@@ -19,7 +19,8 @@ import threading
 import time
 
 from ..validators.p6_token_efficiency import P6_Token_Efficiency_Monitor
-from ..validators.p1_completeness import ViolationSeverity, Violation
+from ..validators.p1_completeness import ViolationSeverity
+from ..models import Violation
 
 
 class ExecutionPhase(Enum):

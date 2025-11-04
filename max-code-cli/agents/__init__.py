@@ -11,6 +11,7 @@ AGENTS:
 - ReviewAgent: Code review (Port 8164)
 - FixAgent: Bug fixing (Port 8165)
 - DocsAgent: Documentação (Port 8166)
+- ArchitectAgent: Sophia - A Arquiteta, Co-Architect (Port 8167)
 """
 
 from .plan_agent import PlanAgent
@@ -20,6 +21,7 @@ from .test_agent import TestAgent
 from .review_agent import ReviewAgent
 from .fix_agent import FixAgent
 from .docs_agent import DocsAgent
+from .architect_agent import ArchitectAgent
 
 __all__ = [
     'PlanAgent',
@@ -29,4 +31,5 @@ __all__ = [
     'ReviewAgent',
     'FixAgent',
     'DocsAgent',
+    'ArchitectAgent',
 ]

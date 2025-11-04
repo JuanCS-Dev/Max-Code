@@ -166,7 +166,7 @@ class GuardianCoordinator:
             enforcement_level=self.enforcement_level,
             total_iterations=0,
             total_violations=len(pre_verdict.constitutional_result.violations),
-            constitutional_score=pre_verdict.constitutional_result.constitutional_score
+            constitutional_score=pre_verdict.constitutional_result.score
         )
 
         self._active_reports[task_id] = report

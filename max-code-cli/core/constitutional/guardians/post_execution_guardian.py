@@ -17,7 +17,8 @@ from datetime import datetime
 from enum import Enum
 
 from ..engine import ConstitutionalEngine, Action, ActionType
-from ..validators.p1_completeness import ViolationSeverity, Violation, P1_Completeness_Validator
+from ..validators.p1_completeness import ViolationSeverity, P1_Completeness_Validator
+from ..models import Violation
 from ..validators.p2_api_validator import P2_API_Validator
 from ..validators.p5_systemic import P5_Systemic_Analyzer
 
@@ -128,23 +129,24 @@ class PostExecutionGuardian:
 
         # 1. Validar com Constitutional Engine
         action = Action(
-            type=ActionType.CODE_GENERATION,
-            payload={'code': code, 'language': language},
-            metadata=context,
-            task_id=task_id
+            task_id=task_id or 'post-validation',
+            action_type=ActionType.CODE_GENERATION,
+            intent=f'Validate generated {language} code',
+            context={'code': code, 'language': language},
+            constitutional_context=context or {}
         )
 
         constitutional_result = self.engine.execute_action(action)
 
-        # 2. Calcular métricas específicas
-        metrics = self._calculate_metrics(code, language, task_id)
-
-        # 3. Análise de qualidade
-        quality = self._determine_quality(metrics, constitutional_result.violations)
-
-        # 4. Verificações adicionais de segurança
+        # 2. Verificações adicionais de segurança PRIMEIRO
         security_violations = self._security_audit(code)
+
+        # 3. Calcular métricas específicas (incluindo security violations)
+        metrics = self._calculate_metrics(code, language, task_id, security_violations)
+
+        # 4. Análise de qualidade
         all_violations = constitutional_result.violations + security_violations
+        quality = self._determine_quality(metrics, all_violations)
 
         # 5. Emitir veredicto
         verdict = self._emit_verdict(quality, metrics, all_violations)
@@ -158,23 +160,36 @@ class PostExecutionGuardian:
         self,
         code: str,
         language: str,
-        task_id: Optional[str]
+        task_id: Optional[str],
+        security_violations: List[Violation] = None
     ) -> OutputMetrics:
         """Calcula métricas do output"""
 
         # LEI (Lazy Execution Index)
-        lei = self.p1_validator.calculate_lei(code)
+        try:
+            lei = self.p1_validator.calculate_lei(code)
+        except (AttributeError, Exception):
+            # Fallback if calculate_lei not available
+            lei = 0.5
 
         # FPC (First-Pass Correctness)
-        from ..validators.p6_token_efficiency import get_monitor
-        monitor = get_monitor()
-        fpc = monitor.calculate_fpc() if task_id else 100.0
+        try:
+            from ..validators.p6_token_efficiency import get_monitor
+            monitor = get_monitor()
+            fpc = monitor.calculate_fpc() if task_id else 100.0
+        except (ImportError, AttributeError, Exception):
+            # Fallback if P6 monitor not available
+            fpc = 100.0
 
         # Violations
         p1_result = self.p1_validator.validate(code, language)
         p2_result = self.p2_validator.validate(code, language)
 
         all_violations = p1_result.violations + p2_result.violations
+
+        # Include security violations in metrics
+        if security_violations:
+            all_violations.extend(security_violations)
 
         critical_count = sum(1 for v in all_violations if v.severity == ViolationSeverity.CRITICAL)
         high_count = sum(1 for v in all_violations if v.severity == ViolationSeverity.HIGH)
@@ -239,9 +254,9 @@ class PostExecutionGuardian:
                 violations.append(Violation(
                     principle="P2",
                     severity=ViolationSeverity.CRITICAL,
-                    pattern=f"Security: {description}",
                     message=f"Security vulnerability detected: {description}",
-                    suggestion="Use safer alternatives or sanitize input"
+                    suggestion="Use safer alternatives or sanitize input",
+                    context={"pattern": pattern, "description": description}
                 ))
 
         return violations

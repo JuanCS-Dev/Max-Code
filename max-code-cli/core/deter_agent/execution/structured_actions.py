@@ -6,7 +6,7 @@ OBJETIVO: Ações estruturadas (não ad-hoc).
 "Tudo, porém, seja feito com decência e ordem." (1 Coríntios 14:40)
 """
 
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 

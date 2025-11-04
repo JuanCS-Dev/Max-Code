@@ -6,7 +6,7 @@ Tracking de métricas constitucionais (LEI, FPC, CRS).
 "Examinai tudo. Retende o bem." (1 Tessalonicenses 5:21)
 """
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
 

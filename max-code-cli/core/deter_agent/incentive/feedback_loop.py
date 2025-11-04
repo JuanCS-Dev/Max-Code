@@ -5,6 +5,7 @@ Sistema de feedback contínuo para melhorar comportamento.
 """
 
 from typing import Dict, List
+from typing import Optional
 from dataclasses import dataclass
 from datetime import datetime
 

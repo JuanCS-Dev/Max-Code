@@ -1,0 +1,302 @@
+# ============================================================================
+# Max-Code CLI v2.0 - MAXIMUS Integration Configuration
+# ============================================================================
+#
+# This file configures integration between Max-Code CLI and MAXIMUS AI backend.
+#
+# Architecture:
+#   Max-Code CLI (Processing Layer) ↔ MAXIMUS AI (Noble AI Layer)
+#
+# Biblical Foundation:
+#   "Porque com sabedoria se edifica a casa, e com a inteligência ela se firma"
+#   (Provérbios 24:3)
+#
+# ============================================================================
+
+# ============================================================================
+# MAXIMUS CORE (Port 8153)
+# ============================================================================
+maximus:
+  # Enable/disable MAXIMUS integration
+  enabled: true
+
+  # MAXIMUS Core base URL
+  base_url: "http://localhost:8153"
+
+  # Request timeout (seconds)
+  timeout: 5.0
+
+  # Retry configuration
+  retry:
+    max_attempts: 3
+    backoff_factor: 1.5  # Exponential backoff: 1.5^n seconds
+
+  # Health check
+  health_check:
+    enabled: true
+    interval: 60  # seconds (check every minute)
+    timeout: 2.0  # seconds
+
+# ============================================================================
+# TRINITY SERVICES
+# ============================================================================
+trinity:
+  # PENELOPE (Self-Healing Service) - Port 8150
+  penelope:
+    enabled: true
+    url: "http://localhost:8150"
+    timeout: 3.0
+
+    # When to use PENELOPE
+    use_for:
+      - "bug_fixing"      # FixAgent uses PENELOPE for root cause analysis
+      - "code_healing"    # Heal broken code
+      - "error_recovery"  # Recover from errors
+
+  # MABA (Multi-Agent Browser Assistant) - Port 8151
+  maba:
+    enabled: true
+    url: "http://localhost:8151"
+    timeout: 10.0  # Web searches can be slower
+
+    # When to use MABA
+    use_for:
+      - "documentation_search"  # DocsAgent searches for API docs
+      - "best_practices"        # Search for coding best practices
+      - "library_research"      # Research libraries/frameworks
+
+  # NIS (Narrative Intelligence System) - Port 8152
+  nis:
+    enabled: true
+    url: "http://localhost:8152"
+    timeout: 5.0
+
+    # When to use NIS
+    use_for:
+      - "documentation"      # DocsAgent uses NIS for narrative docs
+      - "commit_messages"    # Generate narrative commit messages
+      - "changelogs"         # Generate changelogs
+
+# ============================================================================
+# DECISION FUSION
+# ============================================================================
+fusion:
+  # Weights for decision fusion
+  weights:
+    maxcode: 0.6   # Max-Code weight (60%)
+    maximus: 0.4   # MAXIMUS weight (40%)
+
+  # Veto pattern (if any system vetoes, block action)
+  veto_enabled: true
+
+  # Confidence thresholds
+  thresholds:
+    high_confidence: 0.8    # >= 0.8 = high confidence
+    medium_confidence: 0.6  # >= 0.6 = medium confidence
+    low_confidence: 0.4     # < 0.4 = low confidence
+
+# ============================================================================
+# FALLBACK SYSTEM
+# ============================================================================
+fallback:
+  # Default strategy when MAXIMUS is offline
+  # Options: "ask_user", "auto_fallback", "fail_fast"
+  default_strategy: "ask_user"
+
+  # Timeout threshold (seconds)
+  # If MAXIMUS takes longer than this, fallback is triggered
+  timeout_threshold: 2.0
+
+  # Auto fallback for non-critical tasks
+  auto_fallback_for:
+    - "documentation"      # Docs can be generated without MAXIMUS
+    - "simple_refactor"    # Simple refactors don't need deep analysis
+    - "style_fixes"        # Style fixes are non-critical
+
+  # Fail fast for critical tasks (require MAXIMUS)
+  fail_fast_for:
+    - "security_review"    # Security requires ethical review
+    - "deployment"         # Deployment requires systemic analysis
+    - "database_migration" # DB changes require careful analysis
+
+# ============================================================================
+# CACHING
+# ============================================================================
+cache:
+  # Enable response caching (reduces latency + load on MAXIMUS)
+  enabled: true
+
+  # Cache backend
+  # Options: "memory", "redis"
+  backend: "memory"
+
+  # Redis configuration (if backend = "redis")
+  redis:
+    url: "redis://localhost:6379"
+    db: 0
+
+  # TTL (time-to-live) in seconds
+  ttl: 300  # 5 minutes
+
+  # Cache keys
+  # Different analyses have different TTLs
+  ttl_by_type:
+    systemic_analysis: 600    # 10 minutes (stable)
+    ethical_review: 1800      # 30 minutes (very stable)
+    edge_case_prediction: 300 # 5 minutes (changes with code)
+    code_healing: 60          # 1 minute (context-specific)
+    web_search: 3600          # 1 hour (search results stable)
+    narrative: 1800           # 30 minutes (stable)
+
+# ============================================================================
+# AGENT-SPECIFIC CONFIGURATION
+# ============================================================================
+agents:
+  # PlanAgent (Port 8160)
+  plan_agent:
+    use_maximus: true
+    features:
+      - "systemic_analysis"  # Analyze systemic impact of plans
+
+  # ExploreAgent (Port 8161)
+  explore_agent:
+    use_maximus: false  # Exploration is fast, doesn't need MAXIMUS
+    features: []
+
+  # CodeAgent (Port 8162)
+  code_agent:
+    use_maximus: true
+    features:
+      - "security_analysis"  # Analyze generated code for vulnerabilities
+      - "ethical_review"     # Ethical review of generated code
+
+  # TestAgent (Port 8163)
+  test_agent:
+    use_maximus: true
+    features:
+      - "edge_case_prediction"  # Predict edge cases not covered
+
+  # ReviewAgent (Port 8164)
+  review_agent:
+    use_maximus: true
+    features:
+      - "ethical_review"     # 4 ethical frameworks
+      - "systemic_analysis"  # Analyze impact of code changes
+
+  # FixAgent (Port 8165)
+  fix_agent:
+    use_maximus: true
+    features:
+      - "code_healing"       # PENELOPE root cause analysis
+
+  # DocsAgent (Port 8166)
+  docs_agent:
+    use_maximus: true
+    features:
+      - "narrative_generation"  # NIS narrative docs
+      - "web_search"            # MABA doc search
+
+# ============================================================================
+# METRICS & MONITORING
+# ============================================================================
+metrics:
+  # Enable metrics collection
+  enabled: true
+
+  # Metrics backend
+  # Options: "console", "prometheus", "cloudwatch"
+  backend: "console"
+
+  # Prometheus configuration (if backend = "prometheus")
+  prometheus:
+    port: 9090
+    path: "/metrics"
+
+  # Metrics to track
+  track:
+    - "latency"              # Request latency (p50, p95, p99)
+    - "cache_hit_rate"       # Cache hit rate
+    - "fallback_rate"        # % executions in fallback mode
+    - "maximus_availability" # % time MAXIMUS is available
+    - "decision_confidence"  # Average confidence of decisions
+
+  # Alerting thresholds
+  alerts:
+    high_latency_ms: 1000        # Alert if p95 latency > 1s
+    low_cache_hit_rate: 0.4      # Alert if cache hit rate < 40%
+    high_fallback_rate: 0.2      # Alert if fallback rate > 20%
+    low_maximus_uptime: 0.95     # Alert if MAXIMUS uptime < 95%
+
+# ============================================================================
+# LOGGING
+# ============================================================================
+logging:
+  # Log level
+  # Options: "DEBUG", "INFO", "WARNING", "ERROR"
+  level: "INFO"
+
+  # Log file
+  file: "~/.maxcode/logs/maximus_integration.log"
+
+  # Log rotation
+  rotation:
+    max_size_mb: 100  # Rotate when log file > 100MB
+    keep_count: 5     # Keep last 5 log files
+
+  # Log format
+  format: "[%(asctime)s] %(levelname)s - %(name)s - %(message)s"
+
+  # Log MAXIMUS requests/responses (for debugging)
+  log_requests: false   # Set to true for debugging
+  log_responses: false  # Set to true for debugging
+
+# ============================================================================
+# DEVELOPMENT MODE
+# ============================================================================
+development:
+  # Enable development mode (more verbose logging, no caching)
+  enabled: false
+
+  # Mock MAXIMUS (for testing without MAXIMUS backend)
+  mock_maximus: false
+
+  # Mock responses (if mock_maximus = true)
+  mock_responses:
+    systemic_analysis:
+      systemic_risk_score: 0.3
+      side_effects: ["None"]
+      mitigation_strategies: ["N/A"]
+
+    ethical_review:
+      kantian_score: 85
+      virtue_score: 80
+      consequentialist_score: 90
+      principlism_score: 88
+      verdict: "APPROVED"
+
+# ============================================================================
+# ADVANCED CONFIGURATION
+# ============================================================================
+advanced:
+  # Connection pooling
+  connection_pool:
+    max_connections: 100
+    max_keepalive: 10  # seconds
+
+  # Circuit breaker (prevent cascading failures)
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5   # Open circuit after 5 consecutive failures
+    timeout: 60            # Try again after 60 seconds
+    half_open_calls: 3     # Test with 3 calls when half-open
+
+  # Rate limiting (protect MAXIMUS from overload)
+  rate_limiting:
+    enabled: false  # Disable by default (enable in production)
+    requests_per_second: 10
+    burst: 20
+
+  # Request deduplication (prevent duplicate requests)
+  deduplication:
+    enabled: true
+    window: 5  # seconds (deduplicate within 5-second window)

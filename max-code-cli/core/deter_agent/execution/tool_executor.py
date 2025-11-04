@@ -30,6 +30,22 @@ from datetime import datetime
 from enum import Enum
 import subprocess
 import os
+import sys
+from pathlib import Path
+
+# Add tools to path
+tools_path = Path(__file__).parent.parent.parent / "tools"
+if str(tools_path) not in sys.path:
+    sys.path.insert(0, str(tools_path))
+
+# Import file tools
+from core.tools import (
+    FileReader, FileWriter, FileEditor,
+    GlobTool, GrepTool
+)
+
+# Import self-correction engine (P5 - Autocorreção Humilde)
+from .self_correction import SelfCorrectionEngine
 
 
 class ToolType(Enum):
@@ -38,8 +54,10 @@ class ToolType(Enum):
     FILE_READ = "file_read"
     FILE_WRITE = "file_write"
     FILE_EDIT = "file_edit"
+    GLOB = "glob"  # Pattern-based file search
+    GREP = "grep"  # Content search
     API_CALL = "api_call"
-    SEARCH = "search"
+    SEARCH = "search"  # Generic search (deprecated - use GLOB or GREP)
 
 
 class ToolStatus(Enum):
@@ -108,14 +126,16 @@ class ToolExecutor:
 
     DEFAULT_TIMEOUT = 30.0  # 30 seconds
 
-    def __init__(self, safe_mode: bool = True):
+    def __init__(self, safe_mode: bool = True, enable_self_correction: bool = True):
         """
         Inicializa Tool Executor
 
         Args:
             safe_mode: Se True, validar impacto antes de executar
+            enable_self_correction: Se True, ativa Self-Correction Loops (P5)
         """
         self.safe_mode = safe_mode
+        self.enable_self_correction = enable_self_correction
 
         # Registry de ferramentas
         self.registered_tools: Dict[str, Tool] = {}
@@ -130,7 +150,22 @@ class ToolExecutor:
             'failed_executions': 0,
             'blocked_executions': 0,
             'total_execution_time': 0.0,
+            'self_corrections': 0,  # NEW: Track self-corrections
         }
+
+        # Initialize file tools
+        self.file_reader = FileReader()
+        self.file_writer = FileWriter()
+        self.file_editor = FileEditor()
+        self.glob_tool = GlobTool()
+        self.grep_tool = GrepTool()
+
+        # Initialize self-correction engine (P5 - Autocorreção Humilde)
+        if enable_self_correction:
+            self.self_correction_engine = SelfCorrectionEngine(max_attempts=3)
+            print("🔄 Self-Correction Engine enabled (P5 - Autocorreção Humilde)")
+        else:
+            self.self_correction_engine = None
 
     def register_tool(self, tool: Tool):
         """
@@ -218,6 +253,36 @@ class ToolExecutor:
         execution_time = time.time() - start_time
         self.stats['total_execution_time'] += execution_time
 
+        # FASE 2.5: SELF-CORRECTION (P5 - Autocorreção Humilde)
+        # Se falhou e self-correction está ativado, tenta corrigir automaticamente
+        if status == ToolStatus.FAILURE and self.enable_self_correction and self.self_correction_engine:
+            print(f"   ❌ Execution failed: {error}")
+            print(f"   🔄 Attempting self-correction (P5)...")
+
+            correction_result = self.self_correction_engine.correct_execution(
+                tool_executor=self,
+                tool_name=tool_name,
+                parameters=params,
+                original_error=error
+            )
+
+            if correction_result.corrected:
+                # Self-correction bem-sucedida! Usa resultado corrigido
+                output = correction_result.final_output
+                status = ToolStatus.SUCCESS
+                error = None
+                self.stats['self_corrections'] += 1
+
+                # Atualiza stats (falha anterior foi corrigida)
+                self.stats['failed_executions'] -= 1
+                self.stats['successful_executions'] += 1
+
+                print(f"   ✅ Self-correction successful! (P5 - Autocorreção Humilde)")
+            else:
+                # Self-correction falhou, mantém erro original
+                error = correction_result.final_error
+                print(f"   ⚠️  Self-correction failed, escalating to user...")
+
         # FASE 3: AUDIT (P4)
         result = ToolResult(
             tool_name=tool_name,
@@ -233,7 +298,7 @@ class ToolExecutor:
         # Log resultado
         if status == ToolStatus.SUCCESS:
             print(f"   ✓ Execution successful ({execution_time:.2f}s)")
-        else:
+        elif status != ToolStatus.FAILURE:  # Timeout/blocked já foi logado
             print(f"   ❌ Execution failed: {error}")
 
         return result
@@ -305,6 +370,10 @@ class ToolExecutor:
             return self._execute_file_write(parameters)
         elif tool.type == ToolType.FILE_EDIT:
             return self._execute_file_edit(parameters)
+        elif tool.type == ToolType.GLOB:
+            return self._execute_glob(parameters)
+        elif tool.type == ToolType.GREP:
+            return self._execute_grep(parameters)
         elif tool.type == ToolType.API_CALL:
             return self._execute_api_call(parameters)
         elif tool.type == ToolType.SEARCH:
@@ -335,40 +404,110 @@ class ToolExecutor:
             raise TimeoutError(f"Command timed out after {timeout}s")
 
     def _execute_file_read(self, parameters: Dict[str, Any]) -> str:
-        """Lê arquivo"""
+        """Lê arquivo usando FileReader"""
         file_path = parameters['file_path']
+        offset = parameters.get('offset')
+        limit = parameters.get('limit')
 
-        with open(file_path, 'r') as f:
-            return f.read()
+        result = self.file_reader.read(file_path, offset=offset, limit=limit)
+
+        if not result.success:
+            raise RuntimeError(result.error)
+
+        return result.content
 
     def _execute_file_write(self, parameters: Dict[str, Any]) -> str:
-        """Escreve arquivo"""
+        """Escreve arquivo usando FileWriter"""
         file_path = parameters['file_path']
         content = parameters['content']
+        overwrite = parameters.get('overwrite', True)
 
-        with open(file_path, 'w') as f:
-            f.write(content)
+        result = self.file_writer.write(file_path, content, overwrite=overwrite)
 
-        return f"Written {len(content)} bytes to {file_path}"
+        if not result.success:
+            raise RuntimeError(result.error)
+
+        return f"Written {result.bytes_written} bytes to {file_path}" + \
+               (f" (backup: {result.backup_path})" if result.backup_path else "")
 
     def _execute_file_edit(self, parameters: Dict[str, Any]) -> str:
-        """Edita arquivo (find & replace)"""
+        """Edita arquivo usando FileEditor"""
         file_path = parameters['file_path']
         old_string = parameters['old_string']
         new_string = parameters['new_string']
+        replace_all = parameters.get('replace_all', False)
 
-        with open(file_path, 'r') as f:
-            content = f.read()
+        result = self.file_editor.edit(
+            file_path,
+            old_string,
+            new_string,
+            replace_all=replace_all
+        )
 
-        if old_string not in content:
-            raise ValueError(f"String not found in file: '{old_string}'")
+        if not result.success:
+            raise RuntimeError(result.error)
 
-        new_content = content.replace(old_string, new_string)
+        return f"Replaced {result.replacements} occurrence(s) in {file_path}" + \
+               (f"\nBackup: {result.backup_path}" if result.backup_path else "") + \
+               (f"\n\nDiff:\n{result.diff}" if result.diff else "")
 
-        with open(file_path, 'w') as f:
-            f.write(new_content)
+    def _execute_glob(self, parameters: Dict[str, Any]) -> str:
+        """Executa glob (pattern-based file search)"""
+        pattern = parameters['pattern']
+        path = parameters.get('path')
+        max_results = parameters.get('max_results', 100)
 
-        return f"Replaced {content.count(old_string)} occurrences in {file_path}"
+        result = self.glob_tool.glob(pattern, path=path, max_results=max_results)
+
+        if not result.success:
+            raise RuntimeError(result.error)
+
+        # Format output
+        output = f"Found {result.total_matches} files matching '{pattern}'\n"
+        if result.ignored_count > 0:
+            output += f"(Ignored {result.ignored_count} files)\n"
+
+        output += "\nMatches:\n"
+        for match in result.matches:
+            output += f"  {match}\n"
+
+        return output
+
+    def _execute_grep(self, parameters: Dict[str, Any]) -> str:
+        """Executa grep (content search)"""
+        pattern = parameters['pattern']
+        path = parameters.get('path')
+        output_mode = parameters.get('output_mode', 'files_with_matches')
+        case_sensitive = parameters.get('case_sensitive', True)
+        file_type = parameters.get('file_type')
+
+        result = self.grep_tool.grep(
+            pattern,
+            path=path,
+            output_mode=output_mode,
+            case_sensitive=case_sensitive,
+            file_type=file_type
+        )
+
+        if not result.success:
+            raise RuntimeError(result.error)
+
+        # Format output based on mode
+        output = f"Search results for '{pattern}' ({result.total_matches} matches)\n\n"
+
+        if output_mode == "files_with_matches":
+            for file_path in result.files_with_matches:
+                output += f"  {file_path}\n"
+
+        elif output_mode == "content":
+            for match in result.matches:
+                output += f"{match.file_path}:{match.line_number}:{match.line_content}\n"
+
+        elif output_mode == "count":
+            for file_path, count in result.match_counts.items():
+                output += f"  {count:4d} - {file_path}\n"
+
+        return output
 
     def _execute_api_call(self, parameters: Dict[str, Any]) -> Any:
         """Chama API externa"""
@@ -417,6 +556,8 @@ class ToolExecutor:
         print(f"Successful:                {stats['successful_executions']} ({stats['success_rate']:.1f}%)")
         print(f"Failed:                    {stats['failed_executions']}")
         print(f"Blocked:                   {stats['blocked_executions']}")
+        if self.enable_self_correction:
+            print(f"Self-corrections (P5):     {stats['self_corrections']}")
         print(f"Avg execution time:        {stats['avg_execution_time']:.3f}s")
         print("="*60 + "\n")
 

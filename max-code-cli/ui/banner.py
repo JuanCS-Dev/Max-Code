@@ -1,0 +1,337 @@
+"""
+Max-Code CLI Banner System
+
+Creates a MAGNIFICENT banner with:
+- ASCII art logo (PyFiglet)
+- Neon green → blue gradient (rich-gradient)
+- Constitutional principles status
+- Dynamic context display
+- Multiple styles
+- Performance optimized with caching
+
+Usage:
+    from ui.banner import MaxCodeBanner
+
+    banner = MaxCodeBanner()
+    banner.show(version="3.0", context={'model': 'Claude Sonnet 4.5'})
+"""
+
+from rich.console import Console
+from rich.panel import Panel
+import pyfiglet
+from typing import Optional, Dict, TYPE_CHECKING
+from pathlib import Path
+import os
+import sys
+import hashlib
+
+# Lazy import for performance (rich_gradient is slow to import ~113ms)
+if TYPE_CHECKING:
+    from rich_gradient import Gradient
+
+class MaxCodeBanner:
+    """
+    Handles magnificent banner display for Max-Code CLI.
+
+    Features:
+    - Beautiful ASCII art with gradient
+    - Constitutional principles status
+    - Dynamic context display
+    - Caching for performance
+    - Multiple styles
+    - Suppressible for scripts
+    """
+
+    # Neon green → blue gradient colors
+    GRADIENT_COLORS = ['#0FFF50', '#00F0FF', '#0080FF', '#0040FF']
+
+    # Available ASCII art styles
+    FONTS = {
+        'default': 'block',       # Solid block letters (Gemini-style) ⭐ RECOMMENDED
+        'isometric': 'isometric1',# FILLED 3D blocks
+        'banner': 'banner3',      # Bold banner style
+        'minimal': 'small',       # Compact for minimal mode
+        'bold': 'doom',           # Bold doom style
+        'tech': 'digital',        # Tech aesthetic
+        'cyber': 'cybermedium',   # Cyberpunk vibe
+        'colossal': 'colossal',   # HUGE filled letters
+        'graffiti': 'graffiti',   # Street art style
+    }
+
+    # Constitutional principles with colors
+    PRINCIPLES = [
+        ("P1", "Transcendence", "violet"),
+        ("P2", "Reasoning", "blue"),
+        ("P3", "Care", "green"),
+        ("P4", "Wisdom", "yellow"),
+        ("P5", "Beauty", "magenta"),
+        ("P6", "Autonomy", "cyan"),
+    ]
+
+    def __init__(self, console: Optional[Console] = None):
+        """
+        Initialize banner handler.
+
+        Args:
+            console: Rich Console instance (creates new if None)
+        """
+        self.console = console or Console()
+        self._should_show = self._check_should_show()
+        self._cache_dir = Path('.cache/banner_cache')
+        self._cache_dir.mkdir(parents=True, exist_ok=True)
+
+    def _check_should_show(self) -> bool:
+        """
+        Check if banner should be displayed.
+
+        Respects:
+        - --no-banner flag
+        - --quiet/-q flag
+        - MAXCODE_NO_BANNER environment variable
+        - NO_COLOR environment variable
+        - TTY detection (only show in interactive mode)
+
+        Returns:
+            bool: True if banner should be shown
+        """
+        # Check command line flags
+        if '--no-banner' in sys.argv:
+            return False
+        if '--quiet' in sys.argv or '-q' in sys.argv:
+            return False
+
+        # Check environment variables
+        if os.environ.get('MAXCODE_NO_BANNER'):
+            return False
+
+        # Only show in interactive mode (TTY)
+        if not sys.stdout.isatty():
+            return False
+
+        return True
+
+    def _get_cached_ascii_art(self, text: str, font: str) -> Optional[str]:
+        """
+        Get cached ASCII art or generate and cache it.
+
+        Args:
+            text: Text to convert to ASCII art
+            font: PyFiglet font name
+
+        Returns:
+            str: ASCII art text
+        """
+        # Create cache key from text + font
+        cache_key = hashlib.md5(f"{text}:{font}".encode()).hexdigest()
+        cache_file = self._cache_dir / f"{cache_key}.txt"
+
+        # Try to load from cache
+        if cache_file.exists():
+            try:
+                return cache_file.read_text(encoding='utf-8')
+            except:
+                pass  # Cache miss, regenerate
+
+        # Generate ASCII art
+        try:
+            ascii_art = pyfiglet.figlet_format(text, font=font)
+
+            # Cache for next time
+            try:
+                cache_file.write_text(ascii_art, encoding='utf-8')
+            except:
+                pass  # Cache write failed, not critical
+
+            return ascii_art
+        except:
+            # Fallback to simple text if PyFiglet fails
+            return text
+
+    def show(
+        self,
+        version: str = "3.0",
+        context: Optional[Dict] = None,
+        style: str = "default"
+    ):
+        """
+        Display the magnificent banner.
+
+        Args:
+            version: Version string to display
+            context: Additional context (model, session, etc.)
+            style: Banner style (default, minimal, bold, tech, cyber)
+        """
+        if not self._should_show:
+            return
+
+        # Get font for selected style
+        font = self.FONTS.get(style, self.FONTS['default'])
+
+        # Generate ASCII art (with caching)
+        ascii_art = self._get_cached_ascii_art("MAX-CODE", font)
+
+        # Apply beautiful gradient (lazy import for performance)
+        from rich_gradient import Gradient
+        title = Gradient(ascii_art, colors=self.GRADIENT_COLORS)
+
+        # Build subtitle with context
+        subtitle_parts = [
+            f"v{version}",
+            "Constitutional AI Framework",
+        ]
+
+        if context:
+            if 'model' in context:
+                subtitle_parts.append(f"⚡ {context['model']}")
+            if 'session' in context:
+                subtitle_parts.append(f"📊 Session: {context['session']}")
+
+        subtitle = " | ".join(subtitle_parts)
+
+        # Display in beautiful panel
+        self.console.print("\n")
+        self.console.print(Panel(
+            title,
+            subtitle=subtitle,
+            border_style="cyan",
+            padding=(1, 4),
+        ))
+
+        # Show constitutional principles status
+        self._show_principles()
+        self.console.print()
+
+    def _show_principles(self):
+        """Display constitutional principles status with beautiful colors."""
+        status_parts = []
+
+        for code, name, color in self.PRINCIPLES:
+            status_parts.append(f"[{color}]●[/{color}] {code}")
+
+        status_line = "  ".join(status_parts)
+        self.console.print(f"  {status_line}", justify="center")
+
+    def show_minimal(self, version: str = "3.0"):
+        """
+        Display minimal banner for script mode.
+
+        Args:
+            version: Version string to display
+        """
+        self.console.print(f"\nMAX-CODE CLI v{version} | Constitutional AI Framework")
+        self.console.print("─" * 60)
+        self.console.print()
+
+    def show_with_status(
+        self,
+        version: str = "3.0",
+        context: Optional[Dict] = None,
+        style: str = "default",
+        status_message: Optional[str] = None
+    ):
+        """
+        Display banner with additional status message.
+
+        Args:
+            version: Version string
+            context: Additional context
+            style: Banner style
+            status_message: Status message to display below banner
+        """
+        self.show(version, context, style)
+
+        if status_message:
+            self.console.print(f"[cyan]ℹ[/cyan] {status_message}\n")
+
+    def clear_cache(self):
+        """Clear ASCII art cache."""
+        for cache_file in self._cache_dir.glob("*.txt"):
+            try:
+                cache_file.unlink()
+            except:
+                pass
+
+    def get_available_styles(self) -> list:
+        """
+        Get list of available banner styles.
+
+        Returns:
+            list: Available style names
+        """
+        return list(self.FONTS.keys())
+
+
+# Convenience function
+def show_banner(
+    version: str = "3.0",
+    context: Optional[Dict] = None,
+    style: str = "default",
+    console: Optional[Console] = None
+):
+    """
+    Convenience function to show banner quickly.
+
+    Args:
+        version: Version string
+        context: Additional context
+        style: Banner style
+        console: Rich Console instance
+    """
+    banner = MaxCodeBanner(console=console)
+    banner.show(version, context, style)
+
+
+# Demo/test code
+if __name__ == "__main__":
+    import time
+
+    print("=" * 70)
+    print("MAX-CODE CLI BANNER DEMONSTRATION")
+    print("=" * 70)
+    print()
+
+    # Test 1: Default banner
+    print("1. DEFAULT STYLE:")
+    banner = MaxCodeBanner()
+    banner.show(
+        version="3.0",
+        context={
+            'model': 'Claude Sonnet 4.5',
+            'session': 'demo_abc123'
+        },
+        style='default'
+    )
+
+    time.sleep(2)
+
+    # Test 2: Bold style
+    print("\n2. BOLD STYLE:")
+    banner.show(
+        version="3.0",
+        context={'model': 'Claude Sonnet 4.5'},
+        style='bold'
+    )
+
+    time.sleep(2)
+
+    # Test 3: Tech style
+    print("\n3. TECH STYLE:")
+    banner.show(
+        version="3.0",
+        context={'model': 'Claude Sonnet 4.5'},
+        style='tech'
+    )
+
+    time.sleep(2)
+
+    # Test 4: Minimal
+    print("\n4. MINIMAL MODE:")
+    banner.show_minimal("3.0")
+
+    # Test 5: Available styles
+    print("\n5. AVAILABLE STYLES:")
+    print(f"   {', '.join(banner.get_available_styles())}")
+
+    print("\n" + "=" * 70)
+    print("DEMO COMPLETE")
+    print("=" * 70)
