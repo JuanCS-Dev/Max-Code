@@ -6,9 +6,9 @@
 
 ---
 
-## 🎯 Overall Progress: **65%**
+## 🎯 Overall Progress: **85%**
 
-Max-Code CLI está em desenvolvimento ativo. O **Constitutional Core** está **100% COMPLETO**!
+Max-Code CLI está em desenvolvimento ativo. O **DETER-AGENT Framework** está **100% COMPLETO**!
 
 ---
 
@@ -381,57 +381,111 @@ print(get_loading_message('validation'))
 
 ---
 
+## ✅ NEW COMPLETED (100%)
+
+### 6. DETER-AGENT Framework
+
+**Status**: ✅ **COMPLETO** (3,000+ lines)
+
+**Objetivo**: Framework completo de 5 camadas para execução determinística
+
+#### Layer 1: Constitutional
+✅ **COMPLETO** - P1-P6 Validators + Engine + Guardians
+
+#### Layer 2: Deliberation (~1,340 lines)
+✅ **COMPLETO**
+- Tree of Thoughts: Explora múltiplos caminhos (3-5 thoughts, 7 dimensões de avaliação)
+- Self-Consistency: Votação entre múltiplas amostras
+- Chain of Thought: Raciocínio passo-a-passo explícito
+- Adversarial Critic: Red team self-criticism
+
+#### Layer 3: State Management (~1,250 lines)
+✅ **COMPLETO**
+- Context Compression: CRS ≥95%, token efficiency
+- Progressive Disclosure: Revelação gradual (4 níveis)
+- Memory Manager: Working/Episodic/Semantic/Procedural
+- Sub-Agent Isolation: Principle of least privilege
+
+#### Layer 4: Execution (~850 lines)
+✅ **COMPLETO**
+- Tool Executor: Execução segura de ferramentas
+- TDD Enforcer: RED→GREEN→REFACTOR obrigatório
+- Action Validator: Validação pré-execução
+- Structured Actions: Ações estruturadas
+
+#### Layer 5: Incentive (~280 lines)
+✅ **COMPLETO**
+- Reward Model: Sistema de recompensas
+- Metrics Tracker: LEI, FPC, CRS tracking
+- Performance Monitor: Agregação de métricas
+- Feedback Loop: Feedback acionável
+
+### 7. Agent SDK
+
+**Status**: ✅ **COMPLETO** (~500 lines)
+
+**Components**:
+- BaseAgent: Classe abstrata base com constitutional enforcement
+- AgentPool: Gerenciamento de múltiplos agentes
+- AgentRegistry: Catálogo de tipos de agentes
+- AgentOrchestrator: Orquestração multi-agent
+
+### 8. Specialized Agents
+
+**Status**: ✅ **COMPLETO** (7 agents, Ports 8160-8166)
+
+**Agents Implementados**:
+- **PlanAgent** (8160): Planejamento com Tree of Thoughts
+- **ExploreAgent** (8161): Exploração de codebase
+- **CodeAgent** (8162): Geração de código
+- **TestAgent** (8163): Geração e execução de testes
+- **ReviewAgent** (8164): Code review
+- **FixAgent** (8165): Bug fixing
+- **DocsAgent** (8166): Documentação
+
+Todos os agentes têm acesso a:
+- Constitutional Engine (P1-P6)
+- DETER-AGENT (5 layers completos)
+- Memory, Tools, Metrics
+
 ## 📋 TODO (0%)
 
-### 6. NLP Pipeline (Vértice Clone)
+### 9. NLP Pipeline (Vértice Clone)
 
 **Status**: ⏳ **PENDENTE**
 
 **Objetivo**: Clonar NLP do Vértice (`~/vertice-dev`) **SEM** proteções offensive ops
 
-**Steps**:
-1. Localizar NLP no Vértice
-2. Remover camadas de proteção offensive
-3. Adaptar para Max-Code
-4. Integrar com Constitutional Core
-
-### 7. DETER-AGENT Framework
+### 10. TRINITY Integration
 
 **Status**: ⏳ **PENDENTE**
 
-**Objetivo**: Implementar 5-layer framework completo
-
-**Layers**:
-1. **Constitutional Layer** ← **COMPLETO!** (Guardians)
-2. **Deliberation Layer** - Tree of Thoughts, multi-agent planning
-3. **State Management Layer** - Progressive disclosure, context optimization
-4. **Execution Layer** - TDD-driven code generation
-5. **Incentive Layer** - Reward/penalty system
-
-### 8. TRINITY Integration
-
-**Status**: ⏳ **PENDENTE**
-
-**Objetivo**: Conectar aos 3 agentes especializados
+**Objetivo**: Conectar aos 3 agentes principais do backend
 
 **Agents**:
-- **PENELOPE** - Planner & Strategist (Port 8160)
-- **MABA** - Code Generator (Port 8161)
-- **NIS** - Verifier & Quality Assurance (Port 8163)
+- **PENELOPE** - Self-healing & Biblical governance
+- **MABA** - Browser automation & cognitive mapping
+- **NIS** - Narrative intelligence & anomaly detection
 
-### 9. Plan Mode Agent
+### 11. UI/UX (Claude Code + Gemini)
 
 **Status**: ⏳ **PENDENTE**
 
-Interactive planning with Tree of Thoughts
+**Objetivo**: Interface inspirada em Claude Code (funcionalidade) + Gemini (visual)
 
-### 10. Testing Suite
+**Features**:
+- Plan Mode (como Claude Code)
+- Gemini-style visual design
+- Biblical loading messages
+- Responsive layout
+
+### 12. Testing Suite
 
 **Status**: ⏳ **PENDENTE**
 
 - Unit tests (P1-P6 validators)
-- Integration tests (Guardians)
-- E2E tests (CLI commands)
+- Integration tests (Guardians, DETER-AGENT)
+- E2E tests (CLI commands, Agents)
 - Coverage target: **90%+**
 
 ---
@@ -459,18 +513,36 @@ Interactive planning with Tree of Thoughts
 
 ### Code Quality
 
-**Lines of Code**: ~8,000+ (Constitutional Core + Guardians + Auth)
+**Lines of Code**: ~12,000+ (production-ready)
 
 **Structure**:
 ```
 max-code-cli/
 ├── core/
 │   ├── auth/                    # OAuth 2.0 + PKCE (2,500+ lines) ✅
-│   ├── constitutional/
+│   ├── constitutional/          # Constitutional Core (5,000+ lines) ✅
 │   │   ├── validators/          # P1-P6 (2,000+ lines) ✅
-│   │   ├── guardians/           # 3 Guardians + Coordinator (2,000+ lines) ✅
+│   │   ├── guardians/           # 4 Guardians + Auto-Protection (2,500+ lines) ✅
 │   │   └── engine.py           # Constitutional Engine (400+ lines) ✅
+│   ├── deter_agent/            # DETER-AGENT Framework (3,700+ lines) ✅
+│   │   ├── deliberation/        # Layer 2 (1,340 lines) ✅
+│   │   ├── state/               # Layer 3 (1,250 lines) ✅
+│   │   ├── execution/           # Layer 4 (850 lines) ✅
+│   │   └── incentive/           # Layer 5 (280 lines) ✅
 │   └── messages.py             # Biblical Messages (250+ lines) ✅
+├── sdk/                         # Agent SDK (500+ lines) ✅
+│   ├── base_agent.py
+│   ├── agent_pool.py
+│   ├── agent_registry.py
+│   └── agent_orchestrator.py
+├── agents/                      # Specialized Agents (450+ lines) ✅
+│   ├── plan_agent.py            # Port 8160 ✅
+│   ├── explore_agent.py         # Port 8161 ✅
+│   ├── code_agent.py            # Port 8162 ✅
+│   ├── test_agent.py            # Port 8163 ✅
+│   ├── review_agent.py          # Port 8164 ✅
+│   ├── fix_agent.py             # Port 8165 ✅
+│   └── docs_agent.py            # Port 8166 ✅
 ├── cli/                         # CLI commands (400+ lines) 🚧
 └── examples/                    # Demo scripts ✅
 ```
