@@ -1,0 +1,111 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'maximus-ai'
+    environment: 'production'
+
+# Alerting configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+# Load rules once and periodically evaluate them
+rule_files:
+  # - "alerts/*.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Maximus Core Service
+  - job_name: 'maximus-core'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['maximus-core:8150']
+        labels:
+          service: 'maximus-core'
+          component: 'consciousness'
+          tier: 'core'
+
+  # TRINITY Subordinates
+  - job_name: 'penelope'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['penelope:8151']
+        labels:
+          service: 'penelope'
+          component: 'healing'
+          governance: 'biblical'
+          tier: 'subordinate'
+
+  - job_name: 'maba'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['maba:8152']
+        labels:
+          service: 'maba'
+          component: 'browser-agent'
+          tier: 'subordinate'
+
+  - job_name: 'nis'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['nis:8153']
+        labels:
+          service: 'nis'
+          component: 'narrative-intelligence'
+          tier: 'subordinate'
+
+  # Additional Services
+  - job_name: 'orchestrator'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['orchestrator:8154']
+        labels:
+          service: 'orchestrator'
+          component: 'workflow-orchestration'
+
+  - job_name: 'eureka'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['eureka:8155']
+        labels:
+          service: 'eureka'
+          component: 'malware-analysis'
+
+  - job_name: 'oraculo'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['oraculo:8156']
+        labels:
+          service: 'oraculo'
+          component: 'self-improvement'
+
+  - job_name: 'dlq-monitor'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['dlq-monitor:8157']
+        labels:
+          service: 'dlq-monitor'
+          component: 'kafka-resilience'
+
+  # Infrastructure
+  - job_name: 'postgres-exporter'
+    static_configs:
+      - targets: []
+        # Add postgres-exporter if deployed
+
+  - job_name: 'redis-exporter'
+    static_configs:
+      - targets: []
+        # Add redis-exporter if deployed
+
+  - job_name: 'neo4j'
+    static_configs:
+      - targets: []
+        # Add neo4j metrics endpoint if enabled

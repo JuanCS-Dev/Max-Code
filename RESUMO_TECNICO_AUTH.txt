@@ -1,0 +1,358 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║         AUTENTICAÇÃO CLAUDE CODE - RESUMO EXECUTIVO PARA MAX-CODE          ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─ CONCLUSÃO PRINCIPAL ───────────────────────────────────────────────────────┐
+│                                                                              │
+│  ✅ TOTALMENTE VIÁVEL usar Claude Pro/Max sem API Key                      │
+│  ✅ Implementação via OAuth 2.0 + PKCE                                     │
+│  ✅ Documentação disponível (oficial + comunidade)                         │
+│  ⚠️  Restrições de tokens podem exigir negociação com Anthropic            │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ ARQUITETURA DE AUTENTICAÇÃO ──────────────────────────────────────────────┐
+│                                                                              │
+│  1. FLUXO OAUTH 2.0 + PKCE                                                 │
+│     ├─ User executa: /login ou claude login                                │
+│     ├─ Browser abre: https://claude.ai/oauth/authorize?code_challenge=...  │
+│     ├─ User faz login em claude.ai                                         │
+│     ├─ Redirect para: http://localhost:5678/?code=AUTH_CODE                │
+│     ├─ CLI intercepta código e faz POST em console.anthropic.com/v1/...    │
+│     └─ Recebe: access_token + refresh_token (salvos em ~/.claude/)         │
+│                                                                              │
+│  2. ARMAZENAMENTO DE TOKENS                                                │
+│     ├─ Linux:   ~/.claude/.credentials.json (permissão 600)               │
+│     ├─ macOS:   Keychain (encrypted)                                       │
+│     ├─ Windows: Windows Credential Manager                                 │
+│     └─ Estrutura: { claudeAiOauth: { accessToken, refreshToken, ... } }   │
+│                                                                              │
+│  3. REQUISIÇÕES COM OAUTH TOKEN                                            │
+│     ├─ Header: Authorization: Bearer sk-ant-oat01-...                      │
+│     ├─ Sem header x-api-key (diferente de API Key auth)                    │
+│     └─ Endpoint: https://api.anthropic.com/v1/messages                     │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ FORMATOS E CONSTANTES ────────────────────────────────────────────────────┐
+│                                                                              │
+│  ACCESS TOKEN (curta duração)                                              │
+│    Prefixo: sk-ant-oat01-                                                  │
+│    Duração: 8-12 horas                                                     │
+│    Uso: Requisições à API                                                  │
+│                                                                              │
+│  REFRESH TOKEN (longa duração)                                             │
+│    Prefixo: sk-ant-ort01-                                                  │
+│    Duração: ~1 ano                                                         │
+│    Uso: Renovar access token quando expira                                 │
+│                                                                              │
+│  SETUP TOKEN (long-lived)                                                  │
+│    Prefixo: sk-ant-oat01-                                                  │
+│    Duração: ~1 ano                                                         │
+│    Gerado: claude setup-token                                              │
+│    Uso: CI/CD, containers, automação                                       │
+│                                                                              │
+│  CLIENT ID (Público)                                                       │
+│    ID: 9d1c250a-e61b-44d9-88ed-5944d1962f5e                               │
+│    Associado: Claude Code CLI                                              │
+│    Importante: Pode estar registrado APENAS para Claude Code               │
+│                (pode exigir registro próprio com Anthropic)                 │
+│                                                                              │
+│  ENDPOINTS PRINCIPAIS                                                      │
+│    Authorization:  https://claude.ai/oauth/authorize                       │
+│    Token Exchange: https://console.anthropic.com/v1/oauth/token            │
+│    API Messages:   https://api.anthropic.com/v1/messages                   │
+│    Callback Local: http://localhost:5678/callback                          │
+│                                                                              │
+│  SCOPES OAUTH                                                              │
+│    user:inference  → Usar modelos (essencial)                             │
+│    user:profile    → Acessar perfil do usuário                            │
+│    org:create_api_key → Criar API keys (requer owner/admin)               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ PRIORIDADE DE AUTENTICAÇÃO ──────────────────────────────────────────────┐
+│                                                                              │
+│  1️⃣  ANTHROPIC_API_KEY (environment variable) ← TEM PRIORIDADE!           │
+│     └─ Se configurada, ignora tudo mais (inclusive OAuth)                  │
+│                                                                              │
+│  2️⃣  CLAUDE_CODE_OAUTH_TOKEN (environment variable)                       │
+│     └─ Injeta token long-lived                                             │
+│                                                                              │
+│  3️⃣  ~/.claude/.credentials.json (arquivo local)                         │
+│     └─ Tokens salvos do último login                                       │
+│                                                                              │
+│  4️⃣  Cloud provider auth (Bedrock/Vertex)                                 │
+│                                                                              │
+│  ⚠️  IMPORTANTE: Para usar OAuth/Subscription REMOVA ANTHROPIC_API_KEY!   │
+│     unset ANTHROPIC_API_KEY                                                │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ ESTRUTURA DO ARQUIVO .credentials.json ──────────────────────────────────┐
+│                                                                              │
+│  {                                                                          │
+│    "claudeAiOauth": {                                                      │
+│      "accessToken": "sk-ant-oat01-...",      ← Usar nas requisições       │
+│      "refreshToken": "sk-ant-ort01-...",     ← Renovar token quando vence  │
+│      "expiresAt": 1234567890000,             ← Timestamp em ms             │
+│      "scopes": [                                                            │
+│        "user:inference",                                                    │
+│        "user:profile"                                                       │
+│      ],                                                                      │
+│      "subscriptionType": "pro" | "max" | "free"                           │
+│    }                                                                        │
+│  }                                                                          │
+│                                                                              │
+│  Permissões: 600 (rw-------)                                               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ FLUXO TÉCNICO DETALHADO ─────────────────────────────────────────────────┐
+│                                                                              │
+│  FASE 1: PKCE CODE CHALLENGE GENERATION                                   │
+│  ─────────────────────────────────────────                                │
+│   code_verifier  = random_string(128)  # gerado aleatoriamente             │
+│   code_challenge = BASE64(SHA256(code_verifier))                           │
+│                                                                              │
+│  FASE 2: AUTHORIZATION REQUEST                                            │
+│  ──────────────────────────────────                                        │
+│   GET https://claude.ai/oauth/authorize                                    │
+│     ?client_id=9d1c250a-e61b-44d9-88ed-5944d1962f5e                       │
+│     &redirect_uri=http://localhost:5678/callback                           │
+│     &response_type=code                                                    │
+│     &scope=user:inference+user:profile                                     │
+│     &code_challenge=<BASE64_CHALLENGE>                                     │
+│     &code_challenge_method=S256                                            │
+│     &state=<RANDOM_STATE>                                                  │
+│                                                                              │
+│  FASE 3: USER LOGIN (no browser)                                          │
+│  ───────────────────────────────                                           │
+│   User vê tela de login do claude.ai                                       │
+│   User entra com credentials (email + password)                            │
+│   User aprova permissões                                                   │
+│                                                                              │
+│  FASE 4: AUTHORIZATION CALLBACK                                           │
+│  ────────────────────────────────                                          │
+│   claude.ai redireciona para:                                              │
+│   http://localhost:5678/?code=AUTH_CODE_HERE&state=EXPECTED_STATE         │
+│                                                                              │
+│  FASE 5: LOCAL CALLBACK SERVER INTERCEPTS                                 │
+│  ─────────────────────────────────────────                                │
+│   CLI listener em :5678 recebe request                                     │
+│   Valida 'state' (proteção contra CSRF)                                    │
+│   Extrai 'code'                                                            │
+│                                                                              │
+│  FASE 6: TOKEN EXCHANGE                                                   │
+│  ──────────────────────                                                    │
+│   POST https://console.anthropic.com/v1/oauth/token                        │
+│   Content-Type: application/json                                           │
+│                                                                              │
+│   {                                                                         │
+│     "grant_type": "authorization_code",                                    │
+│     "code": "<AUTH_CODE>",                                                 │
+│     "client_id": "9d1c250a-e61b-44d9-88ed-5944d1962f5e",                 │
+│     "code_verifier": "<ORIGINAL_VERIFIER>",                               │
+│     "redirect_uri": "http://localhost:5678/callback"                      │
+│   }                                                                         │
+│                                                                              │
+│  FASE 7: TOKEN RESPONSE                                                   │
+│  ──────────────────────                                                    │
+│   {                                                                         │
+│     "access_token": "sk-ant-oat01-...",                                   │
+│     "refresh_token": "sk-ant-ort01-...",                                  │
+│     "expires_in": 3600,                                                    │
+│     "token_type": "Bearer",                                                │
+│     "scope": "user:inference user:profile"                                │
+│   }                                                                         │
+│                                                                              │
+│  FASE 8: CREDENTIAL STORAGE                                               │
+│  ──────────────────────────                                                │
+│   Salva em ~/.claude/.credentials.json                                    │
+│   Calcula: expiresAt = now() + (expires_in * 1000)                        │
+│                                                                              │
+│  FASE 9: API REQUESTS                                                     │
+│  ──────────────────                                                        │
+│   Toda requisição HTTP inclui:                                             │
+│   Authorization: Bearer sk-ant-oat01-...                                   │
+│                                                                              │
+│  FASE 10: AUTOMATIC TOKEN REFRESH (em background)                         │
+│  ─────────────────────────────────────────────                            │
+│   Triggered quando:                                                        │
+│   - Access token próximo de expirar                                        │
+│   - API retorna 401 (Unauthorized)                                         │
+│   - A cada 5 minutos (preemptive check)                                    │
+│                                                                              │
+│   POST https://console.anthropic.com/v1/oauth/token                        │
+│   {                                                                         │
+│     "grant_type": "refresh_token",                                         │
+│     "refresh_token": "sk-ant-ort01-...",                                  │
+│     "client_id": "9d1c250a-e61b-44d9-88ed-5944d1962f5e"                  │
+│   }                                                                         │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ IMPLEMENTAÇÕES DE REFERÊNCIA ENCONTRADAS ────────────────────────────────┐
+│                                                                              │
+│  1. grll/claude-code-login (TypeScript + Bun)                             │
+│     ├─ OAuth 2.0 + PKCE completo                                          │
+│     ├─ GitHub Actions integration                                          │
+│     └─ GitHub: github.com/grll/claude-code-login                           │
+│                                                                              │
+│  2. sst/opencode (OpenCode IDE)                                           │
+│     ├─ OAuth implementation funcional                                       │
+│     ├─ Tokens em ~/.local/share/opencode/auth.json                        │
+│     ├─ Suporta CLAUDE_REFRESH_TOKEN + CLAUDE_ACCESS_TOKEN env vars        │
+│     └─ GitHub: github.com/sst/opencode                                     │
+│                                                                              │
+│  3. RavenStorm-bit/claude-token-refresh                                   │
+│     ├─ Auto-refresh de tokens expirados                                    │
+│     ├─ Sem re-autenticação manual                                          │
+│     └─ GitHub: github.com/RavenStorm-bit/claude-token-refresh             │
+│                                                                              │
+│  4. cabinlab/claude-code-sdk-docker                                       │
+│     ├─ Docker containers com Pro/Max auth                                  │
+│     ├─ Suporta long-lived tokens                                           │
+│     └─ GitHub: github.com/cabinlab/claude-code-sdk-docker                 │
+│                                                                              │
+│  5. Claude Max Bypass (Arthur Collé)                                      │
+│     ├─ Wrapper script que remove ANTHROPIC_API_KEY                         │
+│     ├─ Força fallback para OAuth/subscription                              │
+│     └─ Medium: "How I Built claude_max to unlock..."                       │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ LIMITAÇÕES CRÍTICAS ────────────────────────────────────────────────────┐
+│                                                                              │
+│  ⚠️  TOKENS RESTRITOS PARA CLAUDE CODE                                    │
+│     ├─ Tokens OAuth gerados para Claude Code têm restrições               │
+│     ├─ Tentativa de usar com SDK padrão retorna erro:                     │
+│     │  "This credential is only authorized for use with Claude Code"      │
+│     ├─ Solução possível 1: Pedir Anthropic liberar escopo                 │
+│     ├─ Solução possível 2: Usar seu próprio client_id registrado          │
+│     └─ Solução possível 3: Usar proxy que traduz OAuth → API Key          │
+│                                                                              │
+│  ⚠️  CLIENT ID PODE ESTAR LOCKED                                          │
+│     ├─ 9d1c250a-e61b-44d9-88ed-5944d1962f5e é do Claude Code oficial     │
+│     ├─ Pode estar registrado APENAS para Claude Code na Anthropic         │
+│     ├─ Outra app tentando usar pode receber erro                          │
+│     └─ Solução: Registrar seu próprio client_id com Anthropic             │
+│                                                                              │
+│  ⚠️  AUTENTICAÇÃO REMOTA (SSH/WSL)                                        │
+│     ├─ OAuth callback exige local HTTP server                             │
+│     ├─ Não funciona bem em SSH sem port forwarding                        │
+│     ├─ WSL pode ter limitações com webbrowser.open()                      │
+│     └─ Solução: Setup token pré-gerado ou device flow                     │
+│                                                                              │
+│  ⚠️  KEYCHAIN ISSUES (macOS)                                              │
+│     ├─ Tokens armazenados em Keychain                                     │
+│     ├─ SSH sessions não conseguem acessar Keychain                        │
+│     ├─ Requer unlock manual a cada sessão                                 │
+│     └─ Solução: File-based credential storage (como Linux)                │
+│                                                                              │
+│  ⚠️  TOKEN EXPIRATION                                                     │
+│     ├─ Access token: 8-12 horas                                           │
+│     ├─ Refresh token: ~1 ano                                              │
+│     ├─ Após 1 ano: re-autenticação necessária                             │
+│     └─ Setup token: ~1 ano (melhor para CI/CD)                            │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ ESTRATÉGIA RECOMENDADA PARA MAX-CODE ────────────────────────────────────┐
+│                                                                              │
+│  CURTO PRAZO (MVP)                                                         │
+│  ───────────────────                                                       │
+│  1. Implementar OAuth 2.0 + PKCE com client_id público                    │
+│  2. Armazenar tokens em ~/.max-code/.credentials.json                     │
+│  3. Auto-refresh de tokens                                                │
+│  4. Testar com claude setup-token (workaround imediato)                    │
+│                                                                              │
+│  MÉDIO PRAZO                                                               │
+│  ────────────                                                              │
+│  1. Contatar Anthropic:                                                   │
+│     - Registrar client_id próprio                                         │
+│     - Negociar uso de OAuth tokens com Max subscription                   │
+│     - Ou: liberar token restrictions para uso com APIs                    │
+│  2. Implementar device flow (para ambientes remotos)                       │
+│  3. Adicionar suporte para AWS Bedrock/Vertex como fallback               │
+│                                                                              │
+│  LONGO PRAZO                                                               │
+│  ─────────────                                                             │
+│  1. Criar CLI wrapper similar a claude-code-login                          │
+│  2. Suporte para múltiplas plataformas (Windows/macOS/Linux)             │
+│  3. Integração com IDEs (VS Code, etc)                                    │
+│  4. Proxy server (similar a CLIProxyAPI) se restrições não forem levantadas│
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ COMANDOS ÚTEIS ──────────────────────────────────────────────────────────┐
+│                                                                              │
+│  # Verificar token atual                                                   │
+│  cat ~/.claude/.credentials.json | jq .                                    │
+│                                                                              │
+│  # Extrair access token                                                    │
+│  jq -r '.claudeAiOauth.accessToken' ~/.claude/.credentials.json            │
+│                                                                              │
+│  # Verificar expiração                                                     │
+│  jq '.claudeAiOauth.expiresAt' ~/.claude/.credentials.json | \            │
+│    xargs -I {} date -d @$(({}/1000)) '+%Y-%m-%d %H:%M:%S'                │
+│                                                                              │
+│  # Testar requisição com token                                             │
+│  TOKEN=$(jq -r '.claudeAiOauth.accessToken' ~/.claude/.credentials.json)   │
+│  curl -H "Authorization: Bearer $TOKEN" \                                  │
+│    -H "anthropic-version: 2023-06-01" \                                    │
+│    -H "content-type: application/json" \                                   │
+│    https://api.anthropic.com/v1/messages \                                 │
+│    -d '{"model":"claude-3-5-sonnet-20241022","max_tokens":100,"messages"...'│
+│                                                                              │
+│  # Forçar OAuth fallback (remove API key priority)                         │
+│  unset ANTHROPIC_API_KEY                                                   │
+│  claude /login                                                             │
+│                                                                              │
+│  # Gerar long-lived token                                                  │
+│  claude setup-token                                                        │
+│                                                                              │
+│  # Injetar token em env                                                    │
+│  export CLAUDE_CODE_OAUTH_TOKEN="sk-ant-oat01-..."                         │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ PRÓXIMOS PASSOS ────────────────────────────────────────────────────────┐
+│                                                                              │
+│  AÇÃO                          PRIORIDADE    RESPONSÁVEL    STATUS         │
+│  ────────────────────────────  ───────────   ──────────────  ────────────  │
+│  1. Estudar grll/claude-code   ALTA          Dev            TODO          │
+│     -login em detalhes                                                     │
+│                                                                              │
+│  2. Implementar PKCE completo  ALTA          Dev            TODO          │
+│     em Max-Code                                                            │
+│                                                                              │
+│  3. Contatar Anthropic:        MÉDIA         PM              TODO          │
+│     - OAuth permissions                                                    │
+│     - Client ID registration                                              │
+│                                                                              │
+│  4. Testar com setup-token     ALTA          QA              TODO          │
+│     (workaround imediato)                                                  │
+│                                                                              │
+│  5. Implementar device flow    MÉDIA         Dev            FUTURE        │
+│     para SSH/WSL                                                           │
+│                                                                              │
+│  6. Integração com VS Code     BAIXA         Dev            FUTURE        │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+═════════════════════════════════════════════════════════════════════════════════
+Documento: CLAUDE_CODE_AUTH_INVESTIGATION.md (completo, 17KB)
+Gerado: 2025-11-04
+Fonte: Análise de documentação oficial + reverse engineering + implementações
+═════════════════════════════════════════════════════════════════════════════════
