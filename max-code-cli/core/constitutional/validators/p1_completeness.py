@@ -74,7 +74,19 @@ class CompletenessViolationType(str, Enum):
 
 @dataclass(frozen=True)
 class P1Config:
-    """Immutable configuration for P1 Completeness Validator."""
+    """
+    Immutable configuration for P1 Completeness Validator.
+
+    Using frozen dataclass for thread safety and immutability.
+    All regex patterns are compiled in __post_init__ for performance.
+
+    Attributes:
+        min_passing_score: Minimum score (0.0-1.0) to pass validation
+        strict_mode: If True, any CRITICAL violation fails validation
+        require_tests: Whether to require test coverage
+        require_error_handling: Whether to require error handling in risky operations
+        require_docs: Whether to require documentation for functions/classes
+    """
     min_passing_score: float = 0.70
     strict_mode: bool = False
     require_tests: bool = True
@@ -86,7 +98,15 @@ class P1Config:
     _doc_patterns: Optional[List[Pattern]] = field(default=None, init=False, repr=False)
 
     def __post_init__(self):
-        """Compile regex patterns and validate config."""
+        """
+        Compile all regex patterns for performance and validate configuration.
+
+        Uses object.__setattr__ because dataclass is frozen (immutable).
+        All patterns are pre-compiled once to avoid recompilation on each validation.
+
+        Raises:
+            ConfigurationError: If configuration parameters are invalid
+        """
         try:
             object.__setattr__(self, '_error_handling_patterns', self._compile_error_patterns())
             object.__setattr__(self, '_test_patterns', self._compile_test_patterns())
@@ -101,7 +121,15 @@ class P1Config:
 
     @staticmethod
     def _compile_error_patterns() -> List[Pattern]:
-        """Compile patterns for error handling."""
+        """
+        Compile regex patterns for error handling detection.
+
+        Detects: try/except blocks, .catch() handlers, error assignments, Exception usage.
+        Patterns are case-insensitive where appropriate for broad detection.
+
+        Returns:
+            List[Pattern]: Compiled regex patterns (performance optimized)
+        """
         return [
             re.compile(r'\btry\b', re.IGNORECASE),
             re.compile(r'\bexcept\b', re.IGNORECASE),
@@ -113,7 +141,15 @@ class P1Config:
 
     @staticmethod
     def _compile_test_patterns() -> List[Pattern]:
-        """Compile patterns for test detection."""
+        """
+        Compile regex patterns for test code detection.
+
+        Detects: test_ prefix, def test, assert statements, pytest decorators, unittest.
+        Helps identify if code is test code (which has different validation rules).
+
+        Returns:
+            List[Pattern]: Compiled regex patterns (performance optimized)
+        """
         return [
             re.compile(r'\btest_', re.IGNORECASE),
             re.compile(r'\bdef test', re.IGNORECASE),
@@ -124,10 +160,18 @@ class P1Config:
 
     @staticmethod
     def _compile_doc_patterns() -> List[Pattern]:
-        """Compile patterns for documentation."""
+        """
+        Compile regex patterns for documentation detection.
+
+        Detects: triple-quote docstrings (both double and single), inline comments (#),
+        and Args:/Returns: sections. Helps identify if functions/classes have proper documentation.
+
+        Returns:
+            List[Pattern]: Compiled regex patterns (performance optimized)
+        """
         return [
             re.compile(r'"""[\s\S]*?"""'),
-            re.compile(r"'''[\s\S]*?'''"),
+            re.compile(r"'{3}[\s\S]*?'{3}"),  # Triple single-quote docstrings
             re.compile(r'#.*$', re.MULTILINE),
             re.compile(r'Args:', re.IGNORECASE),
             re.compile(r'Returns:', re.IGNORECASE),
@@ -152,17 +196,22 @@ class P1Config:
 
 class P1_Completeness_Validator:
     """
-    P1 Completeness Validator
+    P1: Primazia da Responsabilidade (Completeness Validator)
 
-    Validates that AI actions are complete and responsible.
+    Biblical Foundation: "A sabedoria é a coisa principal" (Provérbios 4:7)
 
-    CHECKS:
-    1. Error handling present
-    2. Tests exist (if required)
-    3. Documentation complete
-    4. No breaking changes without migration
-    5. Input validation present
-    6. Rollback mechanisms for destructive ops
+    Validates that AI actions are complete, responsible, and production-ready.
+    Ensures every action has proper error handling, documentation, tests, and safety mechanisms.
+
+    6 Core Completeness Checks:
+    1. Error handling present (try/except, error propagation)
+    2. Test coverage exists (unit/integration tests when required)
+    3. Documentation complete (docstrings, comments, Args/Returns)
+    4. Breaking changes have migration paths
+    5. Input validation present (type checks, boundary validation)
+    6. Rollback mechanisms for destructive operations
+
+    Thread-safe, fail-safe, context-aware validation with comprehensive error handling.
     """
 
     SEVERITY_WEIGHTS = {
@@ -173,16 +222,49 @@ class P1_Completeness_Validator:
     }
 
     def __init__(self, config: Optional[P1Config] = None):
-        """Initialize P1 validator."""
+        """
+        Initialize P1 Completeness Validator.
+
+        Args:
+            config: Optional custom configuration. Defaults to P1Config() with standard settings.
+
+        Raises:
+            ConfigurationError: If validator initialization fails (config issues, pattern compilation errors)
+
+        Note:
+            All regex patterns are pre-compiled during config initialization for performance.
+            Validator is thread-safe due to frozen dataclass configuration.
+        """
         try:
             self.config = config or P1Config()
-            logger.info("P1_Completeness_Validator initialized")
+            logger.info("P1_Completeness_Validator initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize P1 validator: {e}")
             raise ConfigurationError(f"Failed to initialize validator: {e}") from e
 
     def validate(self, action: Action) -> ConstitutionalResult:
-        """Validate action against P1 Completeness principle."""
+        """
+        Validate action against P1 Completeness principle.
+
+        Runs all 6 completeness checks and calculates an aggregate score.
+        Fail-safe: Returns score=0.0 on catastrophic errors (never crashes).
+
+        Args:
+            action: Action to validate (must have task_id, intent, context with code)
+
+        Returns:
+            ConstitutionalResult with:
+                - passed: True if score >= min_passing_score and no CRITICAL violations (strict mode)
+                - score: 0.0-1.0 aggregate score (1.0 = perfect, 0.0 = failed)
+                - violations: List of detected violations with severity, location, suggestion
+                - principle_scores: Score breakdown (P1 only, others 0.0)
+                - suggestions: Remediation guidance for all violations
+                - metadata: Execution details (checks_run, violation counts, strict_mode)
+
+        Raises:
+            InvalidActionError: If action is malformed or missing required fields
+            P1ValidationError: If validation process fails unexpectedly
+        """
         try:
             self._validate_action(action)
             code = self._extract_code_safe(action)
@@ -223,7 +305,17 @@ class P1_Completeness_Validator:
             raise P1ValidationError(f"Validation failed: {e}") from e
 
     def _validate_action(self, action: Action) -> None:
-        """Validate action structure."""
+        """
+        Validate action structure and required fields.
+
+        Ensures action has all necessary fields before validation can proceed.
+
+        Args:
+            action: Action instance to validate
+
+        Raises:
+            InvalidActionError: If action is not an Action instance, or missing task_id/intent
+        """
         try:
             if not isinstance(action, Action):
                 raise InvalidActionError(f"Expected Action instance, got {type(action)}")
@@ -237,7 +329,18 @@ class P1_Completeness_Validator:
             raise InvalidActionError(f"Invalid action: {e}") from e
 
     def _extract_code_safe(self, action: Action) -> str:
-        """Safely extract code from action."""
+        """
+        Safely extract code from action context.
+
+        Tries multiple locations: context["code"], output, intent fallback.
+        Fail-safe: Returns empty string if all extraction attempts fail.
+
+        Args:
+            action: Action with context containing code
+
+        Returns:
+            str: Extracted code or empty string
+        """
         try:
             code = (
                 action.context.get("code", "") or

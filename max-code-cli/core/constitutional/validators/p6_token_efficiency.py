@@ -74,7 +74,20 @@ class EfficiencyViolationType(str, Enum):
 
 @dataclass(frozen=True)
 class P6Config:
-    """Immutable configuration for P6 Token Efficiency Validator."""
+    """
+    P6 Token Efficiency Monitor Configuration (Immutable, Thread-Safe).
+
+    All regex patterns pre-compiled in __post_init__ for optimal performance.
+    Frozen dataclass ensures thread-safety and prevents accidental mutation.
+
+    Attributes:
+        min_passing_score: Minimum score (0.0-1.0) to pass validation (default: 0.70)
+        strict_mode: If True, any CRITICAL violation fails validation (default: False)
+        max_code_length: Maximum lines of code allowed per action (default: 500)
+        check_redundancy: Detect and flag redundant code patterns (default: True)
+        check_complexity: Analyze algorithmic complexity (default: True)
+        token_budget: Maximum token budget for operations (default: 200000)
+    """
     min_passing_score: float = 0.70
     strict_mode: bool = False
     max_code_length: int = 500
@@ -86,7 +99,15 @@ class P6Config:
     _inefficiency_patterns: Optional[List[Pattern]] = field(default=None, init=False, repr=False)
 
     def __post_init__(self):
-        """Compile regex patterns and validate config."""
+        """
+        Compile regex patterns and validate configuration.
+
+        Pre-compiles all regex patterns for performance optimization.
+        Validates min_passing_score, max_code_length, and token_budget ranges.
+
+        Raises:
+            ConfigurationError: If any config parameter is out of valid range or pattern compilation fails
+        """
         try:
             object.__setattr__(self, '_redundancy_patterns', self._compile_redundancy_patterns())
             object.__setattr__(self, '_inefficiency_patterns', self._compile_inefficiency_patterns())
@@ -135,17 +156,22 @@ class P6Config:
 
 class P6_Token_Efficiency_Monitor:
     """
-    P6 Token Efficiency Validator
+    P6: Eficiência de Tokens (Token Efficiency Monitor)
 
-    Validates that AI actions use tokens efficiently.
+    Biblical Foundation: "Sê fiel no pouco" (Lucas 16:10)
 
-    CHECKS:
-    1. Code length within budget
-    2. No redundant code
-    3. Efficient algorithms
-    4. Appropriate data structures
-    5. Minimal verbosity
-    6. Resource-conscious patterns
+    Validates that AI actions use computational resources efficiently and stay within budgets.
+    Ensures code is concise, avoids redundancy, uses optimal algorithms and data structures.
+
+    6 Core Efficiency Checks:
+    1. Code length within budget (max lines per action, not overly verbose)
+    2. No redundant code (duplicate logic, copy-paste patterns)
+    3. Efficient algorithms (avoid O(n²) when O(n log n) available, no nested loops)
+    4. Appropriate data structures (sets for membership, dicts for lookups, not lists)
+    5. Minimal verbosity (clear but concise, no unnecessary comments/prints)
+    6. Token budget respected (total context usage within limits)
+
+    Thread-safe, fail-safe, context-aware validation with comprehensive error handling.
     """
 
     SEVERITY_WEIGHTS = {
@@ -156,17 +182,45 @@ class P6_Token_Efficiency_Monitor:
     }
 
     def __init__(self, config: Optional[P6Config] = None):
-        """Initialize P6 validator."""
+        """
+        Initialize P6 Token Efficiency Monitor.
+
+        Args:
+            config: Optional custom configuration. Defaults to P6Config() with standard settings.
+
+        Raises:
+            ConfigurationError: If validator initialization fails (config issues, pattern compilation errors)
+
+        Note:
+            Tracks current_usage for token budget monitoring.
+            All regex patterns are pre-compiled during config initialization for performance.
+            Validator is thread-safe due to frozen dataclass configuration.
+        """
         try:
             self.config = config or P6Config()
             self.current_usage = 0
-            logger.info("P6_Token_Efficiency_Monitor initialized")
+            logger.info("P6_Token_Efficiency_Monitor initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize P6 validator: {e}")
             raise ConfigurationError(f"Failed to initialize validator: {e}") from e
 
     def validate(self, action: Action) -> ConstitutionalResult:
-        """Validate action against P6 Token Efficiency principle."""
+        """
+        Validate action against P6 Token Efficiency principle.
+
+        Runs all 6 efficiency checks and calculates an aggregate score.
+        Fail-safe: Returns score=0.0 on catastrophic errors (never crashes).
+
+        Args:
+            action: Action to validate (must have task_id, intent, context with code)
+
+        Returns:
+            ConstitutionalResult with passed status, score, violations, and suggestions
+
+        Raises:
+            InvalidActionError: If action is malformed or missing required fields
+            P6ValidationError: If validation process fails unexpectedly
+        """
         try:
             self._validate_action(action)
             code = self._extract_code_safe(action)

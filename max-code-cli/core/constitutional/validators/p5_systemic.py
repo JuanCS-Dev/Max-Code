@@ -74,7 +74,19 @@ class SystemicViolationType(str, Enum):
 
 @dataclass(frozen=True)
 class P5Config:
-    """Immutable configuration for P5 Systemic Validator."""
+    """
+    P5 Systemic Analyzer Configuration (Immutable, Thread-Safe).
+
+    All regex patterns pre-compiled in __post_init__ for optimal performance.
+    Frozen dataclass ensures thread-safety and prevents accidental mutation.
+
+    Attributes:
+        min_passing_score: Minimum score (0.0-1.0) to pass validation (default: 0.70)
+        strict_mode: If True, any CRITICAL violation fails validation (default: False)
+        require_impact_analysis: Enforce cross-component impact documentation (default: True)
+        check_dependencies: Validate dependency chains and imports (default: True)
+        check_side_effects: Detect and validate side effects (mutations, I/O) (default: True)
+    """
     min_passing_score: float = 0.70
     strict_mode: bool = False
     require_impact_analysis: bool = True
@@ -86,7 +98,15 @@ class P5Config:
     _integration_patterns: Optional[List[Pattern]] = field(default=None, init=False, repr=False)
 
     def __post_init__(self):
-        """Compile regex patterns and validate config."""
+        """
+        Compile regex patterns and validate configuration.
+
+        Pre-compiles all regex patterns for performance optimization.
+        Validates min_passing_score is within valid range [0.0, 1.0].
+
+        Raises:
+            ConfigurationError: If min_passing_score is out of range or pattern compilation fails
+        """
         try:
             object.__setattr__(self, '_import_patterns', self._compile_import_patterns())
             object.__setattr__(self, '_mutation_patterns', self._compile_mutation_patterns())
@@ -148,17 +168,22 @@ class P5Config:
 
 class P5_Systemic_Analyzer:
     """
-    P5 Systemic Validator
+    P5: Impacto Sistêmico (Systemic Impact Analyzer)
 
-    Validates that AI actions consider systemic impact.
+    Biblical Foundation: "Todas as coisas cooperam para o bem" (Romanos 8:28)
 
-    CHECKS:
-    1. Impact analysis for changes
-    2. Dependency chain validation
-    3. Side effect detection
-    4. Integration point safety
-    5. Backward compatibility
-    6. State consistency
+    Validates that AI actions consider holistic systemic impact and cross-component effects.
+    Ensures changes don't break dependencies, cause cascade failures, or create inconsistent states.
+
+    6 Core Systemic Checks:
+    1. Impact analysis documented (cross-component effects, downstream impacts)
+    2. Dependency chain validated (imports correct, circular deps avoided)
+    3. Side effects controlled (mutations tracked, I/O operations safe)
+    4. Integration points secure (APIs compatible, contracts maintained)
+    5. Backward compatibility preserved (breaking changes avoided/documented)
+    6. State consistency maintained (no race conditions, atomic operations)
+
+    Thread-safe, fail-safe, context-aware validation with comprehensive error handling.
     """
 
     SEVERITY_WEIGHTS = {
@@ -169,16 +194,43 @@ class P5_Systemic_Analyzer:
     }
 
     def __init__(self, config: Optional[P5Config] = None):
-        """Initialize P5 validator."""
+        """
+        Initialize P5 Systemic Analyzer.
+
+        Args:
+            config: Optional custom configuration. Defaults to P5Config() with standard settings.
+
+        Raises:
+            ConfigurationError: If validator initialization fails (config issues, pattern compilation errors)
+
+        Note:
+            All regex patterns are pre-compiled during config initialization for performance.
+            Validator is thread-safe due to frozen dataclass configuration.
+        """
         try:
             self.config = config or P5Config()
-            logger.info("P5_Systemic_Analyzer initialized")
+            logger.info("P5_Systemic_Analyzer initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize P5 validator: {e}")
             raise ConfigurationError(f"Failed to initialize validator: {e}") from e
 
     def validate(self, action: Action) -> ConstitutionalResult:
-        """Validate action against P5 Systemic principle."""
+        """
+        Validate action against P5 Systemic Impact principle.
+
+        Runs all 6 systemic checks and calculates an aggregate score.
+        Fail-safe: Returns score=0.0 on catastrophic errors (never crashes).
+
+        Args:
+            action: Action to validate (must have task_id, intent, context with code)
+
+        Returns:
+            ConstitutionalResult with passed status, score, violations, and suggestions
+
+        Raises:
+            InvalidActionError: If action is malformed or missing required fields
+            P5ValidationError: If validation process fails unexpectedly
+        """
         try:
             self._validate_action(action)
             code = self._extract_code_safe(action)

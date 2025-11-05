@@ -74,7 +74,19 @@ class TransparencyViolationType(str, Enum):
 
 @dataclass(frozen=True)
 class P2Config:
-    """Immutable configuration for P2 Transparency Validator."""
+    """
+    P2 Transparency Validator Configuration (Immutable, Thread-Safe).
+
+    All regex patterns pre-compiled in __post_init__ for optimal performance.
+    Frozen dataclass ensures thread-safety and prevents accidental mutation.
+
+    Attributes:
+        min_passing_score: Minimum score (0.0-1.0) to pass validation (default: 0.70)
+        strict_mode: If True, any CRITICAL violation fails validation (default: False)
+        require_api_contracts: Enforce API contract definitions (default: True)
+        require_error_details: Require descriptive error messages (default: True)
+        require_versioning: Require API versioning info (default: True)
+    """
     min_passing_score: float = 0.70
     strict_mode: bool = False
     require_api_contracts: bool = True
@@ -86,7 +98,15 @@ class P2Config:
     _version_patterns: Optional[List[Pattern]] = field(default=None, init=False, repr=False)
 
     def __post_init__(self):
-        """Compile regex patterns and validate config."""
+        """
+        Compile regex patterns and validate configuration.
+
+        Pre-compiles all regex patterns for performance optimization.
+        Validates min_passing_score is within valid range [0.0, 1.0].
+
+        Raises:
+            ConfigurationError: If min_passing_score is out of range or pattern compilation fails
+        """
         try:
             object.__setattr__(self, '_api_patterns', self._compile_api_patterns())
             object.__setattr__(self, '_error_patterns', self._compile_error_patterns())
@@ -101,7 +121,15 @@ class P2Config:
 
     @staticmethod
     def _compile_api_patterns() -> List[Pattern]:
-        """Compile patterns for API definitions."""
+        """
+        Compile regex patterns for API endpoint/route detection.
+
+        Detects: Flask routes (@app.route), FastAPI routes (@api.get/post/put/delete),
+        router definitions, and framework mentions (FastAPI, Flask, Django).
+
+        Returns:
+            List[Pattern]: Compiled regex patterns for API detection
+        """
         return [
             re.compile(r'@app\.route', re.IGNORECASE),
             re.compile(r'@api\.(get|post|put|delete)', re.IGNORECASE),
@@ -112,7 +140,15 @@ class P2Config:
 
     @staticmethod
     def _compile_error_patterns() -> List[Pattern]:
-        """Compile patterns for error handling."""
+        """
+        Compile regex patterns for error handling detection.
+
+        Detects: Exception raising (raise XError), error responses ({"error": ...}),
+        HTTPException usage, and status_code assignments.
+
+        Returns:
+            List[Pattern]: Compiled regex patterns for error message detection
+        """
         return [
             re.compile(r'raise\s+\w+Error\(', re.IGNORECASE),
             re.compile(r'return\s+\{[^}]*"error"', re.IGNORECASE),
@@ -149,17 +185,22 @@ class P2Config:
 
 class P2_API_Validator:
     """
-    P2 Transparency Validator
+    P2: Transparência Radical (API Transparency Validator)
 
-    Validates that AI actions maintain API transparency.
+    Biblical Foundation: "A verdade vos libertará" (João 8:32)
 
-    CHECKS:
-    1. API contracts clearly defined
-    2. Error messages are descriptive
-    3. Versioning present
-    4. Rate limits documented
-    5. Authentication requirements clear
-    6. Deprecation warnings for old APIs
+    Validates that AI actions maintain complete API transparency and clear communication.
+    Ensures APIs have clear contracts, descriptive errors, proper versioning, and documented requirements.
+
+    6 Core Transparency Checks:
+    1. API contracts clearly defined (input/output specifications, OpenAPI/Swagger docs)
+    2. Error messages are descriptive (not generic "Error occurred", include context)
+    3. API versioning present (v1, v2, version headers)
+    4. Rate limits documented (requests/minute, quota info)
+    5. Authentication requirements clear (OAuth, API keys, JWT tokens)
+    6. Deprecation warnings for old APIs (sunset dates, migration paths)
+
+    Thread-safe, fail-safe, context-aware validation with comprehensive error handling.
     """
 
     SEVERITY_WEIGHTS = {
@@ -170,16 +211,43 @@ class P2_API_Validator:
     }
 
     def __init__(self, config: Optional[P2Config] = None):
-        """Initialize P2 validator."""
+        """
+        Initialize P2 Transparency Validator.
+
+        Args:
+            config: Optional custom configuration. Defaults to P2Config() with standard settings.
+
+        Raises:
+            ConfigurationError: If validator initialization fails (config issues, pattern compilation errors)
+
+        Note:
+            All regex patterns are pre-compiled during config initialization for performance.
+            Validator is thread-safe due to frozen dataclass configuration.
+        """
         try:
             self.config = config or P2Config()
-            logger.info("P2_API_Validator initialized")
+            logger.info("P2_API_Validator initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize P2 validator: {e}")
             raise ConfigurationError(f"Failed to initialize validator: {e}") from e
 
     def validate(self, action: Action) -> ConstitutionalResult:
-        """Validate action against P2 Transparency principle."""
+        """
+        Validate action against P2 Transparency principle.
+
+        Runs all 6 transparency checks and calculates an aggregate score.
+        Fail-safe: Returns score=0.0 on catastrophic errors (never crashes).
+
+        Args:
+            action: Action to validate (must have task_id, intent, context with code)
+
+        Returns:
+            ConstitutionalResult with passed status, score, violations, and suggestions
+
+        Raises:
+            InvalidActionError: If action is malformed or missing required fields
+            P2ValidationError: If validation process fails unexpectedly
+        """
         try:
             self._validate_action(action)
             code = self._extract_code_safe(action)
