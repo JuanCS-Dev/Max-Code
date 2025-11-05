@@ -67,6 +67,10 @@ class ReviewAgent(BaseAgent):
         self.decision_fusion = DecisionFusion()
         self.cache = MaximusCache()
 
+        # Constitutional Engine with REAL validators
+        from core.constitutional.engine import ConstitutionalEngine
+        self.constitutional_engine = ConstitutionalEngine()
+
     def get_capabilities(self) -> List[AgentCapability]:
         return [AgentCapability.CODE_REVIEW]
 
