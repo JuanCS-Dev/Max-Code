@@ -38,6 +38,11 @@ class ActionType(str, Enum):
     TEST_GENERATION = "test_generation"
     REVIEW = "review"
     PLANNING = "planning"
+    READ = "read"
+    ANALYZE = "analyze"
+    WRITE = "write"
+    MODIFY = "modify"
+    EXECUTE = "execute"
 
 
 class ViolationSeverity(str, Enum):
