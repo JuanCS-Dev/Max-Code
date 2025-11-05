@@ -75,7 +75,7 @@ class SleepAgent(BaseAgent):
                     print(f"   🤖 Phase 5: MAXIMUS session summary...")
                     summary = await self._maximus_summary(snapshot_data)
                     workflow_results['maximus_summary'] = summary
-            except:
+            except (ConnectionError, TimeoutError, AttributeError, Exception):
                 print(f"      ⚠️ MAXIMUS offline - skipping summary")
 
         # Generate final report
@@ -164,7 +164,7 @@ class SleepAgent(BaseAgent):
                             state['modified_files'].append(filename)
                         elif status_code.strip() == '??':
                             state['untracked_files'].append(filename)
-        except:
+        except (subprocess.SubprocessError, subprocess.TimeoutExpired, OSError):
             pass
 
         return state
@@ -203,7 +203,7 @@ class SleepAgent(BaseAgent):
             )
             # Parse coverage from output (simplified)
             metrics['test_collection'] = 'success' if result.returncode == 0 else 'failed'
-        except:
+        except (subprocess.SubprocessError, subprocess.TimeoutExpired, OSError, FileNotFoundError):
             pass
 
         return metrics
@@ -317,7 +317,7 @@ pytest --cov --cov-report=term-missing
             try:
                 shutil.rmtree(pycache)
                 pycache_count += 1
-            except:
+            except (OSError, PermissionError):
                 pass
 
         cleanup_tasks['temp_files_removed'] = pycache_count
@@ -338,7 +338,7 @@ pytest --cov --cov-report=term-missing
                 'insights': analysis_result.get('insights', []),
                 'recommendations': analysis_result.get('recommendations', [])
             }
-        except:
+        except (ConnectionError, TimeoutError, AttributeError, Exception):
             return {'error': 'MAXIMUS summary failed'}
 
     def _generate_report(self, workflow_results: Dict[str, Any]) -> Dict[str, Any]:

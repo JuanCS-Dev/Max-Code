@@ -46,7 +46,7 @@ class ReviewAgent(BaseAgent):
                     )
                     print(f"      └─ Kantian: {ethical_verdict.kantian_score}/100, "
                           f"Virtue: {ethical_verdict.virtue_score}/100")
-            except:
+            except (ConnectionError, TimeoutError, AttributeError, Exception):
                 print(f"      ⚠️ MAXIMUS offline, using Constitutional only")
 
         print(f"   🔀 Phase 3: Fusion...")

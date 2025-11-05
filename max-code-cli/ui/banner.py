@@ -129,7 +129,7 @@ class MaxCodeBanner:
         if cache_file.exists():
             try:
                 return cache_file.read_text(encoding='utf-8')
-            except:
+            except (OSError, UnicodeDecodeError):
                 pass  # Cache miss, regenerate
 
         # Generate ASCII art
@@ -139,11 +139,11 @@ class MaxCodeBanner:
             # Cache for next time
             try:
                 cache_file.write_text(ascii_art, encoding='utf-8')
-            except:
+            except (OSError, PermissionError):
                 pass  # Cache write failed, not critical
 
             return ascii_art
-        except:
+        except (ImportError, AttributeError, Exception):
             # Fallback to simple text if PyFiglet fails
             return text
 
@@ -248,7 +248,7 @@ class MaxCodeBanner:
         for cache_file in self._cache_dir.glob("*.txt"):
             try:
                 cache_file.unlink()
-            except:
+            except (OSError, FileNotFoundError, PermissionError):
                 pass
 
     def get_available_styles(self) -> list:

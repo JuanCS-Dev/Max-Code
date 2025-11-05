@@ -46,7 +46,7 @@ class DocsAgent(BaseAgent):
                     )
                     print(f"      └─ Generated: {narrative.title}")
                     standard_docs = f"{narrative.story}\n\n{standard_docs}"
-            except:
+            except (ConnectionError, TimeoutError, AttributeError, Exception):
                 print(f"      ⚠️ NIS offline")
 
         return AgentResult(

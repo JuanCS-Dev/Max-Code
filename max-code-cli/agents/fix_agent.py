@@ -51,7 +51,7 @@ class FixAgent(BaseAgent):
                         if best_fix.confidence > 0.7:
                             quick_fix = best_fix.code
                             print(f"         └─ Using PENELOPE fix (confidence: {best_fix.confidence:.2f})")
-            except:
+            except (ConnectionError, TimeoutError, AttributeError, Exception):
                 print(f"      ⚠️ PENELOPE offline")
 
         return AgentResult(

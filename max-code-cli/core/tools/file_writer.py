@@ -174,7 +174,7 @@ class FileWriter:
                 # Clean up temp file on error
                 try:
                     os.unlink(temp_path)
-                except:
+                except (OSError, FileNotFoundError):
                     pass
                 raise e
 
@@ -418,5 +418,5 @@ Biblical Foundation:
             elif p.is_dir():
                 shutil.rmtree(p)
                 print(f"  Removed dir: {path}")
-        except:
+        except (OSError, FileNotFoundError, PermissionError):
             pass

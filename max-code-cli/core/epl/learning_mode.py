@@ -265,7 +265,7 @@ class LearningMode:
                 return f"{minutes} minutes"
             else:
                 return f"{delta.seconds} seconds"
-        except:
+        except (ValueError, AttributeError, TypeError):
             return "unknown"
 
     # ========================================================================

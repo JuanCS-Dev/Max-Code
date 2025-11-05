@@ -43,7 +43,7 @@ class CodeAgent(BaseAgent):
                     if ethical_verdict.verdict == "REJECTED":
                         security_issues = ethical_verdict.issues
                         print(f"      ⚠️ Security issues found: {len(security_issues)}")
-            except:
+            except (ConnectionError, TimeoutError, AttributeError, Exception):
                 print(f"      ⚠️ MAXIMUS offline")
 
         return AgentResult(

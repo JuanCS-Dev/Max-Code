@@ -47,7 +47,7 @@ class TestAgent(BaseAgent):
                         if ec.severity.value in ['HIGH', 'CRITICAL']:
                             test_suite.append(ec.suggested_test)
                             print(f"         ├─ {ec.severity.value}: {ec.scenario}")
-            except:
+            except (ConnectionError, TimeoutError, AttributeError, Exception):
                 print(f"      ⚠️ MAXIMUS offline")
 
         print(f"   ✅ Phase 3: GREEN - Running tests...")
