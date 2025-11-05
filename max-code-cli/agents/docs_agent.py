@@ -1,5 +1,5 @@
 """
-Docs Agent - ENHANCED with MAXIMUS
+Docs Agent - ENHANCED with MAXIMUS + DETER-AGENT Guardian
 Port: 8166
 Capability: DOCUMENTATION
 
@@ -13,6 +13,7 @@ v3.0: Elite documentation generation (FASE 3.5)
       - Code examples with explanations
       - Troubleshooting sections
       - NIS narrative intelligence integration
+v3.1: DETER-AGENT Guardian - OBRIGA Claude a obedecer Constitution
 """
 
 import sys, os
@@ -23,6 +24,7 @@ from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import NISClient
 from core.auth import get_anthropic_client
+from core.deter_agent import Guardian, GuardianMode
 from agents.validation_schemas import DocsAgentParameters, validate_task_parameters
 from config.logging_config import get_logger
 from config.settings import settings
@@ -42,9 +44,24 @@ class DocsAgent(BaseAgent):
     - NIS narrative storytelling
     """
 
-    def __init__(self, agent_id: str = "docs_agent", enable_maximus: bool = True):
-        super().__init__(agent_id=agent_id, agent_name="Docs Agent (MAXIMUS-Enhanced)", port=8166)
+    def __init__(
+        self,
+        agent_id: str = "docs_agent",
+        enable_maximus: bool = True,
+        enable_guardian: bool = True,
+        guardian_mode: GuardianMode = GuardianMode.BALANCED
+    ):
+        super().__init__(agent_id=agent_id, agent_name="Docs Agent (Guardian + MAXIMUS)", port=8166)
         self.nis_client = NISClient() if enable_maximus else None
+
+        # Initialize DETER-AGENT Guardian (OBRIGA Claude a obedecer Constitution)
+        self.guardian = Guardian(mode=guardian_mode) if enable_guardian else None
+        if self.guardian:
+            logger.info(
+                f"   🛡️ Guardian initialized (mode: {guardian_mode.value})",
+                extra={"guardian_mode": guardian_mode.value}
+            )
+
         self.anthropic_client = get_anthropic_client()
 
     def get_capabilities(self) -> List[AgentCapability]:
@@ -70,6 +87,33 @@ class DocsAgent(BaseAgent):
                 output={'error': 'Invalid parameters', 'details': e.errors()},
                 metrics={'validation_failed': True}
             )
+
+        # Guardian Pre-Check (OBRIGA Claude a obedecer Constitution)
+        if self.guardian:
+            logger.info("   🛡️ Phase 0: Guardian constitutional check...", extra={"task_id": task.id})
+
+            action_context = {
+                'action_type': 'documentation',
+                'description': task.description,
+                'parameters': task.parameters,
+            }
+
+            guardian_decision = self.guardian.evaluate_action(action_context)
+
+            if not guardian_decision.allowed:
+                logger.error(f"   ❌ Guardian BLOCKED: {guardian_decision.reasoning}", extra={"task_id": task.id})
+                return AgentResult(
+                    task_id=task.id,
+                    success=False,
+                    output={
+                        'error': 'Constitutional violation - Guardian blocked action',
+                        'reasoning': guardian_decision.reasoning,
+                        'recommendations': guardian_decision.recommendations,
+                    },
+                    metrics={'guardian_blocked': True}
+                )
+
+            logger.info(f"   ✅ Guardian approved", extra={"task_id": task.id})
 
         logger.info("   📝 Phase 1: Generating comprehensive docs...", extra={"task_id": task.id})
 

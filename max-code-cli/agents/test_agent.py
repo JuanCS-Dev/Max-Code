@@ -1,5 +1,5 @@
 """
-Test Agent - ENHANCED with MAXIMUS
+Test Agent - ENHANCED with MAXIMUS + DETER-AGENT Guardian
 Port: 8163
 Capability: TESTING
 
@@ -7,6 +7,7 @@ v2.0: TDD (RED→GREEN→REFACTOR) + MAXIMUS Edge Case Prediction
 v2.1: Added Pydantic input validation (FASE 3.2)
 v2.2: Replaced print() with logging (FASE 3.4)
 v3.0: Real Claude-powered test generation (FASE 3.5)
+v3.1: DETER-AGENT Guardian integration - OBRIGA Claude a obedecer Constitution
 """
 
 import sys, os
@@ -17,6 +18,7 @@ from pydantic import ValidationError
 from anthropic import Anthropic
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient
+from core.deter_agent import Guardian, GuardianMode
 from agents.validation_schemas import TestAgentParameters, validate_task_parameters
 from config.logging_config import get_logger
 from config.settings import settings
@@ -35,9 +37,23 @@ class TestAgent(BaseAgent):
     - MAXIMUS edge case prediction integration
     """
 
-    def __init__(self, agent_id: str = "test_agent", enable_maximus: bool = True):
-        super().__init__(agent_id=agent_id, agent_name="Test Agent (MAXIMUS-Enhanced)", port=8163)
+    def __init__(
+        self,
+        agent_id: str = "test_agent",
+        enable_maximus: bool = True,
+        enable_guardian: bool = True,
+        guardian_mode: GuardianMode = GuardianMode.BALANCED
+    ):
+        super().__init__(agent_id=agent_id, agent_name="Test Agent (Guardian + MAXIMUS)", port=8163)
         self.maximus_client = MaximusClient() if enable_maximus else None
+
+        # Initialize DETER-AGENT Guardian (OBRIGA Claude a obedecer Constitution)
+        self.guardian = Guardian(mode=guardian_mode) if enable_guardian else None
+        if self.guardian:
+            logger.info(
+                f"   🛡️ Guardian initialized (mode: {guardian_mode.value})",
+                extra={"guardian_mode": guardian_mode.value}
+            )
 
         # Initialize Anthropic Claude client
         self.anthropic_client = None
@@ -69,6 +85,38 @@ class TestAgent(BaseAgent):
                 output={'error': 'Invalid parameters', 'details': e.errors()},
                 metrics={'validation_failed': True}
             )
+
+        # Guardian Pre-Check (OBRIGA Claude a obedecer Constitution)
+        if self.guardian:
+            logger.info("   🛡️ Phase 0: Guardian constitutional check...", extra={"task_id": task.id})
+
+            action_context = {
+                'action_type': 'test_generation',
+                'description': task.description,
+                'parameters': task.parameters,
+                'function_code': function_code,
+            }
+
+            guardian_decision = self.guardian.evaluate_action(action_context)
+
+            if not guardian_decision.allowed:
+                logger.error(
+                    f"   ❌ Guardian BLOCKED: {guardian_decision.reasoning}",
+                    extra={"task_id": task.id}
+                )
+                return AgentResult(
+                    task_id=task.id,
+                    success=False,
+                    output={
+                        'error': 'Constitutional violation - Guardian blocked action',
+                        'reasoning': guardian_decision.reasoning,
+                        'constitutional_verdict': guardian_decision.constitutional_verdict,
+                        'recommendations': guardian_decision.recommendations,
+                    },
+                    metrics={'guardian_blocked': True, 'mode': guardian_decision.mode.value}
+                )
+
+            logger.info(f"   ✅ Guardian approved", extra={"task_id": task.id})
 
         logger.info("   🔴 Phase 1: RED - Writing tests...", extra={"task_id": task.id})
 
