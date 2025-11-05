@@ -4,14 +4,17 @@ Port: 8163
 Capability: TESTING
 
 v2.0: TDD (RED→GREEN→REFACTOR) + MAXIMUS Edge Case Prediction
+v2.1: Added Pydantic input validation (FASE 3.2)
 """
 
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from typing import List
 import asyncio
+from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient
+from agents.validation_schemas import TestAgentParameters, validate_task_parameters
 
 
 class TestAgent(BaseAgent):
@@ -28,7 +31,19 @@ class TestAgent(BaseAgent):
         return asyncio.run(self._execute_async(task))
 
     async def _execute_async(self, task: AgentTask) -> AgentResult:
-        function_code = task.parameters.get('function_code', '')
+        # Validate input parameters
+        try:
+            params = validate_task_parameters('test', task.parameters or {})
+            print(f"   ✅ Parameters validated")
+            function_code = params.function_code
+        except ValidationError as e:
+            print(f"   ❌ Invalid parameters: {e}")
+            return AgentResult(
+                task_id=task.id,
+                success=False,
+                output={'error': 'Invalid parameters', 'details': e.errors()},
+                metrics={'validation_failed': True}
+            )
 
         print(f"   🔴 Phase 1: RED - Writing tests...")
         test_suite = ['test_basic', 'test_edge_null', 'test_edge_empty']

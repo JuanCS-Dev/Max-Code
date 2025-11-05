@@ -12,6 +12,8 @@ v2.0 Features:
 - Decision Fusion para selecionar melhor plano
 - Fallback automático se MAXIMUS offline
 
+v2.1: Added Pydantic input validation (FASE 3.2)
+
 Biblical Foundation:
 "Os pensamentos do diligente tendem só à abundância"
 (Provérbios 21:5)
@@ -23,6 +25,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from typing import List, Optional
 import asyncio
+from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 
 # MAXIMUS Integration (v2.0)
@@ -32,6 +35,7 @@ from core.maximus_integration import (
     FallbackSystem,
     MaximusCache,
 )
+from agents.validation_schemas import PlanAgentParameters, validate_task_parameters
 from core.maximus_integration.decision_fusion import Decision, DecisionType
 from core.maximus_integration.fallback import FallbackStrategy
 
@@ -92,6 +96,19 @@ class PlanAgent(BaseAgent):
 
     async def _execute_async(self, task: AgentTask) -> AgentResult:
         """Async execution for MAXIMUS calls"""
+
+        # Validate input parameters
+        try:
+            params = validate_task_parameters('plan', task.parameters or {})
+            print(f"   ✅ Parameters validated")
+        except ValidationError as e:
+            print(f"   ❌ Invalid parameters: {e}")
+            return AgentResult(
+                task_id=task.id,
+                success=False,
+                output={'error': 'Invalid parameters', 'details': e.errors()},
+                metrics={'validation_failed': True}
+            )
 
         print(f"   🌳 Phase 1: Tree of Thoughts exploration...")
 

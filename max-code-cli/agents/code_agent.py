@@ -4,14 +4,17 @@ Port: 8162
 Capability: CODE_GENERATION
 
 v2.0: Code Generation + MAXIMUS Security Analysis
+v2.1: Added Pydantic input validation (FASE 3.2)
 """
 
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from typing import List
 import asyncio
+from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient
+from agents.validation_schemas import CodeAgentParameters, validate_task_parameters
 
 
 class CodeAgent(BaseAgent):
@@ -28,6 +31,19 @@ class CodeAgent(BaseAgent):
         return asyncio.run(self._execute_async(task))
 
     async def _execute_async(self, task: AgentTask) -> AgentResult:
+        # Validate input parameters
+        try:
+            params = validate_task_parameters('code', task.parameters or {})
+            print(f"   ✅ Parameters validated")
+        except ValidationError as e:
+            print(f"   ❌ Invalid parameters: {e}")
+            return AgentResult(
+                task_id=task.id,
+                success=False,
+                output={'error': 'Invalid parameters', 'details': e.errors()},
+                metrics={'validation_failed': True}
+            )
+
         print(f"   💻 Phase 1: Generating code...")
         generated_code = f"# Generated code for: {task.description}\ndef solution():\n    return True"
 

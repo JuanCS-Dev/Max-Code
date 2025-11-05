@@ -10,6 +10,8 @@ Specialized agent for /dormir command that handles complete end-of-day workflow:
 - Git push (backup to remote)
 - Cleanup activities
 - Enable exact resumption the next day
+
+v2.1: Added Pydantic input validation (FASE 3.2)
 """
 
 import sys, os
@@ -19,8 +21,10 @@ import asyncio
 import json
 from datetime import datetime
 from pathlib import Path
+from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient
+from agents.validation_schemas import SleepAgentParameters, validate_task_parameters
 
 
 class SleepAgent(BaseAgent):
@@ -44,6 +48,19 @@ class SleepAgent(BaseAgent):
 
     async def _execute_async(self, task: AgentTask) -> AgentResult:
         """Execute end-of-day workflow"""
+        # Validate input parameters
+        try:
+            params = validate_task_parameters('sleep', task.parameters or {})
+            print(f"   ✅ Parameters validated")
+        except ValidationError as e:
+            print(f"   ❌ Invalid parameters: {e}")
+            return AgentResult(
+                task_id=task.id,
+                success=False,
+                output={'error': 'Invalid parameters', 'details': e.errors()},
+                metrics={'validation_failed': True}
+            )
+
         print(f"   😴 Starting end-of-day workflow...")
 
         workflow_results = {}

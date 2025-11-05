@@ -8,6 +8,8 @@ Nome: Sophia (do grego Σοφία - "Sabedoria")
 Port: 8167
 Capability: ARCHITECTURE
 
+v2.1: Added Pydantic input validation (FASE 3.2)
+
 Biblical Foundation:
 "A sabedoria edificou a sua casa" (Provérbios 9:1)
 
@@ -50,6 +52,7 @@ import asyncio
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from pydantic import ValidationError
 
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 
@@ -61,6 +64,7 @@ from core.maximus_integration import (
     MaximusCache,
 )
 from core.maximus_integration.decision_fusion import Decision, DecisionType
+from agents.validation_schemas import ArchitectAgentParameters, validate_task_parameters
 
 
 # ============================================================================
@@ -360,9 +364,20 @@ class ArchitectAgent(BaseAgent):
         else:
             complexity = "LOW"
 
-        # Extract requirements and constraints from parameters
-        requirements = task.parameters.get('requirements', [])
-        constraints = task.parameters.get('constraints', [])
+        # Validate input parameters
+        try:
+            params = validate_task_parameters('architect', task.parameters or {})
+            print(f"   ✅ Parameters validated")
+            requirements = params.requirements
+            constraints = params.constraints
+        except ValidationError as e:
+            print(f"   ❌ Invalid parameters: {e}")
+            return AgentResult(
+                task_id=task.id,
+                success=False,
+                output={'error': 'Invalid parameters', 'details': e.errors()},
+                metrics={'validation_failed': True}
+            )
 
         # Identify concerns
         concerns = []
