@@ -1,11 +1,17 @@
 """
-File Tools - Complete file operation suite
+Tools Framework - Anthropic SDK-style tool management
 
 Biblical Foundation:
 "Dá-me entendimento, e guardarei a tua lei" (Salmos 119:34)
 Understanding through tools - wisdom in action.
 
-Tools:
+Features:
+- @tool decorator (Anthropic SDK pattern)
+- Tool registry and discovery
+- Type-safe tool schemas
+- Automatic validation
+
+File Tools:
 - FileReader: Read files with line ranges
 - FileWriter: Write files atomically
 - FileEditor: Edit files with exact replacements
@@ -44,7 +50,51 @@ from .grep_tool import (
     grep_files,
 )
 
+# Tool decorator and framework (FASE 2.1)
+from .types import (
+    ToolResult,
+    ToolContent,
+    ToolResultType,
+    ToolSchema,
+    ToolParameter,
+    ToolMetadata,
+)
+
+from .registry import (
+    ToolRegistry,
+    get_registry,
+    ToolRegistryError,
+    ToolNotFoundError,
+    ToolAlreadyRegisteredError,
+)
+
+from .decorator import (
+    tool,
+    beta_tool,
+    text_tool,
+    file_tool,
+    async_tool,
+)
+
 __all__ = [
+    # Tool Framework (FASE 2.1)
+    'tool',
+    'beta_tool',
+    'text_tool',
+    'file_tool',
+    'async_tool',
+    'ToolResult',
+    'ToolContent',
+    'ToolResultType',
+    'ToolSchema',
+    'ToolParameter',
+    'ToolMetadata',
+    'ToolRegistry',
+    'get_registry',
+    'ToolRegistryError',
+    'ToolNotFoundError',
+    'ToolAlreadyRegisteredError',
+
     # FileReader
     'FileReader',
     'FileReadResult',
@@ -72,4 +122,4 @@ __all__ = [
     'grep_files',
 ]
 
-__version__ = '1.0.0'
+__version__ = '2.0.0'  # FASE 2.1: @tool decorator
