@@ -9,6 +9,9 @@ Tracking de métricas constitucionais (LEI, FPC, CRS).
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -49,14 +52,12 @@ class MetricsTracker:
         self.metrics_history.append(metrics)
 
         # Log status
-        print(f"📊 Metrics Tracker:")
-        print(f"   LEI: {lei:.2f} (target: < {self.LEI_MAX})")
-        print(f"   FPC: {fpc:.1%} (target: ≥ {self.FPC_MIN:.0%})")
-        print(f"   CRS: {crs:.1%} (target: ≥ {self.CRS_MIN:.0%})")
-
+        logger.info(f"📊 Metrics Tracker:")
+        logger.info(f"   LEI: {lei:.2f} (target: < {self.LEI_MAX})")
+        logger.info(f"   FPC: {fpc:.1%} (target: ≥ {self.FPC_MIN:.0%})")
+        logger.info(f"   CRS: {crs:.1%} (target: ≥ {self.CRS_MIN:.0%})")
         if not metrics.is_constitutional():
-            print(f"   ⚠️  Constitutional violations detected!")
-
+            logger.warning(f"   ⚠️  Constitutional violations detected!")
         return metrics
 
     def get_latest_metrics(self) -> Optional[Metrics]:

@@ -21,6 +21,9 @@ from dataclasses import dataclass
 from enum import Enum
 
 from config.settings import get_settings
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 # ============================================================================
@@ -84,7 +87,7 @@ class MABAClient:
         )
 
         for result in results.results[:3]:
-            print(f"{result.title}: {result.url}")
+            logger.info(f"{result.title}: {result.url}")
     """
 
     def __init__(
@@ -151,12 +154,11 @@ class MABAClient:
                 context="Building REST API with PostgreSQL"
             )
 
-            print(f"Found {results.total_results} results")
-            print(f"Query understood as: {results.query_understanding}")
-
+            logger.info(f"Found {results.total_results} results")
+            logger.info(f"Query understood as: {results.query_understanding}")
             for result in results.results:
-                print(f"- {result.title} ({result.relevance:.2f})")
-                print(f"  {result.url}")
+                logger.info(f"- {result.title} ({result.relevance:.2f})")
+                logger.info(f"  {result.url}")
         """
         payload = {
             "query": query,

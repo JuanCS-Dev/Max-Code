@@ -23,6 +23,9 @@ from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class ReasoningType(Enum):
@@ -147,14 +150,12 @@ class ChainOfThought:
         """
         self.stats['total_problems'] += 1
 
-        print(f"🧠 Chain of Thought: Reasoning step-by-step...")
-        print(f"   Problem: {problem[:80]}...")
-
+        logger.info(f"🧠 Chain of Thought: Reasoning step-by-step...")
+        logger.info(f"   Problem: {problem[:80]}...")
         # FASE 1: DECOMPOSE - quebrar problema
         sub_problems = self._decompose_problem(problem, context)
 
-        print(f"   ✓ Decomposed into {len(sub_problems)} sub-problems")
-
+        logger.info(f"   ✓ Decomposed into {len(sub_problems)} sub-problems")
         # FASE 2: REASON - gerar steps para cada sub-problema
         reasoning_steps = []
 
@@ -171,17 +172,15 @@ class ChainOfThought:
             # Check confidence
             if step.confidence < self.min_confidence:
                 self.stats['low_confidence_steps'] += 1
-                print(f"   ⚠ Step {i} has low confidence ({step.confidence:.2f})")
-
+                logger.info(f"   ⚠ Step {i} has low confidence ({step.confidence:.2f})")
             # Check max steps
             if i >= self.max_steps:
-                print(f"   ⚠ Reached max steps ({self.max_steps}), stopping")
+                logger.info(f"   ⚠ Reached max steps ({self.max_steps}), stopping")
                 break
 
         self.stats['total_steps_generated'] += len(reasoning_steps)
 
-        print(f"   ✓ Generated {len(reasoning_steps)} reasoning steps")
-
+        logger.info(f"   ✓ Generated {len(reasoning_steps)} reasoning steps")
         # FASE 3: SYNTHESIZE - sintetizar resposta final
         final_answer = self._synthesize_answer(reasoning_steps)
 
@@ -213,10 +212,9 @@ class ChainOfThought:
             warnings=warnings,
         )
 
-        print(f"\n   📊 Reasoning Complete:")
-        print(f"   Steps: {result.total_steps}")
-        print(f"   Avg Confidence: {result.avg_confidence:.2f}")
-
+        logger.info(f"\n   📊 Reasoning Complete:")
+        logger.info(f"   Steps: {result.total_steps}")
+        logger.info(f"   Avg Confidence: {result.avg_confidence:.2f}")
         return result
 
     def _decompose_problem(
@@ -355,12 +353,12 @@ class ChainOfThought:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  CHAIN OF THOUGHT - STATISTICS")
+        logger.info("  CHAIN OF THOUGHT - STATISTICS")
         print("="*60)
-        print(f"Total problems solved:     {stats['total_problems']}")
-        print(f"Total steps generated:     {stats['total_steps_generated']}")
-        print(f"Avg steps/problem:         {stats['avg_steps_per_problem']:.1f}")
-        print(f"Low confidence steps:      {stats['low_confidence_steps']} ({stats['low_confidence_rate']:.1f}%)")
+        logger.info(f"Total problems solved:     {stats['total_problems']}")
+        logger.info(f"Total steps generated:     {stats['total_steps_generated']}")
+        logger.info(f"Avg steps/problem:         {stats['avg_steps_per_problem']:.1f}")
+        logger.info(f"Low confidence steps:      {stats['low_confidence_steps']} ({stats['low_confidence_rate']:.1f}%)")
         print("="*60 + "\n")
 
 

@@ -24,6 +24,9 @@ from dataclasses import dataclass, field
 from collections import Counter
 from datetime import datetime
 import hashlib
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -141,10 +144,9 @@ class SelfConsistency:
         elif num_samples > self.MAX_SAMPLES:
             num_samples = self.MAX_SAMPLES
 
-        print(f"🗳️  Self-Consistency: Generating {num_samples} independent solutions...")
-        print(f"   Problem: {problem[:80]}...")
-        print(f"   Temperature: {temperature}")
-
+        logger.info(f"🗳️  Self-Consistency: Generating {num_samples} independent solutions...")
+        logger.info(f"   Problem: {problem[:80]}...")
+        logger.info(f"   Temperature: {temperature}")
         # FASE 1: SAMPLE - gerar múltiplas soluções
         solutions = self._generate_samples(
             problem,
@@ -155,8 +157,7 @@ class SelfConsistency:
 
         self.stats['total_samples_generated'] += len(solutions)
 
-        print(f"   ✓ Generated {len(solutions)} solutions")
-
+        logger.info(f"   ✓ Generated {len(solutions)} solutions")
         # FASE 2: VOTE - contar votos
         consensus = self._vote(solutions)
 
@@ -171,11 +172,10 @@ class SelfConsistency:
         self.stats['avg_confidence'].append(consensus.confidence)
 
         # Log resultado
-        print(f"\n   📊 Voting Results:")
-        print(f"   Winner: {consensus.vote_count}/{consensus.total_votes} votes")
-        print(f"   Confidence: {consensus.confidence:.1%}")
-        print(f"   Status: {'✓ UNANIMOUS' if consensus.is_unanimous else '✓ MAJORITY' if consensus.is_majority else '⚠ SPLIT'}")
-
+        logger.info(f"\n   📊 Voting Results:")
+        logger.info(f"   Winner: {consensus.vote_count}/{consensus.total_votes} votes")
+        logger.info(f"   Confidence: {consensus.confidence:.1%}")
+        logger.info(f"   Status: {'✓ UNANIMOUS' if consensus.is_unanimous else '✓ MAJORITY' if consensus.is_majority else '⚠ SPLIT'}")
         return consensus
 
     def _generate_samples(
@@ -329,14 +329,14 @@ class SelfConsistency:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  SELF-CONSISTENCY - STATISTICS")
+        logger.info("  SELF-CONSISTENCY - STATISTICS")
         print("="*60)
-        print(f"Total problems solved:     {stats['total_problems']}")
-        print(f"Total samples generated:   {stats['total_samples_generated']}")
-        print(f"Unanimous consensus:       {stats['unanimous_consensus']} ({stats['unanimous_rate']:.1f}%)")
-        print(f"Majority consensus:        {stats['majority_consensus']} ({stats['majority_rate']:.1f}%)")
-        print(f"Split votes:               {stats['split_votes']} ({stats['split_rate']:.1f}%)")
-        print(f"Avg confidence:            {stats['avg_confidence']:.3f}")
+        logger.info(f"Total problems solved:     {stats['total_problems']}")
+        logger.info(f"Total samples generated:   {stats['total_samples_generated']}")
+        logger.info(f"Unanimous consensus:       {stats['unanimous_consensus']} ({stats['unanimous_rate']:.1f}%)")
+        logger.info(f"Majority consensus:        {stats['majority_consensus']} ({stats['majority_rate']:.1f}%)")
+        logger.info(f"Split votes:               {stats['split_votes']} ({stats['split_rate']:.1f}%)")
+        logger.info(f"Avg confidence:            {stats['avg_confidence']:.3f}")
         print("="*60 + "\n")
 
 

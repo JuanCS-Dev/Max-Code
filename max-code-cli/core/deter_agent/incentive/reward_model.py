@@ -10,6 +10,9 @@ from typing import Dict, Any
 from dataclasses import dataclass
 from enum import Enum
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class RewardType(Enum):
@@ -53,7 +56,6 @@ class RewardModel:
         """Aplica recompensa"""
         self.total_points += reward.points
         self.rewards_history.append(reward)
-        print(f"🎁 Reward: {reward.points:+.1f} points - {reward.reason}")
-
+        logger.info(f"🎁 Reward: {reward.points:+.1f} points - {reward.reason}")
     def get_total_points(self) -> float:
         return self.total_points

@@ -12,6 +12,7 @@ Specialized agent for /dormir command that handles complete end-of-day workflow:
 - Enable exact resumption the next day
 
 v2.1: Added Pydantic input validation (FASE 3.2)
+v2.2: Replaced print() with logging (FASE 3.4)
 """
 
 import sys, os
@@ -25,6 +26,9 @@ from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient
 from agents.validation_schemas import SleepAgentParameters, validate_task_parameters
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class SleepAgent(BaseAgent):
@@ -51,9 +55,9 @@ class SleepAgent(BaseAgent):
         # Validate input parameters
         try:
             params = validate_task_parameters('sleep', task.parameters or {})
-            print(f"   ✅ Parameters validated")
+            logger.info("Parameters validated", extra={"task_id": task.id})
         except ValidationError as e:
-            print(f"   ❌ Invalid parameters: {e}")
+            logger.error(f"Invalid parameters: {e}", extra={"task_id": task.id, "error_details": e.errors()})
             return AgentResult(
                 task_id=task.id,
                 success=False,
@@ -61,27 +65,27 @@ class SleepAgent(BaseAgent):
                 metrics={'validation_failed': True}
             )
 
-        print(f"   😴 Starting end-of-day workflow...")
+        logger.info("Starting end-of-day workflow", extra={"task_id": task.id})
 
         workflow_results = {}
 
         # Phase 1: Create snapshot
-        print(f"   📸 Phase 1: Creating project snapshot...")
+        logger.info("Phase 1: Creating project snapshot", extra={"task_id": task.id})
         snapshot_data = await self._create_snapshot(task)
         workflow_results['snapshot'] = snapshot_data
 
         # Phase 2: Create status file
-        print(f"   📋 Phase 2: Creating status file...")
+        logger.info("Phase 2: Creating status file", extra={"task_id": task.id})
         status_file = await self._create_status_file(task, snapshot_data)
         workflow_results['status_file'] = status_file
 
         # Phase 3: Git operations
-        print(f"   🔄 Phase 3: Git commit and push...")
+        logger.info("Phase 3: Git commit and push", extra={"task_id": task.id})
         git_result = await self._git_operations(snapshot_data)
         workflow_results['git'] = git_result
 
         # Phase 4: Cleanup
-        print(f"   🧹 Phase 4: Cleanup operations...")
+        logger.info("Phase 4: Cleanup operations", extra={"task_id": task.id})
         cleanup_result = await self._cleanup_operations()
         workflow_results['cleanup'] = cleanup_result
 
@@ -89,17 +93,19 @@ class SleepAgent(BaseAgent):
         if self.maximus_client:
             try:
                 if await self.maximus_client.health_check():
-                    print(f"   🤖 Phase 5: MAXIMUS session summary...")
+                    logger.info("Phase 5: MAXIMUS session summary", extra={"task_id": task.id})
                     summary = await self._maximus_summary(snapshot_data)
                     workflow_results['maximus_summary'] = summary
             except (ConnectionError, TimeoutError, AttributeError, Exception):
-                print(f"      ⚠️ MAXIMUS offline - skipping summary")
+                logger.warning("MAXIMUS offline - skipping summary", extra={"task_id": task.id})
 
         # Generate final report
         report = self._generate_report(workflow_results)
 
-        print(f"\n   ✅ End-of-day workflow completed!")
-        print(f"   📊 Summary: {report['summary']}")
+        logger.info(
+            "End-of-day workflow completed",
+            extra={"task_id": task.id, "summary": report['summary']}
+        )
 
         return AgentResult(
             task_id=task.id,

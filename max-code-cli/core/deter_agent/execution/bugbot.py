@@ -413,24 +413,21 @@ class BugBot:
             verbose: Se True, mostra mais detalhes
         """
         if not result.bugs:
-            print(f"✅ {result.file_path}: No issues detected")
+            logger.info(f"✅ {result.file_path}: No issues detected")
             return
 
-        print(f"\n{'='*70}")
-        print(f"🔍 BugBot Analysis: {result.file_path}")
-        print(f"{'='*70}")
-
+        logger.info(f"\n{'='*70}")
+        logger.debug(f"🔍 BugBot Analysis: {result.file_path}")
+        logger.info(f"{'='*70}")
         # Summary
-        print(f"\n📊 Summary:")
-        print(f"  Critical issues: {result.critical_issues}")
-        print(f"  Errors: {result.errors}")
-        print(f"  Warnings: {result.warnings}")
-        print(f"  Safe to execute: {'✅ Yes' if result.is_safe_to_execute else '❌ No'}")
-        print(f"  Analysis time: {result.analysis_time:.3f}s")
-
+        logger.info(f"\n📊 Summary:")
+        logger.info(f"  Critical issues: {result.critical_issues}")
+        logger.error(f"  Errors: {result.errors}")
+        logger.warning(f"  Warnings: {result.warnings}")
+        logger.info(f"  Safe to execute: {'✅ Yes' if result.is_safe_to_execute else '❌ No'}")
+        logger.info(f"  Analysis time: {result.analysis_time:.3f}s")
         # Bugs
-        print(f"\n🐛 Issues detected:")
-
+        logger.info(f"\n🐛 Issues detected:")
         for bug in result.bugs:
             severity_icon = {
                 ErrorSeverity.CRITICAL: "🔴",
@@ -439,25 +436,22 @@ class BugBot:
                 ErrorSeverity.LOW: "🔵"
             }[bug.severity]
 
-            print(f"\n  {severity_icon} [{bug.severity.value.upper()}] Line {bug.line_number}")
-            print(f"     Category: {bug.category.value}")
-            print(f"     {bug.description}")
-
+            logger.info(f"\n  {severity_icon} [{bug.severity.value.upper()}] Line {bug.line_number}")
+            logger.info(f"     Category: {bug.category.value}")
+            logger.info(f"     {bug.description}")
             if bug.suggestion:
-                print(f"     💡 Suggestion: {bug.suggestion}")
-
+                logger.info(f"     💡 Suggestion: {bug.suggestion}")
             if verbose and bug.code_snippet:
-                print(f"     Code: {bug.code_snippet}")
-
+                logger.info(f"     Code: {bug.code_snippet}")
     def print_stats(self):
         """Imprime estatísticas do BugBot"""
         print("\n" + "="*70)
-        print("   BUGBOT - PROACTIVE ERROR DETECTION STATISTICS")
+        logger.error("   BUGBOT - PROACTIVE ERROR DETECTION STATISTICS")
         print("="*70)
-        print(f"  Files analyzed: {self.stats['files_analyzed']}")
-        print(f"  Bugs detected: {self.stats['bugs_detected']}")
-        print(f"  Critical issues prevented: {self.stats['critical_issues_prevented']}")
-        print(f"  Warnings issued: {self.stats['warnings_issued']}")
+        logger.info(f"  Files analyzed: {self.stats['files_analyzed']}")
+        logger.info(f"  Bugs detected: {self.stats['bugs_detected']}")
+        logger.info(f"  Critical issues prevented: {self.stats['critical_issues_prevented']}")
+        logger.warning(f"  Warnings issued: {self.stats['warnings_issued']}")
         print("="*70)
 
 
@@ -489,9 +483,9 @@ def analyze_file(file_path: str) -> AnalysisResult:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("🔍 BugBot - Proactive Error Detection Demo\n")
+    logger.error("🔍 BugBot - Proactive Error Detection Demo\n")
     print("=" * 70)
-    print("P4 - Prudência Operacional in action!")
+    logger.info("P4 - Prudência Operacional in action!")
     print("=" * 70)
 
     bugbot = BugBot()
@@ -504,6 +498,9 @@ if __name__ == "__main__":
 # Test file with intentional errors
 import os
 from sys import *
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 def buggy_function():
     # Undefined variable
@@ -517,13 +514,12 @@ def buggy_function():
 
 # Syntax error on next line
 def broken_function(
-    print("Missing closing parenthesis")
+    logger.info("Missing closing parenthesis")
 """
 
     test_file.write_text(test_code)
 
-    print(f"\nAnalyzing test file: {test_file.name}")
-
+    logger.info(f"\nAnalyzing test file: {test_file.name}")
     result = bugbot.analyze_file(str(test_file))
 
     bugbot.print_bugs(result, verbose=True)
@@ -534,5 +530,5 @@ def broken_function(
     # Print stats
     bugbot.print_stats()
 
-    print("\n✅ BugBot Demo Complete!")
-    print("🏎️ PAGANI: P4 - Prudência Operacional implementado!")
+    logger.info("\n✅ BugBot Demo Complete!")
+    logger.info("🏎️ PAGANI: P4 - Prudência Operacional implementado!")

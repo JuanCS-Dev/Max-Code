@@ -38,6 +38,9 @@ from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class IsolationLevel(Enum):
@@ -72,7 +75,7 @@ class IsolatedContext:
             return self.allowed_context.get(key, default)
         else:
             # Log access denial (para auditoria)
-            print(f"   🚫 Access denied: Sub-agent '{self.agent_id}' tried to access forbidden key '{key}'")
+            logger.info(f"   🚫 Access denied: Sub-agent '{self.agent_id}' tried to access forbidden key '{key}'")
             return default
 
 
@@ -202,11 +205,10 @@ class SubAgentIsolation:
         tokens_saved = (full_context_size - allowed_context_size) // 4  # Rough estimate (4 chars = 1 token)
         self.stats['tokens_saved'] += tokens_saved
 
-        print(f"🔒 Sub-Agent Isolation: Created isolated context for {agent_type}")
-        print(f"   Isolation level: {isolation_level.value}")
-        print(f"   Allowed keys: {len(allowed_context)} / {len(full_context)}")
-        print(f"   Tokens saved: ~{tokens_saved}")
-
+        logger.info(f"🔒 Sub-Agent Isolation: Created isolated context for {agent_type}")
+        logger.info(f"   Isolation level: {isolation_level.value}")
+        logger.info(f"   Allowed keys: {len(allowed_context)} / {len(full_context)}")
+        logger.info(f"   Tokens saved: ~{tokens_saved}")
         return IsolatedContext(
             agent_id=agent_id,
             agent_type=agent_type,
@@ -290,8 +292,7 @@ class SubAgentIsolation:
         """
         import time
 
-        print(f"▶️  Executing sub-agent: {isolated_context.agent_id}")
-
+        logger.info(f"▶️  Executing sub-agent: {isolated_context.agent_id}")
         start_time = time.time()
 
         # Track access violations (via isolated_context)
@@ -305,8 +306,7 @@ class SubAgentIsolation:
         except Exception as e:
             result = None
             success = False
-            print(f"   ❌ Sub-agent failed: {e}")
-
+            logger.error(f"   ❌ Sub-agent failed: {e}")
         execution_time = time.time() - start_time
 
         # Calculate access violations during execution
@@ -326,8 +326,7 @@ class SubAgentIsolation:
             access_violations=access_violations,
         )
 
-        print(f"   ✓ Sub-agent completed (success: {success}, time: {execution_time:.2f}s)")
-
+        logger.info(f"   ✓ Sub-agent completed (success: {success}, time: {execution_time:.2f}s)")
         return report
 
     def merge_result(
@@ -352,8 +351,7 @@ class SubAgentIsolation:
 
         parent_context[merge_key].append(sub_agent_report.to_dict())
 
-        print(f"   ✓ Merged sub-agent result into parent context")
-
+        logger.info(f"   ✓ Merged sub-agent result into parent context")
         return parent_context
 
     def audit_access(self, isolated_context: IsolatedContext, attempted_key: str):
@@ -367,8 +365,7 @@ class SubAgentIsolation:
         self.stats['access_violations'] += 1
 
         # Log para auditoria (P4 - rastreabilidade)
-        print(f"   🚨 ACCESS VIOLATION: {isolated_context.agent_id} tried to access '{attempted_key}'")
-
+        logger.info(f"   🚨 ACCESS VIOLATION: {isolated_context.agent_id} tried to access '{attempted_key}'")
     def get_stats(self) -> Dict:
         """Retorna estatísticas"""
         return {
@@ -380,11 +377,11 @@ class SubAgentIsolation:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  SUB-AGENT ISOLATION - STATISTICS")
+        logger.info("  SUB-AGENT ISOLATION - STATISTICS")
         print("="*60)
-        print(f"Total sub-agents spawned:  {stats['total_sub_agents_spawned']}")
-        print(f"Access violations:         {stats['access_violations']}")
-        print(f"Tokens saved:              {stats['tokens_saved']:,}")
+        logger.info(f"Total sub-agents spawned:  {stats['total_sub_agents_spawned']}")
+        logger.info(f"Access violations:         {stats['access_violations']}")
+        logger.info(f"Tokens saved:              {stats['tokens_saved']:,}")
         print("="*60 + "\n")
 
 

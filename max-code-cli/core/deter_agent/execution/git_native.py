@@ -38,6 +38,9 @@ from pathlib import Path
 import subprocess
 import os
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -183,7 +186,7 @@ class GitNativeWorkflow:
             )
 
         except Exception as e:
-            print(f"⚠️  Error getting git status: {e}")
+            logger.error(f"⚠️  Error getting git status: {e}")
             return GitStatus(
                 is_repo=True,
                 branch="unknown",
@@ -267,9 +270,8 @@ class GitNativeWorkflow:
             )
             commit_hash = hash_result.stdout.strip()
 
-            print(f"✓ Committed {len(files_to_add)} file(s) to protect user work")
-            print(f"  Commit: {commit_hash[:8]}")
-
+            logger.info(f"✓ Committed {len(files_to_add)} file(s) to protect user work")
+            logger.info(f"  Commit: {commit_hash[:8]}")
             return CommitResult(
                 success=True,
                 commit_hash=commit_hash,
@@ -368,13 +370,12 @@ class GitNativeWorkflow:
             )
             commit_hash = hash_result.stdout.strip()
 
-            print(f"\n✓ Auto-committed AI-assisted changes (P2 - Transparência Radical)")
-            print(f"  Commit: {commit_hash[:8]}")
-            print(f"  Type: {commit_type}")
-            print(f"  Files: {', '.join(files)}")
+            logger.info(f"\n✓ Auto-committed AI-assisted changes (P2 - Transparência Radical)")
+            logger.info(f"  Commit: {commit_hash[:8]}")
+            logger.info(f"  Type: {commit_type}")
+            logger.info(f"  Files: {', '.join(files)}")
             if principle:
-                print(f"  Principle: {principle}")
-
+                logger.info(f"  Principle: {principle}")
             return CommitResult(
                 success=True,
                 commit_hash=commit_hash,
@@ -456,9 +457,8 @@ class GitNativeWorkflow:
                 timeout=10
             )
 
-            print(f"✓ Undid last commit: {commit_hash[:8]}")
-            print(f"  Changes preserved in working directory")
-
+            logger.info(f"✓ Undid last commit: {commit_hash[:8]}")
+            logger.info(f"  Changes preserved in working directory")
             return CommitResult(
                 success=True,
                 commit_hash=commit_hash,
@@ -537,43 +537,41 @@ def create_git_workflow(repo_path: Optional[str] = None) -> GitNativeWorkflow:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("📜 Git-Native Workflow Demo\n")
+    logger.info("📜 Git-Native Workflow Demo\n")
     print("=" * 70)
-    print("P2 - Transparência Radical in action!")
+    logger.info("P2 - Transparência Radical in action!")
     print("=" * 70)
 
     git = GitNativeWorkflow()
 
     # Test 1: Check git status
-    print("\nTEST 1: Get Git Status")
+    logger.info("\nTEST 1: Get Git Status")
     print("-" * 70)
 
     status = git.get_status()
 
     if status.is_repo:
-        print(f"✓ Git repository detected")
-        print(f"  Branch: {status.branch}")
-        print(f"  Dirty files: {len(status.dirty_files)}")
-        print(f"  Staged files: {len(status.staged_files)}")
-        print(f"  Untracked files: {len(status.untracked_files)}")
-        print(f"  Has changes: {status.has_changes}")
+        logger.info(f"✓ Git repository detected")
+        logger.info(f"  Branch: {status.branch}")
+        logger.info(f"  Dirty files: {len(status.dirty_files)}")
+        logger.info(f"  Staged files: {len(status.staged_files)}")
+        logger.info(f"  Untracked files: {len(status.untracked_files)}")
+        logger.info(f"  Has changes: {status.has_changes}")
     else:
-        print(f"⚠️  Not a git repository")
-
+        logger.warning(f"⚠️  Not a git repository")
     # Test 2: View commit history
-    print("\nTEST 2: View Commit History")
+    logger.info("\nTEST 2: View Commit History")
     print("-" * 70)
 
     commits = git.view_commit_history(limit=5)
 
     if commits:
-        print(f"✓ Found {len(commits)} recent commits:")
+        logger.info(f"✓ Found {len(commits)} recent commits:")
         for commit in commits:
-            print(f"  {commit['hash']}: {commit['message']}")
-            print(f"    by {commit['author']}, {commit['time']}")
+            logger.info(f"  {commit['hash']}: {commit['message']}")
+            logger.info(f"    by {commit['author']}, {commit['time']}")
     else:
-        print(f"⚠️  No commits found")
-
+        logger.warning(f"⚠️  No commits found")
     print("\n" + "=" * 70)
-    print("✅ Git-Native Workflow Demo Complete!")
-    print("🏎️ PAGANI: P2 - Transparência Radical implementado!")
+    logger.info("✅ Git-Native Workflow Demo Complete!")
+    logger.info("🏎️ PAGANI: P2 - Transparência Radical implementado!")

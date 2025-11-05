@@ -30,6 +30,9 @@ from enum import Enum
 
 from .lexer import Token, TokenType, tokenize
 from .vocabulary import get_emoji_definition, OPERATORS, EmojiCategory
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 # ============================================================================
@@ -436,10 +439,9 @@ def print_ast(node: ASTNode, indent: int = 0):
 
     if node.value:
         meaning_str = f" ({node.meaning})" if node.meaning else ""
-        print(f"{prefix}{node.node_type.value}: {node.value}{meaning_str}")
+        logger.info(f"{prefix}{node.node_type.value}: {node.value}{meaning_str}")
     else:
-        print(f"{prefix}{node.node_type.value}")
-
+        logger.info(f"{prefix}{node.node_type.value}")
     for child in node.children:
         print_ast(child, indent + 1)
 
@@ -449,8 +451,7 @@ def print_ast(node: ASTNode, indent: int = 0):
 # ============================================================================
 
 if __name__ == "__main__":
-    print("🌳 EPL Parser Demo\n")
-
+    logger.info("🌳 EPL Parser Demo\n")
     test_cases = [
         # Simple emoji sequence
         "🌳📊🔒",

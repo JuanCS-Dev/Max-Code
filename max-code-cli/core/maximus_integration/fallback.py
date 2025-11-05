@@ -18,6 +18,9 @@ import time
 from typing import Any, Callable, Optional, Dict
 from dataclasses import dataclass
 from enum import Enum
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 # ============================================================================
@@ -92,9 +95,9 @@ class FallbackSystem:
         )
 
         if result.mode == FallbackMode.HYBRID:
-            print("✓ MAXIMUS contributed")
+            logger.info("✓ MAXIMUS contributed")
         else:
-            print("⚠️ Standalone mode (MAXIMUS offline)")
+            logger.warning("⚠️ Standalone mode (MAXIMUS offline)")
     """
 
     def __init__(
@@ -181,8 +184,7 @@ class FallbackSystem:
 
         except (asyncio.TimeoutError, ConnectionError, Exception) as e:
             # Primary failed - apply fallback strategy
-            print(f"⚠️  MAXIMUS unavailable: {type(e).__name__}")
-
+            logger.warning(f"⚠️  MAXIMUS unavailable: {type(e).__name__}")
             if strategy == FallbackStrategy.FAIL_FAST and task_critical:
                 # Fail fast for critical tasks
                 self.metrics.total_executions += 1
@@ -266,29 +268,28 @@ class FallbackSystem:
         task_desc = context.get("task_description", "this task")
 
         print("\n" + "="*60)
-        print("⚠️  MAXIMUS AI is offline")
+        logger.warning("⚠️  MAXIMUS AI is offline")
         print("="*60)
-        print(f"\nTask: {task_desc}")
-        print("\nOptions:")
-        print("  1. Continue WITHOUT MAXIMUS (standalone Max-Code)")
-        print("     → Lower quality (no systemic/ethical analysis)")
-        print("     → Faster execution")
-        print("\n  2. Cancel and retry later")
-        print("     → Wait for MAXIMUS to come back online")
+        logger.info(f"\nTask: {task_desc}")
+        logger.info("\nOptions:")
+        logger.info("  1. Continue WITHOUT MAXIMUS (standalone Max-Code)")
+        logger.info("     → Lower quality (no systemic/ethical analysis)")
+        logger.info("     → Faster execution")
+        logger.info("\n  2. Cancel and retry later")
+        logger.info("     → Wait for MAXIMUS to come back online")
         print("="*60)
 
         while True:
             choice = input("\nContinue without MAXIMUS? [y/N]: ").strip().lower()
 
             if choice in ["y", "yes"]:
-                print("✓ Continuing in standalone mode...\n")
+                logger.info("✓ Continuing in standalone mode...\n")
                 return True
             elif choice in ["n", "no", ""]:
-                print("✗ Task cancelled. Please retry when MAXIMUS is online.\n")
+                logger.info("✗ Task cancelled. Please retry when MAXIMUS is online.\n")
                 return False
             else:
-                print("Invalid choice. Please enter 'y' or 'n'.")
-
+                logger.info("Invalid choice. Please enter 'y' or 'n'.")
     def _update_avg(self, current_avg: float, new_value: float, count: int) -> float:
         """Update running average"""
         if count == 0:
@@ -308,20 +309,20 @@ class FallbackSystem:
         m = self.metrics
 
         print("\n" + "="*60)
-        print("Fallback System Metrics")
+        logger.info("Fallback System Metrics")
         print("="*60)
-        print(f"Total Executions:      {m.total_executions}")
-        print(f"  ✓ Hybrid:            {m.hybrid_executions} ({self._pct(m.hybrid_executions, m.total_executions)})")
-        print(f"  ⚠ Standalone:        {m.standalone_executions} ({self._pct(m.standalone_executions, m.total_executions)})")
-        print(f"  ✗ Failed:            {m.failed_executions} ({self._pct(m.failed_executions, m.total_executions)})")
+        logger.info(f"Total Executions:      {m.total_executions}")
+        logger.info(f"  ✓ Hybrid:            {m.hybrid_executions} ({self._pct(m.hybrid_executions, m.total_executions)})")
+        logger.info(f"  ⚠ Standalone:        {m.standalone_executions} ({self._pct(m.standalone_executions, m.total_executions)})")
+        logger.error(f"  ✗ Failed:            {m.failed_executions} ({self._pct(m.failed_executions, m.total_executions)})")
         print()
-        print(f"User Decisions:")
-        print(f"  Approvals:           {m.user_approvals}")
-        print(f"  Rejections:          {m.user_rejections}")
+        logger.info(f"User Decisions:")
+        logger.info(f"  Approvals:           {m.user_approvals}")
+        logger.info(f"  Rejections:          {m.user_rejections}")
         print()
-        print(f"Latency:")
-        print(f"  MAXIMUS (avg):       {m.avg_maximus_latency_ms:.0f}ms")
-        print(f"  Fallback (avg):      {m.avg_fallback_latency_ms:.0f}ms")
+        logger.info(f"Latency:")
+        logger.info(f"  MAXIMUS (avg):       {m.avg_maximus_latency_ms:.0f}ms")
+        logger.info(f"  Fallback (avg):      {m.avg_fallback_latency_ms:.0f}ms")
         print("="*60 + "\n")
 
     def _pct(self, part: int, total: int) -> str:
@@ -421,13 +422,13 @@ async def check_maximus_or_warn(maximus_client) -> bool:
         )
 
         if online:
-            print("✓ MAXIMUS online - hybrid mode enabled")
+            logger.info("✓ MAXIMUS online - hybrid mode enabled")
             return True
         else:
-            print("⚠️  MAXIMUS offline - standalone mode")
+            logger.warning("⚠️  MAXIMUS offline - standalone mode")
             return False
 
     except (asyncio.TimeoutError, Exception) as e:
-        print(f"⚠️  MAXIMUS check failed: {type(e).__name__}")
-        print("   Continuing in standalone mode...")
+        logger.error(f"⚠️  MAXIMUS check failed: {type(e).__name__}")
+        logger.info("   Continuing in standalone mode...")
         return False

@@ -29,6 +29,9 @@ from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class DisclosureLevel(Enum):
@@ -153,8 +156,7 @@ class ProgressiveDisclosure:
         """
         self.stats['total_contexts_created'] += 1
 
-        print(f"📖 Progressive Disclosure: Created context with {len(items)} items at {self.starting_level.value} level")
-
+        logger.info(f"📖 Progressive Disclosure: Created context with {len(items)} items at {self.starting_level.value} level")
         return DisclosureContext(
             items=items,
             current_level=self.starting_level,
@@ -210,8 +212,7 @@ class ProgressiveDisclosure:
         # Update context level
         context.current_level = level
 
-        print(f"   ✓ Revealed {len(revealed)} items at {level.value} level")
-
+        logger.info(f"   ✓ Revealed {len(revealed)} items at {level.value} level")
         return revealed
 
     def reveal_by_query(
@@ -249,11 +250,10 @@ class ProgressiveDisclosure:
                 relevant_items.append(item.id)
 
         if not relevant_items:
-            print(f"   ⚠️  No items matched query: '{query}'")
+            logger.warning(f"   ⚠️  No items matched query: '{query}'")
             return {}
 
-        print(f"   ✓ Found {len(relevant_items)} items matching query: '{query}'")
-
+        logger.info(f"   ✓ Found {len(relevant_items)} items matching query: '{query}'")
         # Revelar próximo nível dos itens relevantes
         return self.reveal_items(context, item_ids=relevant_items)
 
@@ -290,13 +290,13 @@ class ProgressiveDisclosure:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  PROGRESSIVE DISCLOSURE - STATISTICS")
+        logger.info("  PROGRESSIVE DISCLOSURE - STATISTICS")
         print("="*60)
-        print(f"Total contexts created:    {stats['total_contexts_created']}")
-        print(f"Total revelations:         {stats['total_revelations']}")
-        print("Revelations by level:")
+        logger.info(f"Total contexts created:    {stats['total_contexts_created']}")
+        logger.info(f"Total revelations:         {stats['total_revelations']}")
+        logger.info("Revelations by level:")
         for level, count in stats['revelations_by_level'].items():
-            print(f"  {level.value:12s}  {count}")
+            logger.info(f"  {level.value:12s}  {count}")
         print("="*60 + "\n")
 
 

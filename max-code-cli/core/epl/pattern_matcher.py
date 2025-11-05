@@ -19,6 +19,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import json
 import hashlib
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -293,8 +296,7 @@ class PatternMatcher:
 
 if __name__ == "__main__":
     # Demo
-    print("🎯 EPL Pattern Matcher Demo\n")
-
+    logger.info("🎯 EPL Pattern Matcher Demo\n")
     matcher = PatternMatcher()
 
     # Learn some patterns
@@ -306,17 +308,14 @@ if __name__ == "__main__":
         ("Generate code for login", "💻 login", "code"),
     ]
 
-    print("Learning patterns...")
+    logger.info("Learning patterns...")
     for input_text, epl, intent in patterns_to_learn:
         matcher.learn_pattern(input_text, epl, intent, success=True)
-        print(f"  ✓ Learned: '{input_text}' → {epl}")
-
-    print(f"\nTotal patterns learned: {len(matcher.patterns)}")
-
+        logger.info(f"  ✓ Learned: '{input_text}' → {epl}")
+    logger.info(f"\nTotal patterns learned: {len(matcher.patterns)}")
     # Test fuzzy matching
     print("\n" + "="*60)
-    print("Testing fuzzy matching:\n")
-
+    logger.info("Testing fuzzy matching:\n")
     test_inputs = [
         "Use ToT to analyze authentication",  # Similar to pattern 1
         "Analyze auth security",               # Similar to pattern 2
@@ -326,32 +325,31 @@ if __name__ == "__main__":
     ]
 
     for test_input in test_inputs:
-        print(f"Input: '{test_input}'")
+        logger.info(f"Input: '{test_input}'")
         result = matcher.find_similar_pattern(test_input, threshold=0.5)
 
         if result.matched:
-            print(f"  ✓ Match found!")
-            print(f"    Similar to: '{result.pattern.input}'")
-            print(f"    EPL: {result.pattern.epl}")
-            print(f"    Similarity: {result.similarity:.2%}")
-            print(f"    Confidence: {result.confidence:.2%}")
+            logger.info(f"  ✓ Match found!")
+            logger.info(f"    Similar to: '{result.pattern.input}'")
+            logger.info(f"    EPL: {result.pattern.epl}")
+            logger.info(f"    Similarity: {result.similarity:.2%}")
+            logger.info(f"    Confidence: {result.confidence:.2%}")
         else:
-            print(f"  ✗ No similar pattern found")
-            print(f"    Best similarity: {result.similarity:.2%}")
+            logger.info(f"  ✗ No similar pattern found")
+            logger.info(f"    Best similarity: {result.similarity:.2%}")
         print()
 
     # Stats
     print("="*60)
-    print("Pattern Statistics:\n")
+    logger.info("Pattern Statistics:\n")
     stats = matcher.get_stats()
     for key, value in stats.items():
         if isinstance(value, float):
-            print(f"  {key}: {value:.2f}")
+            logger.info(f"  {key}: {value:.2f}")
         else:
-            print(f"  {key}: {value}")
-
+            logger.info(f"  {key}: {value}")
     print("\n" + "="*60)
-    print("Top Patterns:\n")
+    logger.info("Top Patterns:\n")
     for i, pattern in enumerate(matcher.get_top_patterns(3), 1):
-        print(f"  {i}. '{pattern.input}' → {pattern.epl}")
-        print(f"     Used {pattern.frequency}x, Success: {pattern.success_rate:.0%}")
+        logger.info(f"  {i}. '{pattern.input}' → {pattern.epl}")
+        logger.info(f"     Used {pattern.frequency}x, Success: {pattern.success_rate:.0%}")

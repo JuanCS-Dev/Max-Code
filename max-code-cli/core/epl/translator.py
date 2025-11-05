@@ -31,6 +31,9 @@ from .parser import parse, ASTNode, ASTNodeType
 from .nlp_engine import NLPEngine, Intent, IntentType
 from .pattern_matcher import PatternMatcher, MatchResult
 from .vocabulary import (
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
     EMOJI_VOCABULARY,
     get_emoji_definition,
     get_emoji_by_alias,
@@ -404,15 +407,14 @@ def translate_to_nl(epl: str) -> str:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("🔄 EPL Translator Demo\n")
-
+    logger.info("🔄 EPL Translator Demo\n")
     translator = Translator()
 
     # ========================================================================
     # TEST 1: Natural Language → EPL
     # ========================================================================
     print("="*70)
-    print("TEST 1: Natural Language → EPL")
+    logger.info("TEST 1: Natural Language → EPL")
     print("="*70)
 
     nl_test_cases = [
@@ -426,18 +428,17 @@ if __name__ == "__main__":
     for i, test in enumerate(nl_test_cases, 1):
         print(f"\n{i}. Input: \"{test}\"")
         result = translator.translate_to_epl(test, learn=True)
-        print(f"   EPL: {result.target}")
-        print(f"   Confidence: {result.confidence:.0%}")
+        logger.info(f"   EPL: {result.target}")
+        logger.info(f"   Confidence: {result.confidence:.0%}")
         if result.compression_ratio:
-            print(f"   Compression: {result.compression_ratio:.0%}")
+            logger.info(f"   Compression: {result.compression_ratio:.0%}")
         if result.intent:
-            print(f"   Intent: {result.intent.type.value}")
-
+            logger.info(f"   Intent: {result.intent.type.value}")
     # ========================================================================
     # TEST 2: EPL → Natural Language
     # ========================================================================
     print("\n" + "="*70)
-    print("TEST 2: EPL → Natural Language")
+    logger.info("TEST 2: EPL → Natural Language")
     print("="*70)
 
     epl_test_cases = [
@@ -451,21 +452,19 @@ if __name__ == "__main__":
     for i, test in enumerate(epl_test_cases, 1):
         print(f"\n{i}. Input: \"{test}\"")
         result = translator.translate_to_natural_language(test, verbose=False)
-        print(f"   Natural Language: {result.target}")
-
+        logger.info(f"   Natural Language: {result.target}")
         # Also show verbose
         result_verbose = translator.translate_to_natural_language(test, verbose=True)
-        print(f"   Verbose: {result_verbose.target}")
-
+        logger.info(f"   Verbose: {result_verbose.target}")
     # ========================================================================
     # TEST 3: Fuzzy Pattern Matching
     # ========================================================================
     print("\n" + "="*70)
-    print("TEST 3: Fuzzy Pattern Matching")
+    logger.info("TEST 3: Fuzzy Pattern Matching")
     print("="*70)
 
     # First, learn some patterns
-    print("\nLearning patterns...")
+    logger.info("\nLearning patterns...")
     patterns = [
         ("Use tree of thoughts for analysis", "🌳📊"),
         ("Analyze using tree of thoughts", "🌳📊"),
@@ -474,10 +473,9 @@ if __name__ == "__main__":
 
     for nl, epl in patterns:
         translator.pattern_matcher.learn_pattern(nl, epl, "analyze", success=True)
-        print(f"  ✓ Learned: '{nl}' → {epl}")
-
+        logger.info(f"  ✓ Learned: '{nl}' → {epl}")
     # Now test similar inputs
-    print("\nTesting similar inputs...")
+    logger.info("\nTesting similar inputs...")
     similar_inputs = [
         "Use ToT for analyzing data",           # Similar to pattern 1
         "Analyze with tree of thoughts",        # Similar to pattern 2
@@ -487,23 +485,22 @@ if __name__ == "__main__":
     for test in similar_inputs:
         print(f"\n  Input: \"{test}\"")
         result = translator.translate_to_epl(test, learn=False)
-        print(f"    EPL: {result.target}")
-        print(f"    Confidence: {result.confidence:.0%}")
+        logger.info(f"    EPL: {result.target}")
+        logger.info(f"    Confidence: {result.confidence:.0%}")
         if result.matched_pattern:
-            print(f"    Matched: '{result.matched_pattern}'")
-
+            logger.info(f"    Matched: '{result.matched_pattern}'")
     # ========================================================================
     # STATISTICS
     # ========================================================================
     print("\n" + "="*70)
-    print("STATISTICS")
+    logger.info("STATISTICS")
     print("="*70)
     stats = translator.get_stats()
-    print(f"\nVocabulary size: {stats['vocabulary_size']} emojis")
-    print(f"Concept mappings: {stats['concept_mappings']}")
-    print(f"\nPattern Matcher:")
+    logger.info(f"\nVocabulary size: {stats['vocabulary_size']} emojis")
+    logger.info(f"Concept mappings: {stats['concept_mappings']}")
+    logger.info(f"\nPattern Matcher:")
     for key, value in stats['pattern_matcher'].items():
         if isinstance(value, float):
-            print(f"  {key}: {value:.2f}")
+            logger.info(f"  {key}: {value:.2f}")
         else:
-            print(f"  {key}: {value}")
+            logger.info(f"  {key}: {value}")

@@ -10,6 +10,9 @@ Isso traz paz, reflexão e significado transcendente ao processo de desenvolvime
 
 from typing import Dict, List
 import random
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class BiblicalMessages:
@@ -285,8 +288,7 @@ def get_compacting_message() -> str:
 # ==================== EXAMPLES ====================
 
 if __name__ == '__main__':
-    print("=== Biblical Messages Examples ===\n")
-
+    logger.info("=== Biblical Messages Examples ===\n")
     categories = [
         'general', 'validation', 'generation', 'monitoring',
         'waiting', 'correction', 'success', 'failure',
@@ -294,6 +296,6 @@ if __name__ == '__main__':
     ]
 
     for category in categories:
-        print(f"{category.upper()}:")
-        print(f"  ⏳ {BiblicalMessages.get_message(category)}")
+        logger.info(f"{category.upper()}:")
+        logger.info(f"  ⏳ {BiblicalMessages.get_message(category)}")
         print()

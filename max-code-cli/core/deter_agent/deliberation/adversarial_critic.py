@@ -27,6 +27,9 @@ from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class CritiqueType(Enum):
@@ -163,9 +166,8 @@ class AdversarialCritic:
         """
         self.stats['total_solutions_reviewed'] += 1
 
-        print(f"🔍 Adversarial Critic: Attacking solution...")
-        print(f"   Solution: {solution[:80]}...")
-
+        logger.debug(f"🔍 Adversarial Critic: Attacking solution...")
+        logger.info(f"   Solution: {solution[:80]}...")
         # FASE 1: ASSUME ROLE - assumir papel de critic
         # (preparar mindset adversarial)
 
@@ -174,8 +176,7 @@ class AdversarialCritic:
 
         self.stats['total_critiques_found'] += len(critiques)
 
-        print(f"   ✓ Found {len(critiques)} critiques")
-
+        logger.info(f"   ✓ Found {len(critiques)} critiques")
         # Contar por severidade
         critical_count = sum(1 for c in critiques if c.severity == Severity.CRITICAL)
         high_count = sum(1 for c in critiques if c.severity == Severity.HIGH)
@@ -214,14 +215,13 @@ class AdversarialCritic:
         )
 
         # Log resultado
-        print(f"\n   📊 Critique Results:")
-        print(f"   CRITICAL: {critical_count}")
-        print(f"   HIGH:     {high_count}")
-        print(f"   MEDIUM:   {medium_count}")
-        print(f"   LOW:      {low_count}")
-        print(f"   Quality:  {overall_quality}")
-        print(f"   Verdict:  {'✓ PASS' if passed else '✗ FAIL'}")
-
+        logger.info(f"\n   📊 Critique Results:")
+        logger.info(f"   CRITICAL: {critical_count}")
+        logger.info(f"   HIGH:     {high_count}")
+        logger.info(f"   MEDIUM:   {medium_count}")
+        logger.info(f"   LOW:      {low_count}")
+        logger.info(f"   Quality:  {overall_quality}")
+        logger.info(f"   Verdict:  {'✓ PASS' if passed else '✗ FAIL'}")
         return report
 
     def _find_critiques(
@@ -349,30 +349,27 @@ class AdversarialCritic:
     def print_report(self, report: CritiqueReport):
         """Imprime relatório de críticas"""
         print("\n" + "="*70)
-        print("  ADVERSARIAL CRITIQUE REPORT")
+        logger.info("  ADVERSARIAL CRITIQUE REPORT")
         print("="*70 + "\n")
 
-        print(f"Solution: {report.solution[:80]}...\n")
-
-        print("SUMMARY:")
-        print(f"├─ Total Critiques:  {report.total_critiques}")
-        print(f"├─ CRITICAL:         {report.critical_count}")
-        print(f"├─ HIGH:             {report.high_count}")
-        print(f"├─ MEDIUM:           {report.medium_count}")
-        print(f"└─ LOW:              {report.low_count}\n")
-
-        print(f"QUALITY:  {report.overall_quality}")
-        print(f"VERDICT:  {'✓ PASS' if report.passed else '✗ FAIL'}\n")
-
+        logger.info(f"Solution: {report.solution[:80]}...\n")
+        logger.info("SUMMARY:")
+        logger.info(f"├─ Total Critiques:  {report.total_critiques}")
+        logger.info(f"├─ CRITICAL:         {report.critical_count}")
+        logger.info(f"├─ HIGH:             {report.high_count}")
+        logger.info(f"├─ MEDIUM:           {report.medium_count}")
+        logger.info(f"└─ LOW:              {report.low_count}\n")
+        logger.info(f"QUALITY:  {report.overall_quality}")
+        logger.info(f"VERDICT:  {'✓ PASS' if report.passed else '✗ FAIL'}\n")
         if report.critiques:
-            print("CRITIQUES:\n")
+            logger.info("CRITIQUES:\n")
             for i, critique in enumerate(report.critiques, 1):
-                print(f"{i}. [{critique.severity.value.upper()}] {critique.type.value}")
-                print(f"   {critique.description}")
+                logger.info(f"{i}. [{critique.severity.value.upper()}] {critique.type.value}")
+                logger.info(f"   {critique.description}")
                 if critique.location:
-                    print(f"   Location: {critique.location}")
+                    logger.info(f"   Location: {critique.location}")
                 if critique.suggested_fix:
-                    print(f"   Fix: {critique.suggested_fix}")
+                    logger.info(f"   Fix: {critique.suggested_fix}")
                 print()
 
         print("="*70 + "\n")
@@ -402,15 +399,15 @@ class AdversarialCritic:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  ADVERSARIAL CRITIC - STATISTICS")
+        logger.info("  ADVERSARIAL CRITIC - STATISTICS")
         print("="*60)
-        print(f"Solutions reviewed:        {stats['total_solutions_reviewed']}")
-        print(f"Solutions passed:          {stats['solutions_passed']} ({stats['pass_rate']:.1f}%)")
-        print(f"Solutions failed:          {stats['solutions_failed']} ({stats['fail_rate']:.1f}%)")
-        print(f"Total critiques found:     {stats['total_critiques_found']}")
-        print(f"Avg critiques/solution:    {stats['avg_critiques_per_solution']:.1f}")
-        print(f"CRITICAL critiques:        {stats['critical_critiques']}")
-        print(f"HIGH critiques:            {stats['high_critiques']}")
+        logger.info(f"Solutions reviewed:        {stats['total_solutions_reviewed']}")
+        logger.info(f"Solutions passed:          {stats['solutions_passed']} ({stats['pass_rate']:.1f}%)")
+        logger.error(f"Solutions failed:          {stats['solutions_failed']} ({stats['fail_rate']:.1f}%)")
+        logger.info(f"Total critiques found:     {stats['total_critiques_found']}")
+        logger.info(f"Avg critiques/solution:    {stats['avg_critiques_per_solution']:.1f}")
+        logger.info(f"CRITICAL critiques:        {stats['critical_critiques']}")
+        logger.info(f"HIGH critiques:            {stats['high_critiques']}")
         print("="*60 + "\n")
 
 

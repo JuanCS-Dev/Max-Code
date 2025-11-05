@@ -21,6 +21,9 @@ import time
 from ..validators.p6_token_efficiency import P6_Token_Efficiency_Monitor
 from ..validators.p1_completeness import ViolationSeverity
 from ..models import Violation
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class ExecutionPhase(Enum):
@@ -277,8 +280,7 @@ class RuntimeGuardian:
             try:
                 callback(task_id, reason)
             except Exception as e:
-                print(f"[RuntimeGuardian] Error in interruption callback: {e}")
-
+                logger.error(f"[RuntimeGuardian] Error in interruption callback: {e}")
         # Snapshot final
         self._take_snapshot(task_id)
 

@@ -9,6 +9,7 @@ Port: 8167
 Capability: ARCHITECTURE
 
 v2.1: Added Pydantic input validation (FASE 3.2)
+v2.2: Replaced print() with logging (FASE 3.4)
 
 Biblical Foundation:
 "A sabedoria edificou a sua casa" (Provérbios 9:1)
@@ -55,6 +56,9 @@ from enum import Enum
 from pydantic import ValidationError
 
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # MAXIMUS Integration
 from core.maximus_integration import (
@@ -221,26 +225,35 @@ class ArchitectAgent(BaseAgent):
     async def _execute_async(self, task: AgentTask) -> AgentResult:
         """Async execution for MAXIMUS integration"""
 
-        print(f"\n{'='*70}")
-        print(f"   👑 SOPHIA - A Arquiteta (Strategic Analysis)")
-        print(f"   'A sabedoria edificou a sua casa' (Provérbios 9:1)")
-        print(f"{'='*70}")
+        logger.info("SOPHIA - A Arquiteta (Strategic Analysis)", extra={"task_id": task.id})
 
         # PHASE 1: Understanding (Monitor)
-        print(f"\n   📊 Phase 1: MONITOR - Understanding the problem...")
+        logger.info("Starting Phase 1: MONITOR - Understanding the problem", extra={"task_id": task.id})
         problem_analysis = self._analyze_problem(task)
-        print(f"      ├─ Domain: {problem_analysis['domain']}")
-        print(f"      ├─ Complexity: {problem_analysis['complexity']}")
-        print(f"      └─ Constraints: {len(problem_analysis['constraints'])} identified")
+        logger.info(
+            f"Problem analysis complete: Domain={problem_analysis['domain']}, Complexity={problem_analysis['complexity']}",
+            extra={
+                "task_id": task.id,
+                "domain": problem_analysis['domain'],
+                "complexity": problem_analysis['complexity'],
+                "constraints_count": len(problem_analysis['constraints'])
+            }
+        )
 
         # PHASE 2: Exploration (Tree of Thoughts)
-        print(f"\n   🌳 Phase 2: EXPLORE - Tree of Thoughts (architectural options)...")
+        logger.info("Starting Phase 2: EXPLORE - Tree of Thoughts (architectural options)", extra={"task_id": task.id})
         architectural_options = self._explore_architectural_options(task, problem_analysis)
 
         for i, option in enumerate(architectural_options):
-            print(f"      ├─ Option {i+1}: {option['approach']}")
-            print(f"      │  ├─ Patterns: {', '.join(option['patterns'][:2])}")
-            print(f"      │  └─ Complexity: {option['complexity']}")
+            logger.debug(
+                f"Architectural option {i+1}: {option['approach']}",
+                extra={
+                    "task_id": task.id,
+                    "option_id": i+1,
+                    "patterns": option['patterns'][:2],
+                    "complexity": option['complexity']
+                }
+            )
 
         # PHASE 3: MAXIMUS Systemic Analysis (Analyze + Plan)
         systemic_analyses = []
@@ -249,7 +262,7 @@ class ArchitectAgent(BaseAgent):
                 maximus_online = await self.maximus_client.health_check()
 
                 if maximus_online:
-                    print(f"\n   🧠 Phase 3: MAXIMUS MAPE-K - Systemic analysis...")
+                    logger.info("Starting Phase 3: MAXIMUS MAPE-K - Systemic analysis", extra={"task_id": task.id})
 
                     for i, option in enumerate(architectural_options):
                         # MAXIMUS MAPE-K: Analyze systemic impact
@@ -269,23 +282,35 @@ class ArchitectAgent(BaseAgent):
 
                         systemic_analyses.append(analysis)
 
-                        print(f"      ├─ Option {i+1}: Systemic Risk = {analysis.systemic_risk_score:.2f}")
-                        print(f"      │  ├─ Affected components: {len(analysis.affected_components)}")
-                        if analysis.side_effects:
-                            print(f"      │  └─ Side effects: {len(analysis.side_effects)}")
+                        logger.info(
+                            f"MAXIMUS analysis for option {i+1}: Systemic Risk={analysis.systemic_risk_score:.2f}",
+                            extra={
+                                "task_id": task.id,
+                                "option_id": i+1,
+                                "systemic_risk_score": analysis.systemic_risk_score,
+                                "affected_components": len(analysis.affected_components),
+                                "side_effects_count": len(analysis.side_effects) if analysis.side_effects else 0
+                            }
+                        )
 
             except Exception as e:
-                print(f"      ⚠️  MAXIMUS unavailable: {e}")
+                logger.warning(
+                    f"MAXIMUS unavailable: {type(e).__name__}",
+                    extra={"task_id": task.id, "error_type": type(e).__name__}
+                )
 
         # PHASE 4: Adversarial Criticism (Red Team)
-        print(f"\n   🔴 Phase 4: RED TEAM - Adversarial criticism...")
+        logger.info("Starting Phase 4: RED TEAM - Adversarial criticism", extra={"task_id": task.id})
         for i, option in enumerate(architectural_options):
             criticisms = self._red_team_criticism(option)
             option['criticisms'] = criticisms
-            print(f"      ├─ Option {i+1}: {len(criticisms)} concerns identified")
+            logger.debug(
+                f"Red team criticism for option {i+1}: {len(criticisms)} concerns identified",
+                extra={"task_id": task.id, "option_id": i+1, "concerns_count": len(criticisms)}
+            )
 
         # PHASE 5: Decision Fusion & Selection
-        print(f"\n   ⚖️  Phase 5: FUSION - Selecting best architectural approach...")
+        logger.info("Starting Phase 5: FUSION - Selecting best architectural approach", extra={"task_id": task.id})
 
         if systemic_analyses:
             # Hybrid: Combine Max-Code + MAXIMUS
@@ -299,17 +324,21 @@ class ArchitectAgent(BaseAgent):
             best_decision = self._select_best_option_standalone(architectural_options)
             mode = "STANDALONE"
 
-        print(f"      └─ Selected: {best_decision['approach']}")
-        print(f"         ├─ Confidence: {best_decision['confidence']:.2f}")
-        print(f"         └─ Rationale: {best_decision['rationale'][:60]}...")
+        logger.info(
+            f"Selected architectural approach: {best_decision['approach']}",
+            extra={
+                "task_id": task.id,
+                "confidence": best_decision['confidence'],
+                "rationale_preview": best_decision['rationale'][:60]
+            }
+        )
 
         # PHASE 6: Documentation (Execute + Knowledge)
-        print(f"\n   📝 Phase 6: DOCUMENT - Creating architectural decision record...")
+        logger.info("Starting Phase 6: DOCUMENT - Creating architectural decision record", extra={"task_id": task.id})
         adr = self._create_architectural_decision_record(best_decision, task)
         self.decision_history.append(adr)
 
-        print(f"      └─ ADR-{adr.id} created")
-        print(f"\n{'='*70}\n")
+        logger.info(f"Architectural Decision Record created: ADR-{adr.id}", extra={"task_id": task.id, "adr_id": adr.id})
 
         return AgentResult(
             task_id=task.id,
@@ -367,11 +396,11 @@ class ArchitectAgent(BaseAgent):
         # Validate input parameters
         try:
             params = validate_task_parameters('architect', task.parameters or {})
-            print(f"   ✅ Parameters validated")
+            logger.info("Parameters validated", extra={"task_id": task.id})
             requirements = params.requirements
             constraints = params.constraints
         except ValidationError as e:
-            print(f"   ❌ Invalid parameters: {e}")
+            logger.error(f"Invalid parameters: {e}", extra={"task_id": task.id, "error_details": e.errors()})
             return AgentResult(
                 task_id=task.id,
                 success=False,

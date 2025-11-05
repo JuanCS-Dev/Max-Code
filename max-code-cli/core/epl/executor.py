@@ -21,6 +21,9 @@ from enum import Enum
 from .parser import parse, ASTNode, ASTNodeType
 from .translator import Translator, translate_to_nl
 from .vocabulary import get_emoji_definition, EmojiCategory
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class ExecutionStatus(Enum):
@@ -297,8 +300,7 @@ class EPLExecutor:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("⚙️ EPL Executor Demo\n")
-
+    logger.info("⚙️ EPL Executor Demo\n")
     # Create executor
     executor = EPLExecutor()
 
@@ -318,8 +320,7 @@ if __name__ == "__main__":
     executor.register_agent("code", code_handler)
     executor.register_agent("test", test_handler)
 
-    print(f"Registered agents: {executor.get_registered_agents()}\n")
-
+    logger.info(f"Registered agents: {executor.get_registered_agents()}\n")
     # ========================================================================
     # TEST CASES
     # ========================================================================
@@ -342,16 +343,14 @@ if __name__ == "__main__":
     ]
 
     for i, (epl, description) in enumerate(test_cases, 1):
-        print(f"Test {i}: {description}")
-        print(f"  EPL: {epl}")
-
+        logger.info(f"Test {i}: {description}")
+        logger.info(f"  EPL: {epl}")
         result = executor.execute(epl)
 
-        print(f"  Status: {result.status.value}")
-        print(f"  Message: {result.message}")
+        logger.info(f"  Status: {result.status.value}")
+        logger.info(f"  Message: {result.message}")
         if result.agent:
-            print(f"  Agent: {result.agent}")
+            logger.info(f"  Agent: {result.agent}")
         if result.natural_language:
-            print(f"  NL: {result.natural_language}")
-
+            logger.info(f"  NL: {result.natural_language}")
         print()

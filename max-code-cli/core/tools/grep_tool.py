@@ -22,6 +22,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import re
 import fnmatch
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -374,7 +377,7 @@ def grep_files(pattern: str, path: Optional[str] = None, **kwargs) -> List[str]:
     if result.success:
         return result.files_with_matches
     else:
-        print(f"Error: {result.error}")
+        logger.error(f"Error: {result.error}")
         return []
 
 
@@ -383,82 +386,77 @@ def grep_files(pattern: str, path: Optional[str] = None, **kwargs) -> List[str]:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("🔎 Grep Tool Demo\n")
-
+    logger.info("🔎 Grep Tool Demo\n")
     tool = GrepTool()
 
     # Test 1: Find TODOs
     print("=" * 70)
-    print("TEST 1: Find TODO comments in code")
+    logger.info("TEST 1: Find TODO comments in code")
     print("=" * 70)
 
     result = tool.find_todos(path="core/")
 
     if result.success:
-        print(f"✓ Found {result.total_matches} TODOs in {len(result.files_with_matches)} files")
-        print(f"  Files searched: {result.files_searched}")
-        print(f"\nFirst 5 matches:")
+        logger.info(f"✓ Found {result.total_matches} TODOs in {len(result.files_with_matches)} files")
+        logger.info(f"  Files searched: {result.files_searched}")
+        logger.info(f"\nFirst 5 matches:")
         for match in result.matches[:5]:
-            print(f"  {match.file_path}:{match.line_number}: {match.line_content.strip()}")
+            logger.info(f"  {match.file_path}:{match.line_number}: {match.line_content.strip()}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 2: Find files with pattern (files_with_matches mode)
     print("\n" + "=" * 70)
-    print("TEST 2: Find files containing 'Biblical Foundation'")
+    logger.info("TEST 2: Find files containing 'Biblical Foundation'")
     print("=" * 70)
 
     result = tool.grep("Biblical Foundation", path="core/", output_mode="files_with_matches")
 
     if result.success:
-        print(f"✓ Found in {len(result.files_with_matches)} files")
-        print(f"\nFiles:")
+        logger.info(f"✓ Found in {len(result.files_with_matches)} files")
+        logger.info(f"\nFiles:")
         for file_path in result.files_with_matches[:10]:
-            print(f"  - {file_path}")
+            logger.info(f"  - {file_path}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 3: Count matches per file
     print("\n" + "=" * 70)
-    print("TEST 3: Count occurrences of 'def ' in Python files")
+    logger.info("TEST 3: Count occurrences of 'def ' in Python files")
     print("=" * 70)
 
     result = tool.grep(r"def\s+\w+", path="core/epl/", output_mode="count", file_type="py")
 
     if result.success:
-        print(f"✓ Found {result.total_matches} function definitions")
-        print(f"\nTop files:")
+        logger.info(f"✓ Found {result.total_matches} function definitions")
+        logger.info(f"\nTop files:")
         sorted_counts = sorted(result.match_counts.items(), key=lambda x: x[1], reverse=True)
         for file_path, count in sorted_counts[:5]:
-            print(f"  {count:3d} - {file_path}")
+            logger.info(f"  {count:3d} - {file_path}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 4: Case-insensitive search
     print("\n" + "=" * 70)
-    print("TEST 4: Case-insensitive search for 'error'")
+    logger.error("TEST 4: Case-insensitive search for 'error'")
     print("=" * 70)
 
     result = tool.grep("error", path="core/tools/", output_mode="count", case_sensitive=False)
 
     if result.success:
-        print(f"✓ Found {result.total_matches} matches")
+        logger.info(f"✓ Found {result.total_matches} matches")
         for file_path, count in result.match_counts.items():
-            print(f"  {count} - {file_path}")
+            logger.info(f"  {count} - {file_path}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 5: Convenience function
     print("\n" + "=" * 70)
-    print("TEST 5: Convenience function - find imports")
+    logger.info("TEST 5: Convenience function - find imports")
     print("=" * 70)
 
     result = tool.find_imports("dataclass", path="core/epl/")
 
     if result.success:
-        print(f"✓ Found {result.total_matches} import statements")
+        logger.info(f"✓ Found {result.total_matches} import statements")
         for match in result.matches[:3]:
-            print(f"  {match.file_path}:{match.line_number}")
-            print(f"    {match.line_content.strip()}")
+            logger.info(f"  {match.file_path}:{match.line_number}")
+            logger.info(f"    {match.line_content.strip()}")
     else:
-        print(f"✗ Failed: {result.error}")
+        logger.error(f"✗ Failed: {result.error}")

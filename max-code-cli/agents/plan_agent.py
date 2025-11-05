@@ -13,6 +13,7 @@ v2.0 Features:
 - Fallback automático se MAXIMUS offline
 
 v2.1: Added Pydantic input validation (FASE 3.2)
+v2.2: Replaced print() with logging (FASE 3.4)
 
 Biblical Foundation:
 "Os pensamentos do diligente tendem só à abundância"
@@ -27,6 +28,9 @@ from typing import List, Optional
 import asyncio
 from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # MAXIMUS Integration (v2.0)
 from core.maximus_integration import (
@@ -100,9 +104,9 @@ class PlanAgent(BaseAgent):
         # Validate input parameters
         try:
             params = validate_task_parameters('plan', task.parameters or {})
-            print(f"   ✅ Parameters validated")
+            logger.info("Parameters validated", extra={"task_id": task.id})
         except ValidationError as e:
-            print(f"   ❌ Invalid parameters: {e}")
+            logger.error(f"Invalid parameters: {e}", extra={"task_id": task.id, "error_details": e.errors()})
             return AgentResult(
                 task_id=task.id,
                 success=False,
@@ -110,7 +114,7 @@ class PlanAgent(BaseAgent):
                 metrics={'validation_failed': True}
             )
 
-        print(f"   🌳 Phase 1: Tree of Thoughts exploration...")
+        logger.info("Starting Phase 1: Tree of Thoughts exploration", extra={"task_id": task.id})
 
         # PHASE 1: Max-Code Tree of Thoughts (gera múltiplos planos)
         thoughts = []
@@ -120,7 +124,10 @@ class PlanAgent(BaseAgent):
                 num_thoughts=1,
             )
             thoughts.append(thought)
-            print(f"      ├─ Plan {i+1}: {thought.description[:60]}...")
+            logger.debug(
+                f"Generated plan {i+1}: {thought.description[:60]}...",
+                extra={"task_id": task.id, "plan_id": i+1, "complexity": thought.complexity}
+            )
 
         # Convert thoughts to plans
         maxcode_plans = [
@@ -142,7 +149,7 @@ class PlanAgent(BaseAgent):
                 maximus_online = await self.maximus_client.health_check()
 
                 if maximus_online:
-                    print(f"   🧠 Phase 2: MAXIMUS systemic analysis...")
+                    logger.info("Starting Phase 2: MAXIMUS systemic analysis", extra={"task_id": task.id})
 
                     systemic_analyses = []
                     for plan in maxcode_plans:
@@ -155,7 +162,10 @@ class PlanAgent(BaseAgent):
                         if cached:
                             systemic_analyses.append(cached)
                             self.maximus_stats['cache_hits'] += 1
-                            print(f"      ├─ Plan {plan['id']+1}: CACHE HIT")
+                            logger.debug(
+                                "MAXIMUS cache hit",
+                                extra={"task_id": task.id, "plan_id": plan['id']+1}
+                            )
                         else:
                             # Call MAXIMUS
                             analysis = await self.maximus_client.analyze_systemic_impact(
@@ -179,11 +189,18 @@ class PlanAgent(BaseAgent):
                                 result=analysis
                             )
 
-                            print(f"      ├─ Plan {plan['id']+1}: Risk={analysis.systemic_risk_score:.2f} "
-                                  f"(Confidence={analysis.confidence:.2f})")
+                            logger.info(
+                                f"MAXIMUS analysis completed for plan {plan['id']+1}",
+                                extra={
+                                    "task_id": task.id,
+                                    "plan_id": plan['id']+1,
+                                    "systemic_risk_score": analysis.systemic_risk_score,
+                                    "confidence": analysis.confidence
+                                }
+                            )
 
                     # PHASE 3: Decision Fusion
-                    print(f"   ⚖️  Phase 3: Decision fusion...")
+                    logger.info("Starting Phase 3: Decision fusion", extra={"task_id": task.id})
 
                     best_plan = self.decision_fusion.fuse_plan_decisions(
                         maxcode_plans=maxcode_plans,
@@ -192,8 +209,14 @@ class PlanAgent(BaseAgent):
 
                     self.maximus_stats['hybrid_executions'] += 1
 
-                    print(f"      └─ Selected: Plan {best_plan['plan']['id']+1} "
-                          f"(Combined Score: {best_plan['confidence']:.2f})")
+                    logger.info(
+                        f"Plan selected via decision fusion: Plan {best_plan['plan']['id']+1}",
+                        extra={
+                            "task_id": task.id,
+                            "selected_plan_id": best_plan['plan']['id']+1,
+                            "combined_score": best_plan['confidence']
+                        }
+                    )
 
                     return AgentResult(
                         task_id=task.id,
@@ -213,18 +236,27 @@ class PlanAgent(BaseAgent):
                     )
 
             except Exception as e:
-                print(f"      ⚠️  MAXIMUS unavailable: {e}")
+                logger.warning(
+                    f"MAXIMUS unavailable: {type(e).__name__}",
+                    extra={"task_id": task.id, "error_type": type(e).__name__}
+                )
 
         # FALLBACK: Standalone Max-Code (no MAXIMUS)
-        print(f"   📊 Fallback: Standalone mode (Max-Code only)...")
+        logger.info("Fallback: Standalone mode (Max-Code only)", extra={"task_id": task.id})
 
         # Select best plan by ToT score only
         best_plan = max(maxcode_plans, key=lambda p: p['tot_score'])
 
         self.maximus_stats['standalone_executions'] += 1
 
-        print(f"      └─ Selected: Plan {best_plan['id']+1} "
-              f"(ToT Score: {best_plan['tot_score']:.2f})")
+        logger.info(
+            f"Plan selected (standalone): Plan {best_plan['id']+1}",
+            extra={
+                "task_id": task.id,
+                "selected_plan_id": best_plan['id']+1,
+                "tot_score": best_plan['tot_score']
+            }
+        )
 
         return AgentResult(
             task_id=task.id,

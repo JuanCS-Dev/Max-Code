@@ -21,6 +21,9 @@ from dataclasses import dataclass
 from pathlib import Path
 import os
 import mimetypes
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -344,55 +347,51 @@ def read_file(file_path: str, offset: Optional[int] = None, limit: Optional[int]
 # ============================================================================
 
 if __name__ == "__main__":
-    print("📖 File Reader Demo\n")
-
+    logger.info("📖 File Reader Demo\n")
     reader = FileReader()
 
     # Test 1: Read this file
     print("=" * 70)
-    print("TEST 1: Read this file (first 20 lines)")
+    logger.info("TEST 1: Read this file (first 20 lines)")
     print("=" * 70)
 
     result = reader.read(__file__, offset=1, limit=20)
 
     if result.success:
-        print(f"✓ Success!")
-        print(f"  File: {result.file_path}")
-        print(f"  Lines read: {result.lines_read}/{result.total_lines}")
-        print(f"  Encoding: {result.encoding}")
-        print(f"\nContent:\n{result.content}")
+        logger.info(f"✓ Success!")
+        logger.info(f"  File: {result.file_path}")
+        logger.info(f"  Lines read: {result.lines_read}/{result.total_lines}")
+        logger.info(f"  Encoding: {result.encoding}")
+        logger.info(f"\nContent:\n{result.content}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 2: Read specific line range
     print("\n" + "=" * 70)
-    print("TEST 2: Read lines 30-40")
+    logger.info("TEST 2: Read lines 30-40")
     print("=" * 70)
 
     result = reader.read_lines(__file__, 30, 40)
 
     if result.success:
-        print(f"✓ Read lines {result.offset} to {result.offset + result.lines_read - 1}")
-        print(f"\nContent:\n{result.content}")
+        logger.info(f"✓ Read lines {result.offset} to {result.offset + result.lines_read - 1}")
+        logger.info(f"\nContent:\n{result.content}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 3: Read non-existent file
     print("\n" + "=" * 70)
-    print("TEST 3: Read non-existent file")
+    logger.info("TEST 3: Read non-existent file")
     print("=" * 70)
 
     result = reader.read("/non/existent/file.txt")
 
     if not result.success:
-        print(f"✓ Correctly failed: {result.error}")
+        logger.info(f"✓ Correctly failed: {result.error}")
     else:
-        print("✗ Should have failed!")
-
+        logger.error("✗ Should have failed!")
     # Test 4: Convenience function
     print("\n" + "=" * 70)
-    print("TEST 4: Convenience function")
+    logger.info("TEST 4: Convenience function")
     print("=" * 70)
 
     content = read_file(__file__, offset=1, limit=5)
-    print(f"First 5 lines:\n{content}")
+    logger.info(f"First 5 lines:\n{content}")

@@ -24,6 +24,9 @@ from .runtime_guardian import InterruptionReason
 from .post_execution_guardian import OutputQuality
 
 from ..engine import Action, ActionType
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class AutoProtectionMode(Enum):
@@ -156,8 +159,7 @@ class AutoProtectionSystem:
         self.stats['total_protected_actions'] += 1
 
         # Log
-        print(f"🛡️ Auto-Protection: Protecting action {action.type.value}...")
-
+        logger.info(f"🛡️ Auto-Protection: Protecting action {action.type.value}...")
         # Executar COM proteção total dos Guardians
         report = self.coordinator.execute_guarded_action(
             action,
@@ -169,7 +171,7 @@ class AutoProtectionSystem:
 
         # Se rejeitado, tentar auto-correção (se habilitada)
         if not report.overall_passed and self.auto_correction != AutoCorrectionStrategy.REJECT_ONLY:
-            print("🔧 Attempting auto-correction...")
+            logger.info("🔧 Attempting auto-correction...")
             corrected = self._attempt_auto_correction(action, report)
             if corrected:
                 # Re-executar com correção
@@ -182,9 +184,8 @@ class AutoProtectionSystem:
 
     def _handle_pre_rejection(self, task_id: str, verdict):
         """Handler para Pre-Guardian rejections"""
-        print(f"⛔ Pre-Guardian REJECTED task {task_id}")
-        print(f"   Reason: {verdict.reason}")
-
+        logger.info(f"⛔ Pre-Guardian REJECTED task {task_id}")
+        logger.info(f"   Reason: {verdict.reason}")
         self.stats['pre_rejections'] += 1
 
         # Registrar evento
@@ -210,9 +211,8 @@ class AutoProtectionSystem:
 
     def _handle_runtime_interruption(self, task_id: str, reason: InterruptionReason):
         """Handler para Runtime Guardian interruptions"""
-        print(f"🚨 Runtime Guardian INTERRUPTED task {task_id}")
-        print(f"   Reason: {reason.value}")
-
+        logger.info(f"🚨 Runtime Guardian INTERRUPTED task {task_id}")
+        logger.info(f"   Reason: {reason.value}")
         self.stats['runtime_interruptions'] += 1
 
         # Registrar evento
@@ -235,9 +235,8 @@ class AutoProtectionSystem:
 
     def _handle_post_rejection(self, task_id: str, verdict):
         """Handler para Post-Guardian rejections"""
-        print(f"❌ Post-Guardian REJECTED task {task_id}")
-        print(f"   Quality: {verdict.quality.value}")
-
+        logger.error(f"❌ Post-Guardian REJECTED task {task_id}")
+        logger.info(f"   Quality: {verdict.quality.value}")
         self.stats['post_rejections'] += 1
 
         # Registrar evento
@@ -323,7 +322,7 @@ class AutoProtectionSystem:
             )
             self._protection_events.append(event)
 
-            print("✅ Auto-correction applied successfully")
+            logger.info("✅ Auto-correction applied successfully")
             return True
 
         return False
@@ -341,14 +340,13 @@ class AutoProtectionSystem:
 
         self._critical_alerts.append(alert)
 
-        print(f"\n{'='*70}")
-        print(f"🚨 CRITICAL ALERT")
-        print(f"{'='*70}")
-        print(f"Type:    {alert_type}")
-        print(f"Task:    {task_id}")
-        print(f"Message: {message}")
-        print(f"{'='*70}\n")
-
+        logger.info(f"\n{'='*70}")
+        logger.info(f"🚨 CRITICAL ALERT")
+        logger.info(f"{'='*70}")
+        logger.info(f"Type:    {alert_type}")
+        logger.info(f"Task:    {task_id}")
+        logger.info(f"Message: {message}")
+        logger.info(f"{'='*70}\n")
     def _log_protection_event(self, report: GuardianReport):
         """Log de evento de proteção"""
         # Evento já registrado nos callbacks individuais
@@ -367,8 +365,7 @@ class AutoProtectionSystem:
         )
         self._monitoring_thread.start()
 
-        print("✅ Auto-Protection System: ALWAYS_ON mode activated")
-
+        logger.info("✅ Auto-Protection System: ALWAYS_ON mode activated")
     def _monitoring_loop(self):
         """Loop de monitoramento"""
         while not self._stop_monitoring.is_set():
@@ -384,8 +381,7 @@ class AutoProtectionSystem:
         if self._monitoring_thread:
             self._monitoring_thread.join(timeout=5)
 
-        print("🛡️ Auto-Protection System: Stopped")
-
+        logger.info("🛡️ Auto-Protection System: Stopped")
     def get_protection_report(self) -> Dict:
         """Gera relatório de proteções aplicadas"""
         return {
@@ -430,28 +426,24 @@ class AutoProtectionSystem:
         report = self.get_protection_report()
 
         print("\n" + "="*80)
-        print("  AUTO-PROTECTION SYSTEM REPORT")
+        logger.info("  AUTO-PROTECTION SYSTEM REPORT")
         print("="*80 + "\n")
 
-        print(f"MODE:              {report['mode'].upper()}")
-        print(f"ENFORCEMENT:       {report['enforcement_level'].upper()}")
-        print(f"AUTO-CORRECTION:   {report['auto_correction'].upper()}\n")
-
-        print("PROTECTION STATS:")
-        print(f"├─ Protected Actions:      {report['total_protected_actions']}")
-        print(f"├─ Pre-rejections:         {report['pre_rejections']}")
-        print(f"├─ Runtime interruptions:  {report['runtime_interruptions']}")
-        print(f"├─ Post-rejections:        {report['post_rejections']}")
-        print(f"├─ Auto-fixes applied:     {report['auto_fixes_applied']}")
-        print(f"└─ Critical alerts:        {report['critical_alerts_issued']}\n")
-
-        print(f"PROTECTION SUCCESS RATE: {report['protection_success_rate']:.1f}%\n")
-
+        logger.info(f"MODE:              {report['mode'].upper()}")
+        logger.info(f"ENFORCEMENT:       {report['enforcement_level'].upper()}")
+        logger.info(f"AUTO-CORRECTION:   {report['auto_correction'].upper()}\n")
+        logger.info("PROTECTION STATS:")
+        logger.info(f"├─ Protected Actions:      {report['total_protected_actions']}")
+        logger.info(f"├─ Pre-rejections:         {report['pre_rejections']}")
+        logger.info(f"├─ Runtime interruptions:  {report['runtime_interruptions']}")
+        logger.info(f"├─ Post-rejections:        {report['post_rejections']}")
+        logger.info(f"├─ Auto-fixes applied:     {report['auto_fixes_applied']}")
+        logger.info(f"└─ Critical alerts:        {report['critical_alerts_issued']}\n")
+        logger.info(f"PROTECTION SUCCESS RATE: {report['protection_success_rate']:.1f}%\n")
         if report['critical_alerts']:
-            print("RECENT CRITICAL ALERTS:")
+            logger.info("RECENT CRITICAL ALERTS:")
             for alert in report['critical_alerts']:
-                print(f"  🚨 [{alert['timestamp']}] {alert['type']}: {alert['message']}")
-
+                logger.info(f"  🚨 [{alert['timestamp']}] {alert['type']}: {alert['message']}")
         print("\n" + "="*80 + "\n")
 
 
@@ -502,10 +494,9 @@ def enable_auto_protection(
         enforcement_level=enforcement_level
     )
 
-    print("🛡️ Auto-Protection System: ENABLED")
-    print(f"   Enforcement Level: {enforcement_level.value}")
-    print("   Guardians are now ALWAYS protecting Max-Code from constitutional violations.")
-
+    logger.info("🛡️ Auto-Protection System: ENABLED")
+    logger.info(f"   Enforcement Level: {enforcement_level.value}")
+    logger.info("   Guardians are now ALWAYS protecting Max-Code from constitutional violations.")
     return system
 
 
@@ -517,5 +508,5 @@ def disable_auto_protection():
         _auto_protection_instance.stop()
         _auto_protection_instance = None
 
-    print("⚠️ Auto-Protection System: DISABLED")
-    print("   WARNING: Max-Code is now vulnerable to constitutional violations!")
+    logger.warning("⚠️ Auto-Protection System: DISABLED")
+    logger.warning("   WARNING: Max-Code is now vulnerable to constitutional violations!")

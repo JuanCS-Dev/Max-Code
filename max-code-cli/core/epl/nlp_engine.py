@@ -20,6 +20,9 @@ from dataclasses import dataclass
 from enum import Enum
 import unicodedata
 import re
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class Language(Enum):
@@ -332,8 +335,7 @@ def recognize_intent(text: str) -> Intent:
 
 if __name__ == "__main__":
     # Demo
-    print("🧠 EPL NLP Engine Demo\n")
-
+    logger.info("🧠 EPL NLP Engine Demo\n")
     engine = NLPEngine()
 
     test_cases = [
@@ -351,17 +353,14 @@ if __name__ == "__main__":
 
         # Normalize
         normalized = engine.normalize(test)
-        print(f"  Normalized: {normalized}")
-
+        logger.info(f"  Normalized: {normalized}")
         # Detect language
         lang = engine.detect_language(test)
-        print(f"  Language: {lang.value}")
-
+        logger.info(f"  Language: {lang.value}")
         # Recognize intent
         intent = engine.recognize_intent(test)
-        print(f"  Intent: {intent.type.value} (confidence: {intent.confidence:.0%})")
+        logger.info(f"  Intent: {intent.type.value} (confidence: {intent.confidence:.0%})")
         if intent.target:
-            print(f"  Target: {intent.target}")
-        print(f"  Keywords: {intent.keywords}")
-
+            logger.info(f"  Target: {intent.target}")
+        logger.info(f"  Keywords: {intent.keywords}")
         print()

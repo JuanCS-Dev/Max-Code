@@ -46,6 +46,9 @@ from core.tools import (
 
 # Import self-correction engine (P5 - Autocorreção Humilde)
 from .self_correction import SelfCorrectionEngine
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class ToolType(Enum):
@@ -163,7 +166,7 @@ class ToolExecutor:
         # Initialize self-correction engine (P5 - Autocorreção Humilde)
         if enable_self_correction:
             self.self_correction_engine = SelfCorrectionEngine(max_attempts=3)
-            print("🔄 Self-Correction Engine enabled (P5 - Autocorreção Humilde)")
+            logger.info("🔄 Self-Correction Engine enabled (P5 - Autocorreção Humilde)")
         else:
             self.self_correction_engine = None
 
@@ -175,8 +178,7 @@ class ToolExecutor:
             tool: Tool a registrar
         """
         self.registered_tools[tool.name] = tool
-        print(f"🔧 Tool Executor: Registered tool '{tool.name}' ({tool.type.value})")
-
+        logger.info(f"🔧 Tool Executor: Registered tool '{tool.name}' ({tool.type.value})")
     def execute(
         self,
         tool_name: str,
@@ -212,8 +214,7 @@ class ToolExecutor:
         # Merge parameters
         params = {**tool.parameters, **(parameters or {})}
 
-        print(f"⚙️  Tool Executor: Executing '{tool_name}'...")
-
+        logger.info(f"⚙️  Tool Executor: Executing '{tool_name}'...")
         # FASE 1: VALIDATE
         if tool.requires_validation or (self.safe_mode and tool.safe_mode):
             validation_result = self._validate_tool_execution(tool, params)
@@ -227,7 +228,7 @@ class ToolExecutor:
                 )
                 self.execution_history.append(result)
                 self.stats['blocked_executions'] += 1
-                print(f"   🚫 Execution blocked: {validation_result['reason']}")
+                logger.info(f"   🚫 Execution blocked: {validation_result['reason']}")
                 return result
 
         # FASE 2: EXECUTE
@@ -256,9 +257,8 @@ class ToolExecutor:
         # FASE 2.5: SELF-CORRECTION (P5 - Autocorreção Humilde)
         # Se falhou e self-correction está ativado, tenta corrigir automaticamente
         if status == ToolStatus.FAILURE and self.enable_self_correction and self.self_correction_engine:
-            print(f"   ❌ Execution failed: {error}")
-            print(f"   🔄 Attempting self-correction (P5)...")
-
+            logger.error(f"   ❌ Execution failed: {error}")
+            logger.info(f"   🔄 Attempting self-correction (P5)...")
             correction_result = self.self_correction_engine.correct_execution(
                 tool_executor=self,
                 tool_name=tool_name,
@@ -277,12 +277,11 @@ class ToolExecutor:
                 self.stats['failed_executions'] -= 1
                 self.stats['successful_executions'] += 1
 
-                print(f"   ✅ Self-correction successful! (P5 - Autocorreção Humilde)")
+                logger.info(f"   ✅ Self-correction successful! (P5 - Autocorreção Humilde)")
             else:
                 # Self-correction falhou, mantém erro original
                 error = correction_result.final_error
-                print(f"   ⚠️  Self-correction failed, escalating to user...")
-
+                logger.error(f"   ⚠️  Self-correction failed, escalating to user...")
         # FASE 3: AUDIT (P4)
         result = ToolResult(
             tool_name=tool_name,
@@ -297,10 +296,9 @@ class ToolExecutor:
 
         # Log resultado
         if status == ToolStatus.SUCCESS:
-            print(f"   ✓ Execution successful ({execution_time:.2f}s)")
+            logger.info(f"   ✓ Execution successful ({execution_time:.2f}s)")
         elif status != ToolStatus.FAILURE:  # Timeout/blocked já foi logado
-            print(f"   ❌ Execution failed: {error}")
-
+            logger.error(f"   ❌ Execution failed: {error}")
         return result
 
     def _validate_tool_execution(
@@ -515,7 +513,7 @@ class ToolExecutor:
         url = parameters['url']
         method = parameters.get('method', 'GET')
 
-        print(f"   [Placeholder] API call: {method} {url}")
+        logger.info(f"   [Placeholder] API call: {method} {url}")
         return {'status': 'placeholder'}
 
     def _execute_search(self, parameters: Dict[str, Any]) -> List[str]:
@@ -524,7 +522,7 @@ class ToolExecutor:
         pattern = parameters['pattern']
         path = parameters.get('path', '.')
 
-        print(f"   [Placeholder] Search: {pattern} in {path}")
+        logger.info(f"   [Placeholder] Search: {pattern} in {path}")
         return []
 
     def get_execution_history(self, limit: int = 10) -> List[ToolResult]:
@@ -550,15 +548,15 @@ class ToolExecutor:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  TOOL EXECUTOR - STATISTICS")
+        logger.info("  TOOL EXECUTOR - STATISTICS")
         print("="*60)
-        print(f"Total executions:          {stats['total_executions']}")
-        print(f"Successful:                {stats['successful_executions']} ({stats['success_rate']:.1f}%)")
-        print(f"Failed:                    {stats['failed_executions']}")
-        print(f"Blocked:                   {stats['blocked_executions']}")
+        logger.info(f"Total executions:          {stats['total_executions']}")
+        logger.info(f"Successful:                {stats['successful_executions']} ({stats['success_rate']:.1f}%)")
+        logger.error(f"Failed:                    {stats['failed_executions']}")
+        logger.info(f"Blocked:                   {stats['blocked_executions']}")
         if self.enable_self_correction:
-            print(f"Self-corrections (P5):     {stats['self_corrections']}")
-        print(f"Avg execution time:        {stats['avg_execution_time']:.3f}s")
+            logger.info(f"Self-corrections (P5):     {stats['self_corrections']}")
+        logger.info(f"Avg execution time:        {stats['avg_execution_time']:.3f}s")
         print("="*60 + "\n")
 
 

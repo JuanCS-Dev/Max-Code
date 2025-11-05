@@ -19,6 +19,9 @@ from dataclasses import dataclass
 from enum import Enum
 
 from config.settings import get_settings
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 # ============================================================================
@@ -171,7 +174,7 @@ class MaximusClient:
                 action={"type": "code_change", "file": "auth.py"},
                 context={"codebase": "..."}
             )
-            print(f"Systemic risk: {analysis.systemic_risk_score}")
+            logger.info(f"Systemic risk: {analysis.systemic_risk_score}")
     """
 
     def __init__(
@@ -295,9 +298,9 @@ class MaximusClient:
 
         Example:
             if await client.health_check():
-                print("✓ MAXIMUS is online")
+                logger.info("✓ MAXIMUS is online")
             else:
-                print("✗ MAXIMUS is offline")
+                logger.warning("✗ MAXIMUS is offline")
         """
         try:
             response = await self._request("GET", f"{self.base_url}/api/v1/health")
@@ -334,9 +337,9 @@ class MaximusClient:
             )
 
             if analysis.systemic_risk_score > 0.7:
-                print(f"⚠️ High systemic risk: {analysis.reasoning}")
+                logger.warning(f"⚠️ High systemic risk: {analysis.reasoning}")
                 for mitigation in analysis.mitigation_strategies:
-                    print(f"  → {mitigation}")
+                    logger.info(f"  → {mitigation}")
         """
         payload = {"action": action, "context": context}
 
@@ -389,9 +392,9 @@ class MaximusClient:
             )
 
             if verdict.verdict == "REJECTED":
-                print(f"❌ Ethical violation: {verdict.reasoning}")
+                logger.error(f"❌ Ethical violation: {verdict.reasoning}")
                 for issue in verdict.issues:
-                    print(f"  → {issue}")
+                    logger.info(f"  → {issue}")
         """
         payload = {"code": code, "context": context}
 
@@ -444,8 +447,8 @@ class MaximusClient:
 
             for edge_case in edge_cases:
                 if edge_case.severity in ["HIGH", "CRITICAL"]:
-                    print(f"⚠️ {edge_case.scenario} (p={edge_case.probability:.2f})")
-                    print(f"   Suggested test: {edge_case.suggested_test}")
+                    logger.warning(f"⚠️ {edge_case.scenario} (p={edge_case.probability:.2f})")
+                    logger.info(f"   Suggested test: {edge_case.suggested_test}")
         """
         payload = {"function_code": function_code, "test_suite": test_suite}
 
@@ -504,9 +507,9 @@ class MaximusClient:
                 context={"codebase": "..."}
             )
 
-            print(f"Root cause: {healing.root_cause}")
+            logger.info(f"Root cause: {healing.root_cause}")
             for fix in healing.fix_suggestions:
-                print(f"Fix (confidence {fix.confidence:.2f}): {fix.description}")
+                logger.info(f"Fix (confidence {fix.confidence:.2f}): {fix.description}")
         """
         payload = {
             "broken_code": broken_code,
@@ -565,7 +568,7 @@ class MaximusClient:
             )
 
             for result in results.results:
-                print(f"{result.title}: {result.url}")
+                logger.info(f"{result.title}: {result.url}")
         """
         payload = {"query": query, "context": context}
 
@@ -624,7 +627,7 @@ class MaximusClient:
 
             print(narrative.story)
             for insight in narrative.key_insights:
-                print(f"💡 {insight}")
+                logger.info(f"💡 {insight}")
         """
         payload = {"code_changes": code_changes, "context": context}
 

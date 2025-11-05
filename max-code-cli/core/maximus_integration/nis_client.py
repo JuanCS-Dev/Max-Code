@@ -21,6 +21,9 @@ from dataclasses import dataclass
 from enum import Enum
 
 from config.settings import get_settings
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 # ============================================================================
@@ -112,7 +115,7 @@ class NISClient:
 
         print(narrative.story)
         for insight in narrative.key_insights:
-            print(f"💡 {insight.insight}")
+            logger.info(f"💡 {insight.insight}")
     """
 
     def __init__(
@@ -196,7 +199,7 @@ class NISClient:
 
             for insight in narrative.key_insights:
                 if insight.importance in ["HIGH", "CRITICAL"]:
-                    print(f"⚠️ {insight.insight}")
+                    logger.warning(f"⚠️ {insight.insight}")
         """
         context = context or {}
 

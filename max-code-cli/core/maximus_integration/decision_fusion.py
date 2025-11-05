@@ -18,6 +18,9 @@ from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum
 import statistics
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 # ============================================================================
@@ -105,7 +108,7 @@ class DecisionFusion:
         )
 
         fused = fusion.fuse(maxcode_decision, maximus_decision)
-        print(f"Final: {fused.final_decision} (confidence: {fused.confidence})")
+        logger.info(f"Final: {fused.final_decision} (confidence: {fused.confidence})")
     """
 
     def __init__(

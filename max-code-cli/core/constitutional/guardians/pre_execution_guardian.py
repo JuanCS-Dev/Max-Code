@@ -17,6 +17,9 @@ from enum import Enum
 
 from ..engine import ConstitutionalEngine, Action, ActionType, ConstitutionalResult
 from ..validators.p1_completeness import ViolationSeverity
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class GuardianDecision(Enum):
@@ -226,7 +229,7 @@ class PreExecutionGuardian:
             verdict: Veredicto
         """
         print("\n" + "="*70)
-        print("  PRE-EXECUTION GUARDIAN VERDICT")
+        logger.info("  PRE-EXECUTION GUARDIAN VERDICT")
         print("="*70 + "\n")
 
         # Decisão
@@ -238,29 +241,27 @@ class PreExecutionGuardian:
         }
 
         symbol = decision_symbol.get(verdict.decision, "?")
-        print(f"DECISION: {symbol} {verdict.decision.value.upper()}")
-        print(f"REASON:   {verdict.reason}")
-        print(f"PROCEED:  {'YES' if verdict.should_proceed else 'NO'}\n")
-
+        logger.info(f"DECISION: {symbol} {verdict.decision.value.upper()}")
+        logger.info(f"REASON:   {verdict.reason}")
+        logger.info(f"PROCEED:  {'YES' if verdict.should_proceed else 'NO'}\n")
         # Warnings
         if verdict.warnings:
-            print("WARNINGS:")
+            logger.warning("WARNINGS:")
             for warning in verdict.warnings:
-                print(f"  ⚠ {warning}")
+                logger.warning(f"  ⚠ {warning}")
             print()
 
         # Suggestions
         if verdict.suggestions:
-            print("SUGGESTIONS:")
+            logger.info("SUGGESTIONS:")
             for suggestion in verdict.suggestions:
-                print(f"  → {suggestion}")
+                logger.info(f"  → {suggestion}")
             print()
 
         # Constitutional Score
         score = verdict.constitutional_result.constitutional_score
         score_bar = "█" * int(score * 20) + "░" * (20 - int(score * 20))
-        print(f"CONSTITUTIONAL SCORE: {score:.2f} [{score_bar}]")
-
+        logger.info(f"CONSTITUTIONAL SCORE: {score:.2f} [{score_bar}]")
         print("="*70 + "\n")
 
 

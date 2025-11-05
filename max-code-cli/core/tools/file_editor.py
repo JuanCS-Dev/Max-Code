@@ -20,6 +20,9 @@ from typing import Optional, List, Tuple
 from dataclasses import dataclass
 from pathlib import Path
 import difflib
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # Handle both package and standalone imports
 try:
@@ -329,8 +332,7 @@ def edit_file(
     result = editor.edit(file_path, old_string, new_string, **kwargs)
 
     if not result.success:
-        print(f"Error: {result.error}")
-
+        logger.error(f"Error: {result.error}")
     return result.success
 
 
@@ -339,8 +341,7 @@ def edit_file(
 # ============================================================================
 
 if __name__ == "__main__":
-    print("✏️  File Editor Demo\n")
-
+    logger.info("✏️  File Editor Demo\n")
     try:
         from .file_writer import FileWriter
     except ImportError:
@@ -349,11 +350,11 @@ if __name__ == "__main__":
     # Setup: Create test file
     test_file = "/tmp/max_code_edit_test.py"
     original_content = """def hello():
-    print('Hello, World!')
+    logger.info('Hello, World!')
     return True
 
 def goodbye():
-    print('Goodbye, World!')
+    logger.info('Goodbye, World!')
     return False
 """
 
@@ -364,7 +365,7 @@ def goodbye():
 
     # Test 1: Simple edit (first occurrence)
     print("=" * 70)
-    print("TEST 1: Edit first occurrence")
+    logger.info("TEST 1: Edit first occurrence")
     print("=" * 70)
 
     result = editor.edit(
@@ -374,16 +375,15 @@ def goodbye():
     )
 
     if result.success:
-        print(f"✓ Success!")
-        print(f"  Replacements: {result.replacements}")
-        print(f"  Backup: {result.backup_path}")
-        print(f"\nDiff:\n{result.diff}")
+        logger.info(f"✓ Success!")
+        logger.info(f"  Replacements: {result.replacements}")
+        logger.info(f"  Backup: {result.backup_path}")
+        logger.info(f"\nDiff:\n{result.diff}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 2: Replace all occurrences
     print("\n" + "=" * 70)
-    print("TEST 2: Replace all occurrences of 'World'")
+    logger.info("TEST 2: Replace all occurrences of 'World'")
     print("=" * 70)
 
     result = editor.edit(
@@ -394,14 +394,13 @@ def goodbye():
     )
 
     if result.success:
-        print(f"✓ Replaced {result.replacements} occurrences!")
-        print(f"\nDiff:\n{result.diff}")
+        logger.info(f"✓ Replaced {result.replacements} occurrences!")
+        logger.info(f"\nDiff:\n{result.diff}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 3: Error - string not found
     print("\n" + "=" * 70)
-    print("TEST 3: Error handling - string not found")
+    logger.error("TEST 3: Error handling - string not found")
     print("=" * 70)
 
     result = editor.edit(
@@ -411,13 +410,12 @@ def goodbye():
     )
 
     if not result.success:
-        print(f"✓ Correctly detected error: {result.error}")
+        logger.info(f"✓ Correctly detected error: {result.error}")
     else:
-        print(f"✗ Should have failed!")
-
+        logger.error(f"✗ Should have failed!")
     # Test 4: Error - non-unique string without replace_all
     print("\n" + "=" * 70)
-    print("TEST 4: Error handling - non-unique string")
+    logger.error("TEST 4: Error handling - non-unique string")
     print("=" * 70)
 
     # Reset file
@@ -431,13 +429,12 @@ def goodbye():
     )
 
     if not result.success:
-        print(f"✓ Correctly detected non-unique string: {result.error}")
+        logger.info(f"✓ Correctly detected non-unique string: {result.error}")
     else:
-        print(f"✗ Should have failed!")
-
+        logger.error(f"✗ Should have failed!")
     # Test 5: Multiple edits
     print("\n" + "=" * 70)
-    print("TEST 5: Multiple edits")
+    logger.info("TEST 5: Multiple edits")
     print("=" * 70)
 
     # Reset file
@@ -451,21 +448,19 @@ def goodbye():
     result = editor.edit_multiple(test_file, edits)
 
     if result.success:
-        print(f"✓ Applied {result.replacements} edits!")
-        print(f"\nDiff:\n{result.diff}")
+        logger.info(f"✓ Applied {result.replacements} edits!")
+        logger.info(f"\nDiff:\n{result.diff}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Cleanup
     print("\n" + "=" * 70)
-    print("Cleanup")
+    logger.info("Cleanup")
     print("=" * 70)
 
     Path(test_file).unlink()
-    print(f"  Removed: {test_file}")
-
+    logger.info(f"  Removed: {test_file}")
     # Remove backups
     import glob
     for backup in glob.glob(f"{test_file}.backup.*"):
         Path(backup).unlink()
-        print(f"  Removed backup: {backup}")
+        logger.info(f"  Removed backup: {backup}")

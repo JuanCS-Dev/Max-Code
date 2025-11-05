@@ -23,6 +23,9 @@ import time
 from typing import Any, Dict, Optional
 from dataclasses import dataclass
 from enum import Enum
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 # ============================================================================
@@ -503,12 +506,12 @@ class MaximusCache:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("MAXIMUS Cache Statistics")
+        logger.info("MAXIMUS Cache Statistics")
         print("="*60)
-        print(f"Backend:     {self.backend.value}")
-        print(f"Hits:        {stats.hits}")
-        print(f"Misses:      {stats.misses}")
-        print(f"Hit Rate:    {stats.hit_rate:.1%}")
-        print(f"Evictions:   {stats.evictions}")
-        print(f"Size:        {stats.size} entries")
+        logger.info(f"Backend:     {self.backend.value}")
+        logger.info(f"Hits:        {stats.hits}")
+        logger.info(f"Misses:      {stats.misses}")
+        logger.info(f"Hit Rate:    {stats.hit_rate:.1%}")
+        logger.info(f"Evictions:   {stats.evictions}")
+        logger.info(f"Size:        {stats.size} entries")
         print("="*60 + "\n")

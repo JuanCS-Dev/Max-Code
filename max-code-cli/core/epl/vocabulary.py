@@ -13,6 +13,9 @@ Em EPL, no princípio era o EMOJI, e o emoji ERA o conceito.
 from typing import Dict, List, Optional, Set
 from dataclasses import dataclass
 from enum import Enum
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class EmojiCategory(Enum):
@@ -504,26 +507,22 @@ def interpret_emoji_in_context(
 
 if __name__ == "__main__":
     # Demo
-    print("🧬 EPL Vocabulary Demo\n")
-
-    print("📖 Core Vocabulary:")
+    logger.info("🧬 EPL Vocabulary Demo\n")
+    logger.info("📖 Core Vocabulary:")
     for category in EmojiCategory:
         emojis = get_emojis_by_category(category)
-        print(f"\n{category.value.upper()}:")
+        logger.info(f"\n{category.value.upper()}:")
         for emoji in emojis:
             definition = get_emoji_definition(emoji)
-            print(f"  {emoji} = {definition.primary_meaning}")
-
-    print("\n\n🔧 Operators:")
+            logger.info(f"  {emoji} = {definition.primary_meaning}")
+    logger.info("\n\n🔧 Operators:")
     for op, meaning in OPERATORS.items():
-        print(f"  {op} = {meaning}")
-
-    print("\n\n🔍 Alias Lookup Examples:")
-    print(f"  'sophia' → {get_emoji_by_alias('sophia')}")
-    print(f"  'tot' → {get_emoji_by_alias('tot')}")
-    print(f"  'bug' → {get_emoji_by_alias('bug')}")
-
-    print("\n\n📊 Compression Examples:")
+        logger.info(f"  {op} = {meaning}")
+    logger.debug("\n\n🔍 Alias Lookup Examples:")
+    logger.info(f"  'sophia' → {get_emoji_by_alias('sophia')}")
+    logger.info(f"  'tot' → {get_emoji_by_alias('tot')}")
+    logger.info(f"  'bug' → {get_emoji_by_alias('bug')}")
+    logger.info("\n\n📊 Compression Examples:")
     examples = [
         ("Use tree of thoughts to analyze security", "🌳📊🔒"),
         ("Fix bug urgently", "🔥🐛→🔧"),
@@ -531,6 +530,6 @@ if __name__ == "__main__":
     ]
     for text, epl in examples:
         ratio = calculate_compression_ratio(text, epl)
-        print(f"  '{text}'")
-        print(f"  → {epl}")
-        print(f"  Compression: {ratio:.1%}\n")
+        logger.info(f"  '{text}'")
+        logger.info(f"  → {epl}")
+        logger.info(f"  Compression: {ratio:.1%}\n")

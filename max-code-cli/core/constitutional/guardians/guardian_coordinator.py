@@ -21,6 +21,9 @@ from .runtime_guardian import RuntimeGuardian, ExecutionPhase, InterruptionReaso
 from .post_execution_guardian import PostExecutionGuardian, FinalVerdict, OutputQuality
 
 from ..engine import ConstitutionalEngine, Action, ActionType
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class EnforcementLevel(Enum):
@@ -148,8 +151,7 @@ class GuardianCoordinator:
         # ============================================================
         # FASE 1: PRE-EXECUTION VALIDATION
         # ============================================================
-        print("\n⏳ E o Verbo se fez carne... (João 1:14) - Validating action...")
-
+        logger.info("\n⏳ E o Verbo se fez carne... (João 1:14) - Validating action...")
         pre_verdict = self.pre_guardian.validate_action(action)
 
         # Criar report
@@ -173,7 +175,7 @@ class GuardianCoordinator:
 
         # Verificar se pode prosseguir
         if not pre_verdict.should_proceed:
-            print("✗ Pre-execution Guardian REJECTED action")
+            logger.info("✗ Pre-execution Guardian REJECTED action")
             self.stats['pre_rejected'] += 1
 
             # Invocar callbacks
@@ -183,13 +185,11 @@ class GuardianCoordinator:
             report.completed_at = datetime.utcnow()
             return report
 
-        print("✓ Pre-execution Guardian APPROVED")
-
+        logger.info("✓ Pre-execution Guardian APPROVED")
         # ============================================================
         # FASE 2: RUNTIME MONITORING + EXECUTION
         # ============================================================
-        print("⏳ Vigiai e orai... (Mateus 26:41) - Monitoring execution...")
-
+        logger.info("⏳ Vigiai e orai... (Mateus 26:41) - Monitoring execution...")
         self.runtime_guardian.start_monitoring(task_id)
         self.runtime_guardian.update_phase(task_id, ExecutionPhase.GENERATING)
 
@@ -197,7 +197,7 @@ class GuardianCoordinator:
         try:
             generated_code = execution_callback(action)
         except Exception as e:
-            print(f"✗ Execution failed: {e}")
+            logger.error(f"✗ Execution failed: {e}")
             self.runtime_guardian.update_phase(task_id, ExecutionPhase.FAILED)
             report.completed_at = datetime.utcnow()
             return report
@@ -216,18 +216,16 @@ class GuardianCoordinator:
 
         # Se foi interrompido, parar aqui
         if report.was_interrupted:
-            print(f"✗ Runtime Guardian INTERRUPTED: {report.interruption_reason.value}")
+            logger.info(f"✗ Runtime Guardian INTERRUPTED: {report.interruption_reason.value}")
             self.stats['runtime_interrupted'] += 1
             report.completed_at = datetime.utcnow()
             return report
 
-        print("✓ Runtime Guardian: Execution completed")
-
+        logger.info("✓ Runtime Guardian: Execution completed")
         # ============================================================
         # FASE 3: POST-EXECUTION VALIDATION
         # ============================================================
-        print("⏳ Examinai tudo... (1 Tessalonicenses 5:21) - Validating output...")
-
+        logger.info("⏳ Examinai tudo... (1 Tessalonicenses 5:21) - Validating output...")
         language = action.payload.get('language', 'python')
         context = action.metadata
 
@@ -243,7 +241,7 @@ class GuardianCoordinator:
 
         # Verificar se passou
         if not post_verdict.passed:
-            print(f"✗ Post-execution Guardian REJECTED: {post_verdict.quality.value}")
+            logger.info(f"✗ Post-execution Guardian REJECTED: {post_verdict.quality.value}")
             self.stats['post_rejected'] += 1
 
             # Invocar callbacks
@@ -253,8 +251,7 @@ class GuardianCoordinator:
             report.completed_at = datetime.utcnow()
             return report
 
-        print(f"✓ Post-execution Guardian APPROVED: {post_verdict.quality.value}")
-
+        logger.info(f"✓ Post-execution Guardian APPROVED: {post_verdict.quality.value}")
         # ============================================================
         # APROVAÇÃO COMPLETA!
         # ============================================================
@@ -262,8 +259,7 @@ class GuardianCoordinator:
         report.completed_at = datetime.utcnow()
         self.stats['fully_approved'] += 1
 
-        print("✓ GUARDIAN COORDINATION: FULLY APPROVED")
-
+        logger.info("✓ GUARDIAN COORDINATION: FULLY APPROVED")
         return report
 
     def _handle_runtime_interruption(self, task_id: str, reason: InterruptionReason):
@@ -272,8 +268,7 @@ class GuardianCoordinator:
             try:
                 callback(task_id, reason)
             except Exception as e:
-                print(f"[GuardianCoordinator] Error in runtime interrupt callback: {e}")
-
+                logger.error(f"[GuardianCoordinator] Error in runtime interrupt callback: {e}")
     def on_pre_reject(self, callback: Callable[[str, GuardianVerdict], None]):
         """Registra callback para rejeições pre-execution"""
         self._on_pre_reject_callbacks.append(callback)
@@ -315,47 +310,42 @@ class GuardianCoordinator:
     def print_full_report(self, report: GuardianReport):
         """Imprime relatório completo (formato bonito)"""
         print("\n" + "="*80)
-        print("  GUARDIAN COORDINATION REPORT")
+        logger.info("  GUARDIAN COORDINATION REPORT")
         print("="*80 + "\n")
 
         # Task info
-        print(f"TASK ID:          {report.task_id}")
-        print(f"STARTED:          {report.started_at.strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.info(f"TASK ID:          {report.task_id}")
+        logger.info(f"STARTED:          {report.started_at.strftime('%Y-%m-%d %H:%M:%S')}")
         if report.completed_at:
             elapsed = (report.completed_at - report.started_at).total_seconds()
-            print(f"COMPLETED:        {report.completed_at.strftime('%Y-%m-%d %H:%M:%S')} ({elapsed:.1f}s)")
-        print(f"ENFORCEMENT:      {report.enforcement_level.value.upper()}\n")
-
+            logger.info(f"COMPLETED:        {report.completed_at.strftime('%Y-%m-%d %H:%M:%S')} ({elapsed:.1f}s)")
+        logger.info(f"ENFORCEMENT:      {report.enforcement_level.value.upper()}\n")
         # Overall status
         status = "✓ APPROVED" if report.overall_passed else "✗ REJECTED"
-        print(f"OVERALL STATUS:   {status}")
-        print(f"ITERATIONS:       {report.total_iterations}")
-        print(f"TOTAL VIOLATIONS: {report.total_violations}")
-        print(f"CONST. SCORE:     {report.constitutional_score:.2f}\n")
-
+        logger.info(f"OVERALL STATUS:   {status}")
+        logger.info(f"ITERATIONS:       {report.total_iterations}")
+        logger.info(f"TOTAL VIOLATIONS: {report.total_violations}")
+        logger.info(f"CONST. SCORE:     {report.constitutional_score:.2f}\n")
         # Phase breakdown
-        print("PHASE BREAKDOWN:")
+        logger.info("PHASE BREAKDOWN:")
         print("├─ PRE-EXECUTION:  ", end="")
         if report.pre_execution_verdict.should_proceed:
-            print("✓ Approved")
+            logger.info("✓ Approved")
         else:
-            print(f"✗ Rejected ({report.pre_execution_verdict.decision.value})")
-
+            logger.info(f"✗ Rejected ({report.pre_execution_verdict.decision.value})")
         print("├─ RUNTIME:        ", end="")
         if report.was_interrupted:
-            print(f"✗ Interrupted ({report.interruption_reason.value})")
+            logger.info(f"✗ Interrupted ({report.interruption_reason.value})")
         else:
-            print("✓ Completed")
-
+            logger.info("✓ Completed")
         print("└─ POST-EXECUTION: ", end="")
         if report.post_execution_verdict:
             if report.post_execution_verdict.passed:
-                print(f"✓ Approved ({report.post_execution_verdict.quality.value})")
+                logger.info(f"✓ Approved ({report.post_execution_verdict.quality.value})")
             else:
-                print(f"✗ Rejected ({report.post_execution_verdict.quality.value})")
+                logger.info(f"✗ Rejected ({report.post_execution_verdict.quality.value})")
         else:
-            print("(not reached)")
-
+            logger.info("(not reached)")
         print("\n" + "="*80 + "\n")
 
 

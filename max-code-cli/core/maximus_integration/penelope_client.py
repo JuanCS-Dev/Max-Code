@@ -19,6 +19,9 @@ from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 
 from config.settings import get_settings
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 # ============================================================================
@@ -86,9 +89,9 @@ class PENELOPEClient:
             context=HealingContext(codebase="...")
         )
 
-        print(f"Root cause: {healing.root_cause.primary_cause}")
+        logger.info(f"Root cause: {healing.root_cause.primary_cause}")
         for fix in healing.fix_options:
-            print(f"Fix (confidence {fix.confidence:.2f}): {fix.description}")
+            logger.info(f"Fix (confidence {fix.confidence:.2f}): {fix.description}")
     """
 
     def __init__(

@@ -8,6 +8,9 @@ from typing import Dict, List
 from typing import Optional
 from dataclasses import dataclass
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -72,10 +75,9 @@ class FeedbackLoop:
         # Print feedbacks
         for feedback in feedbacks:
             icon = {"INFO": "ℹ️", "WARNING": "⚠️", "ERROR": "❌"}[feedback.severity]
-            print(f"{icon} Feedback: {feedback.message}")
+            logger.info(f"{icon} Feedback: {feedback.message}")
             if feedback.suggested_action:
-                print(f"   → Suggested action: {feedback.suggested_action}")
-
+                logger.info(f"   → Suggested action: {feedback.suggested_action}")
         return feedbacks
 
     def get_actionable_feedback(self) -> List[Feedback]:

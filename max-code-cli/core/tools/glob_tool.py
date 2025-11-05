@@ -22,6 +22,9 @@ from pathlib import Path
 import fnmatch
 import os
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -308,7 +311,7 @@ def glob_files(pattern: str, path: Optional[str] = None) -> List[str]:
     if result.success:
         return result.matches
     else:
-        print(f"Error: {result.error}")
+        logger.error(f"Error: {result.error}")
         return []
 
 
@@ -317,79 +320,74 @@ def glob_files(pattern: str, path: Optional[str] = None) -> List[str]:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("🔍 Glob Tool Demo\n")
-
+    logger.debug("🔍 Glob Tool Demo\n")
     tool = GlobTool()
 
     # Test 1: Find all Python files in current project
     print("=" * 70)
-    print("TEST 1: Find all Python files in core/tools/")
+    logger.info("TEST 1: Find all Python files in core/tools/")
     print("=" * 70)
 
     result = tool.glob("*.py", path="core/tools/")
 
     if result.success:
-        print(f"✓ Found {result.total_matches} files")
-        print(f"  Ignored: {result.ignored_count}")
-        print(f"\nMatches:")
+        logger.info(f"✓ Found {result.total_matches} files")
+        logger.info(f"  Ignored: {result.ignored_count}")
+        logger.info(f"\nMatches:")
         for i, match in enumerate(result.matches[:10], 1):
-            print(f"  {i}. {match}")
+            logger.info(f"  {i}. {match}")
         if result.total_matches > 10:
-            print(f"  ... and {result.total_matches - 10} more")
+            logger.info(f"  ... and {result.total_matches - 10} more")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 2: Recursive search
     print("\n" + "=" * 70)
-    print("TEST 2: Find all Python files recursively in core/")
+    logger.info("TEST 2: Find all Python files recursively in core/")
     print("=" * 70)
 
     result = tool.glob("**/*.py", path="core/")
 
     if result.success:
-        print(f"✓ Found {result.total_matches} files")
-        print(f"\nFirst 10 matches:")
+        logger.info(f"✓ Found {result.total_matches} files")
+        logger.info(f"\nFirst 10 matches:")
         for i, match in enumerate(result.matches[:10], 1):
-            print(f"  {i}. {match}")
+            logger.info(f"  {i}. {match}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 3: Find by extension
     print("\n" + "=" * 70)
-    print("TEST 3: Find by extension (.py)")
+    logger.info("TEST 3: Find by extension (.py)")
     print("=" * 70)
 
     result = tool.find_by_extension("py", path="core/epl/", recursive=False)
 
     if result.success:
-        print(f"✓ Found {result.total_matches} Python files in core/epl/")
-        print(f"\nMatches:")
+        logger.info(f"✓ Found {result.total_matches} Python files in core/epl/")
+        logger.info(f"\nMatches:")
         for match in result.matches:
-            print(f"  - {match}")
+            logger.info(f"  - {match}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 4: Find by name pattern
     print("\n" + "=" * 70)
-    print("TEST 4: Find test files (test_*.py)")
+    logger.info("TEST 4: Find test files (test_*.py)")
     print("=" * 70)
 
     result = tool.find_by_name("test_*.py", path=".")
 
     if result.success:
-        print(f"✓ Found {result.total_matches} test files")
-        print(f"\nMatches:")
+        logger.info(f"✓ Found {result.total_matches} test files")
+        logger.info(f"\nMatches:")
         for match in result.matches[:5]:
-            print(f"  - {match}")
+            logger.info(f"  - {match}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 5: Convenience function
     print("\n" + "=" * 70)
-    print("TEST 5: Convenience function")
+    logger.info("TEST 5: Convenience function")
     print("=" * 70)
 
     files = glob_files("core/epl/*.py")
-    print(f"✓ Found {len(files)} files in core/epl/")
+    logger.info(f"✓ Found {len(files)} files in core/epl/")
     for f in files[:3]:
-        print(f"  - {f}")
+        logger.info(f"  - {f}")

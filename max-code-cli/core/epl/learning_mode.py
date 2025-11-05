@@ -29,6 +29,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 import json
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class LearningPhase(Enum):
@@ -299,8 +302,7 @@ class LearningMode:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("🎓 EPL Learning Mode Demo\n")
-
+    logger.info("🎓 EPL Learning Mode Demo\n")
     learning = LearningMode()
 
     # Simulate user learning journey
@@ -353,7 +355,7 @@ if __name__ == "__main__":
         ("📊🔒", True, None),
     ]
 
-    print("Simulating user learning journey...\n")
+    logger.info("Simulating user learning journey...\n")
     print("=" * 70)
 
     for i, (input_text, is_epl, epl_translation) in enumerate(interactions, 1):
@@ -366,25 +368,22 @@ if __name__ == "__main__":
 
         # Print progress at phase transitions
         if i in [1, 11, 31]:
-            print(f"\n--- Interaction {i}: {learning.progress.phase.value.upper()} PHASE ---")
-
+            logger.info(f"\n--- Interaction {i}: {learning.progress.phase.value.upper()} PHASE ---")
         # Show some examples
         if i in [1, 2, 3, 11, 12, 15, 31, 32, 36]:
-            print(f"\nInteraction {i}:")
-            print(f"  Input: {input_text}")
-            print(f"  Type: {'EPL' if is_epl else 'Natural Language'}")
+            logger.info(f"\nInteraction {i}:")
+            logger.info(f"  Input: {input_text}")
+            logger.info(f"  Type: {'EPL' if is_epl else 'Natural Language'}")
             if hint:
-                print(f"  Hint: {hint.message}")
-
+                logger.info(f"  Hint: {hint.message}")
     # Final summary
     print("\n" + "=" * 70)
-    print("LEARNING SUMMARY")
+    logger.info("LEARNING SUMMARY")
     print("=" * 70)
 
     summary = learning.get_progress_summary()
-    print(f"\nPhase: {summary['phase'].upper()}")
-    print(f"Total interactions: {summary['total_interactions']}")
-    print(f"EPL proficiency: {summary['epl_proficiency']}")
-    print(f"Time learning: {summary['time_learning']}")
-
-    print("\n✨ Congratulations! You've achieved EPL fluency!")
+    logger.info(f"\nPhase: {summary['phase'].upper()}")
+    logger.info(f"Total interactions: {summary['total_interactions']}")
+    logger.info(f"EPL proficiency: {summary['epl_proficiency']}")
+    logger.info(f"Time learning: {summary['time_learning']}")
+    logger.info("\n✨ Congratulations! You've achieved EPL fluency!")

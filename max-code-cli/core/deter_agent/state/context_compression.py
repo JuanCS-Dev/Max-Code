@@ -27,6 +27,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 import hashlib
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class CompressionStrategy(Enum):
@@ -163,8 +166,7 @@ class ContextCompressor:
         # Calculate original token count
         original_token_count = sum(item.token_count for item in context)
 
-        print(f"🗜️  Context Compression: Compressing {len(context)} items ({original_token_count:,} tokens)...")
-
+        logger.info(f"🗜️  Context Compression: Compressing {len(context)} items ({original_token_count:,} tokens)...")
         # FASE 1: DEDUPLICATION
         if CompressionStrategy.DEDUPLICATION in strategies:
             context = self._deduplicate(context)
@@ -200,14 +202,12 @@ class ContextCompressor:
         self.stats['avg_crs'].append(crs)
 
         # Log resultado
-        print(f"   ✓ Compressed: {original_token_count:,} → {compressed_token_count:,} tokens")
-        print(f"   Compression ratio: {compression_ratio:.1%}")
-        print(f"   CRS: {crs:.1%} (target: {self.TARGET_CRS:.1%})")
-
+        logger.info(f"   ✓ Compressed: {original_token_count:,} → {compressed_token_count:,} tokens")
+        logger.info(f"   Compression ratio: {compression_ratio:.1%}")
+        logger.info(f"   CRS: {crs:.1%} (target: {self.TARGET_CRS:.1%})")
         # VALIDAÇÃO CONSTITUCIONAL: CRS ≥95%
         if crs < self.TARGET_CRS:
-            print(f"   ⚠️  WARNING: CRS ({crs:.1%}) below constitutional minimum ({self.TARGET_CRS:.1%})")
-
+            logger.warning(f"   ⚠️  WARNING: CRS ({crs:.1%}) below constitutional minimum ({self.TARGET_CRS:.1%})")
         result = CompressionResult(
             original_token_count=original_token_count,
             compressed_token_count=compressed_token_count,
@@ -238,8 +238,7 @@ class ContextCompressor:
 
         removed = len(context) - len(deduplicated)
         if removed > 0:
-            print(f"   ✓ Deduplication: Removed {removed} duplicates")
-
+            logger.info(f"   ✓ Deduplication: Removed {removed} duplicates")
         return deduplicated
 
     def _filter_by_relevance(
@@ -258,8 +257,7 @@ class ContextCompressor:
 
         removed = len(context) - len(filtered)
         if removed > 0:
-            print(f"   ✓ Relevance Filter: Removed {removed} low-relevance items")
-
+            logger.info(f"   ✓ Relevance Filter: Removed {removed} low-relevance items")
         return filtered, removed
 
     def _summarize_low_relevance(
@@ -292,8 +290,7 @@ class ContextCompressor:
                 summarized_count += 1
 
         if summarized_count > 0:
-            print(f"   ✓ Summarization: Summarized {summarized_count} items")
-
+            logger.info(f"   ✓ Summarization: Summarized {summarized_count} items")
         return context, summarized_count
 
     def _apply_tiering(self, context: List[ContextItem]) -> List[ContextItem]:
@@ -319,8 +316,7 @@ class ContextCompressor:
         warm_count = sum(1 for item in context if item.tier == StorageTier.WARM)
         cold_count = sum(1 for item in context if item.tier == StorageTier.COLD)
 
-        print(f"   ✓ Tiering: HOT={hot_count}, WARM={warm_count}, COLD={cold_count}")
-
+        logger.info(f"   ✓ Tiering: HOT={hot_count}, WARM={warm_count}, COLD={cold_count}")
         return context
 
     def get_hot_context(self, context: List[ContextItem]) -> List[ContextItem]:
@@ -374,12 +370,12 @@ class ContextCompressor:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  CONTEXT COMPRESSION - STATISTICS")
+        logger.info("  CONTEXT COMPRESSION - STATISTICS")
         print("="*60)
-        print(f"Total compressions:        {stats['total_compressions']}")
-        print(f"Total tokens saved:        {stats['total_tokens_saved']:,}")
-        print(f"Avg compression ratio:     {stats['avg_compression_ratio']:.1%}")
-        print(f"Avg CRS:                   {stats['avg_crs']:.1%}")
+        logger.info(f"Total compressions:        {stats['total_compressions']}")
+        logger.info(f"Total tokens saved:        {stats['total_tokens_saved']:,}")
+        logger.info(f"Avg compression ratio:     {stats['avg_compression_ratio']:.1%}")
+        logger.info(f"Avg CRS:                   {stats['avg_crs']:.1%}")
         print("="*60 + "\n")
 
 

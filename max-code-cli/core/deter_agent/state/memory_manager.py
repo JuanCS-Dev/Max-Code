@@ -30,6 +30,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 import json
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class MemoryType(Enum):
@@ -197,8 +200,7 @@ class MemoryManager:
         # Check limits and prune if necessary
         self._enforce_limits(memory_type)
 
-        print(f"💾 Memory Manager: Stored {memory_type.value} memory (importance: {importance.value})")
-
+        logger.info(f"💾 Memory Manager: Stored {memory_type.value} memory (importance: {importance.value})")
         return entry
 
     def retrieve(
@@ -280,8 +282,7 @@ class MemoryManager:
         for memory in results:
             memory.access()
 
-        print(f"   ✓ Retrieved {len(results)} memories (from {len(all_memories)} candidates)")
-
+        logger.info(f"   ✓ Retrieved {len(results)} memories (from {len(all_memories)} candidates)")
         return results
 
     def forget(
@@ -335,8 +336,7 @@ class MemoryManager:
             self.memories[mt] = to_keep
 
         if removed_count > 0:
-            print(f"🗑️  Memory Manager: Forgot {removed_count} memories")
-
+            logger.info(f"🗑️  Memory Manager: Forgot {removed_count} memories")
         return removed_count
 
     def consolidate(self, memory_type: MemoryType) -> int:
@@ -373,8 +373,7 @@ class MemoryManager:
         self.memories[memory_type] = consolidated
 
         if consolidated_count > 0:
-            print(f"   ✓ Consolidated {consolidated_count} duplicate memories")
-
+            logger.info(f"   ✓ Consolidated {consolidated_count} duplicate memories")
         return consolidated_count
 
     def _enforce_limits(self, memory_type: MemoryType):
@@ -410,15 +409,13 @@ class MemoryManager:
 
             self.stats['total_memories_forgotten'] += len(removed)
 
-            print(f"   ⚠️  Limit exceeded: Removed {len(removed)} old {memory_type.value} memories")
-
+            logger.warning(f"   ⚠️  Limit exceeded: Removed {len(removed)} old {memory_type.value} memories")
     def clear_working_memory(self):
         """Limpa working memory (útil entre sessões)"""
         count = len(self.memories[MemoryType.WORKING])
         self.memories[MemoryType.WORKING] = []
         self.stats['total_memories_forgotten'] += count
-        print(f"🧹 Memory Manager: Cleared {count} working memories")
-
+        logger.info(f"🧹 Memory Manager: Cleared {count} working memories")
     def get_memory_count(self, memory_type: Optional[MemoryType] = None) -> int:
         """Retorna contagem de memórias"""
         if memory_type:
@@ -441,14 +438,14 @@ class MemoryManager:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  MEMORY MANAGER - STATISTICS")
+        logger.info("  MEMORY MANAGER - STATISTICS")
         print("="*60)
-        print(f"Total memories stored:     {stats['total_memories_stored']}")
-        print(f"Total memories retrieved:  {stats['total_memories_retrieved']}")
-        print(f"Total memories forgotten:  {stats['total_memories_forgotten']}")
-        print("\nCurrent memory counts:")
+        logger.info(f"Total memories stored:     {stats['total_memories_stored']}")
+        logger.info(f"Total memories retrieved:  {stats['total_memories_retrieved']}")
+        logger.info(f"Total memories forgotten:  {stats['total_memories_forgotten']}")
+        logger.info("\nCurrent memory counts:")
         for mt, count in stats['current_memory_count'].items():
-            print(f"  {mt:12s}  {count}")
+            logger.info(f"  {mt:12s}  {count}")
         print("="*60 + "\n")
 
     def save_to_file(self, file_path: str):
@@ -464,8 +461,7 @@ class MemoryManager:
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=2)
 
-        print(f"💾 Memory Manager: Saved memories to {file_path}")
-
+        logger.info(f"💾 Memory Manager: Saved memories to {file_path}")
     def load_from_file(self, file_path: str):
         """Carrega memórias de arquivo"""
         with open(file_path, 'r') as f:
@@ -473,9 +469,7 @@ class MemoryManager:
 
         # Reconstruct memories
         # (implementação simplificada - em produção, reconstruir MemoryEntry completo)
-        print(f"💾 Memory Manager: Loaded memories from {file_path}")
-
-
+        logger.info(f"💾 Memory Manager: Loaded memories from {file_path}")
 # ==================== HELPER FUNCTIONS ====================
 
 def create_memory_manager() -> MemoryManager:

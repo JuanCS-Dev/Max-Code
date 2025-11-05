@@ -15,6 +15,9 @@ from enum import Enum
 import re
 
 from .vocabulary import (
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
     EMOJI_VOCABULARY,
     OPERATORS,
     get_emoji_by_alias,
@@ -385,8 +388,7 @@ def extract_words(tokens: List[Token]) -> List[Token]:
 
 if __name__ == "__main__":
     # Demo
-    print("🧬 EPL Lexer Demo\n")
-
+    logger.info("🧬 EPL Lexer Demo\n")
     test_cases = [
         "Use tree of thoughts to analyze auth",
         "🌳📊🔒",
@@ -400,20 +402,18 @@ if __name__ == "__main__":
         print(f"Test {i}: \"{test}\"")
         tokens = tokenize(test)
 
-        print(f"  Tokens ({len(tokens)} total):")
+        logger.info(f"  Tokens ({len(tokens)} total):")
         for token in tokens:
             if token.type != TokenType.EOF:
-                print(f"    {token}")
-
+                logger.info(f"    {token}")
         # Classification
         epl_only = is_epl_only(tokens)
         natural_only = is_natural_language_only(tokens)
 
         if epl_only:
-            print(f"  Classification: Pure EPL ✨")
+            logger.info(f"  Classification: Pure EPL ✨")
         elif natural_only:
-            print(f"  Classification: Pure Natural Language 📝")
+            logger.info(f"  Classification: Pure Natural Language 📝")
         else:
-            print(f"  Classification: Mixed (Hybrid) 🔀")
-
+            logger.info(f"  Classification: Mixed (Hybrid) 🔀")
         print()

@@ -7,6 +7,9 @@ Monitora performance geral do agente.
 from typing import Dict, List
 from dataclasses import dataclass
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -60,14 +63,14 @@ class PerformanceMonitor:
 
         # Print report
         print("\n" + "="*60)
-        print("  PERFORMANCE REPORT")
+        logger.info("  PERFORMANCE REPORT")
         print("="*60)
-        print(f"Total tasks:               {total_tasks}")
-        print(f"Success rate:              {report.get_success_rate():.1%}")
-        print(f"Avg LEI:                   {avg_lei:.2f}")
-        print(f"Avg FPC:                   {avg_fpc:.1%}")
-        print(f"Avg CRS:                   {avg_crs:.1%}")
-        print(f"Total rewards:             {total_rewards:.1f}")
+        logger.info(f"Total tasks:               {total_tasks}")
+        logger.info(f"Success rate:              {report.get_success_rate():.1%}")
+        logger.info(f"Avg LEI:                   {avg_lei:.2f}")
+        logger.info(f"Avg FPC:                   {avg_fpc:.1%}")
+        logger.info(f"Avg CRS:                   {avg_crs:.1%}")
+        logger.info(f"Total rewards:             {total_rewards:.1f}")
         print("="*60 + "\n")
 
         return report

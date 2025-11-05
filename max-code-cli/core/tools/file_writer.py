@@ -23,6 +23,9 @@ import os
 import shutil
 import tempfile
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -289,8 +292,7 @@ def write_file(file_path: str, content: str, **kwargs) -> bool:
     result = writer.write(file_path, content, **kwargs)
 
     if not result.success:
-        print(f"Error: {result.error}")
-
+        logger.error(f"Error: {result.error}")
     return result.success
 
 
@@ -299,13 +301,12 @@ def write_file(file_path: str, content: str, **kwargs) -> bool:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("✍️  File Writer Demo\n")
-
+    logger.info("✍️  File Writer Demo\n")
     writer = FileWriter()
 
     # Test 1: Write new file
     print("=" * 70)
-    print("TEST 1: Write new file")
+    logger.info("TEST 1: Write new file")
     print("=" * 70)
 
     test_file = "/tmp/max_code_test.txt"
@@ -319,47 +320,44 @@ Biblical Foundation:
     result = writer.write(test_file, content)
 
     if result.success:
-        print(f"✓ Success!")
-        print(f"  File: {result.file_path}")
-        print(f"  Bytes written: {result.bytes_written}")
-        print(f"  Created dirs: {result.created_dirs}")
-        print(f"  Overwritten: {result.overwritten}")
+        logger.info(f"✓ Success!")
+        logger.info(f"  File: {result.file_path}")
+        logger.info(f"  Bytes written: {result.bytes_written}")
+        logger.info(f"  Created dirs: {result.created_dirs}")
+        logger.info(f"  Overwritten: {result.overwritten}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 2: Overwrite file (with backup)
     print("\n" + "=" * 70)
-    print("TEST 2: Overwrite file (with backup)")
+    logger.info("TEST 2: Overwrite file (with backup)")
     print("=" * 70)
 
     new_content = "This is the updated content.\n"
     result = writer.write(test_file, new_content, overwrite=True)
 
     if result.success:
-        print(f"✓ Overwritten!")
-        print(f"  Bytes written: {result.bytes_written}")
-        print(f"  Backup created: {result.backup_path}")
+        logger.info(f"✓ Overwritten!")
+        logger.info(f"  Bytes written: {result.bytes_written}")
+        logger.info(f"  Backup created: {result.backup_path}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 3: Write with directory creation
     print("\n" + "=" * 70)
-    print("TEST 3: Write with directory creation")
+    logger.info("TEST 3: Write with directory creation")
     print("=" * 70)
 
     nested_file = "/tmp/max_code/nested/dir/test.txt"
     result = writer.write(nested_file, "Nested file content\n")
 
     if result.success:
-        print(f"✓ Created nested file!")
-        print(f"  File: {result.file_path}")
-        print(f"  Created dirs: {result.created_dirs}")
+        logger.info(f"✓ Created nested file!")
+        logger.info(f"  File: {result.file_path}")
+        logger.info(f"  Created dirs: {result.created_dirs}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 4: Write lines
     print("\n" + "=" * 70)
-    print("TEST 4: Write lines")
+    logger.info("TEST 4: Write lines")
     print("=" * 70)
 
     lines = [
@@ -371,41 +369,38 @@ Biblical Foundation:
     result = writer.write_lines("/tmp/lines.txt", lines)
 
     if result.success:
-        print(f"✓ Wrote {len(lines)} lines!")
-        print(f"  Bytes: {result.bytes_written}")
+        logger.info(f"✓ Wrote {len(lines)} lines!")
+        logger.info(f"  Bytes: {result.bytes_written}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 5: Append
     print("\n" + "=" * 70)
-    print("TEST 5: Append to file")
+    logger.info("TEST 5: Append to file")
     print("=" * 70)
 
     result = writer.append("/tmp/lines.txt", "Line 4\n")
 
     if result.success:
-        print(f"✓ Appended content!")
-        print(f"  Total bytes: {result.bytes_written}")
+        logger.info(f"✓ Appended content!")
+        logger.info(f"  Total bytes: {result.bytes_written}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Test 6: Dry run
     print("\n" + "=" * 70)
-    print("TEST 6: Dry run")
+    logger.info("TEST 6: Dry run")
     print("=" * 70)
 
     result = writer.write("/tmp/dryrun.txt", "This won't be written", dry_run=True)
 
     if result.success:
-        print(f"✓ Dry run validated!")
-        print(f"  Would write: {result.bytes_written} bytes")
-        print(f"  File exists: {Path('/tmp/dryrun.txt').exists()}")
+        logger.info(f"✓ Dry run validated!")
+        logger.info(f"  Would write: {result.bytes_written} bytes")
+        logger.info(f"  File exists: {Path('/tmp/dryrun.txt').exists()}")
     else:
-        print(f"✗ Failed: {result.error}")
-
+        logger.error(f"✗ Failed: {result.error}")
     # Cleanup
     print("\n" + "=" * 70)
-    print("Cleanup")
+    logger.info("Cleanup")
     print("=" * 70)
 
     import shutil
@@ -414,9 +409,9 @@ Biblical Foundation:
             p = Path(path)
             if p.is_file():
                 p.unlink()
-                print(f"  Removed: {path}")
+                logger.info(f"  Removed: {path}")
             elif p.is_dir():
                 shutil.rmtree(p)
-                print(f"  Removed dir: {path}")
+                logger.info(f"  Removed dir: {path}")
         except (OSError, FileNotFoundError, PermissionError):
             pass

@@ -26,6 +26,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 import json
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class EvaluationDimension(Enum):
@@ -205,29 +208,25 @@ class TreeOfThoughts:
         elif num_thoughts > self.MAX_THOUGHTS:
             num_thoughts = self.MAX_THOUGHTS
 
-        print(f"🌳 Tree of Thoughts: Generating {num_thoughts} alternative approaches...")
-        print(f"   Problem: {problem[:80]}...")
-
+        logger.info(f"🌳 Tree of Thoughts: Generating {num_thoughts} alternative approaches...")
+        logger.info(f"   Problem: {problem[:80]}...")
         # FASE 1: GENERATE thoughts
         thoughts = self._generate_thoughts(problem, context, num_thoughts)
         self.stats['total_thoughts_generated'] += len(thoughts)
 
-        print(f"   ✓ Generated {len(thoughts)} thoughts")
-
+        logger.info(f"   ✓ Generated {len(thoughts)} thoughts")
         # FASE 2: EVALUATE thoughts
         evaluated_thoughts = self._evaluate_thoughts(thoughts)
 
-        print(f"   ✓ Evaluated all thoughts")
-
+        logger.info(f"   ✓ Evaluated all thoughts")
         # FASE 3: RANK thoughts
         ranked_thoughts = self._rank_thoughts(evaluated_thoughts)
 
         # Log top 3
-        print(f"\n   📊 Top 3 Thoughts:")
+        logger.info(f"\n   📊 Top 3 Thoughts:")
         for i, thought in enumerate(ranked_thoughts[:3], 1):
             score = thought.evaluation.overall_score
-            print(f"   {i}. {thought.description[:60]}... (score: {score:.2f})")
-
+            logger.info(f"   {i}. {thought.description[:60]}... (score: {score:.2f})")
         # Update stats
         best_score = ranked_thoughts[0].evaluation.overall_score
         self.stats['best_scores'].append(best_score)
@@ -240,7 +239,7 @@ class TreeOfThoughts:
             return ranked_thoughts
         else:
             best_thought = ranked_thoughts[0]
-            print(f"\n   🏆 Selected: {best_thought.description[:60]}...")
+            logger.info(f"\n   🏆 Selected: {best_thought.description[:60]}...")
             return best_thought
 
     def _generate_thoughts(
@@ -425,12 +424,12 @@ class TreeOfThoughts:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  TREE OF THOUGHTS - STATISTICS")
+        logger.info("  TREE OF THOUGHTS - STATISTICS")
         print("="*60)
-        print(f"Total problems solved:    {stats['total_problems']}")
-        print(f"Total thoughts generated: {stats['total_thoughts_generated']}")
-        print(f"Avg thoughts/problem:     {stats['avg_thoughts_per_problem']:.1f}")
-        print(f"Avg best score:           {stats['avg_best_score']:.3f}")
+        logger.info(f"Total problems solved:    {stats['total_problems']}")
+        logger.info(f"Total thoughts generated: {stats['total_thoughts_generated']}")
+        logger.info(f"Avg thoughts/problem:     {stats['avg_thoughts_per_problem']:.1f}")
+        logger.info(f"Avg best score:           {stats['avg_best_score']:.3f}")
         print("="*60 + "\n")
 
 

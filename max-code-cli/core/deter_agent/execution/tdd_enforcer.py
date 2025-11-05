@@ -31,6 +31,9 @@ from typing import List, Dict, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class TestStatus(Enum):
@@ -176,7 +179,7 @@ class TDDEnforcer:
         needs_tdd = self._needs_tdd(code_change)
 
         if not needs_tdd:
-            print(f"📝 TDD Enforcer: Code change too small ({code_change.lines_added} lines), TDD not required")
+            logger.info(f"📝 TDD Enforcer: Code change too small ({code_change.lines_added} lines), TDD not required")
             # Criar cycle mas marcar como complete
             cycle = TDDCycle(
                 id=f"tdd_{self.stats['total_code_changes']}",
@@ -188,9 +191,8 @@ class TDDEnforcer:
             )
             return cycle
 
-        print(f"🔴 TDD Enforcer: Starting TDD cycle for {code_change.function_name or code_change.file_path}")
-        print(f"   Lines added: {code_change.lines_added}")
-
+        logger.info(f"🔴 TDD Enforcer: Starting TDD cycle for {code_change.function_name or code_change.file_path}")
+        logger.info(f"   Lines added: {code_change.lines_added}")
         cycle = TDDCycle(
             id=f"tdd_{self.stats['total_code_changes']}",
             code_change=code_change,
@@ -226,13 +228,12 @@ class TDDEnforcer:
         Returns:
             True se fase RED válida, False caso contrário
         """
-        print(f"   🔴 RED Phase: Checking tests...")
-
+        logger.info(f"   🔴 RED Phase: Checking tests...")
         # Check 1: Tem testes?
         if not cycle.code_change.has_tests or len(cycle.code_change.test_cases) == 0:
             cycle.violations.append(TDDViolation.CODE_WITHOUT_TESTS)
             self.stats['tdd_violations'] += 1
-            print(f"   ❌ VIOLATION: No tests written!")
+            logger.error(f"   ❌ VIOLATION: No tests written!")
             return False
 
         # Check 2: Testes foram rodados?
@@ -244,7 +245,7 @@ class TDDEnforcer:
         if not tests_run:
             cycle.violations.append(TDDViolation.TESTS_NOT_RUN)
             self.stats['tdd_violations'] += 1
-            print(f"   ❌ VIOLATION: Tests not run!")
+            logger.error(f"   ❌ VIOLATION: Tests not run!")
             return False
 
         # Check 3: Testes devem estar FALHANDO (RED)
@@ -257,7 +258,7 @@ class TDDEnforcer:
             # Se todos testes já passam, pulou fase RED!
             cycle.violations.append(TDDViolation.SKIPPED_RED_PHASE)
             self.stats['tdd_violations'] += 1
-            print(f"   ⚠️  WARNING: All tests passing (skipped RED phase?)")
+            logger.warning(f"   ⚠️  WARNING: All tests passing (skipped RED phase?)")
             # Não bloquear por isso, mas registrar
             # return False
 
@@ -265,7 +266,7 @@ class TDDEnforcer:
         cycle.red_phase_completed = True
         cycle.current_phase = TDDPhase.GREEN
 
-        print(f"   ✓ RED Phase complete")
+        logger.info(f"   ✓ RED Phase complete")
         return True
 
     def enforce_green_phase(self, cycle: TDDCycle) -> bool:
@@ -275,8 +276,7 @@ class TDDEnforcer:
         Returns:
             True se fase GREEN válida, False caso contrário
         """
-        print(f"   🟢 GREEN Phase: Checking tests...")
-
+        logger.info(f"   🟢 GREEN Phase: Checking tests...")
         # Check: Todos testes devem estar PASSANDO
         all_passing = all(
             test.status == TestStatus.PASSING
@@ -288,7 +288,7 @@ class TDDEnforcer:
                 test.name for test in cycle.code_change.test_cases
                 if test.status == TestStatus.FAILING
             ]
-            print(f"   ❌ FAILURE: {len(failing_tests)} tests still failing: {failing_tests}")
+            logger.error(f"   ❌ FAILURE: {len(failing_tests)} tests still failing: {failing_tests}")
             return False
 
         # Check: Coverage ≥80%?
@@ -296,7 +296,7 @@ class TDDEnforcer:
             if cycle.code_change.coverage < self.MIN_COVERAGE:
                 cycle.violations.append(TDDViolation.INSUFFICIENT_COVERAGE)
                 self.stats['tdd_violations'] += 1
-                print(f"   ⚠️  WARNING: Coverage ({cycle.code_change.coverage:.1%}) below minimum ({self.MIN_COVERAGE:.1%})")
+                logger.warning(f"   ⚠️  WARNING: Coverage ({cycle.code_change.coverage:.1%}) below minimum ({self.MIN_COVERAGE:.1%})")
                 if self.strict_mode:
                     return False
 
@@ -306,7 +306,7 @@ class TDDEnforcer:
         cycle.green_phase_completed = True
         cycle.current_phase = TDDPhase.REFACTOR
 
-        print(f"   ✓ GREEN Phase complete")
+        logger.info(f"   ✓ GREEN Phase complete")
         return True
 
     def enforce_refactor_phase(self, cycle: TDDCycle) -> bool:
@@ -316,15 +316,13 @@ class TDDEnforcer:
         Returns:
             True (sempre - refactor é opcional)
         """
-        print(f"   🔧 REFACTOR Phase: Optional cleanup...")
-
+        logger.info(f"   🔧 REFACTOR Phase: Optional cleanup...")
         # Refactor é opcional
         # Apenas marcar como complete
         cycle.refactor_phase_completed = True
         cycle.completed_at = datetime.utcnow()
 
-        print(f"   ✓ REFACTOR Phase complete")
-
+        logger.info(f"   ✓ REFACTOR Phase complete")
         # Remove from active cycles
         if cycle.id in self.active_cycles:
             del self.active_cycles[cycle.id]
@@ -405,14 +403,14 @@ class TDDEnforcer:
         stats = self.get_stats()
 
         print("\n" + "="*60)
-        print("  TDD ENFORCER - STATISTICS")
+        logger.info("  TDD ENFORCER - STATISTICS")
         print("="*60)
-        print(f"Total code changes:        {stats['total_code_changes']}")
-        print(f"Changes with tests:        {stats['changes_with_tests']} ({stats['tdd_compliance_rate']:.1f}%)")
-        print(f"Changes without tests:     {stats['changes_without_tests']}")
-        print(f"TDD cycles completed:      {stats['tdd_cycles_completed']}")
-        print(f"TDD violations:            {stats['tdd_violations']}")
-        print(f"Avg coverage:              {stats['avg_coverage']:.1%}")
+        logger.info(f"Total code changes:        {stats['total_code_changes']}")
+        logger.info(f"Changes with tests:        {stats['changes_with_tests']} ({stats['tdd_compliance_rate']:.1f}%)")
+        logger.info(f"Changes without tests:     {stats['changes_without_tests']}")
+        logger.info(f"TDD cycles completed:      {stats['tdd_cycles_completed']}")
+        logger.info(f"TDD violations:            {stats['tdd_violations']}")
+        logger.info(f"Avg coverage:              {stats['avg_coverage']:.1%}")
         print("="*60 + "\n")
 
 

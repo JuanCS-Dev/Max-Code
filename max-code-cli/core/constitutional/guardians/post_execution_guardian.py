@@ -21,6 +21,9 @@ from ..validators.p1_completeness import ViolationSeverity, P1_Completeness_Vali
 from ..models import Violation
 from ..validators.p2_api_validator import P2_API_Validator
 from ..validators.p5_systemic import P5_Systemic_Analyzer
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class OutputQuality(Enum):
@@ -362,7 +365,7 @@ class PostExecutionGuardian:
     def print_verdict(self, verdict: FinalVerdict):
         """Imprime veredicto (formato bonito)"""
         print("\n" + "="*70)
-        print("  POST-EXECUTION GUARDIAN VERDICT")
+        logger.info("  POST-EXECUTION GUARDIAN VERDICT")
         print("="*70 + "\n")
 
         # Quality
@@ -377,30 +380,28 @@ class PostExecutionGuardian:
         symbol = quality_symbols.get(verdict.quality, "?")
         status = "✓ ACCEPTED" if verdict.passed else "✗ REJECTED"
 
-        print(f"QUALITY: {symbol} {verdict.quality.value.upper()}")
-        print(f"STATUS:  {status}")
-        print(f"REASON:  {verdict.reason}\n")
-
+        logger.info(f"QUALITY: {symbol} {verdict.quality.value.upper()}")
+        logger.info(f"STATUS:  {status}")
+        logger.info(f"REASON:  {verdict.reason}\n")
         # Métricas
         m = verdict.metrics
-        print("METRICS:")
-        print(f"├─ LEI (Lazy Execution Index):     {m.lei:.2f}   {'✓' if m.lei < 1.0 else '✗'} (target: <1.0)")
-        print(f"├─ FPC (First-Pass Correctness):   {m.fpc:.1f}%  {'✓' if m.fpc >= 80.0 else '✗'} (target: ≥80%)")
-        print(f"├─ Lines of Code:                  {m.lines_of_code}")
-        print(f"└─ Violations:                     {m.total_violations} (Critical: {m.critical_violations}, High: {m.high_violations})\n")
-
+        logger.info("METRICS:")
+        logger.info(f"├─ LEI (Lazy Execution Index):     {m.lei:.2f}   {'✓' if m.lei < 1.0 else '✗'} (target: <1.0)")
+        logger.info(f"├─ FPC (First-Pass Correctness):   {m.fpc:.1f}%  {'✓' if m.fpc >= 80.0 else '✗'} (target: ≥80%)")
+        logger.info(f"├─ Lines of Code:                  {m.lines_of_code}")
+        logger.info(f"└─ Violations:                     {m.total_violations} (Critical: {m.critical_violations}, High: {m.high_violations})\n")
         # Must-fix (se rejeitado)
         if verdict.must_fix:
-            print("MUST FIX (before re-submission):")
+            logger.info("MUST FIX (before re-submission):")
             for fix in verdict.must_fix:
-                print(f"  ✗ {fix}")
+                logger.info(f"  ✗ {fix}")
             print()
 
         # Suggestions
         if verdict.suggestions:
-            print("SUGGESTIONS:")
+            logger.info("SUGGESTIONS:")
             for suggestion in verdict.suggestions:
-                print(f"  → {suggestion}")
+                logger.info(f"  → {suggestion}")
             print()
 
         print("="*70 + "\n")

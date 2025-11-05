@@ -9,6 +9,9 @@ OBJETIVO: Ações estruturadas (não ad-hoc).
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -62,6 +65,6 @@ class StructuredAction:
         while not self.plan.is_complete():
             step = self.plan.get_next_step()
             if step:
-                print(f"   Executing step: {step.description}")
+                logger.info(f"   Executing step: {step.description}")
                 # Execute step (placeholder)
                 self.plan.mark_step_complete()

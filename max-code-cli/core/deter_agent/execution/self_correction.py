@@ -33,6 +33,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 import re
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class ErrorCategory(Enum):
@@ -166,8 +169,7 @@ class SelfCorrectionEngine:
         """
         self.stats['total_corrections'] += 1
 
-        print(f"\n🔄 Self-Correction: Analyzing error in '{tool_name}'...")
-
+        logger.error(f"\n🔄 Self-Correction: Analyzing error in '{tool_name}'...")
         attempts: List[CorrectionAttempt] = []
 
         # Análise inicial do erro
@@ -175,7 +177,7 @@ class SelfCorrectionEngine:
 
         # PROTEÇÃO: Se o erro não é corrigível automaticamente, escala imediatamente
         if analysis.strategy == CorrectionStrategy.ESCALATE_TO_USER:
-            print(f"   ⚠️  Error requires manual intervention, escalating to user...")
+            logger.error(f"   ⚠️  Error requires manual intervention, escalating to user...")
             self.stats['escalated_to_user'] += 1
             return SelfCorrectionResult(
                 original_tool_name=tool_name,
@@ -187,15 +189,13 @@ class SelfCorrectionEngine:
                 learning=self._generate_learning(analysis, False)
             )
 
-        print(f"   ├─ Error category: {analysis.category.value}")
-        print(f"   ├─ Root cause: {analysis.root_cause}")
-        print(f"   ├─ Strategy: {analysis.strategy.value}")
-        print(f"   └─ Confidence: {analysis.confidence:.0%}")
-
+        logger.error(f"   ├─ Error category: {analysis.category.value}")
+        logger.info(f"   ├─ Root cause: {analysis.root_cause}")
+        logger.info(f"   ├─ Strategy: {analysis.strategy.value}")
+        logger.info(f"   └─ Confidence: {analysis.confidence:.0%}")
         # Loop de correção
         for attempt_num in range(1, self.max_attempts + 1):
-            print(f"\n   🔧 Attempt {attempt_num}/{self.max_attempts}: {analysis.strategy.value}")
-
+            logger.info(f"\n   🔧 Attempt {attempt_num}/{self.max_attempts}: {analysis.strategy.value}")
             # Aplica estratégia de correção
             corrected_params = self._apply_correction_strategy(
                 parameters,
@@ -240,8 +240,7 @@ class SelfCorrectionEngine:
                     )
                     attempts.append(attempt)
 
-                    print(f"   ✓ Self-correction successful!")
-
+                    logger.info(f"   ✓ Self-correction successful!")
                     # Aprende com este sucesso
                     if self.learning_enabled:
                         self._learn_from_correction(analysis, corrected_params)
@@ -268,8 +267,7 @@ class SelfCorrectionEngine:
                     )
                     attempts.append(attempt)
 
-                    print(f"   ✗ Attempt failed: {result.error}")
-
+                    logger.error(f"   ✗ Attempt failed: {result.error}")
                     # Re-analisa com novo erro
                     analysis = self._analyze_error(result.error, tool_name, corrected_params)
 
@@ -288,12 +286,10 @@ class SelfCorrectionEngine:
                 )
                 attempts.append(attempt)
 
-                print(f"   ✗ Exception during correction: {e}")
-
+                logger.info(f"   ✗ Exception during correction: {e}")
         # Todas as tentativas falharam - escala para usuário
-        print(f"\n   ⚠️  Self-correction failed after {self.max_attempts} attempts")
-        print(f"   📤 Escalating to user...")
-
+        logger.error(f"\n   ⚠️  Self-correction failed after {self.max_attempts} attempts")
+        logger.info(f"   📤 Escalating to user...")
         self.stats['failed_corrections'] += 1
         self.stats['escalated_to_user'] += 1
 
@@ -476,8 +472,7 @@ class SelfCorrectionEngine:
             self.error_patterns[error_signature] = analysis
             self.stats['patterns_learned'] += 1
 
-            print(f"   📚 Learned new error pattern: {error_signature[:50]}...")
-
+            logger.error(f"   📚 Learned new error pattern: {error_signature[:50]}...")
     def _create_error_signature(self, error: str) -> str:
         """Cria assinatura única para erro (para pattern matching futuro)"""
         # Remove detalhes específicos (paths, números) para generalizar
@@ -510,18 +505,18 @@ class SelfCorrectionEngine:
     def print_stats(self):
         """Imprime estatísticas de self-correction"""
         print("\n" + "=" * 70)
-        print("   SELF-CORRECTION ENGINE STATISTICS")
+        logger.info("   SELF-CORRECTION ENGINE STATISTICS")
         print("=" * 70)
 
         total = self.stats['total_corrections']
         success = self.stats['successful_corrections']
         success_rate = (success / total * 100) if total > 0 else 0
 
-        print(f"  Total corrections attempted: {total}")
-        print(f"  Successful corrections: {success} ({success_rate:.1f}%)")
-        print(f"  Failed corrections: {self.stats['failed_corrections']}")
-        print(f"  Escalated to user: {self.stats['escalated_to_user']}")
-        print(f"  Patterns learned: {self.stats['patterns_learned']}")
+        logger.info(f"  Total corrections attempted: {total}")
+        logger.info(f"  Successful corrections: {success} ({success_rate:.1f}%)")
+        logger.error(f"  Failed corrections: {self.stats['failed_corrections']}")
+        logger.info(f"  Escalated to user: {self.stats['escalated_to_user']}")
+        logger.info(f"  Patterns learned: {self.stats['patterns_learned']}")
         print("=" * 70)
 
 
@@ -550,9 +545,9 @@ def create_self_correction_engine(max_attempts: int = 3) -> SelfCorrectionEngine
 # ============================================================================
 
 if __name__ == "__main__":
-    print("🔄 Self-Correction Loop Demo\n")
+    logger.info("🔄 Self-Correction Loop Demo\n")
     print("=" * 70)
-    print("P5 - Autocorreção Humilde in action!")
+    logger.info("P5 - Autocorreção Humilde in action!")
     print("=" * 70)
 
     # Mock ToolExecutor for demo
@@ -585,8 +580,7 @@ if __name__ == "__main__":
     executor = MockToolExecutor()
 
     # Test correction
-    print("\nTEST: File not found error correction\n")
-
+    logger.error("\nTEST: File not found error correction\n")
     result = engine.correct_execution(
         tool_executor=executor,
         tool_name='read_file',
@@ -595,19 +589,17 @@ if __name__ == "__main__":
     )
 
     print("\n" + "=" * 70)
-    print("RESULT:")
+    logger.info("RESULT:")
     print("=" * 70)
-    print(f"  Corrected: {result.corrected}")
-    print(f"  Total attempts: {result.total_attempts}")
-    print(f"  Learning: {result.learning}")
-
+    logger.info(f"  Corrected: {result.corrected}")
+    logger.info(f"  Total attempts: {result.total_attempts}")
+    logger.info(f"  Learning: {result.learning}")
     if result.corrected:
-        print(f"\n  ✓ Final output: {str(result.final_output)[:100]}...")
+        logger.info(f"\n  ✓ Final output: {str(result.final_output)[:100]}...")
     else:
-        print(f"\n  ✗ Final error: {result.final_error}")
-
+        logger.error(f"\n  ✗ Final error: {result.final_error}")
     # Print stats
     engine.print_stats()
 
-    print("\n✅ Self-Correction Loop Demo Complete!")
-    print("🏎️ PAGANI: P5 - Autocorreção Humilde implementado!")
+    logger.info("\n✅ Self-Correction Loop Demo Complete!")
+    logger.info("🏎️ PAGANI: P5 - Autocorreção Humilde implementado!")
