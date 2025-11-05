@@ -4,6 +4,8 @@ MaximusClient SDK
 Main client for communicating with MAXIMUS AI backend.
 Handles all REST API calls to MAXIMUS Core and TRINITY services.
 
+v2.1: Refactored to use centralized settings (FASE 3.3)
+
 Biblical Foundation:
 "Porque com sabedoria se edifica a casa, e com a inteligência ela se firma"
 (Provérbios 24:3)
@@ -15,6 +17,8 @@ import time
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+
+from config.settings import get_settings
 
 
 # ============================================================================
@@ -172,29 +176,33 @@ class MaximusClient:
 
     def __init__(
         self,
-        base_url: str = "http://localhost:8153",
-        timeout: float = 5.0,
-        max_retries: int = 3,
+        base_url: Optional[str] = None,
+        timeout: Optional[float] = None,
+        max_retries: Optional[int] = None,
         backoff_factor: float = 1.5,
     ):
         """
         Initialize MAXIMUS client.
 
         Args:
-            base_url: MAXIMUS Core base URL (default: http://localhost:8153)
-            timeout: Request timeout in seconds (default: 5.0)
-            max_retries: Maximum retry attempts (default: 3)
+            base_url: MAXIMUS Core base URL (default: from settings)
+            timeout: Request timeout in seconds (default: from settings)
+            max_retries: Maximum retry attempts (default: from settings)
             backoff_factor: Exponential backoff factor (default: 1.5)
         """
-        self.base_url = base_url.rstrip("/")
-        self.timeout = timeout
-        self.max_retries = max_retries
+        # Load settings
+        settings = get_settings()
+
+        # Use provided values or fallback to settings
+        self.base_url = (base_url or settings.maximus.core_url).rstrip("/")
+        self.timeout = timeout if timeout is not None else float(settings.maximus.timeout_seconds)
+        self.max_retries = max_retries if max_retries is not None else settings.maximus.max_retries
         self.backoff_factor = backoff_factor
 
-        # TRINITY service URLs
-        self.penelope_url = "http://localhost:8150"
-        self.maba_url = "http://localhost:8151"
-        self.nis_url = "http://localhost:8152"
+        # TRINITY service URLs (from settings)
+        self.penelope_url = settings.maximus.penelope_url.rstrip("/")
+        self.maba_url = settings.maximus.maba_url.rstrip("/")
+        self.nis_url = settings.maximus.nis_url.rstrip("/")
 
         # Session (reuse connection pool)
         self._session: Optional[aiohttp.ClientSession] = None

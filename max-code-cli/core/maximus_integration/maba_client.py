@@ -10,6 +10,8 @@ MABA performs:
 - Code examples search
 
 MABA = Multi-Agent Browser Assistant
+
+v2.1: Refactored to use centralized settings (FASE 3.3)
 """
 
 import aiohttp
@@ -17,6 +19,8 @@ import asyncio
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+
+from config.settings import get_settings
 
 
 # ============================================================================
@@ -85,18 +89,23 @@ class MABAClient:
 
     def __init__(
         self,
-        url: str = "http://localhost:8151",
-        timeout: float = 10.0,  # Web searches can be slower
+        url: Optional[str] = None,
+        timeout: Optional[float] = None,  # Web searches can be slower
     ):
         """
         Initialize MABA client.
 
         Args:
-            url: MABA service URL (default: http://localhost:8151)
-            timeout: Request timeout in seconds (default: 10.0)
+            url: MABA service URL (default: from settings)
+            timeout: Request timeout in seconds (default: from settings, or 10.0 if not set)
         """
-        self.url = url.rstrip("/")
-        self.timeout = timeout
+        # Load settings
+        settings = get_settings()
+
+        # Use provided values or fallback to settings
+        self.url = (url or settings.maximus.maba_url).rstrip("/")
+        # MABA default timeout is 10.0 (web searches are slower)
+        self.timeout = timeout if timeout is not None else 10.0
         self._session: Optional[aiohttp.ClientSession] = None
 
     async def _get_session(self) -> aiohttp.ClientSession:

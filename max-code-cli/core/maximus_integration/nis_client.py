@@ -10,6 +10,8 @@ NIS performs:
 - Commit message generation
 
 NIS = Narrative Intelligence System
+
+v2.1: Refactored to use centralized settings (FASE 3.3)
 """
 
 import aiohttp
@@ -17,6 +19,8 @@ import asyncio
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+
+from config.settings import get_settings
 
 
 # ============================================================================
@@ -113,18 +117,22 @@ class NISClient:
 
     def __init__(
         self,
-        url: str = "http://localhost:8152",
-        timeout: float = 5.0,
+        url: Optional[str] = None,
+        timeout: Optional[float] = None,
     ):
         """
         Initialize NIS client.
 
         Args:
-            url: NIS service URL (default: http://localhost:8152)
-            timeout: Request timeout in seconds (default: 5.0)
+            url: NIS service URL (default: from settings)
+            timeout: Request timeout in seconds (default: from settings)
         """
-        self.url = url.rstrip("/")
-        self.timeout = timeout
+        # Load settings
+        settings = get_settings()
+
+        # Use provided values or fallback to settings
+        self.url = (url or settings.maximus.nis_url).rstrip("/")
+        self.timeout = timeout if timeout is not None else float(settings.maximus.timeout_seconds)
         self._session: Optional[aiohttp.ClientSession] = None
 
     async def _get_session(self) -> aiohttp.ClientSession:

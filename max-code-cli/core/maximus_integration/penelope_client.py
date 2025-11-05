@@ -9,12 +9,16 @@ PENELOPE performs:
 - Error recovery strategies
 
 Named after Penelope from Greek mythology (weaver, symbolizing healing/mending).
+
+v2.1: Refactored to use centralized settings (FASE 3.3)
 """
 
 import aiohttp
 import asyncio
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
+
+from config.settings import get_settings
 
 
 # ============================================================================
@@ -89,18 +93,22 @@ class PENELOPEClient:
 
     def __init__(
         self,
-        url: str = "http://localhost:8150",
-        timeout: float = 3.0,
+        url: Optional[str] = None,
+        timeout: Optional[float] = None,
     ):
         """
         Initialize PENELOPE client.
 
         Args:
-            url: PENELOPE service URL (default: http://localhost:8150)
-            timeout: Request timeout in seconds (default: 3.0)
+            url: PENELOPE service URL (default: from settings)
+            timeout: Request timeout in seconds (default: from settings)
         """
-        self.url = url.rstrip("/")
-        self.timeout = timeout
+        # Load settings
+        settings = get_settings()
+
+        # Use provided values or fallback to settings
+        self.url = (url or settings.maximus.penelope_url).rstrip("/")
+        self.timeout = timeout if timeout is not None else float(settings.maximus.timeout_seconds)
         self._session: Optional[aiohttp.ClientSession] = None
 
     async def _get_session(self) -> aiohttp.ClientSession:

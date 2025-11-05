@@ -18,16 +18,30 @@ class MaximusServiceConfig(BaseSettings):
 
     # MAXIMUS Core Service (consciousness, predictive coding, neuromodulation)
     core_url: str = Field(
-        default="http://localhost:8150",
+        default="http://localhost:8153",
         env="MAXIMUS_CORE_URL",
         description="MAXIMUS Core Service URL"
     )
 
     # Penelope Service (NLP, healing, 7 Biblical Articles)
     penelope_url: str = Field(
-        default="http://localhost:8154",
+        default="http://localhost:8150",
         env="MAXIMUS_PENELOPE_URL",
         description="Penelope NLP Service URL"
+    )
+
+    # NIS Service (Narrative Intelligence System)
+    nis_url: str = Field(
+        default="http://localhost:8152",
+        env="MAXIMUS_NIS_URL",
+        description="NIS Narrative Intelligence Service URL"
+    )
+
+    # MABA Service (Multi-Agent Browser Assistant)
+    maba_url: str = Field(
+        default="http://localhost:8151",
+        env="MAXIMUS_MABA_URL",
+        description="MABA Browser Assistant Service URL"
     )
 
     # Orchestrator Service (workflow coordination)
@@ -298,6 +312,12 @@ class Settings(BaseSettings):
 
         if not self.maximus.penelope_url:
             errors.append("Penelope URL not configured")
+
+        if not self.maximus.nis_url:
+            errors.append("NIS URL not configured")
+
+        if not self.maximus.maba_url:
+            errors.append("MABA URL not configured")
 
         return (len(errors) == 0, errors)
 
