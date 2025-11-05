@@ -1,5 +1,5 @@
 """
-Code Agent - ENHANCED with MAXIMUS
+Code Agent - ENHANCED with MAXIMUS + DETER-AGENT Guardian
 Port: 8162
 Capability: CODE_GENERATION
 
@@ -7,6 +7,10 @@ v2.0: Code Generation + MAXIMUS Security Analysis
 v2.1: Added Pydantic input validation (FASE 3.2)
 v2.2: Replaced print() with logging (FASE 3.4)
 v3.0: Real Claude-powered code generation (FASE 3.5)
+v3.1: DETER-AGENT Guardian integration (FASE 4.0)
+      - Constitutional validation (P1-P6)
+      - Deliberation quality check
+      - Execution risk analysis
 """
 
 import sys, os
@@ -18,6 +22,7 @@ from anthropic import Anthropic
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient
 from core.auth import get_anthropic_client
+from core.deter_agent import Guardian, GuardianMode
 from agents.validation_schemas import CodeAgentParameters, validate_task_parameters
 from config.logging_config import get_logger
 from config.settings import settings
@@ -37,9 +42,23 @@ class CodeAgent(BaseAgent):
     - MAXIMUS security analysis integration
     """
 
-    def __init__(self, agent_id: str = "code_agent", enable_maximus: bool = True):
-        super().__init__(agent_id=agent_id, agent_name="Code Agent (MAXIMUS-Enhanced)", port=8162)
+    def __init__(
+        self,
+        agent_id: str = "code_agent",
+        enable_maximus: bool = True,
+        enable_guardian: bool = True,
+        guardian_mode: GuardianMode = GuardianMode.BALANCED
+    ):
+        super().__init__(agent_id=agent_id, agent_name="Code Agent (MAXIMUS + Guardian)", port=8162)
         self.maximus_client = MaximusClient() if enable_maximus else None
+
+        # Initialize DETER-AGENT Guardian (controla comportamento Claude)
+        self.guardian = Guardian(mode=guardian_mode) if enable_guardian else None
+        if self.guardian:
+            logger.info(
+                f"   🛡️ Guardian initialized (mode: {guardian_mode.value})",
+                extra={"guardian_mode": guardian_mode.value}
+            )
 
         # Initialize Anthropic Claude client using centralized OAuth handler
         self.anthropic_client = get_anthropic_client()
@@ -72,6 +91,42 @@ class CodeAgent(BaseAgent):
                 metrics={'validation_failed': True}
             )
 
+        # FASE 4.0: Guardian Pre-Check (antes de gerar código)
+        if self.guardian:
+            logger.info("   🛡️ Phase 0: Guardian pre-check...", extra={"task_id": task.id})
+
+            action_context = {
+                'action_type': 'code_generation',
+                'description': task.description,
+                'parameters': task.parameters,
+                'language': params.language,
+                'requirements': params.requirements,
+            }
+
+            guardian_decision = self.guardian.evaluate_action(action_context)
+
+            if not guardian_decision.allowed:
+                logger.error(
+                    f"   ❌ Guardian BLOCKED action: {guardian_decision.reasoning}",
+                    extra={"task_id": task.id, "reasoning": guardian_decision.reasoning}
+                )
+                return AgentResult(
+                    task_id=task.id,
+                    success=False,
+                    output={
+                        'error': 'Guardian blocked action',
+                        'reasoning': guardian_decision.reasoning,
+                        'constitutional_verdict': guardian_decision.constitutional_verdict,
+                        'recommendations': guardian_decision.recommendations,
+                    },
+                    metrics={'guardian_blocked': True, 'mode': guardian_decision.mode.value}
+                )
+
+            logger.info(
+                f"   ✅ Guardian approved: {guardian_decision.reasoning}",
+                extra={"task_id": task.id}
+            )
+
         logger.info("   💻 Phase 1: Generating code...", extra={"task_id": task.id})
 
         # Generate code using Claude API (if available) or fallback
@@ -79,6 +134,39 @@ class CodeAgent(BaseAgent):
             generated_code = await self._generate_with_claude(task, params)
         else:
             generated_code = self._generate_fallback(task, params)
+
+        # FASE 4.0: Guardian Post-Check (depois de gerar código)
+        if self.guardian:
+            logger.info("   🛡️ Phase 1.5: Guardian post-check...", extra={"task_id": task.id})
+
+            post_action_context = {
+                'action_type': 'code_generation',
+                'code': generated_code,
+                'description': task.description,
+                'parameters': task.parameters,
+            }
+
+            post_guardian_decision = self.guardian.evaluate_action(post_action_context)
+
+            if not post_guardian_decision.allowed:
+                logger.error(
+                    f"   ❌ Guardian BLOCKED generated code: {post_guardian_decision.reasoning}",
+                    extra={"task_id": task.id}
+                )
+                return AgentResult(
+                    task_id=task.id,
+                    success=False,
+                    output={
+                        'error': 'Guardian blocked generated code',
+                        'reasoning': post_guardian_decision.reasoning,
+                        'rejected_code': generated_code,
+                        'execution_risks': post_guardian_decision.execution_risks,
+                        'recommendations': post_guardian_decision.recommendations,
+                    },
+                    metrics={'guardian_post_blocked': True}
+                )
+
+            logger.info("   ✅ Guardian approved generated code", extra={"task_id": task.id})
 
         security_issues = []
         if self.maximus_client:

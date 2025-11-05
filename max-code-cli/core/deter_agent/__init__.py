@@ -10,8 +10,13 @@ Execução Determinística através de Aplicação e Raciocínio em Camadas
 4. Execution Layer (Tool Use, TDD Enforcement)
 5. Incentive Layer (Metrics, Reward Shaping)
 
+Guardian: Coordenador central que CONTROLA comportamento da Claude
+
 "Tudo tem o seu tempo determinado..." (Eclesiastes 3:1)
 """
+
+# Guardian (Coordenador Central)
+from .guardian import Guardian, GuardianMode, GuardianDecision
 
 # Layer 2 - Deliberation
 from .deliberation import (
@@ -44,6 +49,10 @@ from .incentive.performance_monitor import PerformanceMonitor
 from .incentive.feedback_loop import FeedbackLoop
 
 __all__ = [
+    # Guardian (Coordenador Central)
+    'Guardian',
+    'GuardianMode',
+    'GuardianDecision',
     # Deliberation (Layer 2)
     'TreeOfThoughts',
     'SelfConsistency',
