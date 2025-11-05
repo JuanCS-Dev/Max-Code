@@ -5,6 +5,7 @@ Capability: TESTING
 
 v2.0: TDD (RED→GREEN→REFACTOR) + MAXIMUS Edge Case Prediction
 v2.1: Added Pydantic input validation (FASE 3.2)
+v2.2: Replaced print() with logging (FASE 3.4)
 """
 
 import sys, os
@@ -15,6 +16,9 @@ from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient
 from agents.validation_schemas import TestAgentParameters, validate_task_parameters
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class TestAgent(BaseAgent):
@@ -34,10 +38,13 @@ class TestAgent(BaseAgent):
         # Validate input parameters
         try:
             params = validate_task_parameters('test', task.parameters or {})
-            print(f"   ✅ Parameters validated")
+            logger.info("   ✅ Parameters validated", extra={"task_id": task.id})
             function_code = params.function_code
         except ValidationError as e:
-            print(f"   ❌ Invalid parameters: {e}")
+            logger.error(
+                f"   ❌ Invalid parameters: {e}",
+                extra={"task_id": task.id, "validation_errors": e.errors()}
+            )
             return AgentResult(
                 task_id=task.id,
                 success=False,
@@ -45,28 +52,37 @@ class TestAgent(BaseAgent):
                 metrics={'validation_failed': True}
             )
 
-        print(f"   🔴 Phase 1: RED - Writing tests...")
+        logger.info("   🔴 Phase 1: RED - Writing tests...", extra={"task_id": task.id})
         test_suite = ['test_basic', 'test_edge_null', 'test_edge_empty']
 
         edge_cases = []
         if self.maximus_client:
             try:
                 if await self.maximus_client.health_check():
-                    print(f"   🧠 Phase 2: MAXIMUS edge case prediction...")
+                    logger.info("   🧠 Phase 2: MAXIMUS edge case prediction...", extra={"task_id": task.id})
                     edge_cases = await self.maximus_client.predict_edge_cases(
                         function_code=function_code,
                         test_suite=test_suite
                     )
-                    print(f"      └─ Predicted {len(edge_cases)} edge cases")
+                    logger.info(
+                        f"      └─ Predicted {len(edge_cases)} edge cases",
+                        extra={"task_id": task.id, "edge_case_count": len(edge_cases)}
+                    )
                     for ec in edge_cases:
                         if ec.severity.value in ['HIGH', 'CRITICAL']:
                             test_suite.append(ec.suggested_test)
-                            print(f"         ├─ {ec.severity.value}: {ec.scenario}")
-            except (ConnectionError, TimeoutError, AttributeError, Exception):
-                print(f"      ⚠️ MAXIMUS offline")
+                            logger.info(
+                                f"         ├─ {ec.severity.value}: {ec.scenario}",
+                                extra={"task_id": task.id, "severity": ec.severity.value, "scenario": ec.scenario}
+                            )
+            except (ConnectionError, TimeoutError, AttributeError, Exception) as e:
+                logger.warning(
+                    f"      ⚠️ MAXIMUS offline: {type(e).__name__}",
+                    extra={"task_id": task.id, "error_type": type(e).__name__}
+                )
 
-        print(f"   ✅ Phase 3: GREEN - Running tests...")
-        print(f"   🔄 Phase 4: REFACTOR - Optimizing...")
+        logger.info("   ✅ Phase 3: GREEN - Running tests...", extra={"task_id": task.id})
+        logger.info("   🔄 Phase 4: REFACTOR - Optimizing...", extra={"task_id": task.id})
 
         return AgentResult(
             task_id=task.id,

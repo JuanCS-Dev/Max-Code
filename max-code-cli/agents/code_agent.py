@@ -5,6 +5,7 @@ Capability: CODE_GENERATION
 
 v2.0: Code Generation + MAXIMUS Security Analysis
 v2.1: Added Pydantic input validation (FASE 3.2)
+v2.2: Replaced print() with logging (FASE 3.4)
 """
 
 import sys, os
@@ -15,6 +16,9 @@ from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient
 from agents.validation_schemas import CodeAgentParameters, validate_task_parameters
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class CodeAgent(BaseAgent):
@@ -34,9 +38,12 @@ class CodeAgent(BaseAgent):
         # Validate input parameters
         try:
             params = validate_task_parameters('code', task.parameters or {})
-            print(f"   ✅ Parameters validated")
+            logger.info("   ✅ Parameters validated", extra={"task_id": task.id})
         except ValidationError as e:
-            print(f"   ❌ Invalid parameters: {e}")
+            logger.error(
+                f"   ❌ Invalid parameters: {e}",
+                extra={"task_id": task.id, "validation_errors": e.errors()}
+            )
             return AgentResult(
                 task_id=task.id,
                 success=False,
@@ -44,23 +51,29 @@ class CodeAgent(BaseAgent):
                 metrics={'validation_failed': True}
             )
 
-        print(f"   💻 Phase 1: Generating code...")
+        logger.info("   💻 Phase 1: Generating code...", extra={"task_id": task.id})
         generated_code = f"# Generated code for: {task.description}\ndef solution():\n    return True"
 
         security_issues = []
         if self.maximus_client:
             try:
                 if await self.maximus_client.health_check():
-                    print(f"   🔒 Phase 2: MAXIMUS security analysis...")
+                    logger.info("   🔒 Phase 2: MAXIMUS security analysis...", extra={"task_id": task.id})
                     ethical_verdict = await self.maximus_client.ethical_review(
                         code=generated_code,
                         context={"focus": "security"}
                     )
                     if ethical_verdict.verdict == "REJECTED":
                         security_issues = ethical_verdict.issues
-                        print(f"      ⚠️ Security issues found: {len(security_issues)}")
-            except (ConnectionError, TimeoutError, AttributeError, Exception):
-                print(f"      ⚠️ MAXIMUS offline")
+                        logger.warning(
+                            f"      ⚠️ Security issues found: {len(security_issues)}",
+                            extra={"task_id": task.id, "issue_count": len(security_issues)}
+                        )
+            except (ConnectionError, TimeoutError, AttributeError, Exception) as e:
+                logger.warning(
+                    f"      ⚠️ MAXIMUS offline: {type(e).__name__}",
+                    extra={"task_id": task.id, "error_type": type(e).__name__}
+                )
 
         return AgentResult(
             task_id=task.id,

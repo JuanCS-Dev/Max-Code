@@ -5,6 +5,7 @@ Capability: DOCUMENTATION
 
 v2.0: Standard Docs + NIS Narrative Intelligence
 v2.1: Added Pydantic input validation (FASE 3.2)
+v2.2: Replaced print() with logging (FASE 3.4)
 """
 
 import sys, os
@@ -15,6 +16,9 @@ from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import NISClient
 from agents.validation_schemas import DocsAgentParameters, validate_task_parameters
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class DocsAgent(BaseAgent):
@@ -34,10 +38,13 @@ class DocsAgent(BaseAgent):
         # Validate input parameters
         try:
             params = validate_task_parameters('docs', task.parameters or {})
-            print(f"   ✅ Parameters validated")
+            logger.info("   ✅ Parameters validated", extra={"task_id": task.id})
             code_changes = params.changes
         except ValidationError as e:
-            print(f"   ❌ Invalid parameters: {e}")
+            logger.error(
+                f"   ❌ Invalid parameters: {e}",
+                extra={"task_id": task.id, "validation_errors": e.errors()}
+            )
             return AgentResult(
                 task_id=task.id,
                 success=False,
@@ -45,24 +52,30 @@ class DocsAgent(BaseAgent):
                 metrics={'validation_failed': True}
             )
 
-        print(f"   📝 Phase 1: Generating standard docs...")
+        logger.info("   📝 Phase 1: Generating standard docs...", extra={"task_id": task.id})
         standard_docs = f"# Documentation\n\nChanges: {len(code_changes)} files modified"
 
         narrative = None
         if self.nis_client:
             try:
                 if await self.nis_client.health_check():
-                    print(f"   📖 Phase 2: NIS narrative generation...")
+                    logger.info("   📖 Phase 2: NIS narrative generation...", extra={"task_id": task.id})
                     from core.maximus_integration.nis_client import CodeChange, NarrativeStyle
                     narrative = await self.nis_client.generate_narrative(
                         changes=[CodeChange(**c) for c in code_changes] if code_changes else [],
                         style=NarrativeStyle.STORY,
                         context=task.parameters.get('context', {})
                     )
-                    print(f"      └─ Generated: {narrative.title}")
+                    logger.info(
+                        f"      └─ Generated: {narrative.title}",
+                        extra={"task_id": task.id, "narrative_title": narrative.title}
+                    )
                     standard_docs = f"{narrative.story}\n\n{standard_docs}"
-            except (ConnectionError, TimeoutError, AttributeError, Exception):
-                print(f"      ⚠️ NIS offline")
+            except (ConnectionError, TimeoutError, AttributeError, Exception) as e:
+                logger.warning(
+                    f"      ⚠️ NIS offline: {type(e).__name__}",
+                    extra={"task_id": task.id, "error_type": type(e).__name__}
+                )
 
         return AgentResult(
             task_id=task.id,

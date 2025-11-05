@@ -5,6 +5,7 @@ Capability: CODE_REVIEW
 
 v2.0: Constitutional (P1-P6) + MAXIMUS Ethical Review (4 frameworks)
 v2.1: Added Pydantic input validation (FASE 3.2)
+v2.2: Replaced print() with logging (FASE 3.4)
 """
 
 import sys, os
@@ -15,6 +16,9 @@ from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient, DecisionFusion, MaximusCache
 from agents.validation_schemas import ReviewAgentParameters, validate_task_parameters
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class ReviewAgent(BaseAgent):
@@ -36,10 +40,13 @@ class ReviewAgent(BaseAgent):
         # Validate input parameters
         try:
             params = validate_task_parameters('review', task.parameters or {})
-            print(f"   ✅ Parameters validated")
+            logger.info("   ✅ Parameters validated", extra={"task_id": task.id})
             code = params.code
         except ValidationError as e:
-            print(f"   ❌ Invalid parameters: {e}")
+            logger.error(
+                f"   ❌ Invalid parameters: {e}",
+                extra={"task_id": task.id, "validation_errors": e.errors()}
+            )
             return AgentResult(
                 task_id=task.id,
                 success=False,
@@ -47,24 +54,34 @@ class ReviewAgent(BaseAgent):
                 metrics={'validation_failed': True}
             )
 
-        print(f"   🏛️ Phase 1: Constitutional review (P1-P6)...")
+        logger.info("   🏛️ Phase 1: Constitutional review (P1-P6)...", extra={"task_id": task.id})
         constitutional_verdict = self.constitutional_engine.evaluate_all_principles({'code': code})
 
         ethical_verdict = None
         if self.maximus_client:
             try:
                 if await self.maximus_client.health_check():
-                    print(f"   ⚖️ Phase 2: MAXIMUS ethical review (4 frameworks)...")
+                    logger.info("   ⚖️ Phase 2: MAXIMUS ethical review (4 frameworks)...", extra={"task_id": task.id})
                     ethical_verdict = await self.maximus_client.ethical_review(
                         code=code,
                         context=task.parameters.get('context', {})
                     )
-                    print(f"      └─ Kantian: {ethical_verdict.kantian_score}/100, "
-                          f"Virtue: {ethical_verdict.virtue_score}/100")
-            except (ConnectionError, TimeoutError, AttributeError, Exception):
-                print(f"      ⚠️ MAXIMUS offline, using Constitutional only")
+                    logger.info(
+                        f"      └─ Kantian: {ethical_verdict.kantian_score}/100, "
+                        f"Virtue: {ethical_verdict.virtue_score}/100",
+                        extra={
+                            "task_id": task.id,
+                            "kantian_score": ethical_verdict.kantian_score,
+                            "virtue_score": ethical_verdict.virtue_score
+                        }
+                    )
+            except (ConnectionError, TimeoutError, AttributeError, Exception) as e:
+                logger.warning(
+                    f"      ⚠️ MAXIMUS offline, using Constitutional only: {type(e).__name__}",
+                    extra={"task_id": task.id, "error_type": type(e).__name__}
+                )
 
-        print(f"   🔀 Phase 3: Fusion...")
+        logger.info("   🔀 Phase 3: Fusion...", extra={"task_id": task.id})
         final_verdict = self.decision_fusion.fuse_review_verdicts(
             constitutional=constitutional_verdict,
             ethical=ethical_verdict

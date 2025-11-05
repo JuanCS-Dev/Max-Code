@@ -5,6 +5,7 @@ Capability: DEBUGGING
 
 v2.0: Quick Fix + PENELOPE Root Cause Analysis
 v2.1: Added Pydantic input validation (FASE 3.2)
+v2.2: Replaced print() with logging (FASE 3.4)
 """
 
 import sys, os
@@ -15,6 +16,9 @@ from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import PENELOPEClient
 from agents.validation_schemas import FixAgentParameters, validate_task_parameters
+from config.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class FixAgent(BaseAgent):
@@ -34,11 +38,14 @@ class FixAgent(BaseAgent):
         # Validate input parameters
         try:
             params = validate_task_parameters('fix', task.parameters or {})
-            print(f"   ✅ Parameters validated")
+            logger.info("   ✅ Parameters validated", extra={"task_id": task.id})
             broken_code = params.code
             error_trace = params.error
         except ValidationError as e:
-            print(f"   ❌ Invalid parameters: {e}")
+            logger.error(
+                f"   ❌ Invalid parameters: {e}",
+                extra={"task_id": task.id, "validation_errors": e.errors()}
+            )
             return AgentResult(
                 task_id=task.id,
                 success=False,
@@ -46,28 +53,37 @@ class FixAgent(BaseAgent):
                 metrics={'validation_failed': True}
             )
 
-        print(f"   🔧 Phase 1: Quick fix attempt...")
+        logger.info("   🔧 Phase 1: Quick fix attempt...", extra={"task_id": task.id})
         quick_fix = f"# Quick fix applied\n{broken_code}"
 
         healing = None
         if self.penelope_client:
             try:
                 if await self.penelope_client.health_check():
-                    print(f"   🏥 Phase 2: PENELOPE root cause analysis...")
+                    logger.info("   🏥 Phase 2: PENELOPE root cause analysis...", extra={"task_id": task.id})
                     from core.maximus_integration.penelope_client import HealingContext
                     healing = await self.penelope_client.heal(
                         broken_code=broken_code,
                         error_trace=error_trace,
                         context=HealingContext()
                     )
-                    print(f"      └─ Root cause: {healing.root_cause.primary_cause[:60]}...")
+                    logger.info(
+                        f"      └─ Root cause: {healing.root_cause.primary_cause[:60]}...",
+                        extra={"task_id": task.id, "root_cause": healing.root_cause.primary_cause}
+                    )
                     if healing.fix_options:
                         best_fix = max(healing.fix_options, key=lambda f: f.confidence)
                         if best_fix.confidence > 0.7:
                             quick_fix = best_fix.code
-                            print(f"         └─ Using PENELOPE fix (confidence: {best_fix.confidence:.2f})")
-            except (ConnectionError, TimeoutError, AttributeError, Exception):
-                print(f"      ⚠️ PENELOPE offline")
+                            logger.info(
+                                f"         └─ Using PENELOPE fix (confidence: {best_fix.confidence:.2f})",
+                                extra={"task_id": task.id, "confidence": best_fix.confidence}
+                            )
+            except (ConnectionError, TimeoutError, AttributeError, Exception) as e:
+                logger.warning(
+                    f"      ⚠️ PENELOPE offline: {type(e).__name__}",
+                    extra={"task_id": task.id, "error_type": type(e).__name__}
+                )
 
         return AgentResult(
             task_id=task.id,
