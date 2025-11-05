@@ -35,15 +35,8 @@ class CodeAgentParameters(TaskParametersBase):
     """
     Parameters for Code Generation Agent.
 
-    Required: description
-    Optional: language, style, max_lines
+    All fields optional - description comes from AgentTask.description
     """
-    description: str = Field(
-        ...,  # Required
-        min_length=10,
-        max_length=1000,
-        description="Code generation task description"
-    )
     language: Optional[str] = Field(
         default="python",
         pattern="^(python|javascript|typescript|java|go|rust)$",
@@ -59,17 +52,14 @@ class CodeAgentParameters(TaskParametersBase):
         le=1000,
         description="Maximum number of lines"
     )
-    context: Optional[Dict[str, Any]] = Field(
-        default_factory=dict,
-        description="Additional context"
+    context: Optional[str] = Field(
+        default=None,
+        description="Additional context for code generation"
     )
-
-    @field_validator('description')
-    @classmethod
-    def description_not_empty(cls, v: str) -> str:
-        if not v.strip():
-            raise ValueError("Description cannot be empty")
-        return v
+    requirements: Optional[List[str]] = Field(
+        default_factory=list,
+        description="List of specific requirements"
+    )
 
 
 # =============================================================================

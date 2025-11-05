@@ -104,12 +104,24 @@ class MaximusServiceConfig(BaseSettings):
 
 
 class ClaudeConfig(BaseSettings):
-    """Claude API configuration."""
+    """
+    Claude API configuration.
+
+    Supports dual authentication:
+    - ANTHROPIC_API_KEY: Traditional API key (sk-ant-api...)
+    - CLAUDE_CODE_OAUTH_TOKEN: OAuth token from 'claude setup-token' (sk-ant-oat01-...)
+    """
 
     api_key: Optional[str] = Field(
         default=None,
         env="ANTHROPIC_API_KEY",
-        description="Anthropic API key for Claude"
+        description="Anthropic API key for Claude (traditional auth)"
+    )
+
+    oauth_token: Optional[str] = Field(
+        default=None,
+        env="CLAUDE_CODE_OAUTH_TOKEN",
+        description="Claude Code OAuth token (Max subscription auth)"
     )
 
     model: str = Field(
@@ -135,6 +147,19 @@ class ClaudeConfig(BaseSettings):
         if not 0 <= v <= 1:
             raise ValueError("Temperature must be between 0 and 1")
         return v
+
+    def get_auth_token(self) -> Optional[str]:
+        """
+        Get authentication token with OAuth preferred.
+
+        Returns:
+            OAuth token if available, otherwise API key
+
+        Example:
+            >>> config = ClaudeConfig()
+            >>> token = config.get_auth_token()
+        """
+        return self.oauth_token or self.api_key
 
     class Config:
         env_file = ".env"

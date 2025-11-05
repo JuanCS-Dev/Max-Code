@@ -6,27 +6,47 @@ Capability: CODE_REVIEW
 v2.0: Constitutional (P1-P6) + MAXIMUS Ethical Review (4 frameworks)
 v2.1: Added Pydantic input validation (FASE 3.2)
 v2.2: Replaced print() with logging (FASE 3.4)
+v3.0: Deep Claude-powered code review (FASE 3.5)
+      - Security analysis (OWASP Top 10)
+      - Performance optimization suggestions
+      - Best practices validation
+      - Architecture review
+      - Maintainability score
 """
 
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from typing import List
+from typing import List, Dict, Any
 import asyncio
 from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient, DecisionFusion, MaximusCache
+from core.auth import get_anthropic_client
 from agents.validation_schemas import ReviewAgentParameters, validate_task_parameters
 from config.logging_config import get_logger
+from config.settings import settings
 
 logger = get_logger(__name__)
 
 
 class ReviewAgent(BaseAgent):
-    """Code review with Constitutional + Ethical analysis"""
+    """
+    Code review with Constitutional + Ethical + Technical analysis
+
+    v3.0: Elite-level code review covering:
+    - Security (OWASP Top 10, injection, XSS, auth)
+    - Performance (algorithms, complexity, bottlenecks)
+    - Best practices (SOLID, DRY, naming, documentation)
+    - Architecture (coupling, cohesion, modularity)
+    - Maintainability (complexity, readability, testability)
+    - Constitutional AI (P1-P6 principles)
+    - Ethical review (4 frameworks via MAXIMUS)
+    """
 
     def __init__(self, agent_id: str = "review_agent", enable_maximus: bool = True):
         super().__init__(agent_id=agent_id, agent_name="Review Agent (MAXIMUS-Enhanced)", port=8164)
         self.maximus_client = MaximusClient() if enable_maximus else None
+        self.anthropic_client = get_anthropic_client()
         self.decision_fusion = DecisionFusion()
         self.cache = MaximusCache()
 
@@ -54,14 +74,21 @@ class ReviewAgent(BaseAgent):
                 metrics={'validation_failed': True}
             )
 
-        logger.info("   🏛️ Phase 1: Constitutional review (P1-P6)...", extra={"task_id": task.id})
+        # Phase 1: Deep technical review with Claude
+        claude_review = None
+        if self.anthropic_client:
+            logger.info("   🔍 Phase 1: Deep technical review...", extra={"task_id": task.id})
+            claude_review = await self._deep_review_with_claude(code, params, task)
+
+        # Phase 2: Constitutional review (P1-P6)
+        logger.info("   🏛️ Phase 2: Constitutional review (P1-P6)...", extra={"task_id": task.id})
         constitutional_verdict = self.constitutional_engine.evaluate_all_principles({'code': code})
 
         ethical_verdict = None
         if self.maximus_client:
             try:
                 if await self.maximus_client.health_check():
-                    logger.info("   ⚖️ Phase 2: MAXIMUS ethical review (4 frameworks)...", extra={"task_id": task.id})
+                    logger.info("   ⚖️ Phase 3: MAXIMUS ethical review (4 frameworks)...", extra={"task_id": task.id})
                     ethical_verdict = await self.maximus_client.ethical_review(
                         code=code,
                         context=task.parameters.get('context', {})
@@ -81,15 +108,183 @@ class ReviewAgent(BaseAgent):
                     extra={"task_id": task.id, "error_type": type(e).__name__}
                 )
 
-        logger.info("   🔀 Phase 3: Fusion...", extra={"task_id": task.id})
+        logger.info("   🔀 Phase 4: Fusion...", extra={"task_id": task.id})
         final_verdict = self.decision_fusion.fuse_review_verdicts(
             constitutional=constitutional_verdict,
             ethical=ethical_verdict
         )
 
+        # Combine all reviews
+        output = {
+            'claude_review': claude_review,
+            'constitutional': constitutional_verdict,
+            'ethical': ethical_verdict,
+            'final_verdict': final_verdict.final_decision,
+            'overall_score': self._calculate_overall_score(claude_review, constitutional_verdict, ethical_verdict)
+        }
+
         return AgentResult(
             task_id=task.id,
             success=final_verdict.final_decision.get('verdict') != 'REJECTED',
-            output=final_verdict.final_decision,
+            output=output,
             metrics={'mode': 'hybrid' if ethical_verdict else 'standalone'}
         )
+
+    async def _deep_review_with_claude(self, code: str, params: ReviewAgentParameters, task: AgentTask) -> Dict[str, Any]:
+        """
+        Perform elite-level code review with Claude.
+
+        Reviews:
+        - Security (OWASP Top 10)
+        - Performance (complexity, algorithms)
+        - Best practices (SOLID, DRY, documentation)
+        - Architecture (coupling, modularity)
+        - Maintainability (readability, testability)
+        """
+        review_type = params.review_type or "full"
+
+        system_prompt = """You are a senior software architect and security expert with 20+ years of experience.
+
+You conduct elite-level code reviews covering:
+
+**Security** (OWASP Top 10):
+- Injection (SQL, XSS, command injection)
+- Authentication & authorization flaws
+- Sensitive data exposure
+- Security misconfiguration
+- Cryptographic failures
+
+**Performance**:
+- Algorithm complexity (O(n) analysis)
+- Database queries (N+1, missing indexes)
+- Memory leaks
+- Caching opportunities
+- Bottlenecks
+
+**Best Practices**:
+- SOLID principles
+- DRY (Don't Repeat Yourself)
+- Clear naming conventions
+- Comprehensive documentation
+- Error handling
+- Type safety
+
+**Architecture**:
+- Coupling and cohesion
+- Modularity and reusability
+- Design patterns
+- Separation of concerns
+- Scalability
+
+**Maintainability**:
+- Code complexity (cyclomatic)
+- Readability
+- Test coverage needs
+- Technical debt
+
+You provide actionable, specific recommendations with code examples."""
+
+        user_prompt = f"""<code_review_request>
+<code>
+{code}
+</code>
+
+<review_type>{review_type}</review_type>
+<context>{params.context or 'No additional context'}</context>
+</code_review_request>
+
+Perform a comprehensive code review. Structure your analysis as:
+
+1. **Security Issues** (severity: critical/high/medium/low)
+2. **Performance Concerns**
+3. **Best Practice Violations**
+4. **Architecture Recommendations**
+5. **Maintainability Score** (0-10 with explanation)
+6. **Summary** (top 3 priorities)
+
+For each issue:
+- Describe the problem
+- Explain the impact
+- Provide specific fix with code example
+- Assign severity/priority
+
+Be thorough but constructive."""
+
+        try:
+            message = self.anthropic_client.messages.create(
+                model=settings.claude.model,
+                max_tokens=settings.claude.max_tokens,
+                temperature=0.4,  # Balanced for thorough analysis
+                system=system_prompt,
+                messages=[{"role": "user", "content": user_prompt}]
+            )
+
+            response_text = message.content[0].text
+
+            # Parse review into structured format
+            review = {
+                'raw_analysis': response_text,
+                'review_type': review_type,
+                'code_length': len(code),
+                'timestamp': task.id
+            }
+
+            # Extract maintainability score if present
+            import re
+            score_match = re.search(r'Maintainability Score.*?(\d+)/10', response_text, re.IGNORECASE)
+            if score_match:
+                review['maintainability_score'] = int(score_match.group(1))
+
+            # Count issues by severity
+            review['critical_issues'] = len(re.findall(r'severity.*?critical', response_text, re.IGNORECASE))
+            review['high_issues'] = len(re.findall(r'severity.*?high', response_text, re.IGNORECASE))
+            review['medium_issues'] = len(re.findall(r'severity.*?medium', response_text, re.IGNORECASE))
+
+            logger.info(
+                f"      ✅ Review complete (maintainability: {review.get('maintainability_score', 'N/A')}/10)",
+                extra={"task_id": task.id, "issues": review['critical_issues'] + review['high_issues']}
+            )
+
+            return review
+
+        except Exception as e:
+            logger.error(
+                f"      ❌ Claude API error: {type(e).__name__}: {e}",
+                extra={"task_id": task.id}
+            )
+            return {
+                'error': f"{type(e).__name__}: {e}",
+                'fallback': True
+            }
+
+    def _calculate_overall_score(self, claude_review: Dict, constitutional: Any, ethical: Any) -> float:
+        """Calculate overall review score (0-1)"""
+        scores = []
+
+        # Claude maintainability (0-10 → 0-1)
+        if claude_review and 'maintainability_score' in claude_review:
+            scores.append(claude_review['maintainability_score'] / 10.0)
+
+        # Constitutional average (already 0-1)
+        if constitutional:
+            const_scores = [
+                constitutional.completeness_score,
+                constitutional.transparency_score,
+                constitutional.truth_score,
+                constitutional.user_sovereignty_score,
+                constitutional.systemic_analysis_score,
+                constitutional.token_efficiency_score
+            ]
+            scores.append(sum(const_scores) / len(const_scores))
+
+        # Ethical average (0-100 → 0-1)
+        if ethical:
+            eth_scores = [
+                ethical.kantian_score / 100.0,
+                ethical.virtue_score / 100.0,
+                ethical.consequentialist_score / 100.0,
+                ethical.principlism_score / 100.0
+            ]
+            scores.append(sum(eth_scores) / len(eth_scores))
+
+        return sum(scores) / len(scores) if scores else 0.0
