@@ -10,7 +10,7 @@ from rich.console import Console
 
 from config.settings import get_settings
 from config.profiles import Profile, ProfileManager, init_profile_wizard
-from ui.banner_vcli_style import show_banner
+from ui.banner import MaxCodeBanner
 from ui.formatter import MaxCodeFormatter
 
 console = Console()
@@ -32,7 +32,16 @@ def cli(ctx, version, no_banner):
 
     # Show banner unless disabled
     if not no_banner and not settings.ui.no_banner:
-        show_banner()
+        banner = MaxCodeBanner(console=console)
+        banner.show(
+            version=settings.version,
+            context={
+                'model': settings.claude.model,
+            },
+            style=settings.ui.banner_style if hasattr(settings.ui, 'banner_style') else 'default',
+            effect=None,  # Effects opcional (pode adicionar depois)
+            show_verse=True  # Verses habilitados por padrão
+        )
 
     # Show version if requested
     if version:

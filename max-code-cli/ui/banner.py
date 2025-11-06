@@ -52,7 +52,8 @@ class MaxCodeBanner:
 
     # Available ASCII art styles
     FONTS = {
-        'default': 'block',       # Solid block letters (Gemini-style) ⭐ RECOMMENDED
+        'default': 'slant',       # Gemini-style slanted (clean, horizontal) ⭐ RECOMMENDED
+        'block': 'block',         # Solid block letters
         'isometric': 'isometric1',# FILLED 3D blocks
         'banner': 'banner3',      # Bold banner style
         'minimal': 'small',       # Compact for minimal mode
@@ -206,14 +207,11 @@ class MaxCodeBanner:
 
         subtitle = " | ".join(subtitle_parts)
 
-        # Display in beautiful panel
+        # Display in Gemini style (no panel, clean gradient, centered)
         self.console.print("\n")
-        self.console.print(Panel(
-            title,
-            subtitle=subtitle,
-            border_style="cyan",
-            padding=(1, 4),
-        ))
+        self.console.print(title, justify="center")  # Gradient ASCII art - CENTERED
+        self.console.print(f"[dim]{subtitle}[/dim]", justify="center")
+        self.console.print()
 
         # Show constitutional principles status
         self._show_principles()
