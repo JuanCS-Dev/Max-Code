@@ -3,11 +3,16 @@ Max-Code CLI Banner System
 
 Creates a MAGNIFICENT banner with:
 - ASCII art logo (PyFiglet)
-- Neon green → blue gradient (rich-gradient)
-- Constitutional principles status
+- Neon green → blue → yellow gradient
+- Optional cinematic effects (beams, decrypt, matrix)
+- Biblical verses (contextual, optional)
+- Constitutional principles status (with Nerd Fonts icons)
 - Dynamic context display
 - Multiple styles
 - Performance optimized with caching
+
+"In the beginning was the Word, and the Word was with God, and the Word was God"
+(John 1:1)
 
 Usage:
     from ui.banner import MaxCodeBanner
@@ -25,7 +30,7 @@ import os
 import sys
 import hashlib
 
-# Lazy import for performance (rich_gradient is slow to import ~113ms)
+# Lazy imports for performance
 if TYPE_CHECKING:
     from rich_gradient import Gradient
 
@@ -42,8 +47,8 @@ class MaxCodeBanner:
     - Suppressible for scripts
     """
 
-    # Neon green → blue gradient colors
-    GRADIENT_COLORS = ['#0FFF50', '#00F0FF', '#0080FF', '#0040FF']
+    # Neon green → blue → yellow gradient colors (OFFICIAL PALETTE)
+    GRADIENT_COLORS = ['#0FFF50', '#00F0FF', '#0080FF', '#FFFF00']
 
     # Available ASCII art styles
     FONTS = {
@@ -151,7 +156,9 @@ class MaxCodeBanner:
         self,
         version: str = "3.0",
         context: Optional[Dict] = None,
-        style: str = "default"
+        style: str = "default",
+        effect: Optional[str] = None,
+        show_verse: bool = True
     ):
         """
         Display the magnificent banner.
@@ -160,6 +167,8 @@ class MaxCodeBanner:
             version: Version string to display
             context: Additional context (model, session, etc.)
             style: Banner style (default, minimal, bold, tech, cyber)
+            effect: Optional cinematic effect ("beams", "decrypt", "matrix", None)
+            show_verse: Whether to show biblical verse (default: True, respects --no-verses)
         """
         if not self._should_show:
             return
@@ -170,11 +179,20 @@ class MaxCodeBanner:
         # Generate ASCII art (with caching)
         ascii_art = self._get_cached_ascii_art("MAX-CODE", font)
 
+        # Apply cinematic effect if requested (and --no-effects not present)
+        if effect and '--no-effects' not in sys.argv and not os.environ.get('MAXCODE_NO_EFFECTS'):
+            try:
+                from ui.effects import animate_banner
+                ascii_art = animate_banner(ascii_art, effect_type=effect)
+            except (ImportError, Exception):
+                pass  # Fall back to gradient only
+
         # Apply beautiful gradient (lazy import for performance)
         from rich_gradient import Gradient
         title = Gradient(ascii_art, colors=self.GRADIENT_COLORS)
 
-        # Build subtitle with context
+        # Build subtitle with context (using Nerd Fonts icons)
+        from ui.constants import NERD_ICONS
         subtitle_parts = [
             f"v{version}",
             "Constitutional AI Framework",
@@ -182,9 +200,9 @@ class MaxCodeBanner:
 
         if context:
             if 'model' in context:
-                subtitle_parts.append(f"⚡ {context['model']}")
+                subtitle_parts.append(f"{NERD_ICONS.get('cpu', '⚡')} {context['model']}")
             if 'session' in context:
-                subtitle_parts.append(f"📊 Session: {context['session']}")
+                subtitle_parts.append(f"{NERD_ICONS.get('database', '📊')} Session: {context['session']}")
 
         subtitle = " | ".join(subtitle_parts)
 
@@ -199,14 +217,30 @@ class MaxCodeBanner:
 
         # Show constitutional principles status
         self._show_principles()
+
+        # Show biblical verse if enabled
+        if show_verse:
+            try:
+                from core.verses import get_startup_verse
+                verse = get_startup_verse()
+                if verse:
+                    self.console.print(verse)
+            except (ImportError, Exception):
+                pass  # Verses optional
+
         self.console.print()
 
     def _show_principles(self):
-        """Display constitutional principles status with beautiful colors."""
+        """Display constitutional principles status with beautiful colors and Nerd Fonts icons."""
+        from ui.constants import NERD_ICONS
+
         status_parts = []
 
         for code, name, color in self.PRINCIPLES:
-            status_parts.append(f"[{color}]●[/{color}] {code}")
+            # Get icon for principle (with fallback to dot)
+            icon_key = code.lower()  # p1, p2, p3, etc.
+            icon = NERD_ICONS.get(icon_key, '●')
+            status_parts.append(f"[{color}]{icon}[/{color}] {code}")
 
         status_line = "  ".join(status_parts)
         self.console.print(f"  {status_line}", justify="center")
