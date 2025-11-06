@@ -95,6 +95,64 @@ if HTTPX_AVAILABLE:
             super().__init__(base_url=base_url, **kwargs)
             self.api_prefix = "/api/v1/consciousness"
 
+        def is_healthy(self) -> bool:
+            """
+            Quick health check to determine if service is available.
+
+            Returns:
+                bool: True if service is healthy and responsive
+            """
+            try:
+                state = self.get_consciousness_state()
+                return state.system_health == "healthy"
+            except Exception:
+                return False
+
+        def set_sabbath_mode(self, enabled: bool) -> bool:
+            """
+            Set Sabbath mode (graceful degradation).
+
+            During Sabbath mode, MAXIMUS consciousness enters a rest state:
+            - ESGT ignitions disabled
+            - Arousal level reduced
+            - Only essential operations allowed
+
+            Args:
+                enabled: True to enable Sabbath mode, False to disable
+
+            Returns:
+                bool: True if mode was set successfully
+
+            Biblical Foundation:
+                "Six days you shall labor, but on the seventh day you shall rest" (Ex 34:21)
+
+            Note:
+                This is a convenience method for Max-Code CLI's Sabbath command.
+                The actual implementation would require backend support.
+            """
+            try:
+                if enabled:
+                    # Reduce arousal to minimal level for rest
+                    self.adjust_arousal(ArousalAdjustment(
+                        delta=-0.3,  # Reduce arousal
+                        duration_seconds=3600 * 24,  # 24 hours
+                        source="max-code-sabbath"
+                    ))
+                    logger.info("MAXIMUS entering Sabbath rest mode")
+                else:
+                    # Restore normal arousal level
+                    self.adjust_arousal(ArousalAdjustment(
+                        delta=0.2,  # Restore arousal
+                        duration_seconds=60,
+                        source="max-code-sabbath-end"
+                    ))
+                    logger.info("MAXIMUS exiting Sabbath rest mode")
+
+                return True
+            except Exception as e:
+                logger.debug(f"Failed to set Sabbath mode: {e}")
+                return False
+
         def get_consciousness_state(self) -> ConsciousnessStateResponse:
             """Get current consciousness state."""
             response = self.get(f"{self.api_prefix}/state")

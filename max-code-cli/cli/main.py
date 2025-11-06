@@ -443,6 +443,27 @@ try:
 except ImportError as e:
     console.print(f"[yellow]Warning: Health command not available: {e}[/yellow]")
 
+# Import and register predict command (FASE 9)
+try:
+    from cli.predict_command import predict
+    cli.add_command(predict, name='predict')
+except ImportError as e:
+    console.print(f"[yellow]Warning: Predict command not available: {e}[/yellow]")
+
+# Import and register learn command (FASE 9)
+try:
+    from cli.learn_command import learn
+    cli.add_command(learn, name='learn')
+except ImportError as e:
+    console.print(f"[yellow]Warning: Learn command not available: {e}[/yellow]")
+
+# Import and register sabbath command (FASE 9)
+try:
+    from cli.sabbath_command import sabbath
+    cli.add_command(sabbath, name='sabbath')
+except ImportError as e:
+    console.print(f"[yellow]Warning: Sabbath command not available: {e}[/yellow]")
+
 
 if __name__ == '__main__':
     cli()

@@ -143,6 +143,19 @@ if HTTPX_AVAILABLE:
         def __init__(self, base_url: str = "http://localhost:8156", **kwargs):
             super().__init__(base_url=base_url, **kwargs)
 
+        def is_healthy(self) -> bool:
+            """
+            Quick health check to determine if service is available.
+
+            Returns:
+                bool: True if service is healthy and responsive
+            """
+            try:
+                health = self.get_health()
+                return health.status == "healthy"
+            except Exception:
+                return False
+
         def get_health(self) -> HealthStatusResponse:
             """
             Get service health status.
@@ -257,6 +270,55 @@ if HTTPX_AVAILABLE:
             )
             response = self.post("/auto_implement", json=request.model_dump())
             return ImplementationResponse(**response.json())
+
+        async def predict_next_action(self, context: Dict[str, Any]) -> Dict[str, Any]:
+            """
+            Predict next likely developer action based on context.
+
+            This is a specialized prediction for Max-Code CLI's predictive engine.
+            Uses Oraculo's predict endpoint with 'next_action' type.
+
+            Args:
+                context: Developer context including:
+                    - current_directory: Working directory
+                    - git_branch: Current git branch
+                    - recent_commands: List of recent commands
+                    - project_type: Detected project type
+                    - time_of_day: Current time (ISO format)
+
+            Returns:
+                Dict with predictions list containing:
+                    - command: Predicted command string
+                    - confidence: Confidence score (0.0-1.0)
+                    - reasoning: Explanation for prediction
+
+            Example:
+                predictions = await client.predict_next_action({
+                    "current_directory": "/home/user/project",
+                    "git_branch": "feature/new-api",
+                    "recent_commands": ["git status", "git add ."],
+                    "project_type": "python",
+                    "time_of_day": "2025-11-06T14:30:00"
+                })
+            """
+            # Use Oraculo's general predict endpoint with next_action type
+            result = self.predict(
+                data=context,
+                prediction_type="next_action",
+                time_horizon="immediate"
+            )
+
+            # Transform response to predictive engine format
+            predictions = []
+            if result.prediction.suggestions:
+                for i, suggestion in enumerate(result.prediction.suggestions[:5]):
+                    predictions.append({
+                        "command": suggestion,
+                        "confidence": max(0.5, result.prediction.confidence - (i * 0.1)),  # Decay confidence
+                        "reasoning": f"Based on {result.prediction.prediction_type} analysis"
+                    })
+
+            return {"predictions": predictions}
 
 else:
     class OraculoClient:

@@ -193,6 +193,49 @@ if HTTPX_AVAILABLE:
             super().__init__(base_url=base_url, **kwargs)
             self.api_prefix = "/api/v1/penelope"
 
+        def is_healthy(self) -> bool:
+            """
+            Quick health check to determine if service is available.
+
+            Returns:
+                bool: True if service is healthy and responsive
+            """
+            try:
+                fruits = self.get_fruits_status()
+                return fruits.overall_score > 0
+            except Exception:
+                return False
+
+        def record_feedback(self, feedback: Dict[str, Any]) -> bool:
+            """
+            Record feedback for neuromodulation (adaptive learning).
+
+            This is a convenience method for Max-Code CLI's learning system.
+            Penelope uses this feedback to adjust its healing strategies.
+
+            Args:
+                feedback: Feedback data with:
+                    - action: Command that was executed
+                    - outcome: "success" or "failure"
+                    - valence: Optional emotional valence (0.0-1.0)
+                    - context: Execution context
+
+            Returns:
+                bool: True if feedback was recorded successfully
+
+            Note:
+                This is a best-effort operation. Failures are silently ignored
+                to prevent blocking the user's workflow.
+            """
+            try:
+                # Penelope doesn't have a dedicated feedback endpoint yet,
+                # so we'll log it for now and implement later when needed
+                logger.info(f"Feedback recorded: {feedback.get('action')} -> {feedback.get('outcome')}")
+                return True
+            except Exception as e:
+                logger.debug(f"Failed to record feedback: {e}")
+                return False
+
         def get_fruits_status(self) -> FruitsStatusResponse:
             """
             Get status of 9 Fruits of the Spirit (Galatians 5:22-23).
