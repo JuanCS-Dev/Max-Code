@@ -1,0 +1,65 @@
+/*
+Max-Code TUI Mode CSS
+Textual CSS styling for full-screen interface
+*/
+
+/* Main container */
+#main-container {
+    layout: horizontal;
+    height: 1fr;
+}
+
+/* Left panel - Agents */
+#left-panel {
+    width: 30%;
+    border-right: solid $primary;
+    padding: 1;
+}
+
+#agents-title {
+    text-style: bold;
+    color: $primary;
+    margin-bottom: 1;
+}
+
+#agents-status {
+    color: $secondary;
+}
+
+/* Right panel - Output */
+#right-panel {
+    width: 70%;
+    padding: 1;
+}
+
+#output-title {
+    text-style: bold;
+    color: $accent;
+    margin-bottom: 1;
+}
+
+#output-content {
+    color: $foreground;
+}
+
+/* Status panel */
+#status-panel {
+    dock: bottom;
+    height: 3;
+    background: $background;
+    border-top: solid $tertiary;
+    padding: 1;
+}
+
+#status-content {
+    color: $info;
+}
+
+/* Header/Footer styling */
+Header {
+    background: $primary;
+}
+
+Footer {
+    background: $tertiary;
+}
