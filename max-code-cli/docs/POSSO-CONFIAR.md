@@ -18,8 +18,9 @@
 | **FASE 3: Melhorias de Qualidade** | ✅ COMPLETO | 100% | ~2,000 | 5 | ✅ |
 | **FASE 3.5: ELITE Agents + OAuth** | ✅ COMPLETO | 100% | 2,467 | 4 | ✅ |
 | **FASE 4: Constitutional Enforcement** | ✅ COMPLETO | 100% | 3,000 | 9 | ✅ |
-| **FASE 5: UI/UX Sprint 1** | ⏳ EM PROGRESSO | 50% | 750 | 6 | ⚠️ |
-| **FASE 5: UI/UX Sprint 2-4** | ❌ NÃO INICIADO | 0% | 0 | 0 | ❌ |
+| **FASE 5: UI/UX Sprint 1** | ✅ COMPLETO | 100% | 750 | 6 | ✅ |
+| **FASE 5: UI/UX Sprint 2** | ✅ COMPLETO | 100% | 1,560 | 1 | ✅ |
+| **FASE 5: UI/UX Sprint 3-4** | ❌ NÃO INICIADO | 0% | 0 | 0 | ❌ |
 
 ### ✅ **O QUE ESTÁ 100% COMPLETO** (Backend Production-Ready)
 
@@ -82,13 +83,14 @@
 
 **Solução**: Sprints 2-4 UI/UX (~18 dias)
 
-#### Sprint 2: Layout & Estrutura ❌ NÃO INICIADO
-- [ ] OutputBlock system (Warp-style colapsible)
-- [ ] Dashboard Multi-Panel (Rich Layout)
-- [ ] Progressive Disclosure (summary/verbose/detail)
-- [ ] Agent spinners com Nerd Fonts
-- [ ] Progress bars com gradiente neon
-- **Estimativa**: 5-7 dias (10-15h real)
+#### Sprint 2: Layout & Estrutura ✅ COMPLETO (2025-11-06)
+- ✅ **ui/dashboard.py** (400 LOC) - Multi-panel layout (k9s/lazygit inspired)
+- ✅ **ui/output_block.py** (420 LOC) - Warp-style visual blocks
+- ✅ **ui/progress_enhanced.py** (380 LOC) - Progress bars com gradiente
+- ✅ **ui/spinners.py** (360 LOC) - Agent spinners customizados
+- ✅ Research-driven methodology ("Research First, Code Second")
+- **Tempo real**: ~2.5h (45min research + 110min implementation)
+- **Commits**: 1 (41d27f7)
 
 #### Sprint 3: Interação Avançada ❌ NÃO INICIADO
 - [ ] Command Palette (fuzzy search)
