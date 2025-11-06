@@ -533,3 +533,396 @@ $ find . -name "test_*.py" | wc -l
 **Próximo passo**: FASE 1.1 - Resolver naming conflicts
 **Tempo estimado FASE 1**: 17-22h
 **Resultado FASE 1**: 40% → 80% funcional
+
+---
+
+# 🎨 UI/UX REFINEMENT PLAN
+**Data**: 2025-11-05 NOITE
+**Status**: 🔄 PLANEJAMENTO COMPLETO | ⏳ IMPLEMENTAÇÃO PENDENTE
+**Filosofia**: "IMPRESSIONANTE but clean" - Personalidade minimalista com impacto visual
+
+---
+
+## 🎯 VISÃO GERAL
+
+Transform max-code-cli numa experiência visual IMPRESSIONANTE mantendo sobriedade:
+- **Paleta**: Neon green (#0FFF50) → Blue (#0080FF) → Yellow (#FFFF00)
+- **Loading**: Versículos bíblicos contextuais e não invasivos
+- **Filosofia**: Maximum Python capabilities, zero brega
+- **Identidade**: Sua produtividade, sua personalidade
+
+---
+
+## 📋 RESEARCH COMPLETO
+
+### Fontes Analisadas:
+- ✅ 20+ ferramentas CLI top-tier (GitHub CLI, Vercel, Railway, Warp)
+- ✅ Open source gems (lazygit, k9s, btop, glow)
+- ✅ Frameworks modernos (Charm.sh, Textual, Ink)
+- ✅ Communities underground (r/commandline, r/unixporn, r/neovim)
+- ✅ Python TUI libraries (Rich, Textual, terminaltexteffects)
+
+### Descobertas-Chave:
+1. **TerminalTextEffects** - Game changer (40+ efeitos cinematográficos)
+2. **Nerd Fonts** - Padrão universal (3,600+ ícones)
+3. **Rich Layout** - Multi-panel dashboards sem flicker
+4. **Textual TUI** - Opcional advanced mode
+5. **Biblical integration patterns** - Natural, não preachy
+
+---
+
+## 🚀 SPRINT 1: IMPACTO VISUAL IMEDIATO (Semana 1)
+**Objetivo**: 80% do "wow factor" com 20% do esforço
+**Duração**: 3-4 dias
+
+### 1.1 Banner Animado Cinematográfico ⭐
+```python
+# Instalar: pip install terminaltexteffects
+from terminaltexteffects.effects import effect_beams
+
+def show_animated_banner():
+    text = pyfiglet.figlet_format("MAX-CODE", font='block')
+    effect = effect_beams.Beams(text)
+    effect.effect_config.beam_gradient = ['#0FFF50', '#0080FF']
+    # Animate
+```
+
+**Resultado**: Banner que IMPRESSIONA na primeira impressão
+
+### 1.2 Nerd Fonts Integration (3,600+ ícones)
+```python
+NERD_ICONS = {
+    'agent_sophia': '󰉋',  # Átomo (arquiteto)
+    'agent_code': '',    # Terminal (dev)
+    'agent_test': '󰙨',    # Escudo (tester)
+    'agent_review': '',  # Olho (reviewer)
+    'success': '',      # Check circle
+    'error': '',        # Error circle
+    'warning': '',      # Alert triangle
+}
+```
+
+**Resultado**: UI moderna com iconografia profissional
+
+### 1.3 Spinners Personalizados por Agente
+```python
+AGENT_SPINNERS = {
+    'sophia': ('󰉋 ', 'gold1'),
+    'code': (' ', 'blue'),
+    'test': ('󰙨 ', 'green'),
+}
+```
+
+**Resultado**: Loading contextual com personalidade
+
+### 1.4 Progress Bars com Gradiente
+- Cores mudam com progresso: red → yellow → green
+- Diferentes estilos por operação
+- Smooth transitions
+
+### 1.5 Sistema de Versículos Bíblicos 📖
+```python
+class BiblicalVerseManager:
+    VERSES = {
+        'wisdom': [
+            ("If any of you lacks wisdom, let him ask God", "James 1:5"),
+        ],
+        'work': [
+            ("Whatever you do, work at it with all your heart", "Colossians 3:23"),
+        ],
+        'encouragement': [
+            ("I can do all things through Christ", "Philippians 4:13"),
+        ],
+    }
+
+    # Mostrar apenas em:
+    # - Startup banner
+    # - Operações longas (>5s)
+    # - Conclusões bem-sucedidas
+    # Flag: --no-verses para desabilitar
+```
+
+**Resultado**: Personalidade espiritual sem ser invasivo
+
+### 1.6 Gradiente True Color Everywhere
+- Usar hex colors (#0FFF50 → #0080FF)
+- Aplicar em: banner, headers, agent names, status
+- Animação: gradient que pulsa/rotaciona
+
+**Deliverable Sprint 1**: CLI causa impacto visual imediato ⚡
+
+---
+
+## 📊 SPRINT 2: LAYOUT & ESTRUTURA (Semana 2)
+**Objetivo**: Organização profissional
+**Duração**: 5-7 dias
+
+### 2.1 Output em Blocos (Warp-style)
+```python
+class OutputBlock:
+    def __init__(self, title, content, collapsible=True):
+        self.title = title
+        self.content = content
+        self.expanded = True
+
+    def render(self):
+        if self.expanded:
+            return Panel(self.content, title=self.title)
+        else:
+            return Text(f"▸ {self.title}")
+```
+
+### 2.2 Dashboard Multi-Panel (Rich Layout)
+```python
+layout = Layout()
+layout.split_column(
+    Layout(name="header", size=3),
+    Layout(name="body"),
+    Layout(name="footer", size=1)
+)
+layout["body"].split_row(
+    Layout(name="agents", ratio=1),
+    Layout(name="output", ratio=2)
+)
+```
+
+**Resultado Visual**:
+```
+╔══════════════════════════════════════════╗
+║ MAX-CODE v3.0 | Constitutional AI        ║
+╠═════════════╦══════════════════════════╗
+║ Agents      ║ Live Output              ║
+║ Sophia 75%  ║ Analyzing codebase...    ║
+║ Code   40%  ║ Found 15 files           ║
+╠═════════════╩══════════════════════════╣
+║ [P1][P2][P3][P4][P5][P6] | Press ? help ║
+╚══════════════════════════════════════════╝
+```
+
+### 2.3 Progressive Disclosure
+- Summary (padrão): apenas essencial
+- Verbose (`--verbose`): todos detalhes
+- Detail (`--show-details`): sob demanda
+
+**Deliverable Sprint 2**: Layout profissional, organizado 📐
+
+---
+
+## 🎮 SPRINT 3: INTERAÇÃO AVANÇADA (Semana 3)
+**Objetivo**: CLI interativa e descobrível
+**Duração**: 5-7 dias
+
+### 3.1 Command Palette (Fuzzy Search)
+- **Atalho**: Ctrl+P
+- Fuzzy search todos comandos
+- Histórico recente
+- Descrições inline
+
+### 3.2 Keyboard Shortcuts
+```
+Ctrl+A   - Show all agents
+Ctrl+L   - Clear/refresh
+Ctrl+R   - Reload
+F1-F6    - Quick P1-P6 access
+?        - Help overlay
+```
+
+### 3.3 Smart Error Messages
+```python
+class SmartError:
+    def show(self, error_type):
+        console.print(f"[red]Error:[/red] {error_type}")
+        console.print("💡 Suggestion:", self.get_suggestion(error_type))
+        console.print("📖 Docs:", self.get_docs_link(error_type))
+```
+
+**Deliverable Sprint 3**: CLI intuitiva, fácil aprender 🎯
+
+---
+
+## 🚀 SPRINT 4: ADVANCED MODE (Mês 2 - OPCIONAL)
+**Objetivo**: Modo profissional avançado
+**Duração**: 3-4 semanas
+
+### 4.1 Textual TUI Mode
+- Flag: `maxcode --tui`
+- Full-screen interface
+- Mouse support opcional
+- Multi-view dashboard
+
+### 4.2 Theme System
+- Temas: neon (padrão), matrix, ocean, sunset
+- Customização via config
+- Live switching
+
+### 4.3 Plugin Architecture
+- Agentes custom
+- Custom effects/animations
+- Community extensions
+
+**Deliverable Sprint 4**: Ferramenta tier-1 profissional 🏆
+
+---
+
+## 🎨 DESIGN SYSTEM
+
+### Paleta de Cores
+```python
+NEON_PALETTE = {
+    'primary': '#0FFF50',      # Neon green
+    'secondary': '#00F0FF',    # Cyan
+    'tertiary': '#0080FF',     # Blue
+    'accent': '#FFFF00',       # Yellow
+    'success': '#00FF00',
+    'error': '#FF0040',
+    'warning': '#FFD700',
+}
+
+GRADIENT_PRESETS = {
+    'neon': ['#0FFF50', '#00F0FF', '#0080FF', '#FFFF00'],
+    'matrix': ['#00FF00', '#00CC00', '#008800'],
+    'cyberpunk': ['#FF1493', '#00FFFF', '#FF00FF'],
+}
+```
+
+### Typography
+```python
+FONTS = {
+    'banner': 'block',         # Padrão
+    'success': 'graceful',     # Elegante
+    'error': 'doom',           # Bold
+}
+```
+
+---
+
+## 📦 DEPENDÊNCIAS
+
+```bash
+# Sprint 1 - CRÍTICO
+pip install terminaltexteffects  # Efeitos cinematográficos
+
+# Sprint 2-3 (já instalados)
+# Rich, Textual, prompt_toolkit
+
+# Sprint 4 (opcional)
+# Nenhuma nova
+```
+
+---
+
+## 📝 ARQUIVOS A MODIFICAR/CRIAR
+
+### Sprint 1
+```
+ui/constants.py          # + ICONS, NEON_PALETTE, VERSES
+ui/banner.py             # + terminaltexteffects
+ui/progress.py           # + custom spinners, gradient
+ui/effects.py            # NOVO - wrapper effects
+core/verses.py           # NOVO - BiblicalVerseManager
+```
+
+### Sprint 2
+```
+ui/layout.py             # NOVO - Multi-panel
+ui/blocks.py             # NOVO - OutputBlock
+ui/disclosure.py         # NOVO - Progressive
+```
+
+### Sprint 3
+```
+ui/palette.py            # NOVO - Command palette
+ui/shortcuts.py          # NOVO - Keyboard manager
+ui/smart_errors.py       # NOVO - Smart errors
+```
+
+### Sprint 4 (Opcional)
+```
+tui/                     # NOVO - Textual TUI
+config/themes.py         # NOVO - Theme system
+plugins/                 # NOVO - Plugins
+```
+
+---
+
+## ⚠️ PRINCÍPIOS DE DESIGN
+
+### DO ✅
+- Minimalista com personalidade
+- Impacto visual intencional
+- Clean e sóbrio sempre
+- Gradiente neon como identidade
+- Versículos em momentos naturais
+- Performance: <100ms response
+- Graceful degradation
+
+### DON'T ❌
+- Brega ou kitsch
+- Poluição visual
+- Versículos invasivos
+- Animações lentas (>500ms)
+- Mouse obrigatório
+- Breaking changes
+
+---
+
+## 📅 TIMELINE
+
+```
+Semana 1: Sprint 1 (Visual Impact)        - 4 dias
+Semana 2: Sprint 2 (Layout & Structure)   - 7 dias
+Semana 3: Sprint 3 (Interaction)          - 7 dias
+------------------------------------------------------
+TOTAL CORE: 18 dias (~3.5 semanas)
+
+Mês 2:    Sprint 4 (Advanced Mode)        - Opcional
+```
+
+---
+
+## 🎯 SUCCESS METRICS
+
+### Sprint 1
+- [ ] Banner animation <500ms
+- [ ] Todos ícones renderizam (Nerd Fonts)
+- [ ] Verses show contextualmente (30%)
+- [ ] Gradientes em 90%+ terminais
+- [ ] User reaction: "Wow!" ⚡
+
+### Sprint 2
+- [ ] Dashboard updates sem flicker
+- [ ] Blocks collapse/expand OK
+- [ ] Summary mode <20 lines
+- [ ] Terminal never scroll excessivo
+
+### Sprint 3
+- [ ] Command palette <100ms
+- [ ] Shortcuts discoverable
+- [ ] Error suggestions >80% helpful
+- [ ] Users find features faster
+
+### Sprint 4
+- [ ] TUI mode em todos terminais
+- [ ] Mouse interactions responsive
+- [ ] Themes switch instantly
+- [ ] Plugins load/unload OK
+
+---
+
+## 🚀 PRÓXIMOS PASSOS IMEDIATOS
+
+1. ✅ Research completo (DONE)
+2. ✅ Plano documentado (DONE)
+3. ⏳ `pip install terminaltexteffects`
+4. ⏳ Criar branch `feature/ui-ux-refinement`
+5. ⏳ Começar por `ui/effects.py`
+6. ⏳ Testar banner animado
+7. ⏳ Adicionar ícones Nerd Fonts
+
+**Quick Win**: Banner cinematográfico + ícones = impacto imediato! ⚡
+
+---
+
+**Status**: 📋 PLAN COMPLETE | ⏳ READY TO START
+**Estimated Total**: 18 dias (core) + 3-4 semanas (optional TUI)
+**Philosophy**: IMPRESSIONANTE but clean, maximum impact, zero brega
