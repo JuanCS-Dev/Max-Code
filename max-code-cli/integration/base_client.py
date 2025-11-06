@@ -11,6 +11,11 @@ try:
 except ImportError:
     HTTPX_AVAILABLE = False
 
+# Configure structured logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 if HTTPX_AVAILABLE:
@@ -66,13 +71,18 @@ if HTTPX_AVAILABLE:
         def _request_with_retry(self, method: str, endpoint: str, **kwargs):
             for attempt in range(self.max_retries):
                 try:
+                    logger.debug(f"{method} {endpoint} (attempt {attempt + 1}/{self.max_retries})")
                     response = self.client.request(method, endpoint, **kwargs)
                     response.raise_for_status()
+                    logger.debug(f"{method} {endpoint} - Success ({response.status_code})")
                     return response
                 except Exception as e:
                     if attempt < self.max_retries - 1:
-                        time.sleep(2 ** attempt)
+                        backoff = 2 ** attempt
+                        logger.warning(f"{method} {endpoint} failed (attempt {attempt + 1}): {e}. Retrying in {backoff}s...")
+                        time.sleep(backoff)
                     else:
+                        logger.error(f"{method} {endpoint} failed after {self.max_retries} attempts: {e}")
                         raise
 
         def get(self, endpoint: str, **kwargs):
