@@ -59,13 +59,16 @@ def get_credential_type(credential: str) -> CredentialType:
         return CredentialType.NONE
 
 
-def get_anthropic_client() -> Optional[Anthropic]:
+def get_anthropic_client(verify_health: bool = False) -> Optional[Anthropic]:
     """
-    Get authenticated Anthropic client.
+    Get authenticated Anthropic client with optional health check.
 
     Tries authentication methods in order:
     1. CLAUDE_CODE_OAUTH_TOKEN (OAuth token from claude setup-token)
     2. ANTHROPIC_API_KEY (Traditional API key)
+
+    Args:
+        verify_health: If True, verify client works with minimal API call
 
     Returns:
         Authenticated Anthropic client or None
@@ -82,11 +85,24 @@ def get_anthropic_client() -> Optional[Anthropic]:
         if cred_type == CredentialType.OAUTH_TOKEN:
             try:
                 client = Anthropic(api_key=oauth_token)
-                logger.info(
-                    "   🔑 Authenticated with OAuth token (Claude Max)",
-                    extra={"auth_type": "oauth"}
-                )
-                return client
+
+                # Optional health check
+                if verify_health:
+                    if not _validate_token_health(oauth_token):
+                        logger.warning("   ⚠️ OAuth token failed health check")
+                        # Continue to try API key
+                    else:
+                        logger.info(
+                            "   🔑 Authenticated with OAuth token (Claude Max) ✓",
+                            extra={"auth_type": "oauth", "health_check": "passed"}
+                        )
+                        return client
+                else:
+                    logger.info(
+                        "   🔑 Authenticated with OAuth token (Claude Max)",
+                        extra={"auth_type": "oauth"}
+                    )
+                    return client
             except Exception as e:
                 logger.warning(
                     f"   ⚠️ OAuth token invalid: {type(e).__name__}",
@@ -100,10 +116,21 @@ def get_anthropic_client() -> Optional[Anthropic]:
         if cred_type == CredentialType.API_KEY:
             try:
                 client = Anthropic(api_key=api_key)
-                logger.info(
-                    "   🔑 Authenticated with API key",
-                    extra={"auth_type": "api_key"}
-                )
+
+                # Optional health check
+                if verify_health:
+                    if not _validate_token_health(api_key):
+                        logger.warning("   ⚠️ API key failed health check")
+                        return None
+                    logger.info(
+                        "   🔑 Authenticated with API key ✓",
+                        extra={"auth_type": "api_key", "health_check": "passed"}
+                    )
+                else:
+                    logger.info(
+                        "   🔑 Authenticated with API key",
+                        extra={"auth_type": "api_key"}
+                    )
                 return client
             except Exception as e:
                 logger.warning(
@@ -117,7 +144,7 @@ def get_anthropic_client() -> Optional[Anthropic]:
         extra={"checked": ["CLAUDE_CODE_OAUTH_TOKEN", "ANTHROPIC_API_KEY"]}
     )
     logger.info("   💡 To authenticate:")
-    logger.info("      1. OAuth (Max): Run 'claude setup-token' and set CLAUDE_CODE_OAUTH_TOKEN")
+    logger.info("      1. OAuth (Max): Run 'max-code auth login'")
     logger.info("      2. API Key: Set ANTHROPIC_API_KEY=sk-ant-api...")
 
     return None
@@ -156,14 +183,18 @@ def validate_credentials() -> Tuple[bool, CredentialType, str]:
     return (False, CredentialType.NONE, "No credentials found")
 
 
-def setup_oauth_token() -> bool:
+def setup_oauth_token(auto_save: bool = True) -> bool:
     """
-    Run 'claude setup-token' to generate OAuth token.
+    Run 'claude setup-token' to generate OAuth token and auto-save to .env.
 
     This launches the Claude CLI OAuth flow:
     1. Opens browser for authentication
     2. Generates long-lived token
-    3. Returns token to set as CLAUDE_CODE_OAUTH_TOKEN
+    3. Auto-saves to .env file (if auto_save=True)
+    4. Validates token with health check
+
+    Args:
+        auto_save: If True, automatically save token to .env file
 
     Returns:
         True if successful, False otherwise
@@ -174,7 +205,7 @@ def setup_oauth_token() -> bool:
 
     Example:
         >>> if setup_oauth_token():
-        ...     print("OAuth token generated!")
+        ...     print("OAuth token saved and validated!")
     """
     try:
         logger.info("   🔐 Launching OAuth setup...")
@@ -192,24 +223,60 @@ def setup_oauth_token() -> bool:
             logger.info("   💡 Install: npm install -g @anthropic-ai/claude-code")
             return False
 
-        # Run claude setup-token
+        # Run claude setup-token (opens browser)
         result = subprocess.run(
             ["claude", "setup-token"],
             capture_output=True,
             text=True
         )
 
-        if result.returncode == 0:
-            logger.info("   ✅ OAuth token generated!")
-            logger.info("   📋 Copy the token and run:")
-            logger.info("      export CLAUDE_CODE_OAUTH_TOKEN=<token>")
-            logger.info("")
-            logger.info("   Or add to your .env file:")
-            logger.info("      CLAUDE_CODE_OAUTH_TOKEN=<token>")
-            return True
-        else:
+        if result.returncode != 0:
             logger.error(f"   ❌ OAuth setup failed: {result.stderr}")
             return False
+
+        # Extract token from output
+        # Claude CLI outputs: "Your token: sk-ant-..."
+        token = None
+        for line in result.stdout.split('\n'):
+            if 'token' in line.lower() and 'sk-ant-' in line:
+                # Extract token (format: sk-ant-...)
+                parts = line.split()
+                for part in parts:
+                    if part.startswith('sk-ant-'):
+                        token = part.strip()
+                        break
+
+        if not token:
+            logger.warning("   ⚠️  Could not extract token automatically")
+            logger.info("   📋 Please copy the token manually and add to .env:")
+            logger.info("      CLAUDE_CODE_OAUTH_TOKEN=<your-token>")
+            return False
+
+        logger.info("   ✅ OAuth token generated!")
+
+        # Auto-save to .env
+        if auto_save:
+            if _save_token_to_env(token):
+                logger.info("   💾 Token saved to .env file")
+
+                # Health check
+                if _validate_token_health(token):
+                    logger.info("   ✅ Token validated with Claude API")
+                    logger.info("   🎉 Setup complete! You're ready to use max-code.")
+                    return True
+                else:
+                    logger.warning("   ⚠️  Token saved but health check failed")
+                    logger.info("   💡 Token may need a few seconds to activate")
+                    return True
+            else:
+                logger.warning("   ⚠️  Token generated but could not save to .env")
+                logger.info("   📋 Please add manually:")
+                logger.info(f"      CLAUDE_CODE_OAUTH_TOKEN={token}")
+                return True
+        else:
+            logger.info("   📋 Token generated. Add to .env:")
+            logger.info(f"      CLAUDE_CODE_OAUTH_TOKEN={token}")
+            return True
 
     except FileNotFoundError:
         logger.error("   ❌ 'claude' CLI not installed")
@@ -217,6 +284,90 @@ def setup_oauth_token() -> bool:
         return False
     except Exception as e:
         logger.error(f"   ❌ OAuth setup error: {type(e).__name__}: {e}")
+        return False
+
+
+def _save_token_to_env(token: str) -> bool:
+    """
+    Save OAuth token to .env file.
+
+    Appends or updates CLAUDE_CODE_OAUTH_TOKEN in .env file.
+
+    Args:
+        token: OAuth token to save
+
+    Returns:
+        True if saved successfully, False otherwise
+    """
+    try:
+        from pathlib import Path
+
+        # Find project root (where .env should be)
+        current_dir = Path(__file__).resolve().parent
+        project_root = current_dir.parent.parent  # max-code-cli/
+        env_file = project_root / ".env"
+
+        # Read existing .env if it exists
+        existing_lines = []
+        token_exists = False
+
+        if env_file.exists():
+            with open(env_file, 'r') as f:
+                for line in f:
+                    if line.strip().startswith('CLAUDE_CODE_OAUTH_TOKEN='):
+                        # Update existing token
+                        existing_lines.append(f'CLAUDE_CODE_OAUTH_TOKEN={token}\n')
+                        token_exists = True
+                    else:
+                        existing_lines.append(line)
+
+        # Append new token if not exists
+        if not token_exists:
+            existing_lines.append(f'\n# Claude OAuth Token (auto-generated)\nCLAUDE_CODE_OAUTH_TOKEN={token}\n')
+
+        # Write back to .env
+        with open(env_file, 'w') as f:
+            f.writelines(existing_lines)
+
+        # Reload environment variables
+        os.environ['CLAUDE_CODE_OAUTH_TOKEN'] = token
+
+        return True
+
+    except Exception as e:
+        logger.error(f"   ❌ Failed to save token: {e}")
+        return False
+
+
+def _validate_token_health(token: str) -> bool:
+    """
+    Validate OAuth token with Claude API health check.
+
+    Makes a minimal API request to verify token works.
+
+    Args:
+        token: OAuth token to validate
+
+    Returns:
+        True if token is valid, False otherwise
+    """
+    try:
+        from anthropic import Anthropic
+
+        # Create client with token
+        client = Anthropic(api_key=token)
+
+        # Make minimal request (count tokens - cheapest operation)
+        response = client.messages.count_tokens(
+            model="claude-sonnet-4-5-20250929",
+            messages=[{"role": "user", "content": "test"}]
+        )
+
+        # If we get here, token is valid
+        return True
+
+    except Exception as e:
+        logger.debug(f"   Token health check failed: {e}")
         return False
 
 

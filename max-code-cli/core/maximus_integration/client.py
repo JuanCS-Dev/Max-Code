@@ -183,6 +183,7 @@ class MaximusClient:
         timeout: Optional[float] = None,
         max_retries: Optional[int] = None,
         backoff_factor: float = 1.5,
+        auth_token: Optional[str] = None,
     ):
         """
         Initialize MAXIMUS client.
@@ -192,6 +193,7 @@ class MaximusClient:
             timeout: Request timeout in seconds (default: from settings)
             max_retries: Maximum retry attempts (default: from settings)
             backoff_factor: Exponential backoff factor (default: 1.5)
+            auth_token: OAuth token for authentication (default: from env CLAUDE_CODE_OAUTH_TOKEN)
         """
         # Load settings
         settings = get_settings()
@@ -201,6 +203,13 @@ class MaximusClient:
         self.timeout = timeout if timeout is not None else float(settings.maximus.timeout_seconds)
         self.max_retries = max_retries if max_retries is not None else settings.maximus.max_retries
         self.backoff_factor = backoff_factor
+
+        # Auth token (OAuth from Claude)
+        if auth_token:
+            self.auth_token = auth_token
+        else:
+            # Try to get from settings (which reads from env)
+            self.auth_token = settings.claude.get_auth_token()
 
         # TRINITY service URLs (from settings)
         self.penelope_url = settings.maximus.penelope_url.rstrip("/")
@@ -249,10 +258,15 @@ class MaximusClient:
         """
         session = await self._get_session()
 
+        # Build headers
+        headers = {}
+        if self.auth_token:
+            headers["Authorization"] = f"Bearer {self.auth_token}"
+
         try:
             start_time = time.time()
 
-            async with session.request(method, url, json=json) as response:
+            async with session.request(method, url, json=json, headers=headers) as response:
                 latency = (time.time() - start_time) * 1000  # ms
 
                 if response.status == 200:

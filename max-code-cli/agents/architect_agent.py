@@ -448,9 +448,159 @@ class ArchitectAgent(BaseAgent):
         """
         PHASE 2: Explore - Generate multiple architectural approaches
 
-        Uses Tree of Thoughts to explore different strategies
+        ✅ NEW: Uses Claude LLM to generate real architectural options
+        Fallback: Tree of Thoughts mock if Claude unavailable
         """
-        # Use ToT to generate multiple thoughts
+        from core.auth import get_anthropic_client
+        from config.settings import get_settings
+        import json
+
+        # Try Claude LLM first
+        claude_client = get_anthropic_client()
+
+        if claude_client:
+            try:
+                return self._explore_with_claude_llm(
+                    claude_client, task, problem_analysis
+                )
+            except Exception as e:
+                logger.warning(f"   ⚠️ Claude LLM failed, using fallback: {e}")
+
+        # Fallback to ToT mock
+        logger.info("   🔄 Using Tree of Thoughts fallback (mock)")
+        return self._explore_with_tot_fallback(task, problem_analysis)
+
+    def _explore_with_claude_llm(
+        self,
+        claude_client,
+        task: AgentTask,
+        problem_analysis: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """
+        ✅ Generate architectural options using Claude LLM
+
+        Returns 3 distinct architectural approaches with:
+        - Description
+        - Implementation steps
+        - Design patterns
+        - Complexity estimate
+        - Pros/Cons
+        - Impact assessment
+        """
+        from config.settings import get_settings
+        import json
+
+        settings = get_settings()
+
+        # Extract problem context
+        domain = problem_analysis.get('domain', 'general')
+        complexity = problem_analysis.get('complexity', 'MEDIUM')
+        requirements = task.parameters.get('requirements', [task.description])
+
+        # Format requirements
+        requirements_text = '\n'.join(f"- {req}" for req in requirements)
+
+        # System prompt for SOFIA
+        system_prompt = """You are Sophia, expert software architect with 20+ years experience.
+
+Your specialty: Generating multiple architectural approaches for any problem.
+
+Principles:
+- Consider scalability, maintainability, performance
+- Apply proven design patterns appropriately
+- Balance ideal design with pragmatic constraints
+- Provide concrete implementation steps
+
+Output format: JSON array with exactly 3 distinct architectural approaches."""
+
+        # User prompt with task details
+        user_prompt = f"""<architectural_task>
+<domain>{domain}</domain>
+<complexity>{complexity}</complexity>
+<task>{task.description}</task>
+
+<requirements>
+{requirements_text}
+</requirements>
+</architectural_task>
+
+Generate exactly 3 distinct architectural approaches as a JSON array.
+
+Each approach must include:
+- approach: Brief name (e.g., "Microservices with Event Sourcing")
+- description: Detailed explanation (3-5 sentences)
+- steps: Array of implementation steps (strings)
+- patterns: Array of design patterns used (strings)
+- complexity: "LOW", "MEDIUM", or "HIGH"
+- pros: Array of advantages (strings)
+- cons: Array of disadvantages (strings)
+
+Return ONLY valid JSON, no markdown, no explanations outside JSON.
+
+Format:
+[
+  {{
+    "approach": "Approach 1 Name",
+    "description": "Detailed description...",
+    "steps": ["Step 1", "Step 2", ...],
+    "patterns": ["Pattern1", "Pattern2"],
+    "complexity": "MEDIUM",
+    "pros": ["Pro 1", "Pro 2"],
+    "cons": ["Con 1", "Con 2"]
+  }},
+  ...
+]"""
+
+        # Call Claude API
+        logger.info("   🤖 Consulting Claude LLM for architectural options...")
+
+        response = claude_client.messages.create(
+            model=settings.claude.model,
+            max_tokens=4096,
+            temperature=0.8,  # Higher temperature for creative thinking
+            system=system_prompt,
+            messages=[{"role": "user", "content": user_prompt}]
+        )
+
+        # Parse JSON response
+        response_text = response.content[0].text.strip()
+
+        # Remove markdown code blocks if present
+        if response_text.startswith('```'):
+            response_text = response_text.split('```')[1]
+            if response_text.startswith('json'):
+                response_text = response_text[4:]
+
+        options_raw = json.loads(response_text)
+
+        # Enrich with architectural metadata
+        options = []
+        for i, opt in enumerate(options_raw):
+            option = {
+                'id': i,
+                'approach': opt.get('approach', f'Approach {i+1}'),
+                'description': opt.get('description', ''),
+                'steps': opt.get('steps', []),
+                'patterns': opt.get('patterns', ['Custom']),
+                'complexity': opt.get('complexity', 'MEDIUM'),
+                'pros': opt.get('pros', []),
+                'cons': opt.get('cons', []),
+                'impact': self._estimate_impact(opt.get('description', '')),
+                'criticisms': [],  # Will be filled in red team phase
+            }
+            options.append(option)
+
+        logger.info(f"   ✅ Generated {len(options)} architectural options via Claude LLM")
+        return options
+
+    def _explore_with_tot_fallback(
+        self,
+        task: AgentTask,
+        problem_analysis: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """
+        Fallback: Use Tree of Thoughts mock (original implementation)
+        """
         options = []
 
         for i in range(3):  # Generate 3 architectural options
