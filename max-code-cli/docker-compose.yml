@@ -1,0 +1,209 @@
+# Max-Code CLI - Local Deployment
+# Docker Compose para rodar serviços MAXIMUS localmente
+# Claude API roda na nuvem (Anthropic)
+
+version: '3.8'
+
+services:
+  # MAXIMUS Core - Consciousness & Safety (Port 8150)
+  maximus-core:
+    image: maximus-ai/core:latest
+    container_name: maximus-core
+    ports:
+      - "8150:8150"
+    environment:
+      - ENVIRONMENT=local
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data/maximus-core:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8150/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # Penelope - 7 Fruits & Healing (Port 8151)
+  penelope:
+    image: maximus-ai/penelope:latest
+    container_name: penelope
+    ports:
+      - "8151:8151"
+    environment:
+      - ENVIRONMENT=local
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data/penelope:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8151/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # MABA - Browser Agent (Port 8152)
+  maba:
+    image: maximus-ai/maba:latest
+    container_name: maba
+    ports:
+      - "8152:8152"
+    environment:
+      - ENVIRONMENT=local
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data/maba:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8152/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # NIS - Narrative Intelligence (Port 8153)
+  nis:
+    image: maximus-ai/nis:latest
+    container_name: nis
+    ports:
+      - "8153:8153"
+    environment:
+      - ENVIRONMENT=local
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data/nis:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8153/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # Orchestrator - Workflow Coordination (Port 8154)
+  orchestrator:
+    image: maximus-ai/orchestrator:latest
+    container_name: orchestrator
+    ports:
+      - "8154:8154"
+    environment:
+      - ENVIRONMENT=local
+      - LOG_LEVEL=INFO
+      - MAXIMUS_CORE_URL=http://maximus-core:8150
+      - PENELOPE_URL=http://penelope:8151
+    volumes:
+      - ./data/orchestrator:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8154/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      - maximus-core
+      - penelope
+    networks:
+      - maximus-net
+
+  # Eureka - Insights & Discovery (Port 8155)
+  eureka:
+    image: maximus-ai/eureka:latest
+    container_name: eureka
+    ports:
+      - "8155:8155"
+    environment:
+      - ENVIRONMENT=local
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data/eureka:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8155/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # Oraculo - Predictions (Port 8156)
+  oraculo:
+    image: maximus-ai/oraculo:latest
+    container_name: oraculo
+    ports:
+      - "8156:8156"
+    environment:
+      - ENVIRONMENT=local
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data/oraculo:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8156/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # DLQ Monitor - Dead Letter Queue (Port 8157)
+  dlq-monitor:
+    image: maximus-ai/dlq-monitor:latest
+    container_name: dlq-monitor
+    ports:
+      - "8157:8157"
+    environment:
+      - ENVIRONMENT=local
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data/dlq:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8157/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # Redis - Caching (optional, for performance)
+  redis:
+    image: redis:7-alpine
+    container_name: maximus-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - maximus-net
+    command: redis-server --appendonly yes
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  maximus-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

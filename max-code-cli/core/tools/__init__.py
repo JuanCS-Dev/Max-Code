@@ -76,6 +76,13 @@ from .decorator import (
     async_tool,
 )
 
+# Unified Tool Executor Bridge (FASE 11 - Constitutional integration)
+from .executor_bridge import (
+    UnifiedToolExecutor,
+    get_unified_executor,
+    execute_tool_unified,
+)
+
 __all__ = [
     # Tool Framework (FASE 2.1)
     'tool',
@@ -120,6 +127,11 @@ __all__ = [
     'GrepResult',
     'GrepMatch',
     'grep_files',
+
+    # Unified Executor Bridge (FASE 11)
+    'UnifiedToolExecutor',
+    'get_unified_executor',
+    'execute_tool_unified',
 ]
 
-__version__ = '2.0.0'  # FASE 2.1: @tool decorator
+__version__ = '2.1.0'  # FASE 11: Unified Tool Executor Bridge

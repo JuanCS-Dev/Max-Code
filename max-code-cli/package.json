@@ -1,0 +1,64 @@
+{
+  "name": "max-code-cli",
+  "version": "1.0.0",
+  "description": "Max-Code CLI - AI-Powered Development Assistant with Constitutional AI v3.0",
+  "main": "cli/main.py",
+  "bin": {
+    "max-code": "./bin/max-code"
+  },
+  "scripts": {
+    "install": "python3 -m pip install -r requirements.txt --user",
+    "postinstall": "python3 scripts/setup.py",
+    "test": "pytest tests/ -v",
+    "test:e2e": "pytest tests/e2e/ -v",
+    "test:integration": "pytest tests/integration/ -v",
+    "benchmark": "python3 scripts/benchmark.py",
+    "load-test": "python3 scripts/load_test.py",
+    "services:up": "docker-compose up -d",
+    "services:down": "docker-compose down",
+    "services:logs": "docker-compose logs -f",
+    "services:health": "python3 -c 'from cli.main import cli; cli()' health"
+  },
+  "keywords": [
+    "cli",
+    "ai",
+    "assistant",
+    "claude",
+    "anthropic",
+    "constitutional-ai",
+    "maximus",
+    "development",
+    "productivity"
+  ],
+  "author": "Juan <juan.brainfarma@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/max-code-cli.git"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "python": ">=3.9"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "preferGlobal": true,
+  "files": [
+    "bin/",
+    "cli/",
+    "config/",
+    "core/",
+    "integration/",
+    "ui/",
+    "scripts/",
+    "requirements.txt",
+    "docker-compose.yml",
+    "README.md",
+    "LICENSE"
+  ]
+}

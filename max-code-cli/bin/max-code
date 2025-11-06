@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+"""
+Max-Code CLI - Executable Entry Point
+Optimized for local execution with lazy loading
+"""
+import sys
+import os
+
+# Add CLI directory to Python path
+CLI_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'cli')
+sys.path.insert(0, CLI_DIR)
+
+if __name__ == '__main__':
+    # Lazy import to minimize cold start time
+    from main import cli
+    cli()

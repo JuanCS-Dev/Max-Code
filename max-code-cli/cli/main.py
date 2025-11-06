@@ -464,6 +464,13 @@ try:
 except ImportError as e:
     console.print(f"[yellow]Warning: Sabbath command not available: {e}[/yellow]")
 
+# Import and register task command (FASE 11 - Autonomous Agent)
+try:
+    from cli.task_command import task
+    cli.add_command(task, name='task')
+except ImportError as e:
+    console.print(f"[yellow]Warning: Task command not available: {e}[/yellow]")
+
 
 if __name__ == '__main__':
     cli()

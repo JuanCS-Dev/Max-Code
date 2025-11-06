@@ -220,7 +220,18 @@ class ArchitectAgent(BaseAgent):
 
     def execute(self, task: AgentTask) -> AgentResult:
         """Execute architectural analysis"""
-        return asyncio.run(self._execute_async(task))
+        try:
+            # Try to get existing event loop (if we're in async context)
+            loop = asyncio.get_running_loop()
+            # We're inside an event loop, cannot use asyncio.run()
+            # Create task and return synchronously (will be awaited by caller)
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                future = executor.submit(asyncio.run, self._execute_async(task))
+                return future.result()
+        except RuntimeError:
+            # No event loop running, we can use asyncio.run()
+            return asyncio.run(self._execute_async(task))
 
     async def _execute_async(self, task: AgentTask) -> AgentResult:
         """Async execution for MAXIMUS integration"""
