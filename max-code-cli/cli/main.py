@@ -234,9 +234,10 @@ def chat(prompt, agent, stream, show_thoughts, consciousness):
     Examples:
       max-code chat "How do I implement authentication?"
       max-code chat --agent sophia "Explain this codebase"
-      max-code chat --show-thoughts "Design a REST API"
+      max-code chat --consciousness "Design a REST API"
     """
-    settings = get_settings()
+    from core.chat_integration import ChatIntegration
+
     prompt_text = ' '.join(prompt)
 
     console.print(f"\n[bold cyan]Max-Code AI Assistant[/bold cyan]")
@@ -244,14 +245,32 @@ def chat(prompt, agent, stream, show_thoughts, consciousness):
         console.print(f"Agent: [yellow]{agent.title()}[/yellow]")
     console.print()
 
-    # Stub: Will integrate with MAXIMUS tomorrow
+    # User input
     console.print(f"[bold white]You:[/bold white] {prompt_text}\n")
-    console.print("[yellow]⚠ Chat integration coming in FASE 6-8 (tomorrow)[/yellow]")
-    console.print("[white]This will connect to:[/white]")
-    console.print(f"  • Claude API: [cyan]{settings.claude.model}[/cyan]")
-    console.print(f"  • MAXIMUS Core: [cyan]{settings.maximus.core_url}[/cyan]")
-    console.print(f"  • Constitutional AI: [cyan]v3.0[/cyan]")
-    console.print()
+
+    # Initialize chat integration
+    try:
+        integration = ChatIntegration()
+
+        # Stream response with Rich
+        console.print("[bold cyan]Max-Code:[/bold cyan] ", end="")
+        for token in integration.chat(
+            user_input=prompt_text,
+            agent=agent,
+            stream=stream,
+            show_consciousness=consciousness
+        ):
+            console.print(token, end="")
+
+        console.print("\n")  # Final newline
+
+        # Close integration
+        integration.close()
+
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        import traceback
+        console.print(f"[dim]{traceback.format_exc()}[/dim]")
 
 
 @cli.command()

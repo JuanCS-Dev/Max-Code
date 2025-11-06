@@ -8,6 +8,9 @@ pydantic>=2.0.0
 # HTTP Client for MAXIMUS Integration
 httpx>=0.26.0
 
+# Claude API (FASE 8 - Chat Integration)
+anthropic>=0.18.0
+
 # Configuration
 python-dotenv>=1.0.0
 

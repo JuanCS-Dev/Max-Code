@@ -20,9 +20,15 @@ from integration import (
     PenelopeClient,
     OrchestratorClient,
     OraculoClient,
-    AtlasClient,
-    ServiceHealth
 )
+
+# Service Health Enum
+class ServiceHealth(str, Enum):
+    """Service health status."""
+    HEALTHY = "healthy"
+    DEGRADED = "degraded"
+    UNHEALTHY = "unhealthy"
+    UNKNOWN = "unknown"
 
 
 class IntegrationMode(str, Enum):
@@ -53,7 +59,6 @@ class IntegrationManager:
         self.penelope: Optional[PenelopeClient] = None
         self.orchestrator: Optional[OrchestratorClient] = None
         self.oraculo: Optional[OraculoClient] = None
-        self.atlas: Optional[AtlasClient] = None
 
         # Service availability
         self.service_health: Dict[str, ServiceHealth] = {}
@@ -105,15 +110,6 @@ class IntegrationManager:
         except Exception as e:
             self.logger.warning(f"Failed to initialize OraculoClient: {e}")
 
-        try:
-            self.atlas = AtlasClient(
-                self.settings.maximus.atlas_url,
-                timeout=self.settings.maximus.timeout_seconds,
-                max_retries=self.settings.maximus.max_retries
-            )
-            self.logger.debug("AtlasClient initialized")
-        except Exception as e:
-            self.logger.warning(f"Failed to initialize AtlasClient: {e}")
 
     def _check_service_health(self):
         """Check health of all services."""
@@ -122,14 +118,32 @@ class IntegrationManager:
             "penelope": self.penelope,
             "orchestrator": self.orchestrator,
             "oraculo": self.oraculo,
-            "atlas": self.atlas
         }
 
         healthy_count = 0
         for name, client in services.items():
             if client:
                 try:
-                    health = client.health_check()
+                    # Try health() or get_health() methods
+                    if hasattr(client, 'health'):
+                        result = client.health()
+                    elif hasattr(client, 'get_health'):
+                        result = client.get_health()
+                    else:
+                        result = None
+
+                    # Determine health from result
+                    if result and isinstance(result, dict):
+                        status = result.get("status", "unknown").lower()
+                        if status in ["healthy", "ok", "up"]:
+                            health = ServiceHealth.HEALTHY
+                        elif status in ["degraded", "warning"]:
+                            health = ServiceHealth.DEGRADED
+                        else:
+                            health = ServiceHealth.UNHEALTHY
+                    else:
+                        health = ServiceHealth.HEALTHY  # If no error, assume healthy
+
                     self.service_health[name] = health
                     if health == ServiceHealth.HEALTHY:
                         healthy_count += 1
@@ -137,7 +151,7 @@ class IntegrationManager:
                     else:
                         self.logger.warning(f"{name} service: {health.value}")
                 except Exception as e:
-                    self.service_health[name] = ServiceHealth.UNKNOWN
+                    self.service_health[name] = ServiceHealth.UNHEALTHY
                     self.logger.error(f"{name} health check failed: {e}")
             else:
                 self.service_health[name] = ServiceHealth.UNKNOWN
@@ -183,8 +197,13 @@ class IntegrationManager:
 
         try:
             response = self.maximus.get_consciousness_state()
-            if response.success:
-                return response.data
+            # FASE 6 API: returns Pydantic model directly
+            if hasattr(response, 'model_dump'):
+                return response.model_dump()
+            elif isinstance(response, dict):
+                return response
+            else:
+                return None
         except Exception as e:
             self.logger.error(f"Failed to get consciousness state: {e}")
 
@@ -204,10 +223,17 @@ class IntegrationManager:
             return None
 
         try:
-            action = {"description": action_description}
-            response = self.penelope.evaluate_against_articles(action)
-            if response.success:
-                return response.data
+            response = self.penelope.evaluate_biblical_alignment(
+                text=action_description,
+                context={"type": "action_evaluation"}
+            )
+            # FASE 6 API: returns Pydantic model or dict
+            if hasattr(response, 'model_dump'):
+                return response.model_dump()
+            elif isinstance(response, dict):
+                return response
+            else:
+                return None
         except Exception as e:
             self.logger.error(f"Failed to evaluate ethics: {e}")
 
@@ -248,7 +274,6 @@ class IntegrationManager:
                 "ethics": self.is_service_available("penelope"),
                 "orchestration": self.is_service_available("orchestrator"),
                 "prediction": self.is_service_available("oraculo"),
-                "context": self.is_service_available("atlas"),
             }
         }
 
@@ -259,7 +284,6 @@ class IntegrationManager:
             self.penelope,
             self.orchestrator,
             self.oraculo,
-            self.atlas
         ]
 
         for client in clients:

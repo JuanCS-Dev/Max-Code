@@ -374,6 +374,8 @@ MAX-CODE isn't about competition. It's about **elevation**.
 **Platform**: LinkedIn
 **Hashtags**: #chatgpt #cli #devtools #inovação #opensource #mvp
 
+**Note on the Image**: The architectural diagram in the post took multiple iterations to create. In November 2024, AI image generation struggled significantly with text rendering. Juan had to persist through numerous attempts to achieve a professional-quality diagram that clearly communicated the vision. This attention to detail and commitment to professional communication — even when the tools were difficult — demonstrates the seriousness and completeness of the original vision.
+
 ---
 
 ## 🔮 WHAT'S NEXT: The Roadmap
