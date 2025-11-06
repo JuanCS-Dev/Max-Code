@@ -1,126 +1,264 @@
 """
-MAXIMUS Oraculo Service Client
+Oraculo Service Client - Predictions & Foresight
 
-Interfaces with Oraculo for:
-- Prediction & forecasting
-- Trend analysis
-- Decision support
-- Future state estimation
+Production HTTP client for Oraculo Predictive Analytics Service.
+Based on real API endpoints from services/oraculo/api.py
 
-PRODUCTION IMPLEMENTATION
+Endpoints:
+- GET  /health                    # Health check
+- GET  /capabilities              # Service capabilities
+- POST /predict                   # Generate predictions
+- POST /analyze_code              # Code analysis
+- POST /auto_implement            # Auto-implement code
+
+Port: 8156 (Docker) | localhost:8156 (dev)
 """
 
-from typing import Dict, Any, Optional, List
-from integration.base_client import BaseServiceClient, ServiceResponse
+import logging
+from typing import Optional, Dict, Any, List
+from pydantic import BaseModel, Field
+
+try:
+    import httpx
+    HTTPX_AVAILABLE = True
+except ImportError:
+    HTTPX_AVAILABLE = False
+    logging.warning("httpx not installed. Install: pip install httpx")
+
+from integration.base_client import BaseHTTPClient
+
+logger = logging.getLogger(__name__)
 
 
-class OraculoClient(BaseServiceClient):
-    """
-    Client for MAXIMUS Oraculo Service.
+# Request Models (matching real API)
+class PredictionRequest(BaseModel):
+    """POST /predict request."""
+    data: Dict[str, Any] = Field(..., description="Data to analyze for predictions")
+    prediction_type: str = Field(..., description="Type of prediction (e.g., 'threat_level', 'resource_demand')")
+    time_horizon: str = Field(..., description="Time horizon for prediction (e.g., '24h', '7d')")
 
-    Provides predictive capabilities for forecasting and decision support.
-    """
 
-    def __init__(self, base_url: str, timeout: int = 30, max_retries: int = 3):
+class CodeAnalysisRequest(BaseModel):
+    """POST /analyze_code request."""
+    code: str = Field(..., description="Code snippet to analyze")
+    language: str = Field(..., description="Programming language")
+    analysis_type: str = Field(..., description="Type of analysis (e.g., 'vulnerability', 'performance', 'refactoring')")
+
+
+class ImplementationRequest(BaseModel):
+    """POST /auto_implement request."""
+    task_description: str = Field(..., description="Description of coding task")
+    context: Optional[Dict[str, Any]] = Field(None, description="Additional context or existing code")
+    target_language: str = Field(..., description="Target programming language")
+
+
+# Response Models
+class HealthStatusResponse(BaseModel):
+    """GET /health response."""
+    status: str
+    service: str
+    version: str
+    capabilities: List[str]
+    degradations: List[str] = []
+    apv_stream_manager: Optional[Dict[str, Any]] = None
+
+
+class CapabilitiesResponse(BaseModel):
+    """GET /capabilities response."""
+    capabilities: List[str]
+    configuration: Dict[str, Any]
+
+
+class PredictionResult(BaseModel):
+    """Prediction result data."""
+    prediction_type: str
+    confidence: float
+    forecast: Dict[str, Any]
+    suggestions: List[str] = []
+
+
+class PredictionResponse(BaseModel):
+    """POST /predict response."""
+    status: str
+    timestamp: str
+    prediction: PredictionResult
+
+
+class CodeAnalysisResult(BaseModel):
+    """Code analysis result data."""
+    issues_found: int
+    severity_breakdown: Dict[str, int]
+    recommendations: List[str]
+    details: Dict[str, Any]
+
+
+class CodeAnalysisResponse(BaseModel):
+    """POST /analyze_code response."""
+    status: str
+    timestamp: str
+    analysis_result: CodeAnalysisResult
+
+
+class ImplementationResult(BaseModel):
+    """Auto-implementation result data."""
+    generated_code: str
+    language: str
+    implementation_notes: List[str]
+    confidence: float
+    test_cases: Optional[List[str]] = []
+
+
+class ImplementationResponse(BaseModel):
+    """POST /auto_implement response."""
+    status: str
+    timestamp: str
+    implementation_result: ImplementationResult
+
+
+if HTTPX_AVAILABLE:
+    class OraculoClient(BaseHTTPClient):
         """
-        Initialize Oraculo client.
+        Oraculo Service Client - Predictive Analytics & Foresight.
 
-        Args:
-            base_url: Oraculo service URL
-            timeout: Request timeout in seconds
-            max_retries: Maximum retry attempts
+        Example:
+            client = OraculoClient()
+
+            # Get prediction
+            prediction = client.predict(
+                data={"metric": "cpu_usage", "values": [0.3, 0.5, 0.7]},
+                prediction_type="resource_demand",
+                time_horizon="24h"
+            )
+            print(f"Prediction: {prediction.prediction.forecast}")
+
+            # Analyze code
+            analysis = client.analyze_code(
+                code="def foo(): pass",
+                language="python",
+                analysis_type="vulnerability"
+            )
+            print(f"Issues found: {analysis.analysis_result.issues_found}")
         """
-        super().__init__(base_url, "Oraculo", timeout, max_retries)
 
-    # ========================================================================
-    # PREDICTION & FORECASTING
-    # ========================================================================
+        def __init__(self, base_url: str = "http://localhost:8156", **kwargs):
+            super().__init__(base_url=base_url, **kwargs)
 
-    def predict(self, context: Dict[str, Any], horizon: int = 1) -> ServiceResponse:
-        """
-        Make prediction based on context.
+        def get_health(self) -> HealthStatusResponse:
+            """
+            Get service health status.
 
-        Args:
-            context: Current context and historical data
-            horizon: Prediction horizon (time steps ahead)
+            Returns:
+                HealthStatusResponse with status and capabilities
+            """
+            response = self.get("/health")
+            return HealthStatusResponse(**response.json())
 
-        Returns:
-            ServiceResponse with prediction and confidence
-        """
-        payload = {
-            "context": context,
-            "horizon": horizon
-        }
-        return self.post("/api/predict", json=payload)
+        def get_capabilities(self) -> CapabilitiesResponse:
+            """
+            Get service capabilities and feature flags.
 
-    def forecast_trend(self, metric_name: str, steps: int = 10) -> ServiceResponse:
-        """
-        Forecast trend for specific metric.
+            Returns:
+                CapabilitiesResponse with capabilities and configuration
+            """
+            response = self.get("/capabilities")
+            return CapabilitiesResponse(**response.json())
 
-        Args:
-            metric_name: Metric to forecast
-            steps: Number of future steps
+        def predict(
+            self,
+            data: Dict[str, Any],
+            prediction_type: str,
+            time_horizon: str
+        ) -> PredictionResponse:
+            """
+            Generate predictive insights based on provided data.
 
-        Returns:
-            ServiceResponse with forecasted values
-        """
-        payload = {
-            "metric": metric_name,
-            "steps": steps
-        }
-        return self.post("/api/forecast", json=payload)
+            Args:
+                data: Data to analyze for predictions
+                prediction_type: Type of prediction (e.g., 'threat_level', 'resource_demand')
+                time_horizon: Time horizon for prediction (e.g., '24h', '7d')
 
-    # ========================================================================
-    # DECISION SUPPORT
-    # ========================================================================
+            Returns:
+                PredictionResponse with prediction results and confidence
 
-    def evaluate_decision(self, decision: Dict[str, Any], alternatives: List[Dict[str, Any]]) -> ServiceResponse:
-        """
-        Evaluate decision against alternatives.
+            Example:
+                result = client.predict(
+                    data={"metric": "cpu_usage", "values": [0.3, 0.5, 0.7]},
+                    prediction_type="resource_demand",
+                    time_horizon="24h"
+                )
+            """
+            request = PredictionRequest(
+                data=data,
+                prediction_type=prediction_type,
+                time_horizon=time_horizon
+            )
+            response = self.post("/predict", json=request.model_dump())
+            return PredictionResponse(**response.json())
 
-        Args:
-            decision: Proposed decision
-            alternatives: Alternative options
+        def analyze_code(
+            self,
+            code: str,
+            language: str,
+            analysis_type: str
+        ) -> CodeAnalysisResponse:
+            """
+            Analyze code for vulnerabilities, performance issues, or refactoring opportunities.
 
-        Returns:
-            ServiceResponse with evaluation scores
-        """
-        payload = {
-            "decision": decision,
-            "alternatives": alternatives
-        }
-        return self.post("/api/evaluate", json=payload)
+            Args:
+                code: Code snippet to analyze
+                language: Programming language (e.g., 'python', 'javascript')
+                analysis_type: Type of analysis ('vulnerability', 'performance', 'refactoring')
 
-    def recommend_action(self, situation: Dict[str, Any]) -> ServiceResponse:
-        """
-        Recommend best action for situation.
+            Returns:
+                CodeAnalysisResponse with analysis results
 
-        Args:
-            situation: Current situation description
+            Example:
+                result = client.analyze_code(
+                    code="def foo(): pass",
+                    language="python",
+                    analysis_type="vulnerability"
+                )
+            """
+            request = CodeAnalysisRequest(
+                code=code,
+                language=language,
+                analysis_type=analysis_type
+            )
+            response = self.post("/analyze_code", json=request.model_dump())
+            return CodeAnalysisResponse(**response.json())
 
-        Returns:
-            ServiceResponse with recommended actions ranked by score
-        """
-        return self.post("/api/recommend", json=situation)
+        def auto_implement(
+            self,
+            task_description: str,
+            target_language: str,
+            context: Optional[Dict[str, Any]] = None
+        ) -> ImplementationResponse:
+            """
+            Request automated code implementation based on task description.
 
-    # ========================================================================
-    # METRICS & HEALTH
-    # ========================================================================
+            Args:
+                task_description: Description of coding task
+                target_language: Target programming language (e.g., 'python', 'typescript')
+                context: Optional additional context or existing code
 
-    def get_prediction_metrics(self) -> ServiceResponse:
-        """
-        Get prediction accuracy metrics.
+            Returns:
+                ImplementationResponse with generated code
 
-        Returns:
-            ServiceResponse with metrics data
-        """
-        return self.get("/metrics")
+            Example:
+                result = client.auto_implement(
+                    task_description="Create a function to validate email addresses",
+                    target_language="python"
+                )
+            """
+            request = ImplementationRequest(
+                task_description=task_description,
+                context=context,
+                target_language=target_language
+            )
+            response = self.post("/auto_implement", json=request.model_dump())
+            return ImplementationResponse(**response.json())
 
-    def get_health(self) -> ServiceResponse:
-        """
-        Get Oraculo health.
-
-        Returns:
-            ServiceResponse with health status
-        """
-        return self.get("/health")
+else:
+    class OraculoClient:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("httpx required: pip install httpx")

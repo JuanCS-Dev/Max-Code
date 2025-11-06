@@ -11,24 +11,26 @@ Connects Max-Code CLI with MAXIMUS backend services:
 All clients are production-ready with real implementations!
 """
 
-from integration.base_client import BaseServiceClient, ServiceResponse, ServiceHealth
+from integration.base_client import BaseHTTPClient, CircuitBreaker, CircuitState
 from integration.maximus_client import MaximusClient
 from integration.penelope_client import PenelopeClient
-from integration.orchestrator_client import OrchestratorClient
 from integration.oraculo_client import OraculoClient
-from integration.atlas_client import AtlasClient
 
 __version__ = "1.0.0"
 __all__ = [
     # Base classes
-    "BaseServiceClient",
-    "ServiceResponse",
-    "ServiceHealth",
+    "BaseHTTPClient",
+    "CircuitBreaker",
+    "CircuitState",
 
-    # Service clients
+    # Service clients (FASE 6 - 3/8 implemented)
     "MaximusClient",
     "PenelopeClient",
-    "OrchestratorClient",
     "OraculoClient",
-    "AtlasClient",
+
+    # TODO FASE 7+:
+    # "OrchestratorClient",
+    # "MABAClient",
+    # "NISClient",
+    # "EurekaClient",
 ]

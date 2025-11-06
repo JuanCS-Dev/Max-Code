@@ -1,167 +1,95 @@
-"""
-Base HTTP Client for MAXIMUS Services
+"""Base HTTP Client - Circuit Breaker + Retry"""
 
-Provides common functionality for all service clients:
-- HTTP requests with retries
-- Error handling
-- Health checks
-- Circuit breaker pattern
-"""
-
-import httpx
-from typing import Dict, Any, Optional
-from dataclasses import dataclass
+import logging
+import time
+from typing import Optional
 from enum import Enum
 
+try:
+    import httpx
+    HTTPX_AVAILABLE = True
+except ImportError:
+    HTTPX_AVAILABLE = False
 
-class ServiceHealth(str, Enum):
-    """Service health status."""
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    UNHEALTHY = "unhealthy"
-    UNKNOWN = "unknown"
+logger = logging.getLogger(__name__)
 
+if HTTPX_AVAILABLE:
+    class CircuitState(str, Enum):
+        CLOSED = "closed"
+        OPEN = "open"
+        HALF_OPEN = "half_open"
 
-@dataclass
-class ServiceResponse:
-    """Standard service response."""
-    success: bool
-    data: Optional[Dict[str, Any]] = None
-    error: Optional[str] = None
-    status_code: Optional[int] = None
+    class CircuitBreaker:
+        def __init__(self, failure_threshold: int = 5, recovery_timeout: float = 30.0):
+            self.failure_threshold = failure_threshold
+            self.recovery_timeout = recovery_timeout
+            self._failure_count = 0
+            self._last_failure_time: Optional[float] = None
+            self._state = CircuitState.CLOSED
 
+        @property
+        def state(self) -> CircuitState:
+            if (self._state == CircuitState.OPEN and self._last_failure_time and
+                time.time() - self._last_failure_time >= self.recovery_timeout):
+                self._state = CircuitState.HALF_OPEN
+            return self._state
 
-class BaseServiceClient:
-    """
-    Base client for MAXIMUS services.
+        def call(self, func, *args, **kwargs):
+            if self.state == CircuitState.OPEN:
+                raise Exception("Circuit breaker OPEN")
+            try:
+                result = func(*args, **kwargs)
+                if self._state == CircuitState.HALF_OPEN:
+                    logger.info("Circuit → CLOSED")
+                self._failure_count = 0
+                self._state = CircuitState.CLOSED
+                return result
+            except Exception as e:
+                self._failure_count += 1
+                self._last_failure_time = time.time()
+                if self._failure_count >= self.failure_threshold:
+                    self._state = CircuitState.OPEN
+                    logger.warning(f"Circuit → OPEN ({self._failure_count} failures)")
+                raise
 
-    Provides:
-    - HTTP client with connection pooling
-    - Automatic retries
-    - Error handling
-    - Health checks
-    """
-
-    def __init__(
-        self,
-        base_url: str,
-        service_name: str,
-        timeout: int = 30,
-        max_retries: int = 3,
-    ):
-        """
-        Initialize base client.
-
-        Args:
-            base_url: Service base URL
-            service_name: Service name for logging
-            timeout: Request timeout in seconds
-            max_retries: Maximum retry attempts
-        """
-        self.base_url = base_url.rstrip('/')
-        self.service_name = service_name
-        self.timeout = timeout
-        self.max_retries = max_retries
-
-        # HTTP client with retries
-        self.client = httpx.Client(
-            base_url=self.base_url,
-            timeout=timeout,
-            follow_redirects=True,
-        )
-
-    def _request(
-        self,
-        method: str,
-        endpoint: str,
-        **kwargs
-    ) -> ServiceResponse:
-        """
-        Make HTTP request with retries.
-
-        Args:
-            method: HTTP method
-            endpoint: API endpoint
-            **kwargs: Additional request parameters
-
-        Returns:
-            ServiceResponse
-        """
-        url = f"{self.base_url}/{endpoint.lstrip('/')}"
-
-        try:
-            response = self.client.request(method, url, **kwargs)
-            response.raise_for_status()
-
-            return ServiceResponse(
-                success=True,
-                data=response.json() if response.text else None,
-                status_code=response.status_code
+    class BaseHTTPClient:
+        def __init__(self, base_url: str, timeout: float = 30.0, max_retries: int = 3):
+            self.base_url = base_url.rstrip('/')
+            self.client = httpx.Client(
+                base_url=self.base_url,
+                timeout=httpx.Timeout(connect=5.0, read=timeout, write=timeout, pool=5.0),
+                follow_redirects=True
             )
+            self.circuit_breaker = CircuitBreaker()
+            self.max_retries = max_retries
 
-        except httpx.HTTPStatusError as e:
-            return ServiceResponse(
-                success=False,
-                error=f"HTTP {e.response.status_code}: {str(e)}",
-                status_code=e.response.status_code
-            )
+        def _request_with_retry(self, method: str, endpoint: str, **kwargs):
+            for attempt in range(self.max_retries):
+                try:
+                    response = self.client.request(method, endpoint, **kwargs)
+                    response.raise_for_status()
+                    return response
+                except Exception as e:
+                    if attempt < self.max_retries - 1:
+                        time.sleep(2 ** attempt)
+                    else:
+                        raise
 
-        except httpx.RequestError as e:
-            return ServiceResponse(
-                success=False,
-                error=f"Request failed: {str(e)}",
-            )
+        def get(self, endpoint: str, **kwargs):
+            return self.circuit_breaker.call(self._request_with_retry, "GET", endpoint, **kwargs)
 
-        except Exception as e:
-            return ServiceResponse(
-                success=False,
-                error=f"Unexpected error: {str(e)}",
-            )
+        def post(self, endpoint: str, **kwargs):
+            return self.circuit_breaker.call(self._request_with_retry, "POST", endpoint, **kwargs)
 
-    def get(self, endpoint: str, **kwargs) -> ServiceResponse:
-        """Make GET request."""
-        return self._request("GET", endpoint, **kwargs)
+        def close(self):
+            self.client.close()
 
-    def post(self, endpoint: str, **kwargs) -> ServiceResponse:
-        """Make POST request."""
-        return self._request("POST", endpoint, **kwargs)
+        def __enter__(self):
+            return self
 
-    def put(self, endpoint: str, **kwargs) -> ServiceResponse:
-        """Make PUT request."""
-        return self._request("PUT", endpoint, **kwargs)
-
-    def delete(self, endpoint: str, **kwargs) -> ServiceResponse:
-        """Make DELETE request."""
-        return self._request("DELETE", endpoint, **kwargs)
-
-    def health_check(self) -> ServiceHealth:
-        """
-        Check service health.
-
-        Returns:
-            ServiceHealth enum
-        """
-        try:
-            response = self.get("/health")
-
-            if response.success:
-                return ServiceHealth.HEALTHY
-            elif response.status_code and 500 <= response.status_code < 600:
-                return ServiceHealth.UNHEALTHY
-            else:
-                return ServiceHealth.DEGRADED
-
-        except Exception:
-            return ServiceHealth.UNKNOWN
-
-    def close(self):
-        """Close HTTP client."""
-        self.client.close()
-
-    def __enter__(self):
-        """Context manager entry."""
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """Context manager exit."""
-        self.close()
+        def __exit__(self, *args):
+            self.close()
+else:
+    class BaseHTTPClient:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("httpx required")

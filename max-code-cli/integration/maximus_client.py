@@ -1,221 +1,135 @@
 """
-MAXIMUS Core Service Client
+MAXIMUS Core Service Client - Consciousness & Safety
 
-Interfaces with MAXIMUS Core for:
-- Consciousness system (ESGT ignition, TIG, MMEI, MCEA)
-- Predictive coding (5-layer hierarchy)
-- Neuromodulation (DA, ACh, NE, 5-HT)
-- Skill learning (Hybrid RL)
-- Attention system
-- Ethical AI stack
+Production HTTP client for MAXIMUS AI Consciousness System.
+Based on real API endpoints from services/core/consciousness/api.py
 
-PRODUCTION IMPLEMENTATION
+Endpoints:
+- GET  /api/v1/consciousness/state
+- POST /api/v1/consciousness/esgt/trigger
+- GET  /api/v1/consciousness/esgt/events
+- POST /api/v1/consciousness/arousal/adjust
+- GET  /api/v1/consciousness/safety/status
+- GET  /api/v1/consciousness/stream/sse
+
+Port: 8150 (Docker) | localhost:8150 (dev)
 """
 
-from typing import Dict, Any, Optional
-from integration.base_client import BaseServiceClient, ServiceResponse
+import logging
+from typing import Optional, Dict, Any, List
+from pydantic import BaseModel, Field
+
+try:
+    import httpx
+    HTTPX_AVAILABLE = True
+except ImportError:
+    HTTPX_AVAILABLE = False
+    logging.warning("httpx not installed. Install: pip install httpx")
+
+from integration.base_client import BaseHTTPClient
+
+logger = logging.getLogger(__name__)
 
 
-class MaximusClient(BaseServiceClient):
-    """
-    Client for MAXIMUS Core Service.
+# Response Models (matching real API)
+class ConsciousnessStateResponse(BaseModel):
+    """Real API response from GET /api/v1/consciousness/state"""
+    timestamp: str
+    esgt_active: bool
+    arousal_level: float
+    arousal_classification: str
+    tig_metrics: Dict[str, Any]
+    recent_events_count: int
+    system_health: str
 
-    The heart of the AI system - provides consciousness, prediction,
-    and neuromodulation capabilities.
-    """
 
-    def __init__(self, base_url: str, timeout: int = 30, max_retries: int = 3):
+class SalienceInput(BaseModel):
+    """POST /api/v1/consciousness/esgt/trigger request"""
+    novelty: float = Field(..., ge=0.0, le=1.0)
+    relevance: float = Field(..., ge=0.0, le=1.0)
+    urgency: float = Field(..., ge=0.0, le=1.0)
+    context: Dict[str, Any] = Field(default_factory=dict)
+
+
+class ESGTEventResponse(BaseModel):
+    """GET /api/v1/consciousness/esgt/events response"""
+    event_id: str
+    timestamp: str
+    success: bool
+    salience: Dict[str, float]
+    coherence: Optional[float]
+    duration_ms: Optional[float]
+    nodes_participating: int
+    reason: Optional[str]
+
+
+class ArousalAdjustment(BaseModel):
+    """POST /api/v1/consciousness/arousal/adjust request"""
+    delta: float = Field(..., ge=-0.5, le=0.5)
+    duration_seconds: float = Field(default=5.0, ge=0.1, le=60.0)
+    source: str = Field(default="max-code-cli")
+
+
+class SafetyStatusResponse(BaseModel):
+    """GET /api/v1/consciousness/safety/status response"""
+    monitoring_active: bool
+    kill_switch_active: bool
+    violations_total: int
+    violations_by_severity: Dict[str, int]
+    last_violation: Optional[str]
+    uptime_seconds: float
+
+
+if HTTPX_AVAILABLE:
+    class MaximusClient(BaseHTTPClient):
         """
-        Initialize MAXIMUS Core client.
+        MAXIMUS Core Service Client.
 
-        Args:
-            base_url: MAXIMUS Core service URL
-            timeout: Request timeout in seconds
-            max_retries: Maximum retry attempts
+        Example:
+            client = MaximusClient()
+            state = client.get_consciousness_state()
+            print(f"ESGT: {state.esgt_active}, Arousal: {state.arousal_level}")
         """
-        super().__init__(base_url, "MAXIMUS Core", timeout, max_retries)
 
-    # ========================================================================
-    # CONSCIOUSNESS SYSTEM
-    # ========================================================================
+        def __init__(self, base_url: str = "http://localhost:8150", **kwargs):
+            super().__init__(base_url=base_url, **kwargs)
+            self.api_prefix = "/api/v1/consciousness"
 
-    def get_consciousness_state(self) -> ServiceResponse:
-        """
-        Get current complete consciousness state.
+        def get_consciousness_state(self) -> ConsciousnessStateResponse:
+            """Get current consciousness state."""
+            response = self.get(f"{self.api_prefix}/state")
+            return ConsciousnessStateResponse(**response.json())
 
-        Returns:
-            ServiceResponse with:
-            - timestamp: Current time
-            - esgt_active: Whether ESGT is active
-            - arousal_level: Current arousal (0-1)
-            - arousal_classification: Arousal level name
-            - tig_metrics: TIG fabric metrics
-            - recent_events_count: Number of recent events
-            - system_health: Overall health status
-        """
-        return self.get("/api/consciousness/state")
+        def trigger_esgt(self, salience: SalienceInput) -> Dict[str, Any]:
+            """Trigger ESGT ignition."""
+            response = self.post(
+                f"{self.api_prefix}/esgt/trigger",
+                json=salience.model_dump()
+            )
+            return response.json()
 
-    def trigger_esgt_event(self, salience: Dict[str, float], context: Optional[Dict[str, Any]] = None) -> ServiceResponse:
-        """
-        Manually trigger ESGT ignition event.
+        def get_esgt_events(self, limit: int = 20) -> List[ESGTEventResponse]:
+            """Get recent ESGT events."""
+            response = self.get(
+                f"{self.api_prefix}/esgt/events",
+                params={"limit": limit}
+            )
+            return [ESGTEventResponse(**event) for event in response.json()]
 
-        Args:
-            salience: Dict with 'novelty', 'relevance', 'urgency' (0-1)
-            context: Additional context for the event
+        def adjust_arousal(self, adjustment: ArousalAdjustment) -> Dict[str, Any]:
+            """Adjust arousal level."""
+            response = self.post(
+                f"{self.api_prefix}/arousal/adjust",
+                json=adjustment.model_dump()
+            )
+            return response.json()
 
-        Returns:
-            ServiceResponse with ignition result
-        """
-        payload = {
-            "novelty": salience.get("novelty", 0.5),
-            "relevance": salience.get("relevance", 0.5),
-            "urgency": salience.get("urgency", 0.5),
-            "context": context or {}
-        }
-        return self.post("/api/consciousness/trigger", json=payload)
+        def get_safety_status(self) -> SafetyStatusResponse:
+            """Get safety protocol status."""
+            response = self.get(f"{self.api_prefix}/safety/status")
+            return SafetyStatusResponse(**response.json())
 
-    # ========================================================================
-    # PREDICTIVE CODING
-    # ========================================================================
-
-    def process_query(self, query: str, context: Optional[Dict[str, Any]] = None) -> ServiceResponse:
-        """
-        Process query through MAXIMUS integrated system.
-
-        Args:
-            query: Natural language query
-            context: Additional context
-
-        Returns:
-            ServiceResponse with processed result
-        """
-        payload = {
-            "query": query,
-            "context": context or {}
-        }
-        return self.post("/api/process", json=payload)
-
-    # ========================================================================
-    # NEUROMODULATION
-    # ========================================================================
-
-    def adjust_arousal(self, delta: float, duration: float = 5.0, source: str = "cli") -> ServiceResponse:
-        """
-        Adjust arousal level for neuromodulation.
-
-        Args:
-            delta: Arousal change (-0.5 to +0.5)
-            duration: Duration in seconds
-            source: Source identifier
-
-        Returns:
-            ServiceResponse with new arousal state
-        """
-        payload = {
-            "delta": max(-0.5, min(0.5, delta)),
-            "duration_seconds": duration,
-            "source": source
-        }
-        return self.post("/api/consciousness/arousal", json=payload)
-
-    def get_arousal_level(self) -> ServiceResponse:
-        """
-        Get current arousal level.
-
-        Returns:
-            ServiceResponse with arousal metrics
-        """
-        response = self.get_consciousness_state()
-        if response.success and response.data:
-            arousal_data = {
-                "arousal_level": response.data.get("arousal_level"),
-                "classification": response.data.get("arousal_classification"),
-                "timestamp": response.data.get("timestamp")
-            }
-            return ServiceResponse(success=True, data=arousal_data)
-        return response
-
-    # ========================================================================
-    # EVENT HISTORY
-    # ========================================================================
-
-    def get_recent_events(self, limit: int = 10) -> ServiceResponse:
-        """
-        Get recent consciousness events.
-
-        Args:
-            limit: Maximum number of events
-
-        Returns:
-            ServiceResponse with event history
-        """
-        return self.get(f"/api/consciousness/events?limit={limit}")
-
-    def get_event_by_id(self, event_id: str) -> ServiceResponse:
-        """
-        Get specific consciousness event by ID.
-
-        Args:
-            event_id: Event identifier
-
-        Returns:
-            ServiceResponse with event details
-        """
-        return self.get(f"/api/consciousness/events/{event_id}")
-
-    # ========================================================================
-    # SAFETY & MONITORING
-    # ========================================================================
-
-    def get_safety_status(self) -> ServiceResponse:
-        """
-        Get safety protocol status.
-
-        Returns:
-            ServiceResponse with safety metrics
-        """
-        return self.get("/api/consciousness/safety/status")
-
-    def get_metrics(self) -> ServiceResponse:
-        """
-        Get Prometheus metrics.
-
-        Returns:
-            ServiceResponse with metrics data
-        """
-        return self.get("/metrics")
-
-    # ========================================================================
-    # INTEGRATION HELPER
-    # ========================================================================
-
-    def is_conscious(self) -> bool:
-        """
-        Check if consciousness system is active.
-
-        Returns:
-            True if ESGT is active
-        """
-        response = self.get_consciousness_state()
-        if response.success and response.data:
-            return response.data.get("esgt_active", False)
-        return False
-
-    def get_consciousness_metrics(self) -> Optional[Dict[str, Any]]:
-        """
-        Get consciousness metrics summary.
-
-        Returns:
-            Dictionary with key metrics or None
-        """
-        response = self.get_consciousness_state()
-        if response.success and response.data:
-            return {
-                "esgt_active": response.data.get("esgt_active"),
-                "arousal_level": response.data.get("arousal_level"),
-                "arousal_class": response.data.get("arousal_classification"),
-                "events_count": response.data.get("recent_events_count"),
-                "health": response.data.get("system_health"),
-                "timestamp": response.data.get("timestamp")
-            }
-        return None
+else:
+    class MaximusClient:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("httpx required: pip install httpx")
