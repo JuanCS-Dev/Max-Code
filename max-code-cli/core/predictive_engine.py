@@ -189,10 +189,12 @@ class ProjectDetector:
     """Project type detection helper."""
 
     @staticmethod
-    def detect_type(directory: Path = None) -> ProjectType:
+    def detect_type(directory = None) -> ProjectType:
         """Detect project type from files in directory."""
         if directory is None:
             directory = Path.cwd()
+        elif not isinstance(directory, Path):
+            directory = Path(directory)
 
         # Check for language-specific files
         if (directory / "pyproject.toml").exists() or (directory / "setup.py").exists():

@@ -255,7 +255,12 @@ class LocalDatabase:
         """Delete all data (GDPR Article 17 - Right to erasure)."""
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("DELETE FROM executions")
-            conn.execute("VACUUM")  # Reclaim space
+            conn.commit()
+
+        # VACUUM must be run outside transaction
+        conn = sqlite3.connect(self.db_path)
+        conn.execute("VACUUM")  # Reclaim space
+        conn.close()
 
 
 class AdaptiveLearningSystem:
