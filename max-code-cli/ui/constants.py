@@ -100,16 +100,29 @@ STATUS_COLORS: Dict[str, str] = {
 # GRADIENT COLORS
 # ============================================================================
 
-# Neon gradient (green → cyan → blue)
-NEON_GRADIENT: list = ['#0FFF50', '#00F0FF', '#0080FF', '#0040FF']
+# Neon gradient (green → cyan → blue → yellow) - OFFICIAL PALETTE
+NEON_GRADIENT: list = ['#0FFF50', '#00F0FF', '#0080FF', '#FFFF00']
+
+# Neon palette (individual colors)
+NEON_PALETTE: Dict[str, str] = {
+    'primary': '#0FFF50',      # Neon green
+    'secondary': '#00F0FF',    # Cyan
+    'tertiary': '#0080FF',     # Blue
+    'accent': '#FFFF00',       # Yellow
+    'success': '#00FF00',      # Success green
+    'error': '#FF0040',        # Error red
+    'warning': '#FFD700',      # Warning gold
+    'info': '#00BFFF',         # Info blue
+}
 
 # Alternative gradients
 GRADIENTS: Dict[str, list] = {
-    'neon': ['#0FFF50', '#00F0FF', '#0080FF', '#0040FF'],
+    'neon': ['#0FFF50', '#00F0FF', '#0080FF', '#FFFF00'],  # Official
     'fire': ['#FF0000', '#FF6600', '#FFCC00', '#FFFF00'],
     'ocean': ['#0080FF', '#00C0FF', '#00FFFF', '#00FF80'],
     'sunset': ['#FF0080', '#FF6600', '#FFCC00', '#FFFF80'],
     'matrix': ['#00FF00', '#00CC00', '#008800', '#004400'],
+    'cyberpunk': ['#FF1493', '#00FFFF', '#FF00FF', '#FFFF00'],
 }
 
 # ============================================================================
@@ -208,6 +221,93 @@ PERFORMANCE_TARGETS = {
 }
 
 # ============================================================================
+# NERD FONTS ICONS (3,600+ icons available)
+# ============================================================================
+# Requires Nerd Font installed (e.g., FiraCode Nerd Font, JetBrains Mono Nerd Font)
+
+NERD_ICONS = {
+    # Agents
+    'agent_sophia': '󰉋',    # Atom (architect/co-architect)
+    'agent_plan': '',      # Strategy
+    'agent_code': '',      # Terminal (developer)
+    'agent_test': '󰙨',      # Shield check (tester)
+    'agent_review': '',    # Eye (reviewer)
+    'agent_fix': '',       # Wrench (debugger)
+    'agent_docs': '󰈙',      # Book (documentation)
+    'agent_explore': '',   # Compass (explorer)
+    'agent_sleep': '󰒲',     # Moon (sleep mode)
+
+    # Status indicators
+    'success': '',        # Check circle
+    'error': '',          # Error circle
+    'warning': '',        # Alert triangle
+    'info': '',           # Info circle
+    'processing': '',     # Sync/loading
+    'active': '',         # Dot circle active
+    'idle': '',           # Dot circle outline
+    'completed': '',      # Check box
+    'failed': '',         # Close box
+
+    # Constitutional principles (symbolic)
+    'p1': '󰝖',              # Completeness (checklist)
+    'p2': '',             # Transparency (eye)
+    'p3': '',             # Truth (scale/balance)
+    'p4': '',             # Sovereignty (shield user)
+    'p5': '󰒓',              # Systemic (network)
+    'p6': '󰓅',              # Efficiency (speedometer)
+    'kantian': '',        # Philosophy/ethics
+
+    # Files and folders
+    'file': '',
+    'folder': '',
+    'folder_open': '',
+    'file_code': '',
+    'file_python': '',
+    'file_js': '',
+    'file_json': '',
+    'file_md': '',
+
+    # Git
+    'git': '',
+    'git_branch': '',
+    'git_commit': '',
+    'git_merge': '',
+    'git_pull': '',
+    'git_push': '',
+
+    # General
+    'rocket': '',         # Launch/deployment
+    'fire': '',           # Critical/hot
+    'sparkles': '✨',       # Special/highlight
+    'book': '📖',          # Documentation/verses
+    'light': '💡',         # Idea/suggestion
+    'target': '',         # Goal/target
+    'trophy': '',         # Achievement
+    'clock': '',          # Time/duration
+    'cpu': '󰘚',            # Processing
+    'memory': '󰍛',         # RAM/memory
+    'database': '',       # Data/storage
+    'cloud': '󰅟',          # Cloud/MAXIMUS
+    'link': '',           # Connection/link
+    'lock': '',           # Security/locked
+    'unlock': '',         # Unlocked
+    'key': '',            # Auth/key
+}
+
+# Spinners per agent (icon + color)
+AGENT_SPINNERS = {
+    'sophia': ('󰉋', 'gold1'),
+    'plan': ('', 'cyan'),
+    'code': ('', 'blue'),
+    'test': ('󰙨', 'green'),
+    'review': ('', 'orange3'),
+    'fix': ('', 'red'),
+    'docs': ('󰈙', 'purple'),
+    'explore': ('', 'cyan'),
+    'sleep': ('󰒲', 'deep_sky_blue1'),
+}
+
+# ============================================================================
 # UNICODE BOX-DRAWING CHARACTERS
 # ============================================================================
 
@@ -220,6 +320,20 @@ BOX_CHARS = {
     'vertical': '║',
     'left_t': '╟',
     'right_t': '╢',
+
+    # Additional box styles
+    'rounded_tl': '╭',
+    'rounded_tr': '╮',
+    'rounded_bl': '╰',
+    'rounded_br': '╯',
+
+    # Light box drawing
+    'light_h': '─',
+    'light_v': '│',
+    'light_tl': '┌',
+    'light_tr': '┐',
+    'light_bl': '└',
+    'light_br': '┘',
 }
 
 # ============================================================================
@@ -236,9 +350,14 @@ __all__ = [
     'STATUS_SYMBOLS',
     'STATUS_COLORS',
     'NEON_GRADIENT',
+    'NEON_PALETTE',          # NEW
     'GRADIENTS',
     'LOG_LEVEL_COLORS',
     'LOG_LEVEL_SYMBOLS',
+
+    # Icons
+    'NERD_ICONS',            # NEW
+    'AGENT_SPINNERS',        # NEW
 
     # Configuration
     'TABLE_CONFIG',
