@@ -417,5 +417,13 @@ def _bool_status(value: bool) -> str:
     return "[green]✓ Enabled[/green]" if value else "[red]✗ Disabled[/red]"
 
 
+# Import and register health command (FASE 7)
+try:
+    from cli.health_command import health
+    cli.add_command(health, name='health')
+except ImportError as e:
+    console.print(f"[yellow]Warning: Health command not available: {e}[/yellow]")
+
+
 if __name__ == '__main__':
     cli()
