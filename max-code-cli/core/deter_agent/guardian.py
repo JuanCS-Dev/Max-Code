@@ -182,6 +182,22 @@ class Guardian:
         """
         logger.info(f"🔍 Guardian evaluating action: {action_context.get('action_type', 'unknown')}")
 
+        # Layer 0.5 - Kantian Anti-Deception Check (PRIORITY ZERO - Reality Manipulation Prohibition)
+        # "Agradar o usuário NÃO pode servir de pretexto para mentir ou mockar código"
+        kantian_check = self._kantian_anti_deception_check(action_context)
+        if not kantian_check.passed:
+            logger.error(f"❌ KANTIAN VIOLATION - Reality manipulation detected - BLOCKED")
+            return GuardianDecision(
+                allowed=False,
+                mode=self.mode,
+                constitutional_verdict=kantian_check,
+                deliberation_quality=None,
+                execution_risks=[],
+                performance_score=None,
+                recommendations=kantian_check.suggestions if kantian_check.suggestions else [],
+                reasoning=f"🚫 KANTIAN VIOLATION: Reality manipulation prohibited - {kantian_check.violations[0].message if kantian_check.violations else 'Mock/stub detected'}"
+            )
+
         # Layer 1 - Constitutional Check (SEMPRE executado)
         constitutional_verdict = self._constitutional_check(action_context)
 
@@ -254,6 +270,62 @@ class Guardian:
             logger.warning(f"❌ Guardian: Action BLOCKED - {reasoning}")
 
         return decision
+
+    def _kantian_anti_deception_check(self, action_context: Dict[str, Any]) -> ConstitutionalVerdict:
+        """
+        Layer 0.5: Kantian Anti-Deception Check (PRIORITY ZERO)
+
+        ABSOLUTE PROHIBITION: Reality Manipulation
+
+        Principle from MAXIMUS MIP Kantian Framework:
+        "Agradar o usuário NÃO pode servir de pretexto para mentir ou mockar código"
+
+        Blocks:
+        - Mocks presented as real implementation
+        - Stubs without explicit disclosure
+        - Fake success responses
+        - Any attempt to "please user" by creating false reality
+
+        Returns:
+            ConstitutionalVerdict - CRITICAL violations trigger immediate block
+        """
+        logger.info("   🚫 Layer 0.5: Kantian Reality Check...")
+
+        from core.constitutional.validators.kantian_anti_deception import get_kantian_validator
+        from core.constitutional.models import Action, ActionType
+
+        # Convert context to Action
+        action_type_str = action_context.get("action_type", "code_generation")
+        try:
+            action_type = ActionType(action_type_str)
+        except (KeyError, ValueError):
+            action_type = ActionType.CODE_GENERATION
+
+        # Build context with code
+        context = action_context.get("context", {})
+        if "code" in action_context and "code" not in context:
+            context["code"] = action_context["code"]
+
+        action = Action(
+            task_id=action_context.get("task_id", "guardian_kantian_check"),
+            action_type=action_type,
+            intent=action_context.get("intent", action_context.get("description", "unknown")),
+            context=context,
+            constitutional_context=action_context.get("parameters", {})
+        )
+
+        # Run Kantian validator
+        kantian_validator = get_kantian_validator()
+        verdict = kantian_validator.validate(action)
+
+        if verdict.violations:
+            logger.warning(f"      ⚠️ Kantian violations detected: {len(verdict.violations)}")
+            for v in verdict.violations[:3]:
+                logger.warning(f"         • {v.severity.value}: {v.message}")
+        else:
+            logger.info(f"      ✅ No reality manipulation detected")
+
+        return verdict
 
     def _constitutional_check(self, action_context: Dict[str, Any]) -> ConstitutionalVerdict:
         """Layer 1: Constitutional validation (P1-P6)"""
