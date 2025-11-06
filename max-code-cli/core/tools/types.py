@@ -93,6 +93,33 @@ class ToolResult:
             "metadata": self.metadata
         }
 
+    @property
+    def type(self) -> str:
+        """
+        Get result type as string (for compatibility with task_command.py)
+
+        Returns "success" if first content block is SUCCESS type, "error" otherwise
+        """
+        if not self.content:
+            return "error"
+        first_type = self.content[0].type
+        if first_type == ToolResultType.SUCCESS:
+            return "success"
+        elif first_type == ToolResultType.ERROR:
+            return "error"
+        else:
+            return "success"  # TEXT/IMAGE treated as success
+
+    @property
+    def error_text(self) -> Optional[str]:
+        """Get error message if result is an error (for compatibility)"""
+        if not self.content:
+            return None
+        first_content = self.content[0]
+        if first_content.type == ToolResultType.ERROR:
+            return first_content.text
+        return None
+
 
 @dataclass
 class ToolParameter:

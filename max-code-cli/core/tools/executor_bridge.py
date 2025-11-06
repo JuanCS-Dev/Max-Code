@@ -89,19 +89,21 @@ class UnifiedToolExecutor:
             NewToolResult with execution result
 
         Process:
-            1. Get tool from new registry
+            1. Get tool from new registry (or create on-the-fly)
             2. Convert to old Tool format
             3. Execute via ToolExecutor (Constitutional validation)
             4. Convert result back to NewToolResult
         """
-        # Get tool from new registry
+        # Try to get tool from new registry
         tool_metadata = self.registry.get(tool_name)
 
+        # If not in registry, create on-the-fly for known tools
         if not tool_metadata:
-            return NewToolResult.error(f"Tool '{tool_name}' not found in registry")
-
-        # Convert to old Tool format for ToolExecutor
-        old_tool = self._convert_to_old_tool(tool_metadata, args)
+            # Convert to old Tool format directly (without registry)
+            old_tool = self._create_old_tool_from_name(tool_name, args)
+        else:
+            # Convert to old Tool format for ToolExecutor
+            old_tool = self._convert_to_old_tool(tool_metadata, args)
 
         # Register with ToolExecutor if not already registered
         if tool_name not in self.tool_executor.registered_tools:
@@ -114,6 +116,62 @@ class UnifiedToolExecutor:
         new_result = self._convert_to_new_result(old_result)
 
         return new_result
+
+    def _create_old_tool_from_name(self, tool_name: str, args: Dict[str, Any]) -> OldTool:
+        """
+        Create OldTool directly from tool name (when not in registry)
+
+        Supports known tools:
+        - file_write, file_read, file_edit
+        - bash, execute_bash
+        - glob, grep
+        """
+        # Infer ToolType from tool name
+        tool_type = self._infer_tool_type_from_name(tool_name)
+
+        # Create generic description
+        description = f"Execute {tool_name} operation"
+
+        return OldTool(
+            name=tool_name,
+            type=tool_type,
+            description=description,
+            parameters=args,
+            requires_validation=True,
+            safe_mode=True,
+            timeout=30.0
+        )
+
+    def _infer_tool_type_from_name(self, tool_name: str) -> ToolType:
+        """
+        Infer ToolType from tool name only
+
+        Mapping:
+            - bash/shell/execute_bash → BASH
+            - file_read/read_file → FILE_READ
+            - file_write/write_file → FILE_WRITE
+            - file_edit/edit_file → FILE_EDIT
+            - glob/pattern → GLOB
+            - grep/search → GREP
+            - default → SEARCH
+        """
+        name_lower = tool_name.lower()
+
+        if "bash" in name_lower or "shell" in name_lower or "execute" in name_lower:
+            return ToolType.BASH
+        if ("read" in name_lower or "file_read" in name_lower) and "write" not in name_lower:
+            return ToolType.FILE_READ
+        if "write" in name_lower or "file_write" in name_lower:
+            return ToolType.FILE_WRITE
+        if "edit" in name_lower or "file_edit" in name_lower:
+            return ToolType.FILE_EDIT
+        if "glob" in name_lower or "pattern" in name_lower:
+            return ToolType.GLOB
+        if "grep" in name_lower:
+            return ToolType.GREP
+
+        # Default
+        return ToolType.SEARCH
 
     def _convert_to_old_tool(self, tool_metadata, args: Dict[str, Any]) -> OldTool:
         """
@@ -192,18 +250,24 @@ class UnifiedToolExecutor:
         Convert old ToolResult to new ToolResult
 
         Maps:
-            - SUCCESS → success type
-            - FAILURE/TIMEOUT/BLOCKED → error type
+            - SUCCESS → success type (ToolResult.success creates ToolContent with type=SUCCESS)
+            - FAILURE/TIMEOUT/BLOCKED → error type (ToolResult.error creates ToolContent with type=ERROR)
             - output → content
             - error → error field
+
+        IMPORTANT: OldToolResult uses .status (ToolStatus enum)
+        NewToolResult has .type property that checks content[0].type
         """
         if old_result.status == ToolStatus.SUCCESS:
+            # Create success result - .type property will return "success"
+            # IMPORTANT: success() expects 'text' parameter, not 'content'
             return NewToolResult.success(
-                content=str(old_result.output) if old_result.output else ""
+                text=str(old_result.output) if old_result.output else ""
             )
         else:
             error_msg = old_result.error or f"Execution failed with status: {old_result.status.value}"
-            return NewToolResult.error(error_msg)
+            # Create error result - .type property will return "error"
+            return NewToolResult.error(error_message=error_msg)
 
     def get_execution_history(self):
         """Get execution history from ToolExecutor (audit trail - P4)"""

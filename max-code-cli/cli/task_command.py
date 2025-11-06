@@ -265,10 +265,10 @@ async def _execute_plan(plan, executor, stream: bool = True, show_tools: bool = 
                         console.print(f"[green]✓ Success:[/green] {result.content[:100] if result.content else ''}...")
                 else:
                     step.executed = True
-                    step.error = result.error or "Unknown error"
+                    step.error = result.error_text or "Unknown error"
                     failed_steps += 1
 
-                    console.print(f"[red]✗ Failed:[/red] {result.error or 'Unknown error'}")
+                    console.print(f"[red]✗ Failed:[/red] {result.error_text or 'Unknown error'}")
 
                     # Stop on first failure (can be made configurable)
                     console.print("[yellow]⚠ Stopping execution due to failure[/yellow]")
@@ -279,6 +279,12 @@ async def _execute_plan(plan, executor, stream: bool = True, show_tools: bool = 
                 failed_steps += 1
 
                 console.print(f"[red]✗ Exception:[/red] {e}")
+
+                # Show full traceback if show_tools is enabled
+                if show_tools:
+                    import traceback
+                    console.print(f"[dim]{traceback.format_exc()}[/dim]")
+
                 break
 
             # Update progress
