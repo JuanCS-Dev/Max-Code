@@ -47,12 +47,63 @@ class AgentTask:
 
 @dataclass
 class AgentResult:
-    """Resultado da execução do agente"""
+    """
+    Resultado da execução do agente
+
+    Automaticamente adiciona comentário de Dream (The Realist Contrarian)
+    ao output para fornecer perspectiva alternativa e sugestões construtivas.
+    """
     task_id: str
     success: bool
     output: Any
     error: Optional[str] = None
     metrics: Optional[Dict] = None
+    dream_comment: Optional[str] = None  # Comentário realista construtivo do Dream
+
+    def __post_init__(self):
+        """Adiciona Dream comment automaticamente se não fornecido."""
+        # Import here to avoid circular dependency
+        from core.skeptic import add_skeptical_comment, SkepticalTone
+
+        # Se dream_comment já foi fornecido, não sobrescrever
+        if self.dream_comment is not None:
+            return
+
+        # Se output é string, adicionar Dream comment
+        if isinstance(self.output, str) and len(self.output) > 100:
+            # Build context from metrics
+            context = self.metrics if self.metrics else {}
+
+            # Add Dream comment (BALANCED tone by default)
+            try:
+                output_with_dream = add_skeptical_comment(
+                    self.output,
+                    context,
+                    tone=SkepticalTone.BALANCED
+                )
+                # Store Dream comment separately (don't modify output)
+                # Extract just the Dream part
+                if "Dream (The" in output_with_dream:
+                    dream_start = output_with_dream.find("="*70, len(self.output))
+                    if dream_start > 0:
+                        self.dream_comment = output_with_dream[dream_start:]
+            except Exception:
+                # If Dream fails, don't break AgentResult
+                self.dream_comment = None
+
+    def get_full_output(self) -> str:
+        """
+        Retorna output completo com Dream comment incluído.
+
+        Use este método para obter output + análise realista do Dream.
+        """
+        if self.dream_comment:
+            return str(self.output) + "\n" + self.dream_comment
+        return str(self.output)
+
+    def print_with_dream(self):
+        """Imprime resultado com Dream comment."""
+        print(self.get_full_output())
 
 
 class BaseAgent(ABC):
