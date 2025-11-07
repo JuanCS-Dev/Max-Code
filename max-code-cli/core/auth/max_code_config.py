@@ -27,7 +27,7 @@ class MaxCodeAuthConfig(BaseAuthConfig):
     """
     Max-Code Auth Config - Override para compatibilidade Claude Code
 
-    Herda tudo do PAI mas ajusta paths para ~/.claude/
+    Herda tudo do PAI mas ajusta paths para ~/.claude/ e scopes para API key creation
     """
 
     # ==================== STORAGE OVERRIDE ====================
@@ -40,6 +40,19 @@ class MaxCodeAuthConfig(BaseAuthConfig):
 
     # Permissões do arquivo (apenas owner pode ler/escrever)
     CREDENTIALS_FILE_PERMISSIONS = 0o600
+
+    # ==================== SCOPES OVERRIDE ====================
+
+    # Scopes OAuth solicitados (inclui org:create_api_key para conversão)
+    # Baseado em engenharia reversa do Claude Code oficial
+    SCOPES = [
+        "openid",                # Identificação do usuário
+        "profile",               # Perfil do usuário
+        "email",                 # Email
+        "offline_access",        # Refresh token (renovação automática)
+        "user:inference",        # API inference (Claude Pro Max)
+        "org:create_api_key",    # Criar API keys (conversão OAuth → API)
+    ]
 
 
 # Alias para facilitar imports

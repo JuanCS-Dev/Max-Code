@@ -102,6 +102,8 @@ def get_anthropic_client(verify_health: bool = False) -> Optional[Anthropic]:
 
     Tries authentication methods in order:
     1. Claude Code credentials file (~/.claude/.credentials.json)
+       - Try apiKey (if exists - PRIORITY 1A)
+       - Convert OAuth → API Key (auto - PRIORITY 1B)
     2. CLAUDE_CODE_OAUTH_TOKEN (OAuth token from environment)
     3. ANTHROPIC_API_KEY (Traditional API key)
 
@@ -116,35 +118,56 @@ def get_anthropic_client(verify_health: bool = False) -> Optional[Anthropic]:
         >>> if client:
         ...     message = client.messages.create(...)
     """
+    from core.auth.token_converter import TokenConverter
+
     # Try Claude Code credentials file first (PRIORITY 1)
     claude_creds = load_claude_credentials()
-    if claude_creds and claude_creds.get("accessToken"):
-        access_token = claude_creds["accessToken"]
-        try:
-            client = Anthropic(api_key=access_token)
+    if claude_creds:
+        # PRIORITY 1A: Try API key (if already converted)
+        api_key = claude_creds.get("apiKey")
+        if api_key and TokenConverter.is_api_key(api_key):
+            logger.info("   🔑 Using converted API key from credentials")
+            try:
+                client = Anthropic(api_key=api_key)
 
-            # Optional health check
-            if verify_health:
-                if not _validate_token_health(access_token):
-                    logger.warning("   ⚠️ Claude Code token failed health check")
-                    # Continue to try other methods
+                if verify_health:
+                    if _validate_token_health(api_key):
+                        logger.info("   ✅ API key validated")
+                        return client
+                    else:
+                        logger.warning("   ⚠️ API key failed health check")
                 else:
-                    logger.info(
-                        "   🔑 Authenticated with Claude Code session (Pro Max) ✓",
-                        extra={"auth_type": "claude_code", "health_check": "passed"}
-                    )
                     return client
+            except Exception as e:
+                logger.warning(f"   ⚠️ API key error: {type(e).__name__}")
+
+        # PRIORITY 1B: Convert OAuth → API Key (automatic)
+        access_token = claude_creds.get("accessToken")
+        if access_token and TokenConverter.is_oauth_token(access_token):
+            logger.info("   🔄 OAuth token detected, converting to API key...")
+
+            # Convert OAuth → API Key
+            api_key = TokenConverter.convert_oauth_to_api_key(access_token)
+
+            if api_key:
+                # Save API key to credentials file
+                _save_api_key_to_credentials(api_key)
+
+                # Use converted API key
+                try:
+                    client = Anthropic(api_key=api_key)
+
+                    if verify_health:
+                        if _validate_token_health(api_key):
+                            logger.info("   ✅ Converted API key validated")
+                            return client
+                    else:
+                        logger.info("   ✅ Using converted API key")
+                        return client
+                except Exception as e:
+                    logger.warning(f"   ⚠️ Converted API key error: {type(e).__name__}")
             else:
-                logger.info(
-                    "   🔑 Authenticated with Claude Code session (Pro Max)",
-                    extra={"auth_type": "claude_code"}
-                )
-                return client
-        except Exception as e:
-            logger.warning(
-                f"   ⚠️ Claude Code token invalid: {type(e).__name__}",
-                extra={"error_type": type(e).__name__}
-            )
+                logger.warning("   ⚠️ OAuth → API Key conversion failed")
 
     # Try OAuth token from environment (PRIORITY 2)
     oauth_token = os.getenv("CLAUDE_CODE_OAUTH_TOKEN")
@@ -404,6 +427,53 @@ def _save_token_to_env(token: str) -> bool:
 
     except Exception as e:
         logger.error(f"   ❌ Failed to save token: {e}")
+        return False
+
+
+def _save_api_key_to_credentials(api_key: str) -> bool:
+    """
+    Save converted API key to credentials file.
+
+    Updates ~/.claude/.credentials.json adding apiKey field.
+
+    Args:
+        api_key: Converted API key (sk-ant-api03-...)
+
+    Returns:
+        True if saved successfully, False otherwise
+    """
+    try:
+        from core.auth.max_code_config import AuthConfig, ensure_config_dir
+
+        # Ensure config directory exists
+        ensure_config_dir()
+        credentials_file = AuthConfig.CREDENTIALS_FILE
+
+        # Load existing credentials
+        if credentials_file.exists():
+            with open(credentials_file, 'r') as f:
+                data = json.load(f)
+        else:
+            data = {"claudeAiOauth": {}}
+
+        # Add API key to credentials
+        if "claudeAiOauth" not in data:
+            data["claudeAiOauth"] = {}
+
+        data["claudeAiOauth"]["apiKey"] = api_key
+
+        # Save updated credentials
+        with open(credentials_file, 'w') as f:
+            json.dump(data, f, indent=2)
+
+        # Set permissions (owner only)
+        credentials_file.chmod(AuthConfig.CREDENTIALS_FILE_PERMISSIONS)
+
+        logger.info(f"   💾 API key saved to {credentials_file}")
+        return True
+
+    except Exception as e:
+        logger.error(f"   ❌ Failed to save API key: {e}")
         return False
 
 
