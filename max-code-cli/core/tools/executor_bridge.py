@@ -24,22 +24,17 @@ import sys
 from .types import ToolResult as NewToolResult
 from .registry import get_registry
 
-# Import ToolExecutor (old system)
-deter_path = Path(__file__).parent.parent / "deter_agent" / "execution"
-if str(deter_path) not in sys.path:
-    sys.path.insert(0, str(deter_path))
-
-from core.deter_agent.execution.tool_executor import (
-    ToolExecutor,
-    Tool as OldTool,
-    ToolType,
-    ToolResult as OldToolResult,
-    ToolStatus
-)
-
 from config.logging_config import get_logger
 
 logger = get_logger(__name__)
+
+# LAZY IMPORT: Import ToolExecutor classes only when needed (avoids circular import)
+# These will be imported in UnifiedToolExecutor.__init__()
+ToolExecutor = None
+OldTool = None
+ToolType = None
+OldToolResult = None
+ToolStatus = None
 
 
 class UnifiedToolExecutor:
@@ -63,6 +58,23 @@ class UnifiedToolExecutor:
             safe_mode: Enable Constitutional validation (P2, P5)
             enable_self_correction: Enable self-correction loops (P5)
         """
+        # LAZY IMPORT: Import here to avoid circular import
+        global ToolExecutor, OldTool, ToolType, OldToolResult, ToolStatus
+
+        if ToolExecutor is None:
+            from core.deter_agent.execution.tool_executor import (
+                ToolExecutor as _ToolExecutor,
+                Tool as _OldTool,
+                ToolType as _ToolType,
+                ToolResult as _OldToolResult,
+                ToolStatus as _ToolStatus
+            )
+            ToolExecutor = _ToolExecutor
+            OldTool = _OldTool
+            ToolType = _ToolType
+            OldToolResult = _OldToolResult
+            ToolStatus = _ToolStatus
+
         self.tool_executor = ToolExecutor(
             safe_mode=safe_mode,
             enable_self_correction=enable_self_correction
@@ -117,7 +129,7 @@ class UnifiedToolExecutor:
 
         return new_result
 
-    def _create_old_tool_from_name(self, tool_name: str, args: Dict[str, Any]) -> OldTool:
+    def _create_old_tool_from_name(self, tool_name: str, args: Dict[str, Any]):
         """
         Create OldTool directly from tool name (when not in registry)
 
@@ -126,6 +138,8 @@ class UnifiedToolExecutor:
         - bash, execute_bash
         - glob, grep
         """
+        global OldTool, ToolType
+
         # Infer ToolType from tool name
         tool_type = self._infer_tool_type_from_name(tool_name)
 
@@ -142,7 +156,7 @@ class UnifiedToolExecutor:
             timeout=30.0
         )
 
-    def _infer_tool_type_from_name(self, tool_name: str) -> ToolType:
+    def _infer_tool_type_from_name(self, tool_name: str):
         """
         Infer ToolType from tool name only
 
@@ -155,6 +169,8 @@ class UnifiedToolExecutor:
             - grep/search → GREP
             - default → SEARCH
         """
+        global ToolType
+
         name_lower = tool_name.lower()
 
         if "bash" in name_lower or "shell" in name_lower or "execute" in name_lower:
@@ -173,7 +189,7 @@ class UnifiedToolExecutor:
         # Default
         return ToolType.SEARCH
 
-    def _convert_to_old_tool(self, tool_metadata, args: Dict[str, Any]) -> OldTool:
+    def _convert_to_old_tool(self, tool_metadata, args: Dict[str, Any]):
         """
         Convert new tool metadata to old Tool format
 
@@ -183,6 +199,8 @@ class UnifiedToolExecutor:
             - args → parameters
             - Infer ToolType from name/tags
         """
+        global OldTool
+
         # Infer ToolType from tool name or tags
         tool_type = self._infer_tool_type(tool_metadata)
 
@@ -196,7 +214,7 @@ class UnifiedToolExecutor:
             timeout=30.0  # Default timeout
         )
 
-    def _infer_tool_type(self, tool_metadata) -> ToolType:
+    def _infer_tool_type(self, tool_metadata):
         """
         Infer ToolType from tool name or tags
 
@@ -210,6 +228,8 @@ class UnifiedToolExecutor:
             - api/http/web → API_CALL
             - default → SEARCH (generic)
         """
+        global ToolType
+
         name_lower = tool_metadata.name.lower()
         tags_lower = [t.lower() for t in tool_metadata.tags]
 
@@ -245,7 +265,7 @@ class UnifiedToolExecutor:
         # Default
         return ToolType.SEARCH
 
-    def _convert_to_new_result(self, old_result: OldToolResult) -> NewToolResult:
+    def _convert_to_new_result(self, old_result) -> NewToolResult:
         """
         Convert old ToolResult to new ToolResult
 
@@ -258,6 +278,8 @@ class UnifiedToolExecutor:
         IMPORTANT: OldToolResult uses .status (ToolStatus enum)
         NewToolResult has .type property that checks content[0].type
         """
+        global ToolStatus
+
         if old_result.status == ToolStatus.SUCCESS:
             # Create success result - .type property will return "success"
             # IMPORTANT: success() expects 'text' parameter, not 'content'
