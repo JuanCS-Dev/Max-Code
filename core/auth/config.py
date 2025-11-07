@@ -15,10 +15,11 @@ class AuthConfig:
     # ==================== ENDPOINTS ====================
 
     # Authorization endpoint (onde user faz login)
-    AUTHORIZATION_URL = "https://claude.ai/oauth/authorize"
+    # NOTA: Usar console.anthropic.com ao invés de claude.ai para compatibilidade com token exchange
+    AUTHORIZATION_URL = "https://console.anthropic.com/oauth/authorize"
 
     # Token exchange endpoint
-    TOKEN_URL = "https://console.anthropic.com/v1/oauth/token"
+    TOKEN_URL = "https://api.anthropic.com/v1/oauth/token"
 
     # API endpoint
     API_BASE_URL = "https://api.anthropic.com/v1"
@@ -34,12 +35,12 @@ class AuthConfig:
 
     # ==================== SCOPES ====================
 
-    # Scopes OAuth solicitados
+    # Scopes OAuth solicitados (Anthropic proprietário)
+    # NOTA: Anthropic NÃO aceita scopes OpenID padrão (openid, profile, email)
+    # Usa scopes proprietários específicos - baseado em Claude Code oficial
     SCOPES = [
-        "openid",           # Identificação do usuário
-        "profile",          # Perfil do usuário
-        "email",            # Email
-        "offline_access",   # Refresh token (para renovação automática)
+        "user:inference",   # API inference (Claude Pro Max)
+        "user:profile",     # Perfil do usuário (Anthropic proprietário)
     ]
 
     # ==================== TOKEN LIFETIMES ====================

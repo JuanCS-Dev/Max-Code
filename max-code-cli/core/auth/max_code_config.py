@@ -43,15 +43,13 @@ class MaxCodeAuthConfig(BaseAuthConfig):
 
     # ==================== SCOPES OVERRIDE ====================
 
-    # Scopes OAuth solicitados (inclui org:create_api_key para conversão)
+    # Scopes OAuth solicitados (APENAS scopes Anthropic-specific)
+    # Anthropic NÃO aceita openid/profile/email padrão OAuth 2.0
     # Baseado em engenharia reversa do Claude Code oficial
     SCOPES = [
-        "openid",                # Identificação do usuário
-        "profile",               # Perfil do usuário
-        "email",                 # Email
-        "offline_access",        # Refresh token (renovação automática)
+        "org:create_api_key",    # Criar API keys (conversão OAuth → API) - DEVE ser primeiro
+        "user:profile",          # Perfil do usuário
         "user:inference",        # API inference (Claude Pro Max)
-        "org:create_api_key",    # Criar API keys (conversão OAuth → API)
     ]
 
 

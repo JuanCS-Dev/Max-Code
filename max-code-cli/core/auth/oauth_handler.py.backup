@@ -169,30 +169,13 @@ def get_anthropic_client(verify_health: bool = False) -> Optional[Anthropic]:
             else:
                 logger.warning("   ⚠️ OAuth → API Key conversion failed")
 
-        # PRIORITY 1C: Use OAuth token directly (if conversion failed)
-        if access_token and TokenConverter.is_oauth_token(access_token):
-            logger.info("   🔑 Using OAuth token directly (Claude Max)")
-            try:
-                client = Anthropic(auth_token=access_token)
-
-                if verify_health:
-                    if _validate_token_health(access_token):
-                        logger.info("   ✅ OAuth token validated")
-                        return client
-                    else:
-                        logger.warning("   ⚠️ OAuth token failed health check")
-                else:
-                    return client
-            except Exception as e:
-                logger.warning(f"   ⚠️ OAuth token error: {type(e).__name__}")
-
     # Try OAuth token from environment (PRIORITY 2)
     oauth_token = os.getenv("CLAUDE_CODE_OAUTH_TOKEN")
     if oauth_token:
         cred_type = get_credential_type(oauth_token)
         if cred_type == CredentialType.OAUTH_TOKEN:
             try:
-                client = Anthropic(auth_token=oauth_token)
+                client = Anthropic(api_key=oauth_token)
 
                 # Optional health check
                 if verify_health:
@@ -504,12 +487,8 @@ def _validate_token_health(token: str) -> bool:
     try:
         from anthropic import Anthropic
 
-        # Create client with token (detect type)
-        cred_type = get_credential_type(token)
-        if cred_type == CredentialType.OAUTH_TOKEN:
-            client = Anthropic(auth_token=token)
-        else:
-            client = Anthropic(api_key=token)
+        # Create client with token
+        client = Anthropic(api_key=token)
 
         # Make minimal request (count tokens - cheapest operation)
         response = client.messages.count_tokens(

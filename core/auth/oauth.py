@@ -426,14 +426,14 @@ class OAuthFlow:
         }
 
         headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'User-Agent': AuthConfig.USER_AGENT,
         }
 
         try:
             response = requests.post(
                 AuthConfig.TOKEN_URL,
-                data=payload,
+                json=payload,
                 headers=headers,
                 timeout=AuthConfig.HTTP_REQUEST_TIMEOUT
             )
@@ -474,14 +474,14 @@ class OAuthFlow:
         }
 
         headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'User-Agent': AuthConfig.USER_AGENT,
         }
 
         try:
             response = requests.post(
                 AuthConfig.TOKEN_URL,
-                data=payload,
+                json=payload,
                 headers=headers,
                 timeout=AuthConfig.HTTP_REQUEST_TIMEOUT
             )
