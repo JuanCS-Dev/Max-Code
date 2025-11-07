@@ -111,6 +111,14 @@ class EnhancedREPL:
         # Agent instances (lazy loading)
         self._agent_instances = {}
 
+        # Status bar for Constitutional AI monitoring
+        from ui.status_bar import StatusBar
+        self.status_bar = StatusBar(console=self.console)
+        self.status_bar.update(
+            git_branch=self._get_git_branch(),
+            tokens_used=0
+        )
+
     def _load_commands(self) -> Dict[str, Dict]:
         """
         Carregar TODOS comandos disponíveis.
@@ -354,6 +362,12 @@ class EnhancedREPL:
             }
             icon = icon_map.get(agent_name, "🤖")
 
+            # Update status bar - agent thinking
+            self.status_bar.update(
+                active_agent=f"{agent_name.capitalize()}Agent",
+                agent_status="thinking"
+            )
+
             console.print(f"\n{icon} [cyan]Invoking {agent_name} agent...[/cyan]\n")
 
             # Process message through agent
@@ -369,11 +383,21 @@ class EnhancedREPL:
                 system_prompt = f"You are the {agent_name} agent. Respond according to your specialization."
                 response = self.claude_client.chat(message, system=system_prompt)
 
+            # Update status bar - agent active/completed
+            self.status_bar.update(
+                agent_status="idle"
+            )
+
             # Display response with beautiful markdown rendering
             self._display_response(response)
             console.print()
 
         except Exception as e:
+            # Reset status bar on error
+            self.status_bar.update(
+                active_agent=None,
+                agent_status="idle"
+            )
             console.print(f"\n[red]Error invoking agent: {e}[/red]\n")
 
     def _display_response(self, response: str):
@@ -520,10 +544,26 @@ class EnhancedREPL:
             console.print(f"\n[red]Error changing theme: {e}[/red]\n")
             console.print("[yellow]Available themes: neon, fire, ocean, matrix, cyberpunk[/yellow]\n")
 
+    def _get_git_branch(self) -> Optional[str]:
+        """Get current git branch name."""
+        try:
+            import subprocess
+            result = subprocess.run(
+                ['git', 'branch', '--show-current'],
+                capture_output=True,
+                text=True,
+                timeout=2
+            )
+            if result.returncode == 0:
+                return result.stdout.strip() or None
+        except Exception:
+            pass
+        return None
+
     def _get_prompt(self) -> HTML:
         """
-        Gerar prompt formatado.
-        Visual clean mas com personalidade.
+        Generate beautiful prompt with MAXIMUS neon colors.
+        Uses green → yellow → cyan gradient for "maximus ⚡ ›"
         """
         # Indicadores de modo
         mode_indicator = ""
@@ -532,12 +572,25 @@ class EnhancedREPL:
         if self.current_agent:
             mode_indicator += f"<yellow>{self.current_agent}</yellow> "
 
-        # Prompt base
-        return HTML(
-            f"{mode_indicator}"
-            "<b><ansicyan>max-code</ansicyan></b> "
-            "<ansigreen>❯</ansigreen> "
-        )
+        # Apply neon gradient to prompt using hex colors
+        # MAXIMUS neon: #00FF41 (green) → #FFFF00 (yellow) → #00D4FF (cyan)
+        prompt_parts = [
+            mode_indicator,
+            '<style fg="#00FF41">m</style>',
+            '<style fg="#33FF33">a</style>',
+            '<style fg="#66FF26">x</style>',
+            '<style fg="#99FF1A">i</style>',
+            '<style fg="#CCFF0D">m</style>',
+            '<style fg="#FFFF00">u</style>',
+            '<style fg="#CCEE11">s</style>',
+            ' ',
+            '<style fg="#00D4FF">⚡</style>',
+            ' ',
+            '<style fg="#00FF88">›</style>',
+            ' '
+        ]
+
+        return HTML(''.join(prompt_parts))
 
     def _process_command(self, user_input: str):
         """Processar comando ou natural language"""
@@ -589,11 +642,16 @@ class EnhancedREPL:
             console.print("[yellow]💡 Check your authentication: max-code auth login[/yellow]\n")
 
     def run(self):
-        """Rodar enhanced REPL"""
+        """Run enhanced REPL with magnificent visuals"""
         # Welcome banner
         print_banner()
 
         console.print("[dim]Type /help for commands or Ctrl+P for command palette[/dim]")
+        console.print()
+
+        # Display initial status bar
+        console.print("[dim]Status:[/dim]")
+        self.status_bar.render()
         console.print()
 
         # Main loop
