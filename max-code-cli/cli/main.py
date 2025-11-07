@@ -491,12 +491,26 @@ def repl():
     - Command history (↑/↓)
     - Auto-completion (Tab)
     - Special commands (/help, /agents, /status, etc)
+    - Command palette (Ctrl+P)
+    - Agent shortcuts (/sophia, /code, /test, etc)
+    - DREAM mode (Ctrl+D)
 
     Example:
       max-code repl
     """
-    from cli.repl import start_repl
-    start_repl()
+    from cli.repl_enhanced import start_enhanced_repl
+    start_enhanced_repl()
+
+
+@cli.command()
+def shell():
+    """
+    Start interactive REPL shell (alias for 'repl').
+
+    Same as 'max-code repl' - launches Enhanced REPL with all features.
+    """
+    from cli.repl_enhanced import start_enhanced_repl
+    start_enhanced_repl()
 
 
 if __name__ == '__main__':
