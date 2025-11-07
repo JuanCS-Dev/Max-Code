@@ -496,6 +496,22 @@ def start_repl():
     # Print welcome
     print_welcome()
 
+    # Check Claude CLI authentication (non-blocking)
+    from core.llm import check_claude_cli_available
+    if not check_claude_cli_available():
+        console.print("[yellow]⚠ Warning:[/yellow] [red]Claude CLI not found[/red]")
+        console.print("[dim]Install: npm install -g @anthropic-ai/claude-code[/dim]")
+        console.print("[dim]Login: claude login[/dim]")
+        console.print()
+    else:
+        # Claude CLI is available, verify it works
+        from core.llm import verify_claude_cli_setup
+        status = verify_claude_cli_setup()
+        if not status.get("authenticated"):
+            console.print("[yellow]⚠ Warning:[/yellow] [red]Claude CLI not authenticated[/red]")
+            console.print("[dim]Run: claude login[/dim]")
+            console.print()
+
     # Main REPL loop
     while True:
         try:

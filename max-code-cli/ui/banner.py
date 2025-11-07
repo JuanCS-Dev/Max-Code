@@ -201,9 +201,9 @@ class MaxCodeBanner:
 
         if context:
             if 'model' in context:
-                subtitle_parts.append(f"{NERD_ICONS.get('cpu', '⚡')} {context['model']}")
+                subtitle_parts.append(f"⚡ {context['model']}")  # Lightning bolt for model
             if 'session' in context:
-                subtitle_parts.append(f"{NERD_ICONS.get('database', '📊')} Session: {context['session']}")
+                subtitle_parts.append(f"📊 Session: {context['session']}")
 
         subtitle = " | ".join(subtitle_parts)
 
@@ -229,15 +229,22 @@ class MaxCodeBanner:
         self.console.print()
 
     def _show_principles(self):
-        """Display constitutional principles status with beautiful colors and Nerd Fonts icons."""
-        from ui.constants import NERD_ICONS
+        """Display constitutional principles status with beautiful colors and simple emojis."""
+        # Use simple Unicode symbols that work in all terminals
+        # No Nerd Fonts required - these are standard Unicode
+        principle_icons = {
+            'P1': '∞',   # Transcendence (infinity)
+            'P2': '⚡',  # Reasoning (lightning)
+            'P3': '♥',   # Care (heart)
+            'P4': '◆',   # Wisdom (diamond)
+            'P5': '✦',   # Beauty (star)
+            'P6': '⚙',   # Autonomy (gear)
+        }
 
         status_parts = []
 
         for code, name, color in self.PRINCIPLES:
-            # Get icon for principle (with fallback to dot)
-            icon_key = code.lower()  # p1, p2, p3, etc.
-            icon = NERD_ICONS.get(icon_key, '●')
+            icon = principle_icons.get(code, '●')
             status_parts.append(f"[{color}]{icon}[/{color}] {code}")
 
         status_line = "  ".join(status_parts)
