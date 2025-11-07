@@ -489,22 +489,22 @@ def start_repl():
     # Print welcome
     print_welcome()
 
-    # Check Claude CLI authentication (non-blocking)
+    # Quick check if Claude CLI is available (non-blocking, no test call)
     from core.llm import check_claude_cli_available
-    if not check_claude_cli_available():
-        console.print("[yellow]⚠ Warning:[/yellow] [red]Claude CLI not found[/red]")
+    from pathlib import Path
+
+    cli_available = check_claude_cli_available()
+    credentials_exist = (Path.home() / ".claude" / ".credentials.json").exists()
+
+    if not cli_available:
+        console.print("[yellow]⚠ Warning:[/yellow] [red]'claude' command not found[/red]")
         console.print("[dim]Install: npm install -g @anthropic-ai/claude-code[/dim]")
-        console.print("[dim]Then run (outside this shell): claude login[/dim]")
+        console.print("[dim]Then run: claude login[/dim]")
         console.print()
-    else:
-        # Claude CLI is available, verify it works
-        from core.llm import verify_claude_cli_setup
-        status = verify_claude_cli_setup()
-        if not status.get("authenticated"):
-            console.print("[yellow]⚠ Warning:[/yellow] [red]Claude CLI not authenticated[/red]")
-            console.print("[dim]Exit this shell (Ctrl+D) and run: [bold]claude login[/bold][/dim]")
-            console.print("[dim]Then restart max-code[/dim]")
-            console.print()
+    elif not credentials_exist:
+        console.print("[yellow]⚠ Warning:[/yellow] [red]Not authenticated[/red]")
+        console.print("[dim]Run: [bold]claude login[/bold][/dim]")
+        console.print()
 
     # Main REPL loop
     while True:
