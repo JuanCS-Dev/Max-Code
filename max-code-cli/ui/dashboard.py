@@ -359,3 +359,7 @@ if __name__ == "__main__":
     print("\n" + "=" * 70)
     print("DEMO COMPLETE")
     print("=" * 70)
+
+
+# Alias for simpler imports in repl_enhanced.py
+Dashboard = MaxCodeDashboard

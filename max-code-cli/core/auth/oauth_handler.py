@@ -439,6 +439,34 @@ def _validate_token_health(token: str) -> bool:
         return False
 
 
+def initiate_browser_oauth_flow() -> bool:
+    """
+    Iniciar OAuth flow via browser (como claude-code).
+
+    Opens browser for user authentication, captures callback, and saves token.
+
+    Returns:
+        True se sucesso, False caso contrário
+
+    Example:
+        >>> if initiate_browser_oauth_flow():
+        ...     print("Authentication successful!")
+        ...     client = get_anthropic_client()
+    """
+    from core.auth.oauth_flow import OAuthFlow
+
+    flow = OAuthFlow()
+    success = flow.initiate_flow()
+
+    if success:
+        logger.info("✅ OAuth flow completed successfully")
+        logger.info("   Token saved to ~/.claude/.credentials.json")
+    else:
+        logger.error("❌ OAuth flow failed")
+
+    return success
+
+
 # ============================================================================
 # DEMO
 # ============================================================================

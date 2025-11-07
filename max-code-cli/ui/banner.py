@@ -312,6 +312,47 @@ def show_banner(
     banner.show(version, context, style)
 
 
+def print_banner():
+    """
+    Helper function for Enhanced REPL - prints welcome banner.
+
+    Cinematográfico mas clean - como Apple ou Vercel.
+    """
+    console = Console()
+
+    # ASCII art clean (não excessivo)
+    logo = """
+    ███╗   ███╗ █████╗ ██╗  ██╗      ██████╗ ██████╗ ██████╗ ███████╗
+    ████╗ ████║██╔══██╗╚██╗██╔╝     ██╔════╝██╔═══██╗██╔══██╗██╔════╝
+    ██╔████╔██║███████║ ╚███╔╝█████╗██║     ██║   ██║██║  ██║█████╗
+    ██║╚██╔╝██║██╔══██║ ██╔██╗╚════╝██║     ██║   ██║██║  ██║██╔══╝
+    ██║ ╚═╝ ██║██║  ██║██╔╝ ██╗     ╚██████╗╚██████╔╝██████╔╝███████╗
+    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝      ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝
+    """
+
+    # Info concisa
+    info = (
+        "[bold cyan]MAX-CODE CLI[/bold cyan] [dim]v1.0.0-alpha[/dim]\n"
+        "[dim]AI Development Assistant powered by Claude[/dim]\n\n"
+        "[green]●[/green] 8 specialized agents  "
+        "[blue]●[/blue] Constitutional AI  "
+        "[magenta]●[/magenta] MAXIMUS integration"
+    )
+
+    # Panel com gradiente sutil (Padrão Pagani: clean, minimal, memorável)
+    from rich import box
+    panel = Panel(
+        f"[cyan]{logo}[/cyan]\n\n{info}",
+        border_style="cyan",
+        box=box.DOUBLE,
+        padding=(1, 2)
+    )
+
+    console.print("\n")
+    console.print(panel)
+    console.print("\n")
+
+
 # Demo/test code
 if __name__ == "__main__":
     import time
