@@ -50,10 +50,10 @@ def cli(ctx, version, no_banner):
         console.print(f"Claude Model: [magenta]{settings.claude.model}[/magenta]\n")
         ctx.exit()
 
-    # Start REPL if no command provided (FASE 1 - Interactive Shell)
+    # Start Enhanced REPL if no command provided (FASE 1 - Interactive Shell)
     if ctx.invoked_subcommand is None:
-        from cli.repl import start_repl
-        start_repl()
+        from cli.repl_enhanced import start_enhanced_repl
+        start_enhanced_repl()
 
 
 @cli.command()
