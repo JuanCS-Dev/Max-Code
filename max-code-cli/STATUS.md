@@ -126,4 +126,30 @@ max-code
 
 ---
 
-**🎉 META ALCANÇADA**: Shell 100% funcional, IMPECÁVEL e ROBUSTO!
+## ⚠️ ESTADO REAL DO PROJETO
+
+**Shell está FUNCIONAL mas NÃO IMPECÁVEL**
+
+### ✅ O que funciona:
+- Banner com gradiente (minimalista)
+- Auto-completion básico (Tab)
+- História (↑/↓)
+- 12 comandos especiais
+- Claude Pro Max integration (subprocess)
+- Startup rápido (<100ms)
+
+### ❌ O que FALTA para ser "impecável":
+- Fuzzy dropdown ao apertar `/`
+- Command palette (Ctrl+P)
+- Live suggestions inline
+- Keyboard shortcuts visíveis
+- Command preview/help
+- Dropdown visual com descrições
+
+### 📝 Próximos Passos (Cursor/Codex):
+1. Adicionar FuzzyCompleter do prompt_toolkit
+2. Implementar command palette com keybindings
+3. Adicionar floating window para suggestions
+4. Preview de comandos inline
+
+**Status**: INCOMPLETO - Continuar no Cursor/Codex
