@@ -444,6 +444,7 @@ def initiate_browser_oauth_flow() -> bool:
     Iniciar OAuth flow via browser (como claude-code).
 
     Opens browser for user authentication, captures callback, and saves token.
+    USES PARENT IMPLEMENTATION - No duplication.
 
     Returns:
         True se sucesso, False caso contrário
@@ -453,18 +454,37 @@ def initiate_browser_oauth_flow() -> bool:
         ...     print("Authentication successful!")
         ...     client = get_anthropic_client()
     """
-    from core.auth.oauth_flow import OAuthFlow
+    # Import from parent project (eliminates duplication)
+    from core.auth.oauth import initiate_oauth_login
+    from core.auth.config import AuthConfig
 
-    flow = OAuthFlow()
-    success = flow.initiate_flow()
+    # Call parent implementation
+    tokens = initiate_oauth_login()
 
-    if success:
+    if tokens:
+        # Save tokens to credentials file
+        AuthConfig.ensure_config_dir()
+        credentials_file = AuthConfig.CREDENTIALS_FILE
+
+        import time
+        credentials = {
+            "accessToken": tokens['access_token'],
+            "refreshToken": tokens['refresh_token'],
+            "expiresAt": int(time.time()) + tokens['expires_in'],
+        }
+
+        with open(credentials_file, 'w') as f:
+            json.dump({"claudeAiOauth": credentials}, f, indent=2)
+
+        # Set permissions (owner only)
+        credentials_file.chmod(AuthConfig.CREDENTIALS_FILE_PERMISSIONS)
+
         logger.info("✅ OAuth flow completed successfully")
-        logger.info("   Token saved to ~/.claude/.credentials.json")
+        logger.info(f"   Token saved to {credentials_file}")
+        return True
     else:
         logger.error("❌ OAuth flow failed")
-
-    return success
+        return False
 
 
 # ============================================================================
