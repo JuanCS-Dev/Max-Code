@@ -456,14 +456,14 @@ def initiate_browser_oauth_flow() -> bool:
     """
     # Import from parent project (eliminates duplication)
     from core.auth.oauth import initiate_oauth_login
-    from core.auth.config import AuthConfig
+    from core.auth.max_code_config import AuthConfig, ensure_config_dir
 
     # Call parent implementation
     tokens = initiate_oauth_login()
 
     if tokens:
-        # Save tokens to credentials file
-        AuthConfig.ensure_config_dir()
+        # Save tokens to credentials file (using max-code override: ~/.claude/)
+        ensure_config_dir()
         credentials_file = AuthConfig.CREDENTIALS_FILE
 
         import time

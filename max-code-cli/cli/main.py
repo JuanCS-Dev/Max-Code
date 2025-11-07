@@ -97,6 +97,70 @@ def init(profile, interactive):
 
 
 @cli.command()
+def setup():
+    """
+    One-time setup for Max-Code CLI.
+
+    Creates configuration directory (~/.claude/) and guides through OAuth authentication.
+
+    This command:
+    1. Creates ~/.claude/ directory
+    2. Checks for existing authentication
+    3. Guides through OAuth login if needed
+    4. Verifies authentication works
+
+    Example:
+      max-code setup
+    """
+    from core.auth.max_code_config import ensure_config_dir, get_config_dir, get_credentials_file_path
+    from core.auth.oauth_handler import get_anthropic_client
+
+    console.print("\n[bold cyan]═══════════════════════════════════════════════════════[/bold cyan]")
+    console.print("[bold cyan]       MAX-CODE CLI - FIRST TIME SETUP               [/bold cyan]")
+    console.print("[bold cyan]═══════════════════════════════════════════════════════[/bold cyan]\n")
+
+    # Step 1: Create config directory
+    console.print("[bold yellow]Step 1:[/bold yellow] Creating configuration directory...")
+    ensure_config_dir()
+    config_dir = get_config_dir()
+    console.print(f"[green]✓[/green] Directory created: [white]{config_dir}[/white]\n")
+
+    # Step 2: Check existing authentication
+    console.print("[bold yellow]Step 2:[/bold yellow] Checking existing authentication...")
+    client = get_anthropic_client()
+
+    if client:
+        console.print("[green]✓[/green] Authentication already configured!")
+        console.print(f"   Credentials: [white]{get_credentials_file_path()}[/white]\n")
+
+        console.print("[bold green]Setup complete! You're ready to use max-code.[/bold green]\n")
+
+        console.print("[bold yellow]Try these commands:[/bold yellow]")
+        console.print("  [cyan]max-code shell[/cyan]        # Enhanced REPL")
+        console.print("  [cyan]max-code chat[/cyan]         # Chat with Claude")
+        console.print("  [cyan]max-code auth status[/cyan]  # Check authentication\n")
+
+    else:
+        console.print("[yellow]⚠[/yellow]  No authentication found.\n")
+
+        console.print("[bold yellow]Step 3:[/bold yellow] Setting up OAuth authentication...")
+        console.print("\nTo authenticate with Claude, you have two options:\n")
+
+        console.print("[bold]Option 1 (RECOMMENDED):[/bold] OAuth Browser Login")
+        console.print("  [cyan]max-code auth login[/cyan]")
+        console.print("  - Opens browser for Claude.ai login")
+        console.print("  - Uses your Claude Pro/Max subscription")
+        console.print("  - Tokens auto-refresh automatically\n")
+
+        console.print("[bold]Option 2:[/bold] API Key (consumes credits)")
+        console.print("  Set environment variable:")
+        console.print("  [white]export ANTHROPIC_API_KEY=\"sk-ant-api...\"[/white]\n")
+
+        console.print("[bold yellow]Next step:[/bold yellow]")
+        console.print("  Run: [cyan]max-code auth login[/cyan]\n")
+
+
+@cli.command()
 def config():
     """
     Show current configuration.
