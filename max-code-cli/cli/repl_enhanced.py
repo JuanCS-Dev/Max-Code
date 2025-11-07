@@ -21,6 +21,7 @@ from prompt_toolkit.history import FileHistory
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+from rich.markdown import Markdown
 from typing import Dict, Callable, Optional
 import sys
 from pathlib import Path
@@ -368,12 +369,43 @@ class EnhancedREPL:
                 system_prompt = f"You are the {agent_name} agent. Respond according to your specialization."
                 response = self.claude_client.chat(message, system=system_prompt)
 
-            # Display response
-            console.print(response)
+            # Display response with beautiful markdown rendering
+            self._display_response(response)
             console.print()
 
         except Exception as e:
             console.print(f"\n[red]Error invoking agent: {e}[/red]\n")
+
+    def _display_response(self, response: str):
+        """
+        Display agent response with beautiful markdown rendering.
+
+        Args:
+            response: Raw response text from agent
+        """
+        if not response:
+            return
+
+        # Check if response looks like markdown (has headers, lists, code blocks)
+        has_markdown = any([
+            '# ' in response or '## ' in response or '### ' in response,  # Headers
+            '```' in response,  # Code blocks
+            '- ' in response or '* ' in response or '1. ' in response,    # Lists
+            '**' in response or '__' in response,                         # Bold
+            '`' in response,                                               # Inline code
+        ])
+
+        if has_markdown:
+            # Render as markdown for beautiful formatting
+            try:
+                md = Markdown(response)
+                console.print(md)
+            except Exception:
+                # Fallback to plain text if markdown parsing fails
+                console.print(response)
+        else:
+            # Plain text response - just print directly
+            console.print(response)
 
     def _cmd_help(self, _):
         """Mostrar help de comandos"""
