@@ -101,6 +101,8 @@ class MaximusServiceConfig(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # Allow other env vars in .env
+        extra = "ignore"  # Allow ANTHROPIC_API_KEY in .env without error
 
 
 class ClaudeConfig(BaseSettings):
@@ -164,6 +166,8 @@ class ClaudeConfig(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # Allow other env vars in .env
+        extra = "ignore"  # Allow other env vars in .env
 
 
 class UIConfig(BaseSettings):
@@ -223,6 +227,7 @@ class UIConfig(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # Allow other env vars in .env
 
 
 class LoggingConfig(BaseSettings):
@@ -255,6 +260,7 @@ class LoggingConfig(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # Allow other env vars in .env
 
 
 class Settings(BaseSettings):
@@ -349,6 +355,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # Allow other env vars in .env
         case_sensitive = False
 
 

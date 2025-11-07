@@ -6,6 +6,7 @@ Handles both traditional API keys and OAuth tokens for Anthropic Claude.
 Supports:
 - ANTHROPIC_API_KEY (format: sk-ant-api...)
 - CLAUDE_CODE_OAUTH_TOKEN (format: sk-ant-oat01-...)
+- Claude Code credentials file (~/.claude/.credentials.json)
 
 Biblical Foundation:
 "Torre forte é o nome do Senhor" (Provérbios 18:10)
@@ -13,8 +14,10 @@ Secure authentication protects the system.
 """
 
 import os
+import json
 import subprocess
-from typing import Optional, Tuple
+from pathlib import Path
+from typing import Optional, Tuple, Dict
 from enum import Enum
 from anthropic import Anthropic
 from config.logging_config import get_logger
@@ -59,13 +62,48 @@ def get_credential_type(credential: str) -> CredentialType:
         return CredentialType.NONE
 
 
+def load_claude_credentials() -> Optional[Dict]:
+    """
+    Load credentials from Claude Code credentials file.
+
+    Reads from ~/.claude/.credentials.json (same as Claude Code).
+
+    Returns:
+        Dict with accessToken, refreshToken, expiresAt, or None if not found
+    """
+    credentials_file = Path.home() / ".claude" / ".credentials.json"
+
+    if not credentials_file.exists():
+        return None
+
+    try:
+        with open(credentials_file, 'r') as f:
+            data = json.load(f)
+
+        # Extract OAuth credentials
+        oauth_data = data.get("claudeAiOauth", {})
+        if not oauth_data:
+            return None
+
+        return {
+            "accessToken": oauth_data.get("accessToken"),
+            "refreshToken": oauth_data.get("refreshToken"),
+            "expiresAt": oauth_data.get("expiresAt"),
+            "scopes": oauth_data.get("scopes", []),
+        }
+    except Exception as e:
+        logger.warning(f"Failed to load Claude credentials: {e}")
+        return None
+
+
 def get_anthropic_client(verify_health: bool = False) -> Optional[Anthropic]:
     """
     Get authenticated Anthropic client with optional health check.
 
     Tries authentication methods in order:
-    1. CLAUDE_CODE_OAUTH_TOKEN (OAuth token from claude setup-token)
-    2. ANTHROPIC_API_KEY (Traditional API key)
+    1. Claude Code credentials file (~/.claude/.credentials.json)
+    2. CLAUDE_CODE_OAUTH_TOKEN (OAuth token from environment)
+    3. ANTHROPIC_API_KEY (Traditional API key)
 
     Args:
         verify_health: If True, verify client works with minimal API call
@@ -78,7 +116,37 @@ def get_anthropic_client(verify_health: bool = False) -> Optional[Anthropic]:
         >>> if client:
         ...     message = client.messages.create(...)
     """
-    # Try OAuth token first (preferred for Max subscribers)
+    # Try Claude Code credentials file first (PRIORITY 1)
+    claude_creds = load_claude_credentials()
+    if claude_creds and claude_creds.get("accessToken"):
+        access_token = claude_creds["accessToken"]
+        try:
+            client = Anthropic(api_key=access_token)
+
+            # Optional health check
+            if verify_health:
+                if not _validate_token_health(access_token):
+                    logger.warning("   ⚠️ Claude Code token failed health check")
+                    # Continue to try other methods
+                else:
+                    logger.info(
+                        "   🔑 Authenticated with Claude Code session (Pro Max) ✓",
+                        extra={"auth_type": "claude_code", "health_check": "passed"}
+                    )
+                    return client
+            else:
+                logger.info(
+                    "   🔑 Authenticated with Claude Code session (Pro Max)",
+                    extra={"auth_type": "claude_code"}
+                )
+                return client
+        except Exception as e:
+            logger.warning(
+                f"   ⚠️ Claude Code token invalid: {type(e).__name__}",
+                extra={"error_type": type(e).__name__}
+            )
+
+    # Try OAuth token from environment (PRIORITY 2)
     oauth_token = os.getenv("CLAUDE_CODE_OAUTH_TOKEN")
     if oauth_token:
         cred_type = get_credential_type(oauth_token)

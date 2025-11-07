@@ -50,9 +50,10 @@ def cli(ctx, version, no_banner):
         console.print(f"Claude Model: [magenta]{settings.claude.model}[/magenta]\n")
         ctx.exit()
 
-    # Show help if no command provided
+    # Start REPL if no command provided (FASE 1 - Interactive Shell)
     if ctx.invoked_subcommand is None:
-        click.echo(ctx.get_help())
+        from cli.repl import start_repl
+        start_repl()
 
 
 @cli.command()
@@ -470,6 +471,32 @@ try:
     cli.add_command(task, name='task')
 except ImportError as e:
     console.print(f"[yellow]Warning: Task command not available: {e}[/yellow]")
+
+# Import and register auth command (FASE 12 - OAuth Integration)
+try:
+    from cli.auth_command import auth
+    cli.add_command(auth, name='auth')
+except ImportError as e:
+    console.print(f"[yellow]Warning: Auth command not available: {e}[/yellow]")
+
+
+@cli.command()
+def repl():
+    """
+    Start interactive REPL shell.
+
+    Features:
+    - Natural language commands
+    - EPL (Emoji Protocol Language) support
+    - Command history (↑/↓)
+    - Auto-completion (Tab)
+    - Special commands (/help, /agents, /status, etc)
+
+    Example:
+      max-code repl
+    """
+    from cli.repl import start_repl
+    start_repl()
 
 
 if __name__ == '__main__':
