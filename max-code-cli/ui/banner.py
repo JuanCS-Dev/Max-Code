@@ -188,9 +188,9 @@ class MaxCodeBanner:
             except (ImportError, Exception):
                 pass  # Fall back to gradient only
 
-        # Apply beautiful gradient (lazy import for performance)
-        from rich_gradient import Gradient
-        title = Gradient(ascii_art, colors=self.GRADIENT_COLORS)
+        # Apply magnificent MAXIMUS neon gradient (our own system!)
+        from ui.colors import neon
+        title = neon(ascii_art)
 
         # Display in Gemini style (clean, no borders, minimal info)
         self.console.print("\n")
@@ -314,9 +314,15 @@ def show_banner(
 
 def print_banner():
     """
-    Helper function for Enhanced REPL - prints welcome banner.
+    Helper function for Enhanced REPL - prints welcome banner with animations.
 
-    Cinematográfico mas clean - como Apple ou Vercel.
+    Features:
+    - ASCII art with MAXIMUS neon gradient (verde → amarelo → azul)
+    - Animated initialization sequence
+    - Constitutional AI status
+    - MAXIMUS integration indicators
+
+    Cinematográfico mas clean - como Apple ou Vercel + Anthropic.
     """
     console = Console()
 
@@ -330,19 +336,23 @@ def print_banner():
     ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝      ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝
     """
 
+    # Apply MAXIMUS neon gradient (verde → amarelo → azul)
+    from ui.colors import neon
+    logo_gradient = neon(logo)
+
     # Info concisa
     info = (
-        "[bold cyan]MAX-CODE CLI[/bold cyan] [dim]v1.0.0-alpha[/dim]\n"
-        "[dim]AI Development Assistant powered by Claude[/dim]\n\n"
+        "[bold cyan]MAXIMUS SHELL[/bold cyan] [dim]v1.0.0[/dim]\n"
+        "[dim]AGI Development System powered by Claude & Constitutional AI[/dim]\n\n"
         "[green]●[/green] 8 specialized agents  "
         "[blue]●[/blue] Constitutional AI  "
-        "[magenta]●[/magenta] MAXIMUS integration"
+        "[magenta]●[/magenta] MAXIMUS ecosystem"
     )
 
-    # Panel com gradiente sutil (Padrão Pagani: clean, minimal, memorável)
+    # Panel com gradiente neon (Padrão Pagani: clean, minimal, memorável)
     from rich import box
     panel = Panel(
-        f"[cyan]{logo}[/cyan]\n\n{info}",
+        f"{logo_gradient}\n\n{info}",
         border_style="cyan",
         box=box.DOUBLE,
         padding=(1, 2)
@@ -350,7 +360,20 @@ def print_banner():
 
     console.print("\n")
     console.print(panel)
-    console.print("\n")
+
+    # Animated initialization sequence
+    import time
+    with console.status("[bold green]Initializing...", spinner="dots") as status:
+        time.sleep(0.3)
+        status.update("[bold yellow]⚡ Loading neural networks...")
+        time.sleep(0.3)
+        status.update("[bold cyan]🔗 Connecting to MAXIMUS ecosystem...")
+        time.sleep(0.3)
+        status.update("[bold magenta]⚖️  Loading constitutional principles...")
+        time.sleep(0.3)
+
+    console.print("[bold green]✨ System ready[/bold green]")
+    console.print()
 
 
 # Demo/test code
