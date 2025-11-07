@@ -76,6 +76,41 @@ class StreamingDisplay:
     def __init__(self, console: Optional[Console] = None):
         """Initialize streaming display."""
         self.console = console or Console()
+        self.spinner = None
+        self.buffer = ""
+
+    def __enter__(self):
+        """Context manager entry - start spinner."""
+        # Iniciar spinner enquanto aguarda primeira resposta
+        from rich.status import Status
+        self.spinner = self.console.status(
+            "[cyan]⚡ Thinking...[/cyan]",
+            spinner="dots"
+        )
+        self.spinner.__enter__()
+        return self
+
+    def __exit__(self, *args):
+        """Context manager exit - stop spinner."""
+        if self.spinner:
+            self.spinner.__exit__(*args)
+            self.spinner = None
+
+    def update(self, chunk: str):
+        """
+        Update display with new chunk (for context manager usage).
+
+        Args:
+            chunk: Text chunk to display
+        """
+        # Parar spinner na primeira resposta
+        if self.spinner:
+            self.spinner.__exit__(None, None, None)
+            self.spinner = None
+
+        # Print chunk
+        self.console.print(chunk, end="")
+        self.buffer += chunk
 
     def stream_text(
         self,
