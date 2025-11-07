@@ -293,19 +293,42 @@ def process_command(user_input: str):
     """
     Process user command (natural language, EPL, or regular).
 
-    This is a STUB that will be enhanced in FASE 2.
+    Sends to Claude Pro Max for processing.
     """
+    from core.llm import chat_with_claude
+
     # Check if EPL
     has_emoji = any(char for char in user_input if ord(char) > 0x1F300)
 
     if has_emoji:
         console.print("[dim]🧠 EPL detected, parsing...[/dim]")
-        # TODO FASE 2: Integrate with core/epl/ for actual translation
-        console.print("[yellow]⚠️  EPL integration coming in FASE 2[/yellow]")
+        # TODO FASE 2: Translate EPL to natural language
+        # For now, send as-is
+
+    console.print("[dim]🔄 Processing with Claude Pro Max...[/dim]\n")
+
+    # Call Claude using Pro Max subscription
+    result = chat_with_claude(user_input)
+
+    if result and result.get("success"):
+        # Display response
+        response = result["response"]
+
+        # Format as markdown panel
+        from rich.panel import Panel
+        from rich.markdown import Markdown
+
+        md = Markdown(response)
+        console.print(Panel(
+            md,
+            title=f"[cyan]Claude Pro Max[/cyan] [dim]({result['billing']})[/dim]",
+            border_style="green",
+            expand=True
+        ))
     else:
-        console.print("[dim]🧠 Natural language detected[/dim]")
-        # TODO FASE 2: Integrate with chat command
-        console.print("[yellow]⚠️  Chat integration coming in FASE 2[/yellow]")
+        console.print("[red]❌ Failed to get response from Claude[/red]")
+        console.print("[dim]Make sure 'claude' CLI is installed and authenticated[/dim]")
+        console.print("[dim]Run: claude login[/dim]")
 
     console.print()
 
