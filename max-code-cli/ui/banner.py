@@ -192,39 +192,31 @@ class MaxCodeBanner:
         from rich_gradient import Gradient
         title = Gradient(ascii_art, colors=self.GRADIENT_COLORS)
 
-        # Build subtitle with context (using Nerd Fonts icons)
-        from ui.constants import NERD_ICONS
-        subtitle_parts = [
-            f"v{version}",
-            "Constitutional AI Framework",
-        ]
-
-        if context:
-            if 'model' in context:
-                subtitle_parts.append(f"⚡ {context['model']}")  # Lightning bolt for model
-            if 'session' in context:
-                subtitle_parts.append(f"📊 Session: {context['session']}")
-
-        subtitle = " | ".join(subtitle_parts)
-
-        # Display in Gemini style (no panel, clean gradient, centered)
+        # Display in Gemini style (clean, no borders, minimal info)
         self.console.print("\n")
-        self.console.print(title, justify="center")  # Gradient ASCII art - CENTERED
-        self.console.print(f"[dim]{subtitle}[/dim]", justify="center")
+        self.console.print(title, justify="center")  # Giant gradient ASCII art
         self.console.print()
 
-        # Show constitutional principles status
+        # Single minimal line: version • Constitutional AI
+        self.console.print(
+            f"[dim]v{version}[/dim] [cyan]•[/cyan] [dim]Constitutional AI[/dim]",
+            justify="center"
+        )
+        self.console.print()
+
+        # Constitutional principles (one clean line with emojis)
         self._show_principles()
 
-        # Show biblical verse if enabled
+        # Biblical verse (optional, minimal)
         if show_verse:
             try:
                 from core.verses import get_startup_verse
                 verse = get_startup_verse()
                 if verse:
+                    self.console.print()
                     self.console.print(verse)
             except (ImportError, Exception):
-                pass  # Verses optional
+                pass
 
         self.console.print()
 

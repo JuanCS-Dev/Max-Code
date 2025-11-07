@@ -111,17 +111,10 @@ def print_welcome():
         show_verse=True
     )
 
-    # Show quick start with colors and emojis
-    console.print("\n[bold cyan]Quick Start:[/bold cyan]")
-    console.print("  [green]/help[/green]           - Show all commands")
-    console.print("  [green]/agents[/green]         - Agent dashboard (live)")
-    console.print("  [green]/constitutional[/green] - P1-P6 status")
-    console.print("  [green]/dashboard[/green]      - Multi-panel dashboard")
-    console.print("  [green]/theme[/green] <name>   - Change theme (neon, fire, ocean, matrix)")
-    console.print("  [green]/tui[/green]            - Full-screen TUI mode")
+    # Minimal hint - Gemini style
     console.print()
-    console.print("[dim]Type commands in natural language or use EPL (Emoji Protocol)[/dim]")
-    console.print("[dim]Press Tab for auto-completion | ↑/↓ for history[/dim]")
+    console.print("[dim]Type /help to see available commands[/dim]", justify="center")
+    console.print("[dim]Tab for completion • ↑↓ for history[/dim]", justify="center")
     console.print()
 
 
@@ -501,7 +494,7 @@ def start_repl():
     if not check_claude_cli_available():
         console.print("[yellow]⚠ Warning:[/yellow] [red]Claude CLI not found[/red]")
         console.print("[dim]Install: npm install -g @anthropic-ai/claude-code[/dim]")
-        console.print("[dim]Login: claude login[/dim]")
+        console.print("[dim]Then run (outside this shell): claude login[/dim]")
         console.print()
     else:
         # Claude CLI is available, verify it works
@@ -509,7 +502,8 @@ def start_repl():
         status = verify_claude_cli_setup()
         if not status.get("authenticated"):
             console.print("[yellow]⚠ Warning:[/yellow] [red]Claude CLI not authenticated[/red]")
-            console.print("[dim]Run: claude login[/dim]")
+            console.print("[dim]Exit this shell (Ctrl+D) and run: [bold]claude login[/bold][/dim]")
+            console.print("[dim]Then restart max-code[/dim]")
             console.print()
 
     # Main REPL loop
