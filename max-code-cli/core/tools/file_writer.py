@@ -415,3 +415,20 @@ Biblical Foundation:
                 logger.info(f"  Removed dir: {path}")
         except (OSError, FileNotFoundError, PermissionError):
             pass
+
+
+# Auto-register tool (PROMPT 2.2 - Zero Duplication)
+from .auto_register import register_tool
+
+register_tool(
+    name="file_writer",
+    description="Write content to files with atomic operations and automatic backups. Creates parent directories if needed.",
+    handler_class=FileWriter,
+    handler_method="write",
+    parameters=[
+        {"name": "file_path", "type": "string", "description": "Path to file to write", "required": True},
+        {"name": "content", "type": "string", "description": "Content to write to file", "required": True},
+        {"name": "encoding", "type": "string", "description": "File encoding (default: utf-8)", "required": False},
+    ],
+    tags=["file", "write", "create", "io"]
+)

@@ -59,6 +59,7 @@ class FileEditor:
     - Creates backup before editing
     - Atomic operation (all or nothing)
     - Can replace all occurrences or just first
+    - **NEW: Interactive confirmation for risky operations**
 
     Example:
         >>> editor = FileEditor()
@@ -69,10 +70,27 @@ class FileEditor:
         ... )
     """
 
-    def __init__(self):
-        """Initialize FileEditor"""
+    def __init__(self, skip_confirmation: bool = False):
+        """
+        Initialize FileEditor
+        
+        Args:
+            skip_confirmation: Skip interactive confirmations (use with caution)
+        """
         self.reader = FileReader()
         self.writer = FileWriter()
+        self.skip_confirmation = skip_confirmation
+        
+        # Import confirmation components
+        from core.risk_classifier import RiskClassifier
+        from ui.confirmation import ConfirmationUI, QuietConfirmationUI
+        
+        self.risk_classifier = RiskClassifier()
+        
+        if skip_confirmation:
+            self.confirmation_ui = QuietConfirmationUI()
+        else:
+            self.confirmation_ui = ConfirmationUI()
 
     def edit(
         self,
@@ -179,6 +197,33 @@ class FileEditor:
                 new_content,
                 str(path)
             )
+        
+        # NEW: Risk assessment and confirmation
+        risk = self.risk_classifier.assess_file_operation(
+            operation="edit",
+            filepath=file_path,
+            file_exists=True,
+            content_size=len(new_content)
+        )
+        
+        # Ask for confirmation if needed
+        if risk.requires_confirmation:
+            confirmed = self.confirmation_ui.confirm_file_operation(
+                risk=risk,
+                diff=diff,
+                old_content=original_content,
+                new_content=new_content,
+                operation_name="file edit"
+            )
+            
+            if not confirmed:
+                return FileEditResult(
+                    success=False,
+                    file_path=file_path,
+                    old_string=old_string,
+                    new_string=new_string,
+                    error="Operation cancelled by user"
+                )
 
         # Write new content
         write_result = self.writer.write(
@@ -464,3 +509,20 @@ def goodbye():
     for backup in glob.glob(f"{test_file}.backup.*"):
         Path(backup).unlink()
         logger.info(f"  Removed backup: {backup}")
+
+
+# Auto-register tool (PROMPT 2.2 - Zero Duplication)
+from .auto_register import register_tool
+
+register_tool(
+    name="file_editor",
+    description="Edit files with exact string replacements. Safer than full rewrites - changes only specified strings.",
+    handler_class=FileEditor,
+    handler_method="edit",
+    parameters=[
+        {"name": "file_path", "type": "string", "description": "Path to file to edit", "required": True},
+        {"name": "old_string", "type": "string", "description": "Exact string to find and replace", "required": True},
+        {"name": "new_string", "type": "string", "description": "Replacement string", "required": True},
+    ],
+    tags=["file", "edit", "modify", "io"]
+)

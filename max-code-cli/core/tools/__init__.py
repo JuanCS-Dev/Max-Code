@@ -83,6 +83,31 @@ from .executor_bridge import (
     execute_tool_unified,
 )
 
+# Enhanced Tool Registry & Smart Selection (PROMPT 2.2)
+from .tool_metadata import (
+    EnhancedToolMetadata,
+    ToolCategory,
+    ToolCapabilities,
+    ToolRequirements,
+    ToolPerformance,
+)
+
+from .enhanced_registry import (
+    EnhancedToolRegistry,
+    get_enhanced_registry,
+)
+
+from .tool_selector import (
+    ToolSelector,
+    get_tool_selector,
+)
+
+# Auto-registration helper (PROMPT 2.2)
+from .auto_register import (
+    register_tool,
+    register_tool_function,
+)
+
 __all__ = [
     # Tool Framework (FASE 2.1)
     'tool',
@@ -132,6 +157,21 @@ __all__ = [
     'UnifiedToolExecutor',
     'get_unified_executor',
     'execute_tool_unified',
+    
+    # Enhanced Tool Registry & Smart Selection (PROMPT 2.2)
+    'EnhancedToolMetadata',
+    'ToolCategory',
+    'ToolCapabilities',
+    'ToolRequirements',
+    'ToolPerformance',
+    'EnhancedToolRegistry',
+    'get_enhanced_registry',
+    'ToolSelector',
+    'get_tool_selector',
+    
+    # Auto-registration (PROMPT 2.2)
+    'register_tool',
+    'register_tool_function',
 ]
 
-__version__ = '2.1.0'  # FASE 11: Unified Tool Executor Bridge
+__version__ = '2.2.0'  # PROMPT 2.2: Enhanced Registry & Smart Selection + Auto-Registration

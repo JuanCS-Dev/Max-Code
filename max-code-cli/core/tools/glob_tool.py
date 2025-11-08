@@ -391,3 +391,20 @@ if __name__ == "__main__":
     logger.info(f"✓ Found {len(files)} files in core/epl/")
     for f in files[:3]:
         logger.info(f"  - {f}")
+
+
+# Auto-register tool (PROMPT 2.2 - Zero Duplication)
+from .auto_register import register_tool
+
+register_tool(
+    name="glob_tool",
+    description="Find files matching glob patterns (e.g., *.py, **/*.ts). Supports recursive search and gitignore filtering.",
+    handler_class=GlobTool,
+    handler_method="glob",
+    parameters=[
+        {"name": "pattern", "type": "string", "description": "Glob pattern (e.g., '*.py', '**/*.ts')", "required": True},
+        {"name": "path", "type": "string", "description": "Base path to search from (default: current dir)", "required": False},
+        {"name": "max_results", "type": "integer", "description": "Maximum number of results", "required": False},
+    ],
+    tags=["search", "find", "pattern", "glob", "files"]
+)

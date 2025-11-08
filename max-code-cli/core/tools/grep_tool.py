@@ -460,3 +460,21 @@ if __name__ == "__main__":
             logger.info(f"    {match.line_content.strip()}")
     else:
         logger.error(f"✗ Failed: {result.error}")
+
+
+# Auto-register tool (PROMPT 2.2 - Zero Duplication)
+from .auto_register import register_tool
+
+register_tool(
+    name="grep_tool",
+    description="Search file contents using regex patterns. Returns matching lines with context. Supports gitignore filtering.",
+    handler_class=GrepTool,
+    handler_method="grep",
+    parameters=[
+        {"name": "pattern", "type": "string", "description": "Regex pattern to search for", "required": True},
+        {"name": "path", "type": "string", "description": "Path to search in (file or directory)", "required": False},
+        {"name": "case_sensitive", "type": "boolean", "description": "Case sensitive search (default: False)", "required": False},
+        {"name": "max_results", "type": "integer", "description": "Maximum number of matches", "required": False},
+    ],
+    tags=["search", "grep", "regex", "content", "find"]
+)

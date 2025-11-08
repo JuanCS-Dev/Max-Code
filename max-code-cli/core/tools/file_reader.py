@@ -395,3 +395,21 @@ if __name__ == "__main__":
 
     content = read_file(__file__, offset=1, limit=5)
     logger.info(f"First 5 lines:\n{content}")
+
+
+# Auto-register tool (PROMPT 2.2 - Zero Duplication)
+from .auto_register import register_tool
+
+register_tool(
+    name="file_reader",
+    description="Read file contents with line ranges and offsets. Supports large files with pagination.",
+    handler_class=FileReader,
+    handler_method="read",
+    parameters=[
+        {"name": "file_path", "type": "string", "description": "Path to file to read", "required": True},
+        {"name": "offset", "type": "integer", "description": "Line number to start reading from (0-indexed)", "required": False},
+        {"name": "limit", "type": "integer", "description": "Maximum number of lines to read", "required": False},
+        {"name": "encoding", "type": "string", "description": "File encoding (default: utf-8)", "required": False},
+    ],
+    tags=["file", "read", "io"]
+)
