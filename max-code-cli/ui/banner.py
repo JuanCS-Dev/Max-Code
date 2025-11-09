@@ -128,7 +128,7 @@ class MaxCodeBanner:
             str: ASCII art text
         """
         # Create cache key from text + font
-        cache_key = hashlib.md5(f"{text}:{font}".encode()).hexdigest()
+        cache_key = hashlib.md5(f"{text}:{font}".encode(), usedforsecurity=False).hexdigest()
         cache_file = self._cache_dir / f"{cache_key}.txt"
 
         # Try to load from cache

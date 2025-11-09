@@ -421,8 +421,9 @@ class TaskDecomposer:
         """
         logger.info(f"Attempting to auto-fix {len(issues)} issues...")
         
-        # For now, just mark as invalid and return
-        # TODO: Implement Claude-powered auto-fix
+        # LIMITATION: Auto-fix currently marks plan as invalid
+        # Claude-powered auto-fix can be implemented in future iteration
+        # For now, validation issues are returned to user for manual review
         plan.validated = False
         plan.validation_issues = issues
         

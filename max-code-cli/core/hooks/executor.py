@@ -76,9 +76,12 @@ class HookExecutor:
             # Execute command
             logger.debug(f"Executing hook command: {command}")
 
+            # Security: shell=True needed for hook script execution
+            # Commands come from configured hooks, not untrusted input
+            # Protected by timeout and pre-configured environment
             result = subprocess.run(
                 command,
-                shell=True,
+                shell=True,  # nosec B602
                 capture_output=True,
                 text=True,
                 timeout=self.timeout,

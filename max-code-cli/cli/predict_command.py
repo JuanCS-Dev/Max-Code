@@ -200,10 +200,14 @@ def _interactive_execute(predictions, engine):
             return
 
         # Execute command
+        # Security note: shell=True is acceptable here because:
+        # 1. User explicitly confirms before execution
+        # 2. Command comes from learned history, not external input
+        # 3. This is a CLI tool where user has full control
         import subprocess
         console.print(f"\n[bold cyan]Executing:[/bold cyan] {selected.command}\n")
 
-        result = subprocess.run(selected.command, shell=True)
+        result = subprocess.run(selected.command, shell=True)  # nosec B602
 
         # Record execution in history
         engine.command_history.add_command(

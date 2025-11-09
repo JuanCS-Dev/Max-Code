@@ -164,8 +164,13 @@ class ConstitutionalEngine:
             if "code" in data and "code" not in context:
                 context["code"] = data["code"]
 
-            # Extract description/intent
-            intent = data.get("intent", data.get("description", "unknown"))
+            # Extract description/intent with fallbacks
+            intent = (
+                data.get("intent") or
+                data.get("description") or
+                context.get("description") or
+                "Constitutional validation check"
+            ).strip() or "Constitutional validation check"
 
             action = Action(
                 task_id=data.get("task_id", "guardian_action"),

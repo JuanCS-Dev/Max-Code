@@ -101,7 +101,7 @@ class PatternMatcher:
         """Generate unique pattern ID from input"""
         # Normalize and hash
         normalized = input.lower().strip()
-        return hashlib.md5(normalized.encode()).hexdigest()[:16]
+        return hashlib.md5(normalized.encode(), usedforsecurity=False).hexdigest()[:16]
 
     def learn_pattern(
         self,

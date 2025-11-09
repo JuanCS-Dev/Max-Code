@@ -1,13 +1,18 @@
 """
-Tool Selector - High-level API for intelligent tool selection
+Tool Selector - World-Class Unified Tool Selection API
 
-Provides simple interface for agents to select and execute tools
-based on natural language task descriptions.
+Provides comprehensive interface for intelligent tool selection:
+- Natural language descriptions → tools
+- Task objects → tools
+- Batch selection for multiple tasks
+- Validation and alternatives
+- Sync and async support
 
 Integrates:
 - EnhancedToolRegistry (enhanced_registry.py)
-- Task requirement inference from description
-- Automatic tool selection and execution
+- Task requirement inference
+- Claude-powered batch selection
+- Fallback strategies
 
 Biblical Foundation:
 "A sabedoria do prudente é entender o seu caminho" (Provérbios 14:8)
@@ -15,15 +20,48 @@ Biblical Foundation:
 Soli Deo Gloria
 """
 
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 import logging
 import re
+import json
+import os
+import asyncio
 
 from .enhanced_registry import get_enhanced_registry, EnhancedToolRegistry
 from .tool_metadata import EnhancedToolMetadata, ToolCategory
 from .types import ToolResult
 
 logger = logging.getLogger(__name__)
+
+# Lazy import for Task models and Anthropic (avoid import errors if not installed)
+_Task = None
+_TaskRequirement = None
+_Anthropic = None
+_AsyncAnthropic = None
+
+def _get_task_models():
+    """Lazy import task models"""
+    global _Task, _TaskRequirement
+    if _Task is None:
+        try:
+            from core.task_models import Task, TaskRequirement
+            _Task = Task
+            _TaskRequirement = TaskRequirement
+        except ImportError:
+            logger.debug("Task models not available (optional dependency)")
+    return _Task, _TaskRequirement
+
+def _get_anthropic_clients():
+    """Lazy import Anthropic SDK"""
+    global _Anthropic, _AsyncAnthropic
+    if _Anthropic is None:
+        try:
+            from anthropic import Anthropic, AsyncAnthropic
+            _Anthropic = Anthropic
+            _AsyncAnthropic = AsyncAnthropic
+        except ImportError:
+            logger.debug("Anthropic SDK not available (optional for LLM-powered batch selection)")
+    return _Anthropic, _AsyncAnthropic
 
 
 class ToolSelector:
@@ -100,10 +138,11 @@ class ToolSelector:
         requirements['needs_execute'] = any(re.search(kw, text) for kw in execute_keywords)
         
         # Infer context availability
-        # File path patterns: /path/to/file, ./file, ../file, file.ext
+        # File path patterns: /path/to/file, ./file, ../file, file.ext, word.ext (anywhere)
         has_filepath = bool(
             re.search(r'[./][\w/.-]+\.\w+', text) or  # ./path/file.ext
-            re.search(r'\bfile\b.*\b\w+\.\w+\b', text)  # file config.json
+            re.search(r'\bfile\b.*\b\w+\.\w+\b', text) or  # file config.json
+            re.search(r'\b[\w-]+\.\w{2,4}\b', text)  # filename.ext (2-4 char extension)
         )
         requirements['has_filepath'] = has_filepath
         
@@ -354,6 +393,363 @@ class ToolSelector:
             reasoning += f"- Competitors: {', '.join([s['tool'] for s in top_scores[1:]])}\n"
         
         return reasoning
+    
+    async def select_tools_for_tasks(
+        self,
+        tasks: List[Any],
+        batch_mode: bool = True,
+        api_key: Optional[str] = None
+    ) -> Dict[str, EnhancedToolMetadata]:
+        """
+        Select tools for multiple tasks (async batch processing)
+        
+        Uses single Claude API call for efficient batch selection when batch_mode=True.
+        Falls back to individual selection if batch fails or batch_mode=False.
+        
+        Args:
+            tasks: List of Task objects (from core.task_models)
+            batch_mode: Use single Claude call for all tasks (more efficient)
+            api_key: Optional Anthropic API key (uses ANTHROPIC_API_KEY env var if not provided)
+        
+        Returns:
+            Dict mapping task_id -> selected tool
+        
+        Examples:
+            >>> selector = ToolSelector()
+            >>> tasks = [task1, task2, task3]
+            >>> selections = await selector.select_tools_for_tasks(tasks)
+            >>> print(selections)
+            {
+                "task_1_id": EnhancedToolMetadata(name="file_reader", ...),
+                "task_2_id": EnhancedToolMetadata(name="file_editor", ...),
+                ...
+            }
+        
+        Notes:
+            - Requires Anthropic SDK installed
+            - Batch mode is significantly faster for >3 tasks
+            - Automatically falls back to individual selection on errors
+        """
+        if batch_mode:
+            try:
+                return await self._batch_select_with_claude(tasks, api_key)
+            except Exception as e:
+                logger.warning(f"Batch selection failed ({e}), falling back to individual selection")
+                return await self._individual_select_async(tasks)
+        else:
+            return await self._individual_select_async(tasks)
+    
+    async def _batch_select_with_claude(
+        self,
+        tasks: List[Any],
+        api_key: Optional[str] = None
+    ) -> Dict[str, EnhancedToolMetadata]:
+        """
+        Batch select tools using single Claude API call
+        
+        More token-efficient for multiple tasks (single request vs N requests).
+        Uses structured JSON output for deterministic parsing.
+        """
+        # Get Anthropic client
+        Anthropic, AsyncAnthropic = _get_anthropic_clients()
+        if AsyncAnthropic is None:
+            raise ImportError("Anthropic SDK required for batch selection. Install: pip install anthropic")
+        
+        # Initialize async client
+        api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            raise ValueError("ANTHROPIC_API_KEY required for LLM-powered batch selection")
+        
+        client = AsyncAnthropic(api_key=api_key)
+        
+        # Get available tools
+        available_tools = self.registry.list_tools()
+        tools_summary = self._build_tools_summary(available_tools)
+        
+        # Build task descriptions
+        task_descriptions = []
+        task_id_map = {}
+        
+        for i, task in enumerate(tasks):
+            task_id = getattr(task, 'id', f"task_{i}")
+            task_id_map[task_id] = task
+            
+            task_desc = getattr(task, 'description', str(task))
+            task_type = getattr(task, 'type', 'unknown')
+            
+            # Extract requirements if available
+            requirements = {}
+            if hasattr(task, 'requirements'):
+                req = task.requirements
+                requirements = {
+                    'agent_type': getattr(req, 'agent_type', 'unknown'),
+                    'tools': getattr(req, 'tools', []),
+                    'inputs': getattr(req, 'inputs', {})
+                }
+            
+            task_descriptions.append(f"""
+Task {i+1} (ID: {task_id}):
+  Description: {task_desc}
+  Type: {task_type}
+  Requirements: {json.dumps(requirements, indent=2)}
+""")
+        
+        # Build prompt with structured output instructions
+        prompt = f"""You are an expert tool selector. Select the BEST tool for each task.
+
+AVAILABLE TOOLS:
+{tools_summary}
+
+TASKS TO ANALYZE:
+{''.join(task_descriptions)}
+
+SELECTION CRITERIA:
+1. Match tool capabilities to task requirements
+2. Prefer specialized tools over generic ones
+3. Consider input parameters available
+4. Prioritize tools with exact capability match
+
+RESPONSE FORMAT (JSON only):
+{{
+  "task_id_1": "tool_name",
+  "task_id_2": "tool_name",
+  ...
+}}
+
+IMPORTANT: Respond with ONLY valid JSON. No markdown, no explanations."""
+        
+        try:
+            # Call Claude with structured output
+            response = await client.messages.create(
+                model="claude-sonnet-4-20250514",
+                max_tokens=2048,
+                temperature=0,  # Deterministic selection
+                messages=[{"role": "user", "content": prompt}]
+            )
+            
+            # Extract and parse response
+            response_text = response.content[0].text.strip()
+            
+            # Handle markdown code blocks if present
+            if "```json" in response_text:
+                json_text = response_text.split("```json")[1].split("```")[0].strip()
+            elif "```" in response_text:
+                json_text = response_text.split("```")[1].split("```")[0].strip()
+            else:
+                json_text = response_text
+            
+            # Parse JSON
+            selections_json = json.loads(json_text)
+            
+            # Map to ToolMetadata objects
+            selections = {}
+            for task_id, tool_name in selections_json.items():
+                tool = self.registry.get_tool(tool_name)
+                if tool:
+                    selections[task_id] = tool
+                else:
+                    logger.warning(f"Tool '{tool_name}' not found for task '{task_id}'")
+            
+            logger.info(f"Batch selected {len(selections)}/{len(tasks)} tools via Claude")
+            return selections
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse Claude response as JSON: {e}")
+            raise
+        except Exception as e:
+            logger.error(f"Claude API call failed: {e}")
+            raise
+    
+    async def _individual_select_async(self, tasks: List[Any]) -> Dict[str, EnhancedToolMetadata]:
+        """
+        Select tools individually (fallback)
+        
+        Less efficient but more robust. Used when batch selection unavailable or fails.
+        """
+        selections = {}
+        
+        for i, task in enumerate(tasks):
+            task_id = getattr(task, 'id', f"task_{i}")
+            task_desc = getattr(task, 'description', str(task))
+            
+            # Use synchronous selection
+            tool = self.select_for_task(task_desc)
+            if tool:
+                selections[task_id] = tool
+            else:
+                logger.warning(f"No tool selected for task '{task_id}'")
+        
+        return selections
+    
+    def _build_tools_summary(self, tools: List[EnhancedToolMetadata]) -> str:
+        """Build concise summary of available tools for LLM prompt"""
+        summary_lines = []
+        
+        for tool in tools:
+            caps = []
+            if tool.capabilities.can_read:
+                caps.append("read")
+            if tool.capabilities.can_write:
+                caps.append("write")
+            if tool.capabilities.can_search:
+                caps.append("search")
+            if tool.capabilities.can_execute:
+                caps.append("execute")
+            
+            summary_lines.append(
+                f"- {tool.name}: {tool.description} | Capabilities: {', '.join(caps)}"
+            )
+        
+        return "\n".join(summary_lines)
+    
+    def validate_tool_for_task(
+        self,
+        tool: EnhancedToolMetadata,
+        task: Any,
+        strict: bool = True
+    ) -> Tuple[bool, List[str]]:
+        """
+        Validate if tool can execute task
+        
+        Checks:
+        1. Required parameters are available
+        2. Tool capabilities match task type
+        3. Input types are compatible
+        
+        Args:
+            tool: Tool to validate
+            task: Task to execute (Task object from core.task_models)
+            strict: Strict validation (fail on warnings)
+        
+        Returns:
+            (is_valid, issues_list)
+        
+        Examples:
+            >>> selector = ToolSelector()
+            >>> tool = selector.registry.get_tool("file_reader")
+            >>> valid, issues = selector.validate_tool_for_task(tool, task)
+            >>> if not valid:
+            ...     print(f"Validation failed: {issues}")
+        """
+        issues = []
+        warnings = []
+        
+        # Extract task information
+        task_type = getattr(task, 'type', None)
+        task_requirements = getattr(task, 'requirements', None)
+        
+        # Check 1: Required parameters
+        if task_requirements and tool.parameters:
+            # Handle both dict and object parameter formats
+            required_params = set()
+            for p in tool.parameters:
+                if isinstance(p, dict):
+                    if p.get('required', False):
+                        required_params.add(p['name'])
+                else:
+                    # Object with attributes
+                    if getattr(p, 'required', False):
+                        required_params.add(p.name)
+            
+            provided_params = set(task_requirements.inputs.keys())
+            
+            missing = required_params - provided_params
+            if missing:
+                issues.append(f"Missing required parameters: {missing}")
+        
+        # Check 2: Capability matching
+        if task_type:
+            task_type_value = getattr(task_type, 'value', str(task_type))
+            
+            if task_type_value == 'read' and not tool.capabilities.can_read:
+                issues.append("Tool cannot read but task requires reading")
+            
+            if task_type_value == 'write' and not tool.capabilities.can_write:
+                issues.append("Tool cannot write but task requires writing")
+            
+            if task_type_value == 'execute' and not tool.capabilities.can_execute:
+                issues.append("Tool cannot execute but task requires execution")
+        
+        # Check 3: Tool-specific validation
+        if hasattr(tool, 'validate_parameters'):
+            try:
+                params = task_requirements.inputs if task_requirements else {}
+                valid, tool_issues = tool.validate_parameters(params)
+                if not valid:
+                    issues.extend(tool_issues)
+            except Exception as e:
+                warnings.append(f"Tool validation raised exception: {e}")
+        
+        # Warnings (non-critical)
+        if task_requirements and not task_requirements.tools:
+            warnings.append("Task has no explicit tool requirements")
+        
+        # Combine issues
+        all_issues = issues + (warnings if strict else [])
+        
+        return (len(issues) == 0, all_issues)
+    
+    async def suggest_alternative_tools(
+        self,
+        task: Any,
+        primary_tool: EnhancedToolMetadata,
+        count: int = 2,
+        exclude_failed: List[str] = None
+    ) -> List[EnhancedToolMetadata]:
+        """
+        Suggest alternative tools if primary fails
+        
+        Uses requirement matching to find next-best tools.
+        Excludes tools that already failed (avoid retry loops).
+        
+        Args:
+            task: The task to execute
+            primary_tool: Primary tool that failed/is unavailable
+            count: Number of alternatives to suggest (default: 2)
+            exclude_failed: List of tool names that already failed
+        
+        Returns:
+            List of alternative tools, sorted by match score
+        
+        Examples:
+            >>> selector = ToolSelector()
+            >>> primary = selector.registry.get_tool("file_editor")
+            >>> alternatives = await selector.suggest_alternative_tools(
+            ...     task, primary, count=2, exclude_failed=["file_editor"]
+            ... )
+            >>> for alt in alternatives:
+            ...     print(f"Try {alt.name} instead")
+        
+        Notes:
+            - Returns empty list if no suitable alternatives
+            - Alternatives are sorted by match score (best first)
+            - Considers task requirements and capabilities
+        """
+        exclude_failed = exclude_failed or []
+        exclude_names = set(exclude_failed + [primary_tool.name])
+        
+        # Extract task description and requirements
+        task_desc = getattr(task, 'description', str(task))
+        requirements = self.infer_requirements(task_desc)
+        
+        # Get all matching tools
+        candidates = []
+        for tool in self.registry.list_tools():
+            if tool.name in exclude_names:
+                continue  # Skip primary and failed tools
+            
+            score = tool.matches_requirements(requirements)
+            if score > 0:
+                candidates.append((score, tool))
+        
+        # Sort by score (descending)
+        candidates.sort(reverse=True, key=lambda x: x[0])
+        
+        # Take top N
+        alternatives = [tool for _, tool in candidates[:count]]
+        
+        logger.info(f"Found {len(alternatives)} alternatives for {primary_tool.name}")
+        return alternatives
 
 
 # Global selector instance

@@ -26,20 +26,20 @@ from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
 import re
 
+from config.logging_config import get_logger
 from .lexer import tokenize, is_epl_only, extract_emojis, extract_words, Token, TokenType
 from .parser import parse, ASTNode, ASTNodeType
 from .nlp_engine import NLPEngine, Intent, IntentType
 from .pattern_matcher import PatternMatcher, MatchResult
 from .vocabulary import (
-from config.logging_config import get_logger
-
-logger = get_logger(__name__)
     EMOJI_VOCABULARY,
     get_emoji_definition,
     get_emoji_by_alias,
     EmojiCategory,
     calculate_compression_ratio,
 )
+
+logger = get_logger(__name__)
 
 
 @dataclass

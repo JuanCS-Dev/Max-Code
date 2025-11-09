@@ -7,6 +7,7 @@ Biblical Foundation:
 Soli Deo Gloria
 """
 
+import os
 import pytest
 from core.tools.tool_metadata import (
     EnhancedToolMetadata,
@@ -392,3 +393,380 @@ class TestIntegration:
         assert read_tool.capabilities.can_read is True
         assert write_tool.capabilities.can_write is True
         assert search_tool.capabilities.can_search is True
+
+
+class TestBatchSelection:
+    """Test batch selection features (NEW in v3.0)"""
+    
+    @pytest.mark.asyncio
+    async def test_batch_select_with_tasks(self):
+        """Test batch selection with multiple tasks"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        
+        # Create mock tasks
+        tasks = [
+            Task(
+                id="task_1",
+                description="Read the config.json file",
+                type=TaskType.READ,
+                requirements=TaskRequirement(
+                    agent_type="code",
+                    tools=[],
+                    inputs={"file_path": "config.json"}
+                )
+            ),
+            Task(
+                id="task_2",
+                description="Search for TODO comments in src/",
+                type=TaskType.READ,
+                requirements=TaskRequirement(
+                    agent_type="code",
+                    tools=[],
+                    inputs={"pattern": "TODO", "directory": "src/"}
+                )
+            ),
+            Task(
+                id="task_3",
+                description="Create a new file output.txt",
+                type=TaskType.WRITE,
+                requirements=TaskRequirement(
+                    agent_type="code",
+                    tools=[],
+                    inputs={"file_path": "output.txt", "content": "test"}
+                )
+            ),
+        ]
+        
+        # Test individual selection (fallback, no API key needed)
+        selections = await selector.select_tools_for_tasks(tasks, batch_mode=False)
+        
+        # Verify selections
+        assert len(selections) == 3
+        assert "task_1" in selections
+        assert "task_2" in selections
+        assert "task_3" in selections
+        
+        # Verify correct tools selected
+        assert selections["task_1"].capabilities.can_read is True
+        assert selections["task_2"].capabilities.can_search is True
+        assert selections["task_3"].capabilities.can_write is True
+    
+    @pytest.mark.asyncio
+    @pytest.mark.skipif(
+        not os.getenv("ANTHROPIC_API_KEY"),
+        reason="ANTHROPIC_API_KEY not set"
+    )
+    async def test_batch_select_with_claude(self):
+        """Test batch selection using Claude API (requires API key)"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        
+        tasks = [
+            Task(
+                id="task_1",
+                description="Read the README.md file",
+                type=TaskType.READ,
+                requirements=TaskRequirement(
+                    agent_type="code",
+                    inputs={"file_path": "README.md"}
+                )
+            ),
+            Task(
+                id="task_2",
+                description="Find all Python files in src/",
+                type=TaskType.READ,
+                requirements=TaskRequirement(
+                    agent_type="code",
+                    inputs={"pattern": "*.py", "directory": "src/"}
+                )
+            ),
+        ]
+        
+        # Test batch selection with Claude
+        selections = await selector.select_tools_for_tasks(tasks, batch_mode=True)
+        
+        assert len(selections) == 2
+        assert selections["task_1"].capabilities.can_read is True
+        assert selections["task_2"].capabilities.can_search is True
+
+
+class TestToolValidation:
+    """Test tool validation features (NEW in v3.0)"""
+    
+    def test_validate_tool_success(self):
+        """Test successful tool validation"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        tool = selector.registry.get_tool("file_reader")
+        
+        task = Task(
+            id="task_1",
+            description="Read config.json",
+            type=TaskType.READ,
+            requirements=TaskRequirement(
+                agent_type="code",
+                tools=["file_reader"],  # Explicit tool requirement (no warning)
+                inputs={"file_path": "config.json"}
+            )
+        )
+        
+        valid, issues = selector.validate_tool_for_task(tool, task, strict=False)
+        
+        assert valid is True
+        assert len(issues) == 0
+    
+    def test_validate_tool_missing_params(self):
+        """Test validation fails with missing parameters"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        tool = selector.registry.get_tool("file_reader")
+        
+        # Check what parameters file_reader actually requires
+        required_params = [p.name for p in tool.parameters if p.required]
+        
+        # If file_reader has no required params, this test is not applicable
+        if not required_params:
+            pytest.skip("file_reader has no required parameters")
+        
+        task = Task(
+            id="task_1",
+            description="Read a file",
+            type=TaskType.READ,
+            requirements=TaskRequirement(
+                agent_type="code",
+                inputs={}  # Missing required parameters
+            )
+        )
+        
+        valid, issues = selector.validate_tool_for_task(tool, task, strict=False)
+        
+        # Should fail validation if required params are missing
+        if required_params:
+            assert valid is False
+            assert len(issues) > 0
+            # Check that missing param is mentioned
+            issues_text = " ".join(issues).lower()
+            assert any(param.lower() in issues_text for param in required_params)
+    
+    def test_validate_tool_capability_mismatch(self):
+        """Test validation fails with capability mismatch"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        tool = selector.registry.get_tool("file_reader")  # Can only read
+        
+        task = Task(
+            id="task_1",
+            description="Write to file",
+            type=TaskType.WRITE,  # Requires write capability
+            requirements=TaskRequirement(
+                agent_type="code",
+                inputs={"file_path": "output.txt", "content": "test"}
+            )
+        )
+        
+        valid, issues = selector.validate_tool_for_task(tool, task)
+        
+        assert valid is False
+        assert any("write" in issue.lower() for issue in issues)
+    
+    def test_validate_tool_non_strict(self):
+        """Test non-strict validation (warnings allowed)"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        tool = selector.registry.get_tool("file_reader")
+        
+        task = Task(
+            id="task_1",
+            description="Read file",
+            type=TaskType.READ,
+            requirements=TaskRequirement(
+                agent_type="code",
+                inputs={"file_path": "config.json"},
+                tools=[]  # Empty tools list (warning, not error)
+            )
+        )
+        
+        # Non-strict: warnings don't fail validation
+        valid, issues = selector.validate_tool_for_task(tool, task, strict=False)
+        assert valid is True
+        
+        # Strict: warnings fail validation
+        valid, issues = selector.validate_tool_for_task(tool, task, strict=True)
+        # May have warnings about empty tools list
+
+
+class TestAlternativeTools:
+    """Test alternative tool suggestions (NEW in v3.0)"""
+    
+    @pytest.mark.asyncio
+    async def test_suggest_alternatives_basic(self):
+        """Test basic alternative suggestions"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        primary_tool = selector.registry.get_tool("file_reader")
+        
+        task = Task(
+            id="task_1",
+            description="Read and analyze config.json",
+            type=TaskType.READ,
+            requirements=TaskRequirement(
+                agent_type="code",
+                inputs={"file_path": "config.json"}
+            )
+        )
+        
+        alternatives = await selector.suggest_alternative_tools(
+            task, primary_tool, count=2
+        )
+        
+        # Should suggest alternatives (may be empty if no good matches)
+        assert isinstance(alternatives, list)
+        assert len(alternatives) <= 2
+        
+        # Alternatives should not include primary tool
+        for alt in alternatives:
+            assert alt.name != primary_tool.name
+    
+    @pytest.mark.asyncio
+    async def test_suggest_alternatives_exclude_failed(self):
+        """Test excluding failed tools from suggestions"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        primary_tool = selector.registry.get_tool("grep_tool")
+        
+        task = Task(
+            id="task_1",
+            description="Search for TODO comments",
+            type=TaskType.READ,
+            requirements=TaskRequirement(
+                agent_type="code",
+                inputs={"pattern": "TODO"}
+            )
+        )
+        
+        # Exclude primary and glob_tool
+        alternatives = await selector.suggest_alternative_tools(
+            task, 
+            primary_tool, 
+            count=3,
+            exclude_failed=["grep_tool", "glob_tool"]
+        )
+        
+        # Should not suggest excluded tools
+        for alt in alternatives:
+            assert alt.name not in ["grep_tool", "glob_tool"]
+    
+    @pytest.mark.asyncio
+    async def test_suggest_alternatives_sorted_by_score(self):
+        """Test alternatives are sorted by match score"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        primary_tool = selector.registry.get_tool("file_reader")
+        
+        task = Task(
+            id="task_1",
+            description="Read multiple files matching pattern *.json",
+            type=TaskType.READ,
+            requirements=TaskRequirement(
+                agent_type="code",
+                inputs={"pattern": "*.json"}
+            )
+        )
+        
+        alternatives = await selector.suggest_alternative_tools(
+            task, primary_tool, count=3
+        )
+        
+        if len(alternatives) > 1:
+            # Verify alternatives are sorted (first should have highest score)
+            reqs = selector.infer_requirements(task.description)
+            scores = [alt.matches_requirements(reqs) for alt in alternatives]
+            
+            # Scores should be in descending order
+            for i in range(len(scores) - 1):
+                assert scores[i] >= scores[i + 1]
+
+
+class TestEdgeCases:
+    """Test edge cases and error handling (NEW in v3.0)"""
+    
+    def test_validate_tool_without_requirements(self):
+        """Test validation when task has no requirements"""
+        from core.task_models import Task, TaskType
+        
+        selector = get_tool_selector()
+        tool = selector.registry.get_tool("file_reader")
+        
+        # Create task without requirements attribute
+        task = type('Task', (), {
+            'id': 'task_1',
+            'description': 'Read file',
+            'type': TaskType.READ
+        })()
+        
+        valid, issues = selector.validate_tool_for_task(tool, task)
+        
+        # Should handle gracefully (no crash)
+        assert isinstance(valid, bool)
+        assert isinstance(issues, list)
+    
+    @pytest.mark.asyncio
+    async def test_batch_select_empty_tasks(self):
+        """Test batch selection with empty task list"""
+        selector = get_tool_selector()
+        
+        selections = await selector.select_tools_for_tasks([], batch_mode=False)
+        
+        assert selections == {}
+    
+    @pytest.mark.asyncio
+    async def test_suggest_alternatives_no_matches(self):
+        """Test alternative suggestions when no tools match"""
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = get_tool_selector()
+        primary_tool = selector.registry.get_tool("file_reader")
+        
+        # Create task with requirements no tool can satisfy
+        task = Task(
+            id="task_1",
+            description="Deploy to production server",
+            type=type('TaskType', (), {'value': 'deploy'})(),  # Non-existent type
+            requirements=TaskRequirement(
+                agent_type="deploy",
+                inputs={"server": "prod"}
+            )
+        )
+        
+        alternatives = await selector.suggest_alternative_tools(
+            task, primary_tool, count=2
+        )
+        
+        # Should return empty list or low-scoring tools
+        assert isinstance(alternatives, list)
+    
+    def test_infer_requirements_edge_cases(self):
+        """Test requirement inference with edge cases"""
+        selector = get_tool_selector()
+        
+        # Empty description
+        reqs1 = selector.infer_requirements("")
+        assert isinstance(reqs1, dict)
+        
+        # Very long description
+        reqs2 = selector.infer_requirements("x" * 10000)
+        assert isinstance(reqs2, dict)
+        
+        # Special characters
+        reqs3 = selector.infer_requirements("Read file @#$%^&*()")
+        assert reqs3['needs_read'] is True

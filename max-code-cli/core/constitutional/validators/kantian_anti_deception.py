@@ -156,11 +156,18 @@ class KantianAntiDeceptionValidator:
         code = action.context.get('code', '')
 
         if not code:
-            # No code to validate
+            # No code to validate - all principles pass
             return ConstitutionalResult(
                 passed=True,
                 score=1.0,
-                principle_scores={'Kantian': 1.0},
+                principle_scores={
+                    'P1': 1.0,
+                    'P2': 1.0,
+                    'P3': 1.0,
+                    'P4': 1.0,
+                    'P5': 1.0,
+                    'P6': 1.0,
+                },
                 violations=[],
                 suggestions=[],
                 metadata={'validator': self.name, 'version': self.version}

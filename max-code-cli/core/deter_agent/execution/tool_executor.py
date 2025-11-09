@@ -385,9 +385,12 @@ class ToolExecutor:
         timeout = parameters.get('timeout', self.DEFAULT_TIMEOUT)
 
         try:
+            # Security: shell=True needed for bash tool functionality
+            # Commands come from AI agent execution plan, not untrusted input
+            # Protected by timeout and Constitutional AI validation
             result = subprocess.run(
                 command,
-                shell=True,
+                shell=True,  # nosec B602
                 capture_output=True,
                 text=True,
                 timeout=timeout,

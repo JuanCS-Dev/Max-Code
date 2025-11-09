@@ -43,7 +43,7 @@ class Solution:
         """Hash da solução (para votação)"""
         # Normalizar antes de hashear
         normalized = self.content.strip().lower()
-        return hashlib.md5(normalized.encode()).hexdigest()
+        return hashlib.md5(normalized.encode(), usedforsecurity=False).hexdigest()
 
 
 @dataclass

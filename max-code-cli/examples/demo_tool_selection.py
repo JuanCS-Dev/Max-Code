@@ -200,18 +200,186 @@ def demo_anthropic_schema():
     print(json.dumps(schema, indent=2))
 
 
+def demo_batch_selection():
+    """Demo: Batch tool selection (NEW in v3.0)"""
+    print("\n" + "=" * 70)
+    print("DEMO 5: Batch Tool Selection (NEW)")
+    print("=" * 70)
+    
+    try:
+        from core.task_models import Task, TaskType, TaskRequirement
+        import asyncio
+        
+        selector = ToolSelector()
+        
+        # Register demo tools
+        registry = EnhancedToolRegistry()
+        for tool in create_demo_tools():
+            registry.register_enhanced(tool)
+        
+        # Create multiple tasks
+        tasks = [
+            Task(
+                id="task_1",
+                description="Read the config.json file",
+                type=TaskType.READ,
+                requirements=TaskRequirement(
+                    agent_type="code",
+                    inputs={"file_path": "config.json"}
+                )
+            ),
+            Task(
+                id="task_2",
+                description="Search for TODO comments in src/",
+                type=TaskType.READ,
+                requirements=TaskRequirement(
+                    agent_type="code",
+                    inputs={"pattern": "TODO", "directory": "src/"}
+                )
+            ),
+            Task(
+                id="task_3",
+                description="Create output.txt file",
+                type=TaskType.WRITE,
+                requirements=TaskRequirement(
+                    agent_type="code",
+                    inputs={"file_path": "output.txt", "content": "test"}
+                )
+            ),
+        ]
+        
+        print(f"\nSelecting tools for {len(tasks)} tasks...")
+        
+        # Run async batch selection (fallback mode, no API key needed)
+        async def run_batch():
+            return await selector.select_tools_for_tasks(tasks, batch_mode=False)
+        
+        selections = asyncio.run(run_batch())
+        
+        print(f"\nSelected {len(selections)} tools:")
+        for task_id, tool in selections.items():
+            print(f"  {task_id}: {tool.name} ({tool.category.value})")
+    
+    except ImportError:
+        print("\n⚠️  Task models not available. Skipping batch selection demo.")
+
+
+def demo_tool_validation():
+    """Demo: Tool validation (NEW in v3.0)"""
+    print("\n" + "=" * 70)
+    print("DEMO 6: Tool Validation (NEW)")
+    print("=" * 70)
+    
+    try:
+        from core.task_models import Task, TaskType, TaskRequirement
+        
+        selector = ToolSelector()
+        
+        # Register demo tools
+        registry = EnhancedToolRegistry()
+        for tool in create_demo_tools():
+            registry.register_enhanced(tool)
+        
+        # Create task
+        task = Task(
+            id="task_1",
+            description="Read config.json",
+            type=TaskType.READ,
+            requirements=TaskRequirement(
+                agent_type="code",
+                tools=["file_reader"],
+                inputs={"path": "config.json"}  # Using 'path' parameter
+            )
+        )
+        
+        # Get tool
+        tool = registry.get_tool("file_reader")
+        
+        print(f"\nValidating tool '{tool.name}' for task...")
+        
+        # Validate
+        valid, issues = selector.validate_tool_for_task(tool, task, strict=False)
+        
+        if valid:
+            print("✅ Validation PASSED")
+        else:
+            print("❌ Validation FAILED")
+            for issue in issues:
+                print(f"   - {issue}")
+    
+    except ImportError:
+        print("\n⚠️  Task models not available. Skipping validation demo.")
+
+
+def demo_alternative_suggestions():
+    """Demo: Alternative tool suggestions (NEW in v3.0)"""
+    print("\n" + "=" * 70)
+    print("DEMO 7: Alternative Tool Suggestions (NEW)")
+    print("=" * 70)
+    
+    try:
+        from core.task_models import Task, TaskType, TaskRequirement
+        import asyncio
+        
+        selector = ToolSelector()
+        
+        # Register demo tools
+        registry = EnhancedToolRegistry()
+        for tool in create_demo_tools():
+            registry.register_enhanced(tool)
+        
+        # Create task
+        task = Task(
+            id="task_1",
+            description="Search for patterns in files",
+            type=TaskType.READ,
+            requirements=TaskRequirement(
+                agent_type="code",
+                inputs={"pattern": "TODO"}
+            )
+        )
+        
+        # Primary tool (pretend it failed)
+        primary_tool = registry.get_tool("grep_tool")
+        
+        print(f"\nPrimary tool '{primary_tool.name}' failed.")
+        print(f"Suggesting alternatives...")
+        
+        # Get alternatives
+        async def run_suggest():
+            return await selector.suggest_alternative_tools(
+                task, primary_tool, count=2
+            )
+        
+        alternatives = asyncio.run(run_suggest())
+        
+        if alternatives:
+            print(f"\n✅ Found {len(alternatives)} alternatives:")
+            for i, alt in enumerate(alternatives, 1):
+                print(f"   {i}. {alt.name} - {alt.description}")
+        else:
+            print("\n⚠️  No suitable alternatives found.")
+    
+    except ImportError:
+        print("\n⚠️  Task models not available. Skipping alternatives demo.")
+
+
 def main():
     """Run all demos"""
     print("\n")
     print("╔" + "=" * 68 + "╗")
     print("║" + " " * 15 + "TOOL REGISTRY & SMART SELECTION" + " " * 22 + "║")
     print("║" + " " * 27 + "DEMONSTRATION" + " " * 28 + "║")
+    print("║" + " " * 25 + "v3.0 - World Class" + " " * 24 + "║")
     print("╚" + "=" * 68 + "╝")
     
     demo_basic_selection()
     demo_requirement_inference()
     demo_scoring()
     demo_anthropic_schema()
+    demo_batch_selection()
+    demo_tool_validation()
+    demo_alternative_suggestions()
     
     print("\n" + "=" * 70)
     print("✅ ALL DEMOS COMPLETE")

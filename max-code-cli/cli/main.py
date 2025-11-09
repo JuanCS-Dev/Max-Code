@@ -543,6 +543,14 @@ try:
 except ImportError as e:
     console.print(f"[yellow]Warning: Auth command not available: {e}[/yellow]")
 
+# Import and register streaming demo commands (Enhanced Thinking Display)
+try:
+    from cli.demo_streaming import demo_streaming, demo_streaming_all
+    cli.add_command(demo_streaming, name='demo-streaming')
+    cli.add_command(demo_streaming_all, name='demo-streaming-all')
+except ImportError as e:
+    console.print(f"[yellow]Warning: Streaming demo commands not available: {e}[/yellow]")
+
 
 @cli.command()
 def repl():

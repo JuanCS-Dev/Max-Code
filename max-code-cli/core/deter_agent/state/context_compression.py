@@ -61,7 +61,7 @@ class ContextItem:
     def hash(self) -> str:
         """Hash do conteúdo (para dedup)"""
         normalized = self.content.strip().lower()
-        return hashlib.md5(normalized.encode()).hexdigest()
+        return hashlib.md5(normalized.encode(), usedforsecurity=False).hexdigest()
 
 
 @dataclass

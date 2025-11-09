@@ -145,7 +145,7 @@ def mock_ethical_verdict_conditional():
 def test_agent_initialization_with_maximus(code_agent):
     """Test 1: Agent initializes correctly with MAXIMUS enabled"""
     assert code_agent.agent_id == "test_code_agent"
-    assert code_agent.agent_name == "Code Agent (MAXIMUS-Enhanced)"
+    assert code_agent.agent_name == "Code Agent (MAXIMUS + Guardian)"
     assert code_agent.port == 8162
     assert code_agent.maximus_client is not None
     assert isinstance(code_agent.maximus_client, MaximusClient)

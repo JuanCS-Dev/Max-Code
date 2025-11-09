@@ -157,7 +157,7 @@ class StatusBar:
 
     def _build_principles_section(self) -> Text:
         """
-        Build Constitutional Principles status display.
+        Build Constitutional Principles status display (COMPACT).
 
         Returns:
             Rich Text with colored P1-P6 indicators
@@ -175,19 +175,16 @@ class StatusBar:
         }
 
         text = Text()
-        for i, (code, active) in enumerate(self.state.principles.items()):
-            if i > 0:
-                text.append(" ", style="dim")
-
+        for code, active in self.state.principles.items():
             icon = self.PRINCIPLE_ICONS.get(code, '●')
             color = principle_colors.get(code, "#808080")
 
             if active:
-                # Active: colored icon + code
-                text.append(f"{icon}{code}", style=f"bold {color}")
+                # Active: colored icon only (compact)
+                text.append(f"{icon}", style=f"bold {color}")
             else:
-                # Inactive: dimmed
-                text.append(f"{icon}{code}", style="dim")
+                # Inactive: dimmed icon
+                text.append(f"{icon}", style="dim")
 
         return text
 
@@ -275,7 +272,7 @@ class StatusBar:
     def _format_token_count(self, count: int) -> str:
         """Format token count with K suffix (e.g., 2400 → 2.4K)."""
         if count >= 1000:
-            return f"{count / 1000:.1f}K"
+            return f"{count / 1000:.0f}K"  # No decimal for compact display
         return str(count)
 
     def _build_context_section(self) -> Optional[Text]:

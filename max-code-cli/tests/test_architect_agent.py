@@ -65,7 +65,10 @@ async def test_architect_agent_problem_analysis():
     task = AgentTask(
         id="arch-002",
         description="We have a monolith with 500k LOC. Performance is degrading. What should we do?",
-        parameters={}
+        parameters={
+            "requirements": ["scalability", "performance"],
+            "constraints": ["legacy code"]
+        }
     )
 
     # Test internal method
@@ -124,7 +127,10 @@ async def test_architect_agent_decision_history():
     task = AgentTask(
         id="arch-003",
         description="Choose between REST and GraphQL for API",
-        parameters={}
+        parameters={
+            "requirements": ["API design"],
+            "constraints": []
+        }
     )
 
     result = await sophia._execute_async(task)

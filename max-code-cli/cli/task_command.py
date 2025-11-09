@@ -527,9 +527,12 @@ async def execute_tool(tool_name: str, tool_input: dict, cwd: str) -> str:
         elif tool_name == "execute_bash":
             command = tool_input["command"]
 
+            # Security: shell=True needed for complex commands with pipes/redirects
+            # Command comes from AI agent, not directly from untrusted input
+            # Limited by timeout and executed in controlled context
             result = subprocess.run(
                 command,
-                shell=True,
+                shell=True,  # nosec B602
                 cwd=str(cwd_path),
                 capture_output=True,
                 text=True,

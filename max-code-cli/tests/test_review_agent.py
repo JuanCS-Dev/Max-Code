@@ -140,7 +140,7 @@ def test_review_agent_initialization_standalone(review_agent_standalone):
     agent = review_agent_standalone
 
     assert agent.agent_id == "review_001"
-    assert agent.agent_name == "Review Agent (MAXIMUS-Enhanced)"
+    assert agent.agent_name == "Review Agent (Guardian + MAXIMUS)"
     assert agent.port == 8164
     assert agent.maximus_client is None
     assert agent.decision_fusion is not None

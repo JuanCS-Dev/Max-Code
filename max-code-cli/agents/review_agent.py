@@ -91,7 +91,11 @@ class ReviewAgent(BaseAgent):
             return AgentResult(
                 task_id=task.id,
                 success=False,
-                output={'error': 'Invalid parameters', 'details': e.errors()},
+                output={
+                    'error': 'Invalid parameters',
+                    'verdict': 'ERROR',
+                    'details': e.errors()
+                },
                 metrics={'validation_failed': True}
             )
 
@@ -115,6 +119,7 @@ class ReviewAgent(BaseAgent):
                     success=False,
                     output={
                         'error': 'Constitutional violation - Guardian blocked action',
+                        'verdict': 'REJECTED',
                         'reasoning': guardian_decision.reasoning,
                         'recommendations': guardian_decision.recommendations,
                     },
@@ -169,7 +174,10 @@ class ReviewAgent(BaseAgent):
             'constitutional': constitutional_verdict,
             'ethical': ethical_verdict,
             'final_verdict': final_verdict.final_decision,
-            'overall_score': self._calculate_overall_score(claude_review, constitutional_verdict, ethical_verdict)
+            'verdict': final_verdict.final_decision.get('verdict'),  # Shortcut for tests
+            'reasoning': final_verdict.final_decision.get('reasoning'),
+            'overall_score': self._calculate_overall_score(claude_review, constitutional_verdict, ethical_verdict),
+            'ethical_score': self._calculate_ethical_score(ethical_verdict) if ethical_verdict else None
         }
 
         return AgentResult(
@@ -316,15 +324,10 @@ Be thorough but constructive."""
 
         # Constitutional average (already 0-1)
         if constitutional:
-            const_scores = [
-                constitutional.completeness_score,
-                constitutional.transparency_score,
-                constitutional.truth_score,
-                constitutional.user_sovereignty_score,
-                constitutional.systemic_analysis_score,
-                constitutional.token_efficiency_score
-            ]
-            scores.append(sum(const_scores) / len(const_scores))
+            # ConstitutionalResult has principle_scores dict (P1-P6)
+            const_scores = list(constitutional.principle_scores.values())
+            if const_scores:
+                scores.append(sum(const_scores) / len(const_scores))
 
         # Ethical average (0-100 → 0-1)
         if ethical:
@@ -337,3 +340,17 @@ Be thorough but constructive."""
             scores.append(sum(eth_scores) / len(eth_scores))
 
         return sum(scores) / len(scores) if scores else 0.0
+
+    def _calculate_ethical_score(self, ethical: Any) -> float:
+        """Calculate ethical score (0-1) from EthicalVerdict"""
+        if not ethical:
+            return None
+        
+        # Average of all ethical framework scores (0-100 → 0-1)
+        eth_scores = [
+            ethical.kantian_score / 100.0,
+            ethical.virtue_score / 100.0,
+            ethical.consequentialist_score / 100.0,
+            ethical.principlism_score / 100.0
+        ]
+        return sum(eth_scores) / len(eth_scores)

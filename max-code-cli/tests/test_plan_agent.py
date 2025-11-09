@@ -70,6 +70,8 @@ def sample_task():
         id="task_001",
         description="Design authentication system for web application",
         parameters={
+                "goal": "Design authentication system for web application",
+            "goal": "Design authentication system for web application",
             "requirements": ["secure", "scalable", "maintainable"],
             "constraints": ["budget", "timeline"],
         },
@@ -675,6 +677,7 @@ def test_real_world_authentication_planning(plan_agent_standalone, mock_thought)
         id="auth_planning",
         description="Design secure authentication system with OAuth2 and JWT",
         parameters={
+                "goal": "Design secure authentication system with OAuth2 and JWT",
             "requirements": ["OAuth2", "JWT", "refresh tokens", "MFA"],
             "security_level": "high",
         },
@@ -703,6 +706,7 @@ def test_real_world_microservice_architecture(plan_agent_standalone, mock_though
         id="microservice_planning",
         description="Design microservice architecture for e-commerce platform",
         parameters={
+                "goal": "Design microservice architecture for e-commerce platform",
             "services": ["user", "product", "order", "payment"],
             "scale": "high",
             "budget": "limited",
@@ -731,6 +735,7 @@ async def test_real_world_database_migration_with_maximus(plan_agent_hybrid, moc
         id="db_migration_planning",
         description="Plan migration from MySQL to PostgreSQL with zero downtime",
         parameters={
+                "goal": "Plan migration from MySQL to PostgreSQL with zero downtime",
             "current_db": "MySQL",
             "target_db": "PostgreSQL",
             "requirement": "zero_downtime",
@@ -792,6 +797,7 @@ def test_real_world_api_refactoring(plan_agent_standalone, mock_thought):
         id="api_refactoring",
         description="Refactor legacy REST API to modern GraphQL API",
         parameters={
+                "goal": "Refactor legacy REST API to modern GraphQL API",
             "current": "REST",
             "target": "GraphQL",
             "compatibility": "required",
@@ -875,12 +881,14 @@ async def test_edge_case_cache_with_different_contexts(plan_agent_hybrid, mock_t
     task1 = AgentTask(
         id="task1",
         description="Plan authentication system",
-        parameters={},
+        parameters={
+                "goal": "Plan authentication system",},
     )
     task2 = AgentTask(
         id="task2",
         description="Plan payment system",  # Different task
-        parameters={},
+        parameters={
+                "goal": "Plan payment system",},
     )
 
     with patch.object(plan_agent_hybrid.tot, 'solve') as mock_solve, \

@@ -61,6 +61,20 @@ from .client import (
     stream_and_print,
 )
 
+from .thinking_display import (
+    ThinkingPhase,
+    ThinkingStep,
+    ToolUse,
+    ThinkingDisplayConfig,
+    EnhancedThinkingDisplay,
+    stream_with_thinking,
+)
+
+from .claude_adapter import (
+    ClaudeStreamAdapter,
+    ClaudeAgentIntegration,
+)
+
 __all__ = [
     # Types
     'StreamEventType',
@@ -81,6 +95,18 @@ __all__ = [
     'StreamingConversation',
     'stream_conversation',
     'stream_and_print',
+    
+    # Thinking Display
+    'ThinkingPhase',
+    'ThinkingStep',
+    'ToolUse',
+    'ThinkingDisplayConfig',
+    'EnhancedThinkingDisplay',
+    'stream_with_thinking',
+    
+    # Claude Integration
+    'ClaudeStreamAdapter',
+    'ClaudeAgentIntegration',
 ]
 
-__version__ = '2.0.0'  # FASE 2.4: Streaming Support
+__version__ = '3.0.0'  # Enhanced Thinking Display + Claude Integration

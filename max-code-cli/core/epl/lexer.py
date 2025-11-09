@@ -14,15 +14,15 @@ from dataclasses import dataclass
 from enum import Enum
 import re
 
-from .vocabulary import (
 from config.logging_config import get_logger
-
-logger = get_logger(__name__)
+from .vocabulary import (
     EMOJI_VOCABULARY,
     OPERATORS,
     get_emoji_by_alias,
     get_emoji_definition,
 )
+
+logger = get_logger(__name__)
 
 
 class TokenType(Enum):

@@ -266,6 +266,34 @@ class EnhancedREPL:
             mode_status = "[green]enabled[/green]" if self.dream_mode else "[dim]disabled[/dim]"
             console.print(f"\n💭 DREAM mode {mode_status}\n")
 
+        @bindings.add("c-s")
+        def enter_sofia_plan(event):
+            """SOFIA Plan Mode (Ctrl+S)"""
+            event.app.exit()  # Exit prompt temporarily
+            console.print("\n[bold cyan]🎯 SOFIA Plan Mode[/bold cyan]")
+            console.print("[dim]Strategic planning with SOFIA wisdom...[/dim]\n")
+            # Get plan input
+            try:
+                plan_input = input("What do you want to plan? › ").strip()
+                if plan_input:
+                    self._cmd_sofia_plan(plan_input)
+            except (KeyboardInterrupt, EOFError):
+                console.print("\n[dim]Cancelled[/dim]\n")
+
+        @bindings.add("c-h")
+        def show_quick_help(event):
+            """Quick Help (Ctrl+H)"""
+            event.app.exit()  # Exit prompt temporarily
+            console.print("\n[bold cyan]⚡ Quick Help - Keyboard Shortcuts[/bold cyan]")
+            console.print()
+            console.print("  [bold]Ctrl+P[/bold]  Command Palette")
+            console.print("  [bold]Ctrl+S[/bold]  SOFIA Plan Mode")
+            console.print("  [bold]Ctrl+D[/bold]  Toggle DREAM Mode (critical analysis)")
+            console.print("  [bold]Ctrl+A[/bold]  Agent Dashboard")
+            console.print("  [bold]Ctrl+H[/bold]  This help")
+            console.print()
+            console.print("  Type [bold]/help[/bold] for full command list\n")
+
         return bindings
 
     def _show_command_palette(self):
@@ -646,7 +674,7 @@ class EnhancedREPL:
         # Welcome banner
         print_banner()
 
-        console.print("[dim]Type /help for commands or Ctrl+P for command palette[/dim]")
+        console.print("[dim]✨ Shortcuts: Ctrl+P (palette) | Ctrl+S (SOFIA plan) | Ctrl+D (DREAM) | Ctrl+H (help)[/dim]")
         console.print()
 
         # Display initial status bar
