@@ -1,0 +1,387 @@
+{
+  "project_stats": {
+    "total_python_files": 261,
+    "total_lines_of_code": 94312,
+    "commands_count": 12,
+    "agents_count": 9,
+    "has_core_module": true,
+    "has_sdk": true
+  },
+  "commands": {
+    "count": 12,
+    "commands": [
+      "analyze",
+      "auth",
+      "heal",
+      "health",
+      "learn",
+      "logs",
+      "predict",
+      "risk",
+      "sabbath",
+      "security",
+      "task",
+      "workflow"
+    ],
+    "has_basic_commands": false,
+    "has_analyze": true,
+    "has_health": true,
+    "has_logs": true
+  },
+  "agents": {
+    "count": 9,
+    "agents": [
+      {
+        "name": "SleepAgent",
+        "file": "sleep_agent.py",
+        "methods": [
+          "__init__",
+          "get_capabilities",
+          "execute",
+          "_generate_report"
+        ],
+        "lines": 421
+      },
+      {
+        "name": "PlanAgent",
+        "file": "plan_agent.py",
+        "methods": [
+          "__init__",
+          "get_capabilities",
+          "execute",
+          "_calculate_tot_score",
+          "get_maximus_stats"
+        ],
+        "lines": 310
+      },
+      {
+        "name": "FixAgent",
+        "file": "fix_agent.py",
+        "methods": [
+          "__init__",
+          "get_capabilities",
+          "execute"
+        ],
+        "lines": 200
+      },
+      {
+        "name": "DocsAgent",
+        "file": "docs_agent.py",
+        "methods": [
+          "__init__",
+          "get_capabilities",
+          "execute"
+        ],
+        "lines": 238
+      },
+      {
+        "name": "ReviewAgent",
+        "file": "review_agent.py",
+        "methods": [
+          "__init__",
+          "get_capabilities",
+          "execute",
+          "_calculate_overall_score"
+        ],
+        "lines": 339
+      },
+      {
+        "name": "ArchitectAgent",
+        "file": "architect_agent.py",
+        "methods": [
+          "__init__",
+          "get_capabilities",
+          "execute",
+          "_analyze_problem",
+          "_explore_architectural_options",
+          "_explore_with_claude_llm",
+          "_explore_with_tot_fallback",
+          "_identify_patterns",
+          "_estimate_impact",
+          "_red_team_criticism",
+          "_fuse_architectural_decisions",
+          "_select_best_option_standalone",
+          "_calculate_tot_score",
+          "_create_architectural_decision_record",
+          "_load_design_patterns",
+          "_load_architectural_principles",
+          "_get_design_pattern_info",
+          "get_decision_history",
+          "query_knowledge_base"
+        ],
+        "lines": 937
+      },
+      {
+        "name": "CodeAgent",
+        "file": "code_agent.py",
+        "methods": [
+          "__init__",
+          "get_capabilities",
+          "execute",
+          "_generate_fallback"
+        ],
+        "lines": 322
+      },
+      {
+        "name": "TestAgent",
+        "file": "test_agent.py",
+        "methods": [
+          "__init__",
+          "get_capabilities",
+          "execute",
+          "_generate_tests_fallback",
+          "_parse_test_suite"
+        ],
+        "lines": 295
+      },
+      {
+        "name": "ExploreAgent",
+        "file": "explore_agent.py",
+        "methods": [
+          "__init__",
+          "get_capabilities",
+          "execute",
+          "_discover_files",
+          "_analyze_structure"
+        ],
+        "lines": 272
+      }
+    ],
+    "has_code_agent": true,
+    "has_planning_agent": true,
+    "has_architect_agent": true,
+    "has_fix_agent": true,
+    "has_test_agent": true
+  },
+  "tools": {
+    "count": 31,
+    "tool_files": 9,
+    "tools": [
+      {
+        "file": "grep_tool.py",
+        "functions": [
+          "grep_files"
+        ],
+        "classes": [
+          "GrepMatch",
+          "GrepResult",
+          "GrepTool"
+        ],
+        "count": 4
+      },
+      {
+        "file": "file_editor.py",
+        "functions": [
+          "edit_file",
+          "goodbye"
+        ],
+        "classes": [
+          "FileEditResult",
+          "FileEditor"
+        ],
+        "count": 4
+      },
+      {
+        "file": "glob_tool.py",
+        "functions": [
+          "glob_files"
+        ],
+        "classes": [
+          "GlobResult",
+          "GlobTool"
+        ],
+        "count": 3
+      },
+      {
+        "file": "types.py",
+        "functions": [],
+        "classes": [
+          "ToolContent",
+          "ToolResult",
+          "ToolParameter",
+          "ToolSchema",
+          "ToolMetadata"
+        ],
+        "count": 5
+      },
+      {
+        "file": "decorator.py",
+        "functions": [
+          "tool",
+          "_ensure_tool_result",
+          "text_tool",
+          "file_tool",
+          "async_tool"
+        ],
+        "classes": [],
+        "count": 5
+      },
+      {
+        "file": "file_reader.py",
+        "functions": [
+          "read_file"
+        ],
+        "classes": [
+          "FileReadResult",
+          "FileReader"
+        ],
+        "count": 3
+      },
+      {
+        "file": "executor_bridge.py",
+        "functions": [
+          "get_unified_executor"
+        ],
+        "classes": [
+          "UnifiedToolExecutor"
+        ],
+        "count": 2
+      },
+      {
+        "file": "file_writer.py",
+        "functions": [
+          "write_file"
+        ],
+        "classes": [
+          "FileWriteResult",
+          "FileWriter"
+        ],
+        "count": 3
+      },
+      {
+        "file": "registry.py",
+        "functions": [
+          "get_registry"
+        ],
+        "classes": [
+          "ToolRegistry"
+        ],
+        "count": 2
+      }
+    ],
+    "has_file_tools": true,
+    "has_exec_tools": true,
+    "has_grep": true,
+    "has_editor": true
+  },
+  "llm_integration": {
+    "has_anthropic": true,
+    "has_openai": false,
+    "has_streaming": true,
+    "has_function_calling": false,
+    "llm_files": [
+      "client.py",
+      "claude_cli.py",
+      "__init__.py"
+    ]
+  },
+  "planning": {
+    "has_planning_module": true,
+    "has_task_planner": true,
+    "has_task_decomposition": false,
+    "has_dependency_management": false,
+    "planning_keywords_count": 1358,
+    "planning_files": [
+      "task_planner.py",
+      "plan_agent.py"
+    ]
+  },
+  "execution": {
+    "can_execute_code": true,
+    "can_edit_files": true,
+    "can_run_commands": true,
+    "has_sandbox": true,
+    "has_executor_bridge": true
+  },
+  "context_management": {
+    "has_context_module": true,
+    "has_history": true,
+    "has_memory": true,
+    "context_size_limit": 6,
+    "context_files": [
+      "strategies.py",
+      "monitor.py",
+      "compactor.py",
+      "types.py",
+      "__init__.py"
+    ]
+  },
+  "error_handling": {
+    "try_except_count": 971,
+    "has_retry_logic": true,
+    "has_fallback": true,
+    "error_recovery_count": 42
+  },
+  "multi_step": {
+    "has_workflow": true,
+    "has_pipeline": true,
+    "has_chaining": true,
+    "step_keywords_count": 1202,
+    "workflow_files": [
+      "workflow_command.py",
+      "test_workflows.py",
+      "test_workflow_e2e.py"
+    ]
+  },
+  "self_correction": {
+    "has_self_correction": true,
+    "has_validation": true,
+    "has_auto_fix": true,
+    "correction_keywords_count": 603,
+    "has_fix_agent": true
+  },
+  "deter_agent": {
+    "has_deter_agent": true,
+    "has_constitutional": true,
+    "deter_files": [
+      "incentive_old.py",
+      "execution_old.py",
+      "guardian.py",
+      "deliberation_old.py",
+      "state_old.py",
+      "__init__.py",
+      "sub_agent_isolation.py",
+      "memory_manager.py",
+      "progressive_disclosure.py",
+      "context_compression.py",
+      "__init__.py",
+      "adversarial_critic.py",
+      "chain_of_thought.py",
+      "tree_of_thoughts.py",
+      "__init__.py",
+      "self_consistency.py",
+      "bugbot.py",
+      "action_validator.py",
+      "self_correction.py",
+      "structured_actions.py",
+      "git_native.py",
+      "tdd_enforcer.py",
+      "tool_executor.py",
+      "__init__.py",
+      "performance_monitor.py",
+      "metrics_tracker.py",
+      "reward_model.py",
+      "__init__.py",
+      "feedback_loop.py"
+    ],
+    "constitutional_files": [
+      "engine.py",
+      "__init__.py",
+      "models.py",
+      "kantian_anti_deception.py",
+      "p6_token_efficiency.py",
+      "p5_systemic.py",
+      "p2_api_validator.py",
+      "p3_truth.py",
+      "p4_user_sovereignty.py",
+      "p1_completeness.py",
+      "__init__.py",
+      "guardian_coordinator.py",
+      "runtime_guardian.py",
+      "pre_execution_guardian.py",
+      "__init__.py",
+      "post_execution_guardian.py",
+      "auto_protection.py"
+    ]
+  }
+}

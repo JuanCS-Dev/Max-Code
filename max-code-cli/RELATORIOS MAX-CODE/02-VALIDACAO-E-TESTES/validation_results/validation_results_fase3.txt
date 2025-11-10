@@ -1,0 +1,75 @@
+2025-11-08 16:43:59,947 - core.tools.registry - INFO - ToolRegistry initialized
+2025-11-08 16:43:59,947 - core.tools.registry - INFO - Tool 'file_reader' registered successfully (version 1.0.0)
+2025-11-08 16:43:59,948 - core.tools.registry - INFO - Tool 'file_writer' registered successfully (version 1.0.0)
+2025-11-08 16:43:59,948 - core.tools.registry - INFO - Tool 'file_editor' registered successfully (version 1.0.0)
+2025-11-08 16:43:59,949 - core.tools.registry - INFO - Tool 'glob_tool' registered successfully (version 1.0.0)
+2025-11-08 16:43:59,950 - core.tools.registry - INFO - Tool 'grep_tool' registered successfully (version 1.0.0)
+================================================================================
+FASE 3: VALIDAÇÃO DE IMPORTS
+================================================================================
+
+✅ ui.streaming
+   ✓ StreamingDisplay
+
+✅ core.risk_classifier
+   ✓ RiskClassifier
+   ✓ RiskLevel
+
+✅ ui.confirmation
+   ✓ ConfirmationUI
+
+✅ core.plan_visualizer
+   ✓ PlanVisualizer
+
+✅ core.task_models
+   ✓ Task
+   ✓ EnhancedExecutionPlan
+   ✓ TaskStatus
+   ✓ TaskType
+
+✅ core.task_graph
+   ✓ TaskGraph
+
+✅ core.task_decomposer
+   ✓ TaskDecomposer
+   ✓ TaskDecomposerFactory
+
+✅ core.dependency_resolver
+   ✓ DependencyResolver
+
+✅ prompts.decomposition_prompts
+   ✓ DecompositionPrompts
+
+✅ core.tools.tool_metadata
+   ✓ EnhancedToolMetadata
+   ✓ ToolCategory
+
+✅ core.tools.enhanced_registry
+   ✓ EnhancedToolRegistry
+
+✅ core.tools.tool_selector
+   ✓ ToolSelector
+
+✅ core.tools.decorator
+   ✓ enhanced_tool
+
+✅ core.tool_integration
+   ✓ ToolIntegration
+
+✅ core.execution_engine
+   ✓ ExecutionEngine
+   ✓ RetryStrategy
+
+✅ ui.execution_display
+   ✓ ExecutionDisplay
+
+================================================================================
+SUMMARY - FASE 3
+================================================================================
+Total modules:  16
+Passed:         16
+Failed:         0
+
+================================================================================
+✅ FASE 3 PASSED: All imports work correctly
+================================================================================

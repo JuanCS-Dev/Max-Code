@@ -1,0 +1,2032 @@
+# MAXIMUS - Function Index
+
+**Complete list of all public functions**
+**Generated:** 2025-11-07 20:48:00
+
+---
+
+## All Public Functions (Alphabetical)
+
+- **acetylcholine_system()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **add_skeptical_comment()** - `max-code-cli/core/skeptic/dream.py`
+- **add_span_attribute()** - `services/maba/shared/vertice_tracing.py`
+- **add_span_attribute()** - `services/nis/shared/vertice_tracing.py`
+- **add_span_attribute()** - `services/penelope/shared/vertice_tracing.py`
+- **add_span_event()** - `services/maba/shared/vertice_tracing.py`
+- **add_span_event()** - `services/nis/shared/vertice_tracing.py`
+- **add_span_event()** - `services/penelope/shared/vertice_tracing.py`
+- **agent_icon()** - `max-code-cli/ui/utils.py`
+- **agents()** - `max-code-cli/cli/main.py`
+- **analyze_file()** - `max-code-cli/core/deter_agent/execution/bugbot.py`
+- **analyze()** - `max-code-cli/cli/main.py`
+- **animate_banner()** - `max-code-cli/ui/effects.py`
+- **ask()** - `cli/main.py`
+- **async_tool()** - `max-code-cli/core/tools/decorator.py`
+- **attention_system()** - `services/core/test_neuromodulation_integration_simple.py`
+- **audit_context()** - `services/maba/shared/audit_logger.py`
+- **audit_context()** - `services/nis/shared/audit_logger.py`
+- **audit_context()** - `services/penelope/shared/audit_logger.py`
+- **audit_logger()** - `services/core/governance/test_audit_infrastructure.py`
+- **audit_trail()** - `services/core/hitl/test_hitl.py`
+- **auth()** - `max-code-cli/cli/auth_command.py`
+- **auto_update_sabbath_status()** - `libs/vortex-legacy/metrics_exporter.py`
+- **auto_update_sabbath_status()** - `services/core/shared/metrics_exporter.py`
+- **auto_update_sabbath_status()** - `services/dlq_monitor/shared/metrics_exporter.py`
+- **auto_update_sabbath_status()** - `services/eureka/shared/metrics_exporter.py`
+- **auto_update_sabbath_status()** - `services/maba/shared/metrics_exporter.py`
+- **auto_update_sabbath_status()** - `services/nis/shared/metrics_exporter.py`
+- **auto_update_sabbath_status()** - `services/oraculo/shared/metrics_exporter.py`
+- **auto_update_sabbath_status()** - `services/orchestrator/shared/metrics_exporter.py`
+- **auto_update_sabbath_status()** - `services/penelope/shared/metrics_exporter.py`
+- **background_worker()** - `services/core/governance/guardian/test_guardians.py`
+- **bar()** - `max-code-cli/ui/progress.py`
+- **broken_function()** - `max-code-cli/core/deter_agent/execution/bugbot.py`
+- **bubble_sort()** - `max-code-cli/examples/guardian_auto_protection_demo.py`
+- **buggy_function()** - `max-code-cli/core/deter_agent/execution/bugbot.py`
+- **build_error_response()** - `services/maba/shared/error_handlers.py`
+- **build_error_response()** - `services/nis/shared/error_handlers.py`
+- **build_error_response()** - `services/penelope/shared/error_handlers.py`
+- **calculate_compression_ratio()** - `max-code-cli/core/epl/vocabulary.py`
+- **calculate()** - `max-code-cli/examples/tool_decorator_example.py`
+- **calculate_risk_score()** - `services/core/osint_router.py`
+- **calculate_sum()** - `max-code-cli/examples/guardian_auto_protection_demo.py`
+- **call_claude_cli()** - `max-code-cli/core/llm/claude_cli.py`
+- **chain_of_thought_reason()** - `max-code-cli/core/deter_agent/deliberation/chain_of_thought.py`
+- **chat()** - `max-code-cli/cli/main.py`
+- **chat_with_claude()** - `max-code-cli/core/llm/claude_cli.py`
+- **check_claude_cli_available()** - `max-code-cli/core/llm/claude_cli.py`
+- **check_process_running()** - `services/core/scripts/monitor_and_report.py`
+- **check_service()** - `max-code-cli/cli/health_command.py`
+- **cli()** - `cli/main.py`
+- **cli()** - `max-code-cli/cli/main.py`
+- **compare_results()** - `services/maba/scripts/benchmark_cognitive_map.py`
+- **compliance_engine()** - `services/core/test_ethical_ai_integration.py`
+- **compress_context()** - `max-code-cli/core/deter_agent/state/context_compression.py`
+- **config()** - `max-code-cli/cli/main.py`
+- **config_no_auto_enforce()** - `services/core/governance/test_policy_engine.py`
+- **config()** - `services/core/governance/test_audit_infrastructure.py`
+- **config()** - `services/core/governance/test_constitutional_scenarios.py`
+- **config()** - `services/core/governance/test_erb_100pct.py`
+- **config()** - `services/core/governance/test_governance.py`
+- **config()** - `services/core/governance/test_policy_engine_100pct.py`
+- **config()** - `services/core/governance/test_policy_engine.py`
+- **configure_constitutional_logging()** - `libs/constitutional/logging.py`
+- **configure_constitutional_logging()** - `libs/vortex-legacy/constitutional_logging.py`
+- **configure_constitutional_logging()** - `services/core/shared/constitutional_logging.py`
+- **configure_constitutional_logging()** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **configure_constitutional_logging()** - `services/eureka/shared/constitutional_logging.py`
+- **configure_constitutional_logging()** - `services/maba/shared/constitutional_logging.py`
+- **configure_constitutional_logging()** - `services/nis/shared/constitutional_logging.py`
+- **configure_constitutional_logging()** - `services/oraculo/shared/constitutional_logging.py`
+- **configure_constitutional_logging()** - `services/orchestrator/shared/constitutional_logging.py`
+- **configure_constitutional_logging()** - `services/penelope/shared/constitutional_logging.py`
+- **configure_logging()** - `max-code-cli/config/logging_config.py`
+- **configure()** - `max-code-cli/cli/sabbath_command.py`
+- **consciousness_icon()** - `max-code-cli/ui/utils.py`
+- **constitutional()** - `cli/main.py`
+- **constitutional_gradient()** - `max-code-cli/ui/colors.py`
+- **controller()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **convert_file()** - `max-code-cli/scripts/batch_convert_logging.py`
+- **convert()** - `max-code-cli/cli/auth_command.py`
+- **convert_oauth_to_api_key()** - `max-code-cli/core/auth/token_converter.py`
+- **convert_prints_to_logging()** - `max-code-cli/scripts/convert_prints_to_logging.py`
+- **convert_to_onnx_with_quantization()** - `services/core/performance/onnx_exporter.py`
+- **coordinator()** - `services/core/governance/guardian/test_coordinator.py`
+- **count_lines()** - `max-code-cli/examples/tool_decorator_example.py`
+- **create_agent_task()** - `max-code-cli/sdk/base_agent.py`
+- **create_apv_api()** - `services/core/apv/api.py`
+- **create_bash_tool()** - `max-code-cli/core/deter_agent/execution/tool_executor.py`
+- **create_block_manager()** - `max-code-cli/ui/output_block.py`
+- **create_box()** - `max-code-cli/ui/utils.py`
+- **create_clean_result()** - `max-code-cli/core/constitutional/models.py`
+- **create_client()** - `max-code-cli/core/llm/client.py`
+- **create_code_change()** - `max-code-cli/core/deter_agent/execution/tdd_enforcer.py`
+- **create_consciousness_api()** - `services/core/consciousness/api.py`
+- **create_constitutional_tracer()** - `libs/constitutional/tracing.py`
+- **create_constitutional_tracer()** - `libs/vortex-legacy/constitutional_tracing.py`
+- **create_constitutional_tracer()** - `services/core/shared/constitutional_tracing.py`
+- **create_constitutional_tracer()** - `services/dlq_monitor/shared/constitutional_tracing.py`
+- **create_constitutional_tracer()** - `services/eureka/shared/constitutional_tracing.py`
+- **create_constitutional_tracer()** - `services/maba/shared/constitutional_tracing.py`
+- **create_constitutional_tracer()** - `services/nis/shared/constitutional_tracing.py`
+- **create_constitutional_tracer()** - `services/oraculo/shared/constitutional_tracing.py`
+- **create_constitutional_tracer()** - `services/orchestrator/shared/constitutional_tracing.py`
+- **create_constitutional_tracer()** - `services/penelope/shared/constitutional_tracing.py`
+- **create_dashboard()** - `max-code-cli/ui/dashboard.py`
+- **create_data_privacy_policy()** - `services/core/governance/policies.py`
+- **create_default_validators()** - `services/core/justice/validators.py`
+- **create_disclosable_from_file()** - `max-code-cli/core/deter_agent/state/progressive_disclosure.py`
+- **create_divider()** - `max-code-cli/ui/utils.py`
+- **create_ethical_use_policy()** - `services/core/governance/policies.py`
+- **create_example_events()** - `services/core/_demonstration/example_predictive_coding_usage.py`
+- **create_file_read_tool()** - `max-code-cli/core/deter_agent/execution/tool_executor.py`
+- **create_git_workflow()** - `max-code-cli/core/deter_agent/execution/git_native.py`
+- **create_governance_api()** - `services/core/governance_sse/api_routes.py`
+- **create_incident_response_policy()** - `services/core/governance/policies.py`
+- **create_layer1_vae_objective()** - `services/core/training/hyperparameter_tuner.py`
+- **create_memory_manager()** - `max-code-cli/core/deter_agent/state/memory_manager.py`
+- **create_mock_data_source()** - `services/core/attention_system/test_attention_integration.py`
+- **create_model_adapter()** - `services/core/federated_learning/model_adapters.py`
+- **create_multi_spinner()** - `max-code-cli/ui/spinners.py`
+- **create_openapi_config()** - `services/maba/shared/openapi_config.py`
+- **create_openapi_config()** - `services/nis/shared/openapi_config.py`
+- **create_openapi_config()** - `services/penelope/shared/openapi_config.py`
+- **create_rate_limiter()** - `services/maba/shared/security_tools/rate_limiter.py`
+- **create_rate_limiter()** - `services/nis/shared/security_tools/rate_limiter.py`
+- **create_rate_limiter()** - `services/penelope/shared/security_tools/rate_limiter.py`
+- **create_red_teaming_policy()** - `services/core/governance/policies.py`
+- **create_security_action()** - `services/core/examples/01_ethical_decision_pipeline.py`
+- **create_self_correction_engine()** - `max-code-cli/core/deter_agent/execution/self_correction.py`
+- **create_test_case()** - `max-code-cli/core/deter_agent/execution/tdd_enforcer.py`
+- **create_test_decision_payload()** - `services/core/_demonstration/enqueue_test_decision.py`
+- **create_violation_result()** - `max-code-cli/core/constitutional/models.py`
+- **create_websocket_app()** - `services/maba/shared/websocket_gateway.py`
+- **create_websocket_app()** - `services/nis/shared/websocket_gateway.py`
+- **create_websocket_app()** - `services/penelope/shared/websocket_gateway.py`
+- **create_whistleblower_policy()** - `services/core/governance/policies.py`
+- **critique_solution()** - `max-code-cli/core/deter_agent/deliberation/adversarial_critic.py`
+- **decision_framework()** - `services/core/governance_sse/test_integration.py`
+- **decision_framework()** - `services/core/hitl/test_hitl.py`
+- **decision_queue()** - `services/core/governance_sse/test_integration.py`
+- **decision_queue()** - `services/core/hitl/test_hitl.py`
+- **decision_to_sse_data()** - `services/core/governance_sse/sse_server.py`
+- **delete_credentials()** - `core/auth/credentials.py`
+- **delete_everything()** - `services/core/governance/guardian/test_guardians.py`
+- **delete_user_account()** - `services/core/governance/guardian/test_guardians.py`
+- **demo_agents()** - `max-code-cli/ui/demo.py`
+- **demo_auto_protection()** - `max-code-cli/examples/guardian_auto_protection_demo.py`
+- **demo_banner()** - `max-code-cli/ui/demo.py`
+- **demo_complete()** - `max-code-cli/ui/demo.py`
+- **demo_formatter()** - `max-code-cli/ui/demo.py`
+- **demonstrate_neuromodulation_standalone()** - `services/core/_demonstration/example_neuromodulation_standalone.py`
+- **demo_progress()** - `max-code-cli/ui/demo.py`
+- **detect_command_injection()** - `services/maba/shared/sanitizers.py`
+- **detect_command_injection()** - `services/nis/shared/sanitizers.py`
+- **detect_command_injection()** - `services/penelope/shared/sanitizers.py`
+- **detect_language()** - `max-code-cli/core/epl/nlp_engine.py`
+- **detect_sql_injection()** - `services/maba/shared/sanitizers.py`
+- **detect_sql_injection()** - `services/nis/shared/sanitizers.py`
+- **detect_sql_injection()** - `services/penelope/shared/sanitizers.py`
+- **disable_auto_protection()** - `max-code-cli/core/constitutional/guardians/auto_protection.py`
+- **disable()** - `max-code-cli/cli/learn_command.py`
+- **disable()** - `max-code-cli/cli/sabbath_command.py`
+- **discover_plugins()** - `max-code-cli/core/plugins.py`
+- **divide()** - `max-code-cli/examples/test_all_elite_agents.py`
+- **dopamine_system()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **dummy_model()** - `services/core/xai/test_xai.py`
+- **edit_file()** - `max-code-cli/core/tools/file_editor.py`
+- **enable_auto_protection()** - `max-code-cli/core/constitutional/guardians/auto_protection.py`
+- **enable()** - `max-code-cli/cli/learn_command.py`
+- **enable()** - `max-code-cli/cli/sabbath_command.py`
+- **engine()** - `services/core/governance/test_governance_engine_edge_cases.py`
+- **ensure_config_dir()** - `max-code-cli/core/auth/max_code_config.py`
+- **erb_manager()** - `services/core/governance/test_constitutional_scenarios.py`
+- **erb_manager()** - `services/core/governance/test_erb_100pct.py`
+- **erb_manager()** - `services/core/governance/test_governance.py`
+- **erb_manager()** - `services/core/test_ethical_ai_integration.py`
+- **error()** - `max-code-cli/ui/formatter.py`
+- **error_response()** - `services/maba/shared/response_models.py`
+- **error_response()** - `services/nis/shared/response_models.py`
+- **error_response()** - `services/penelope/shared/response_models.py`
+- **escalation_manager()** - `services/core/hitl/test_hitl.py`
+- **ethical_guardian()** - `services/core/test_maximus_ethical_integration.py`
+- **ethical_wrapper()** - `services/core/test_maximus_ethical_integration.py`
+- **ethics_engine()** - `services/core/test_ethical_ai_integration.py`
+- **eureka_engine()** - `services/eureka/test_eureka.py`
+- **example_1_basic_compliance_check()** - `services/core/compliance/example_usage.py`
+- **example_1_basic_count()** - `services/core/privacy/example_usage.py`
+- **example_1_basic_fairness_evaluation()** - `services/core/fairness/example_usage.py`
+- **example_1_basic_fl_round()** - `services/core/federated_learning/example_usage.py`
+- **example_1_basic_hitl_workflow()** - `services/core/hitl/example_usage.py`
+- **example_1_erb_meeting_decision()** - `services/core/governance/example_usage.py`
+- **example_1_get_api_key()** - `services/maba/shared/vault_example.py`
+- **example_1_get_api_key()** - `services/nis/shared/vault_example.py`
+- **example_1_get_api_key()** - `services/penelope/shared/vault_example.py`
+- **example_1_standalone_hpc_network()** - `services/core/_demonstration/example_predictive_coding_usage.py`
+- **example_2_bias_detection()** - `services/core/fairness/example_usage.py`
+- **example_2_gap_analysis_remediation()** - `services/core/compliance/example_usage.py`
+- **example_2_geographic_distribution()** - `services/core/privacy/example_usage.py`
+- **example_2_get_database_connection()** - `services/maba/shared/vault_example.py`
+- **example_2_get_database_connection()** - `services/nis/shared/vault_example.py`
+- **example_2_get_database_connection()** - `services/penelope/shared/vault_example.py`
+- **example_2_high_risk_escalation()** - `services/core/hitl/example_usage.py`
+- **example_2_policy_enforcement()** - `services/core/governance/example_usage.py`
+- **example_2_secure_aggregation()** - `services/core/federated_learning/example_usage.py`
+- **example_3_bias_mitigation()** - `services/core/fairness/example_usage.py`
+- **example_3_certification_readiness()** - `services/core/compliance/example_usage.py`
+- **example_3_compliance_reporting()** - `services/core/hitl/example_usage.py`
+- **example_3_dp_federated_learning()** - `services/core/federated_learning/example_usage.py`
+- **example_3_free_energy_principle()** - `services/core/_demonstration/example_predictive_coding_usage.py`
+- **example_3_get_dynamic_database_credentials()** - `services/maba/shared/vault_example.py`
+- **example_3_get_dynamic_database_credentials()** - `services/nis/shared/vault_example.py`
+- **example_3_get_dynamic_database_credentials()** - `services/penelope/shared/vault_example.py`
+- **example_3_severity_statistics()** - `services/core/privacy/example_usage.py`
+- **example_3_whistleblower_report()** - `services/core/governance/example_usage.py`
+- **example_4_attack_vector_histogram()** - `services/core/privacy/example_usage.py`
+- **example_4_continuous_monitoring()** - `services/core/fairness/example_usage.py`
+- **example_4_get_redis_connection()** - `services/maba/shared/vault_example.py`
+- **example_4_get_redis_connection()** - `services/nis/shared/vault_example.py`
+- **example_4_get_redis_connection()** - `services/penelope/shared/vault_example.py`
+- **example_5_auto_mitigation()** - `services/core/fairness/example_usage.py`
+- **example_5_budget_tracking()** - `services/core/privacy/example_usage.py`
+- **example_5_fastapi_dependency()** - `services/maba/shared/vault_example.py`
+- **example_5_fastapi_dependency()** - `services/nis/shared/vault_example.py`
+- **example_5_fastapi_dependency()** - `services/penelope/shared/vault_example.py`
+- **example_6_service_configuration()** - `services/maba/shared/vault_example.py`
+- **example_6_service_configuration()** - `services/nis/shared/vault_example.py`
+- **example_6_service_configuration()** - `services/penelope/shared/vault_example.py`
+- **example_7_vault_health_check()** - `services/maba/shared/vault_example.py`
+- **example_7_vault_health_check()** - `services/nis/shared/vault_example.py`
+- **example_7_vault_health_check()** - `services/penelope/shared/vault_example.py`
+- **example_8_circuit_breaker_demo()** - `services/maba/shared/vault_example.py`
+- **example_8_circuit_breaker_demo()** - `services/nis/shared/vault_example.py`
+- **example_8_circuit_breaker_demo()** - `services/penelope/shared/vault_example.py`
+- **example_all_agents()** - `max-code-cli/examples/validation_example.py`
+- **example_basic_context()** - `max-code-cli/examples/context_compaction_example.py`
+- **example_basic_logging()** - `max-code-cli/examples/logging_example.py`
+- **example_clients_use_settings()** - `max-code-cli/examples/config_example.py`
+- **example_complex_validation()** - `max-code-cli/examples/validation_example.py`
+- **example_convenience_functions()** - `max-code-cli/examples/logging_example.py`
+- **example_create_server()** - `max-code-cli/examples/mcp_example.py`
+- **example_environment_variables()** - `max-code-cli/examples/config_example.py`
+- **example_epl_compression()** - `max-code-cli/examples/logging_example.py`
+- **example_epl_protocol()** - `max-code-cli/examples/logging_example.py`
+- **example_invalid_types()** - `max-code-cli/examples/validation_example.py`
+- **example_load_settings()** - `max-code-cli/examples/config_example.py`
+- **example_log_formats()** - `max-code-cli/examples/logging_example.py`
+- **example_missing_required()** - `max-code-cli/examples/validation_example.py`
+- **example_multiple_tools()** - `max-code-cli/examples/mcp_example.py`
+- **example_override_urls()** - `max-code-cli/examples/config_example.py`
+- **example_pattern_validation()** - `max-code-cli/examples/validation_example.py`
+- **example_sanitization()** - `max-code-cli/examples/logging_example.py`
+- **example_structured_logging()** - `max-code-cli/examples/logging_example.py`
+- **example_validate_configuration()** - `max-code-cli/examples/config_example.py`
+- **example_valid_parameters()** - `max-code-cli/examples/validation_example.py`
+- **execute_command()** - `max-code-cli/ui/command_palette.py`
+- **execute_user_code()** - `max-code-cli/examples/guardian_auto_protection_demo.py`
+- **execute_with_guardians()** - `max-code-cli/core/constitutional/guardians/guardian_coordinator.py`
+- **export()** - `max-code-cli/cli/learn_command.py`
+- **extract_emojis()** - `max-code-cli/core/epl/lexer.py`
+- **extract_request_id()** - `services/maba/shared/error_handlers.py`
+- **extract_request_id()** - `services/nis/shared/error_handlers.py`
+- **extract_request_id()** - `services/penelope/shared/error_handlers.py`
+- **extract_statistics()** - `services/core/scripts/monitor_and_report.py`
+- **extract_words()** - `max-code-cli/core/epl/lexer.py`
+- **fibonacci()** - `max-code-cli/examples/test_all_elite_agents.py`
+- **file_tool()** - `max-code-cli/core/tools/decorator.py`
+- **find_python_files_with_prints()** - `max-code-cli/scripts/batch_convert_logging.py`
+- **fix_file()** - `services/core/scripts/fix_torch_imports.py`
+- **flash_error()** - `max-code-cli/ui/effects.py`
+- **flash_success()** - `max-code-cli/ui/effects.py`
+- **flash_warning()** - `max-code-cli/ui/effects.py`
+- **fl_config()** - `services/core/federated_learning/test_federated_learning.py`
+- **force_token_refresh()** - `core/auth/token_manager.py`
+- **format_bytes()** - `max-code-cli/ui/utils.py`
+- **format_duration()** - `max-code-cli/ui/utils.py`
+- **format_patch_explanation()** - `services/eureka/llm/prompt_templates.py`
+- **format_status()** - `max-code-cli/ui/base.py`
+- **generate_biased_data()** - `services/core/fairness/example_usage.py`
+- **generate_biased_data()** - `services/core/fairness/test_fairness.py`
+- **generate_complexity_assessment_prompt()** - `services/eureka/llm/prompt_templates.py`
+- **generate_env_example()** - `services/maba/shared/base_config.py`
+- **generate_env_example()** - `services/nis/shared/base_config.py`
+- **generate_env_example()** - `services/penelope/shared/base_config.py`
+- **generate_fair_data()** - `services/core/fairness/example_usage.py`
+- **generate_fair_data()** - `services/core/fairness/test_fairness.py`
+- **generate_html_report()** - `services/core/scripts/monitor_and_report.py`
+- **generate()** - `max-code-cli/cli/main.py`
+- **generate_patch_prompt()** - `services/eureka/llm/prompt_templates.py`
+- **generate_validation_prompt()** - `services/eureka/llm/prompt_templates.py`
+- **get_active_theme()** - `max-code-cli/ui/themes.py`
+- **get_agent_display()** - `max-code-cli/ui/__init__.py`
+- **get_all_emojis()** - `max-code-cli/core/epl/vocabulary.py`
+- **get_all_operators()** - `max-code-cli/core/epl/vocabulary.py`
+- **get_all_scenarios()** - `services/core/compassion/sally_anne_dataset.py`
+- **get_anthropic_client()** - `max-code-cli/core/auth/oauth_handler.py`
+- **get_api_key()** - `services/maba/shared/vault_client.py`
+- **get_api_key()** - `services/nis/shared/vault_client.py`
+- **get_api_key()** - `services/penelope/shared/vault_client.py`
+- **get_attack_surface_workflow()** - `services/core/adw_router.py`
+- **get_audit_logger()** - `services/maba/shared/audit_logger.py`
+- **get_audit_logger()** - `services/nis/shared/audit_logger.py`
+- **get_audit_logger()** - `services/penelope/shared/audit_logger.py`
+- **get_auto_protection()** - `max-code-cli/core/constitutional/guardians/auto_protection.py`
+- **get_banner()** - `max-code-cli/ui/__init__.py`
+- **get_bindings()** - `max-code-cli/ui/keybindings.py`
+- **get_canary_manager()** - `services/maba/shared/vertice_canary.py`
+- **get_canary_manager()** - `services/nis/shared/vertice_canary.py`
+- **get_canary_manager()** - `services/penelope/shared/vertice_canary.py`
+- **get_classes()** - `services/core/test_predictive_coding_structure.py`
+- **get_command_palette()** - `max-code-cli/ui/__init__.py`
+- **get_compacting_message()** - `max-code-cli/core/messages.py`
+- **get_config_dir()** - `core/auth/config.py`
+- **get_config_dir()** - `max-code-cli/core/auth/max_code_config.py`
+- **get_config_for_risk()** - `services/core/ethics/config.py`
+- **get_config_menu()** - `max-code-cli/ui/__init__.py`
+- **get_config()** - `services/core/ethics/config.py`
+- **get_console()** - `max-code-cli/ui/utils.py`
+- **get_constitutional_analysis()** - `max-code-cli/ui/__init__.py`
+- **get_constitutional_engine()** - `max-code-cli/core/constitutional/engine.py`
+- **get_constitutional_logger()** - `libs/constitutional/logging.py`
+- **get_constitutional_logger()** - `libs/vortex-legacy/constitutional_logging.py`
+- **get_constitutional_logger()** - `services/core/shared/constitutional_logging.py`
+- **get_constitutional_logger()** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **get_constitutional_logger()** - `services/eureka/shared/constitutional_logging.py`
+- **get_constitutional_logger()** - `services/maba/shared/constitutional_logging.py`
+- **get_constitutional_logger()** - `services/nis/shared/constitutional_logging.py`
+- **get_constitutional_logger()** - `services/oraculo/shared/constitutional_logging.py`
+- **get_constitutional_logger()** - `services/orchestrator/shared/constitutional_logging.py`
+- **get_constitutional_logger()** - `services/penelope/shared/constitutional_logging.py`
+- **get_consumer_topics()** - `services/maba/shared/messaging/topics.py`
+- **get_consumer_topics()** - `services/nis/shared/messaging/topics.py`
+- **get_consumer_topics()** - `services/penelope/shared/messaging/topics.py`
+- **get_cost_tracker()** - `services/eureka/tracking/llm_cost_tracker.py`
+- **get_credential_intel_workflow()** - `services/core/adw_router.py`
+- **get_credentials_file_path()** - `core/auth/config.py`
+- **get_credentials_file_path()** - `max-code-cli/core/auth/max_code_config.py`
+- **get_credential_type()** - `max-code-cli/core/auth/oauth_handler.py`
+- **get_database_config()** - `services/maba/shared/vault_client.py`
+- **get_database_config()** - `services/nis/shared/vault_client.py`
+- **get_database_config()** - `services/penelope/shared/vault_client.py`
+- **get_dream()** - `max-code-cli/core/skeptic/dream.py`
+- **get_emoji_by_alias()** - `max-code-cli/core/epl/vocabulary.py`
+- **get_emoji_definition()** - `max-code-cli/core/epl/vocabulary.py`
+- **get_emojis_by_category()** - `max-code-cli/core/epl/vocabulary.py`
+- **get_env()** - `libs/common/config.py`
+- **get_failure_message()** - `max-code-cli/core/messages.py`
+- **get_few_shot_examples()** - `services/eureka/data/few_shot_database.py`
+- **get_formatter()** - `max-code-cli/ui/__init__.py`
+- **get_framework_weights()** - `services/core/ethics/config.py`
+- **get_generation_message()** - `max-code-cli/core/messages.py`
+- **get_global_engine()** - `services/core/xai/engine.py`
+- **get_gradient()** - `max-code-cli/ui/colors.py`
+- **get_guardian_coordinator()** - `max-code-cli/core/constitutional/guardians/guardian_coordinator.py`
+- **get_handler()** - `max-code-cli/ui/smart_errors.py`
+- **get_hook_manager()** - `max-code-cli/core/hooks/manager.py`
+- **get_http_client()** - `core/auth/http_client.py`
+- **get_integration_manager()** - `max-code-cli/core/integration_manager.py`
+- **get_ip_intelligence_config()** - `services/maba/shared/openapi_config.py`
+- **get_ip_intelligence_config()** - `services/nis/shared/openapi_config.py`
+- **get_ip_intelligence_config()** - `services/penelope/shared/openapi_config.py`
+- **get_jwt_secret()** - `services/maba/shared/vault_client.py`
+- **get_jwt_secret()** - `services/nis/shared/vault_client.py`
+- **get_jwt_secret()** - `services/penelope/shared/vault_client.py`
+- **get_kantian_validator()** - `max-code-cli/core/constitutional/validators/kantian_anti_deception.py`
+- **get_loading_message()** - `max-code-cli/core/messages.py`
+- **get_logger()** - `max-code-cli/config/logging_config.py`
+- **get_log_viewer()** - `max-code-cli/ui/__init__.py`
+- **get_maba_service()** - `services/maba/api/routes.py`
+- **get_malware_analysis_config()** - `services/maba/shared/openapi_config.py`
+- **get_malware_analysis_config()** - `services/nis/shared/openapi_config.py`
+- **get_malware_analysis_config()** - `services/penelope/shared/openapi_config.py`
+- **get_manager()** - `max-code-cli/core/plugins.py`
+- **get_manager()** - `max-code-cli/ui/keybindings.py`
+- **get_manager()** - `max-code-cli/ui/themes.py`
+- **get_maximus_core_config()** - `services/maba/shared/openapi_config.py`
+- **get_maximus_core_config()** - `services/nis/shared/openapi_config.py`
+- **get_maximus_core_config()** - `services/penelope/shared/openapi_config.py`
+- **get_methods()** - `services/core/test_predictive_coding_structure.py`
+- **get_metrics_handler()** - `services/core/consciousness/prometheus_metrics.py`
+- **get_mode_policy()** - `services/core/autonomic_core/plan/mode_definitions.py`
+- **get_monitoring_message()** - `max-code-cli/core/messages.py`
+- **get_mvp_service()** - `services/nis/api/routes.py`
+- **get_operation_verse()** - `max-code-cli/core/verses.py`
+- **get_optimal_batch_size()** - `services/core/performance/gpu_trainer.py`
+- **get_palette()** - `max-code-cli/ui/command_palette.py`
+- **get_producer_topics()** - `services/maba/shared/messaging/topics.py`
+- **get_producer_topics()** - `services/nis/shared/messaging/topics.py`
+- **get_producer_topics()** - `services/penelope/shared/messaging/topics.py`
+- **get_progress()** - `max-code-cli/ui/__init__.py`
+- **get_progress()** - `services/core/scripts/monitor_and_report.py`
+- **get_progress_stream()** - `max-code-cli/ui/__init__.py`
+- **get_public_data()** - `services/core/governance/guardian/test_guardians.py`
+- **get_rank()** - `services/core/performance/distributed_trainer.py`
+- **get_rate_limit_status()** - `services/maba/shared/middleware/rate_limiter.py`
+- **get_rate_limit_status()** - `services/nis/shared/middleware/rate_limiter.py`
+- **get_rate_limit_status()** - `services/penelope/shared/middleware/rate_limiter.py`
+- **get_reasoning_steps()** - `max-code-cli/ui/__init__.py`
+- **get_registry()** - `max-code-cli/core/tools/registry.py`
+- **get_regulation()** - `services/core/compliance/regulations.py`
+- **get_rich_theme()** - `max-code-cli/ui/themes.py`
+- **get_runtime_guardian()** - `max-code-cli/core/constitutional/guardians/runtime_guardian.py`
+- **get_scenarios_by_difficulty()** - `services/core/compassion/sally_anne_dataset.py`
+- **get_scenario()** - `services/core/compassion/sally_anne_dataset.py`
+- **get_schema_for_agent()** - `max-code-cli/agents/validation_schemas.py`
+- **get_selection_menu()** - `max-code-cli/ui/__init__.py`
+- **get_servers()** - `services/maba/shared/openapi_config.py`
+- **get_servers()** - `services/nis/shared/openapi_config.py`
+- **get_servers()** - `services/penelope/shared/openapi_config.py`
+- **get_settings()** - `max-code-cli/config/settings.py`
+- **get_startup_verse()** - `max-code-cli/core/verses.py`
+- **get_status_bar()** - `max-code-cli/ui/status_bar.py`
+- **get_strategy()** - `max-code-cli/core/context/strategies.py`
+- **get_streaming_display()** - `max-code-cli/ui/__init__.py`
+- **get_success_message()** - `max-code-cli/core/messages.py`
+- **get_success_verse()** - `max-code-cli/core/verses.py`
+- **get_system_info()** - `max-code-cli/examples/tool_decorator_example.py`
+- **get_target_profiling_workflow()** - `services/core/adw_router.py`
+- **get_theme()** - `max-code-cli/ui/utils.py`
+- **get_thought_tree()** - `max-code-cli/ui/__init__.py`
+- **get_thresholds()** - `services/core/ethics/config.py`
+- **get_token_manager()** - `core/auth/token_manager.py`
+- **get_topic_config()** - `services/maba/shared/messaging/topics.py`
+- **get_topic_config()** - `services/nis/shared/messaging/topics.py`
+- **get_topic_config()** - `services/penelope/shared/messaging/topics.py`
+- **get_tracer()** - `services/maba/shared/vertice_tracing.py`
+- **get_tracer()** - `services/nis/shared/vertice_tracing.py`
+- **get_tracer()** - `services/penelope/shared/vertice_tracing.py`
+- **get_unified_executor()** - `max-code-cli/core/tools/executor_bridge.py`
+- **get_user()** - `max-code-cli/examples/test_all_elite_agents.py`
+- **get_valid_access_token()** - `core/auth/credentials.py`
+- **get_validation_message()** - `max-code-cli/core/messages.py`
+- **get_valid_token()** - `core/auth/token_manager.py`
+- **get_vault_client()** - `services/maba/shared/vault_client.py`
+- **get_vault_client()** - `services/nis/shared/vault_client.py`
+- **get_vault_client()** - `services/penelope/shared/vault_client.py`
+- **get_vcli_banner()** - `max-code-cli/ui/__init__.py`
+- **get_verse_manager()** - `max-code-cli/core/verses.py`
+- **get_verse()** - `max-code-cli/core/verses.py`
+- **get_version_info()** - `services/core/version.py`
+- **get_version()** - `services/core/version.py`
+- **get_world_size()** - `services/core/performance/distributed_trainer.py`
+- **glob_files()** - `max-code-cli/core/tools/glob_tool.py`
+- **goodbye()** - `max-code-cli/core/tools/file_editor.py`
+- **governance_app()** - `services/core/governance_sse/test_integration.py`
+- **governance_config()** - `services/core/test_ethical_ai_integration.py`
+- **governance_config()** - `services/core/test_maximus_ethical_integration.py`
+- **governance_engine()** - `services/core/governance/test_governance_engine.py`
+- **governance_engine()** - `services/core/governance/test_hitl_interface.py`
+- **greet_user()** - `max-code-cli/examples/tool_decorator_example.py`
+- **grep_files()** - `max-code-cli/core/tools/grep_tool.py`
+- **guardian()** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **guardian()** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **guardian()** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **guardian()** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **guardian()** - `services/core/governance/guardian/test_base_guardian.py`
+- **handle_error()** - `max-code-cli/ui/smart_errors.py`
+- **handle_request()** - `services/core/governance/guardian/test_guardians.py`
+- **health()** - `max-code-cli/cli/health_command.py`
+- **health()** - `max-code-cli/cli/main.py`
+- **hello_maxcode()** - `max-code-cli/ui/formatter.py`
+- **hitl_config()** - `services/core/hitl/test_hitl.py`
+- **hitl_interface()** - `services/core/governance/test_hitl_interface.py`
+- **info()** - `max-code-cli/ui/formatter.py`
+- **initialize_stream_manager()** - `services/oraculo/api_endpoints/websocket_endpoints.py`
+- **initiate_browser_oauth_flow()** - `max-code-cli/core/auth/oauth_handler.py`
+- **initiate_oauth_login()** - `core/auth/oauth.py`
+- **init()** - `max-code-cli/cli/main.py`
+- **init_profile_wizard()** - `max-code-cli/config/profiles.py`
+- **init_tracing()** - `services/maba/shared/vertice_tracing.py`
+- **init_tracing()** - `services/nis/shared/vertice_tracing.py`
+- **init_tracing()** - `services/penelope/shared/vertice_tracing.py`
+- **insights()** - `max-code-cli/cli/learn_command.py`
+- **instrument_fastapi()** - `services/maba/shared/vertice_tracing.py`
+- **instrument_fastapi()** - `services/nis/shared/vertice_tracing.py`
+- **instrument_fastapi()** - `services/penelope/shared/vertice_tracing.py`
+- **instrument_httpx()** - `services/maba/shared/vertice_tracing.py`
+- **instrument_httpx()** - `services/nis/shared/vertice_tracing.py`
+- **instrument_httpx()** - `services/penelope/shared/vertice_tracing.py`
+- **instrument_redis()** - `services/maba/shared/vertice_tracing.py`
+- **instrument_redis()** - `services/nis/shared/vertice_tracing.py`
+- **instrument_redis()** - `services/penelope/shared/vertice_tracing.py`
+- **interpret_emoji_in_context()** - `max-code-cli/core/epl/vocabulary.py`
+- **ioc_extractor()** - `services/eureka/test_eureka.py`
+- **is_api_key()** - `core/auth/config.py`
+- **is_authenticated()** - `core/auth/credentials.py`
+- **is_dist_available_and_initialized()** - `services/core/performance/distributed_trainer.py`
+- **is_epl_only()** - `max-code-cli/core/epl/lexer.py`
+- **is_natural_language_only()** - `max-code-cli/core/epl/lexer.py`
+- **is_oauth_token()** - `core/auth/config.py`
+- **is_private_ip()** - `services/maba/shared/validators.py`
+- **is_private_ip()** - `services/nis/shared/validators.py`
+- **is_private_ip()** - `services/penelope/shared/validators.py`
+- **is_public_ip()** - `services/maba/shared/validators.py`
+- **is_public_ip()** - `services/nis/shared/validators.py`
+- **is_public_ip()** - `services/penelope/shared/validators.py`
+- **is_sabbath()** - `libs/vortex-legacy/metrics_exporter.py`
+- **is_sabbath()** - `services/core/shared/metrics_exporter.py`
+- **is_sabbath()** - `services/dlq_monitor/shared/metrics_exporter.py`
+- **is_sabbath()** - `services/eureka/shared/metrics_exporter.py`
+- **is_sabbath()** - `services/maba/shared/metrics_exporter.py`
+- **is_sabbath()** - `services/nis/shared/metrics_exporter.py`
+- **is_sabbath()** - `services/oraculo/shared/metrics_exporter.py`
+- **is_sabbath()** - `services/orchestrator/shared/metrics_exporter.py`
+- **is_sabbath()** - `services/penelope/main.py`
+- **is_sabbath()** - `services/penelope/shared/metrics_exporter.py`
+- **learn()** - `max-code-cli/cli/learn_command.py`
+- **list_response()** - `services/maba/shared/response_models.py`
+- **list_response()** - `services/nis/shared/response_models.py`
+- **list_response()** - `services/penelope/shared/response_models.py`
+- **load_claude_credentials()** - `max-code-cli/core/auth/oauth_handler.py`
+- **load_config()** - `libs/common/config.py`
+- **load_config()** - `services/maba/shared/base_config.py`
+- **load_config()** - `services/nis/shared/base_config.py`
+- **load_config()** - `services/penelope/shared/base_config.py`
+- **load_credentials()** - `core/auth/credentials.py`
+- **load_plugin()** - `max-code-cli/core/plugins.py`
+- **load_settings_from_file()** - `max-code-cli/config/settings.py`
+- **log_agent_complete()** - `max-code-cli/config/logging_config.py`
+- **log_agent_start()** - `max-code-cli/config/logging_config.py`
+- **log_aletheia_check()** - `libs/constitutional/logging.py`
+- **log_aletheia_check()** - `libs/vortex-legacy/constitutional_logging.py`
+- **log_aletheia_check()** - `services/core/shared/constitutional_logging.py`
+- **log_aletheia_check()** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **log_aletheia_check()** - `services/eureka/shared/constitutional_logging.py`
+- **log_aletheia_check()** - `services/maba/shared/constitutional_logging.py`
+- **log_aletheia_check()** - `services/nis/shared/constitutional_logging.py`
+- **log_aletheia_check()** - `services/oraculo/shared/constitutional_logging.py`
+- **log_aletheia_check()** - `services/orchestrator/shared/constitutional_logging.py`
+- **log_aletheia_check()** - `services/penelope/shared/constitutional_logging.py`
+- **log_constitutional_violation()** - `libs/constitutional/logging.py`
+- **log_constitutional_violation()** - `libs/vortex-legacy/constitutional_logging.py`
+- **log_constitutional_violation()** - `services/core/shared/constitutional_logging.py`
+- **log_constitutional_violation()** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **log_constitutional_violation()** - `services/eureka/shared/constitutional_logging.py`
+- **log_constitutional_violation()** - `services/maba/shared/constitutional_logging.py`
+- **log_constitutional_violation()** - `services/nis/shared/constitutional_logging.py`
+- **log_constitutional_violation()** - `services/oraculo/shared/constitutional_logging.py`
+- **log_constitutional_violation()** - `services/orchestrator/shared/constitutional_logging.py`
+- **log_constitutional_violation()** - `services/penelope/shared/constitutional_logging.py`
+- **login()** - `cli/main.py`
+- **login()** - `max-code-cli/cli/auth_command.py`
+- **log_maximus_call()** - `max-code-cli/config/logging_config.py`
+- **logout()** - `cli/main.py`
+- **logout()** - `max-code-cli/cli/auth_command.py`
+- **log_praotes_check()** - `libs/constitutional/logging.py`
+- **log_praotes_check()** - `libs/vortex-legacy/constitutional_logging.py`
+- **log_praotes_check()** - `services/core/shared/constitutional_logging.py`
+- **log_praotes_check()** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **log_praotes_check()** - `services/eureka/shared/constitutional_logging.py`
+- **log_praotes_check()** - `services/maba/shared/constitutional_logging.py`
+- **log_praotes_check()** - `services/nis/shared/constitutional_logging.py`
+- **log_praotes_check()** - `services/oraculo/shared/constitutional_logging.py`
+- **log_praotes_check()** - `services/orchestrator/shared/constitutional_logging.py`
+- **log_praotes_check()** - `services/penelope/shared/constitutional_logging.py`
+- **log_sabbath_check()** - `libs/constitutional/logging.py`
+- **log_sabbath_check()** - `libs/vortex-legacy/constitutional_logging.py`
+- **log_sabbath_check()** - `services/core/shared/constitutional_logging.py`
+- **log_sabbath_check()** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **log_sabbath_check()** - `services/eureka/shared/constitutional_logging.py`
+- **log_sabbath_check()** - `services/maba/shared/constitutional_logging.py`
+- **log_sabbath_check()** - `services/nis/shared/constitutional_logging.py`
+- **log_sabbath_check()** - `services/oraculo/shared/constitutional_logging.py`
+- **log_sabbath_check()** - `services/orchestrator/shared/constitutional_logging.py`
+- **log_sabbath_check()** - `services/penelope/shared/constitutional_logging.py`
+- **log_sophia_decision()** - `libs/constitutional/logging.py`
+- **log_sophia_decision()** - `libs/vortex-legacy/constitutional_logging.py`
+- **log_sophia_decision()** - `services/core/shared/constitutional_logging.py`
+- **log_sophia_decision()** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **log_sophia_decision()** - `services/eureka/shared/constitutional_logging.py`
+- **log_sophia_decision()** - `services/maba/shared/constitutional_logging.py`
+- **log_sophia_decision()** - `services/nis/shared/constitutional_logging.py`
+- **log_sophia_decision()** - `services/oraculo/shared/constitutional_logging.py`
+- **log_sophia_decision()** - `services/orchestrator/shared/constitutional_logging.py`
+- **log_sophia_decision()** - `services/penelope/shared/constitutional_logging.py`
+- **log_tapeinophrosyne_check()** - `libs/constitutional/logging.py`
+- **log_tapeinophrosyne_check()** - `libs/vortex-legacy/constitutional_logging.py`
+- **log_tapeinophrosyne_check()** - `services/core/shared/constitutional_logging.py`
+- **log_tapeinophrosyne_check()** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **log_tapeinophrosyne_check()** - `services/eureka/shared/constitutional_logging.py`
+- **log_tapeinophrosyne_check()** - `services/maba/shared/constitutional_logging.py`
+- **log_tapeinophrosyne_check()** - `services/nis/shared/constitutional_logging.py`
+- **log_tapeinophrosyne_check()** - `services/oraculo/shared/constitutional_logging.py`
+- **log_tapeinophrosyne_check()** - `services/orchestrator/shared/constitutional_logging.py`
+- **log_tapeinophrosyne_check()** - `services/penelope/shared/constitutional_logging.py`
+- **log_validation_error()** - `max-code-cli/config/logging_config.py`
+- **main()** - `max-code-cli/benchmarks/ui_benchmarks.py`
+- **main()** - `max-code-cli/examples/config_example.py`
+- **main()** - `max-code-cli/examples/logging_example.py`
+- **main()** - `max-code-cli/examples/test_code_agent.py`
+- **main()** - `max-code-cli/examples/test_elite_agents_structure.py`
+- **main()** - `max-code-cli/examples/validation_example.py`
+- **main()** - `max-code-cli/scripts/batch_convert_logging.py`
+- **main()** - `max-code-cli/scripts/benchmark.py`
+- **main()** - `max-code-cli/scripts/convert_prints_to_logging.py`
+- **main()** - `max-code-cli/scripts/load_test.py`
+- **main()** - `max-code-cli/ui/demo.py`
+- **main()** - `max-code-cli/ui/showcase.py`
+- **main()** - `services/core/_demonstration/enqueue_test_decision.py`
+- **main()** - `services/core/_demonstration/example_predictive_coding_usage.py`
+- **main()** - `services/core/examples/01_ethical_decision_pipeline.py`
+- **main()** - `services/core/examples/02_autonomous_training_workflow.py`
+- **main()** - `services/core/examples/03_performance_optimization_pipeline.py`
+- **main()** - `services/core/performance/batch_predictor.py`
+- **main()** - `services/core/performance/benchmark_suite.py`
+- **main()** - `services/core/performance/inference_engine.py`
+- **main()** - `services/core/performance/onnx_exporter.py`
+- **main()** - `services/core/performance/profiler.py`
+- **main()** - `services/core/performance/pruner.py`
+- **main()** - `services/core/performance/quantizer.py`
+- **main()** - `services/core/scripts/batch_test_generator.py`
+- **main()** - `services/core/scripts/coverage_commander.py`
+- **main()** - `services/core/scripts/coverage_report.py`
+- **main()** - `services/core/scripts/coverage_tracker.py`
+- **main()** - `services/core/scripts/generate_tests_gemini.py`
+- **main()** - `services/core/scripts/generate_tests.py`
+- **main()** - `services/core/scripts/industrial_test_generator.py`
+- **main()** - `services/core/scripts/industrial_test_generator_v2.py`
+- **main()** - `services/core/scripts/industrial_test_generator_v3.py`
+- **main()** - `services/core/scripts/industrial_test_generator_v4.py`
+- **main()** - `services/core/scripts/industrial_test_generator_v5_hypothesis.py`
+- **main()** - `services/core/scripts/monitor_and_report.py`
+- **main()** - `services/core/test_adw_real_integration.py`
+- **main()** - `services/core/training/hyperparameter_tuner.py`
+- **main()** - `services/core/training/train_layer1_vae.py`
+- **main()** - `services/core/validate_regra_de_ouro.py`
+- **main()** - `services/eureka/consumer.py`
+- **main()** - `services/maba/main.py`
+- **main()** - `services/nis/main.py`
+- **main()** - `services/oraculo/auto_implementer.py`
+- **main()** - `services/oraculo/auto_implementer.py`
+- **main()** - `services/penelope/main.py`
+- **merge()** - `max-code-cli/examples/guardian_auto_protection_demo.py`
+- **merge_sort()** - `max-code-cli/examples/guardian_auto_protection_demo.py`
+- **migrate_print_to_log()** - `max-code-cli/config/logging_config.py`
+- **mock_gemini_client()** - `services/core/test_world_class_tools.py`
+- **mock_psycopg2()** - `services/core/governance/test_audit_infrastructure.py`
+- **neon()** - `max-code-cli/ui/colors.py`
+- **neuromodulation()** - `services/core/test_neuromodulation_integration_simple.py`
+- **norepinephrine_system()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **normalize()** - `max-code-cli/core/epl/nlp_engine.py`
+- **normalize_unicode()** - `services/maba/shared/sanitizers.py`
+- **normalize_unicode()** - `services/nis/shared/sanitizers.py`
+- **normalize_unicode()** - `services/penelope/shared/sanitizers.py`
+- **normalize_whitespace()** - `services/maba/shared/sanitizers.py`
+- **normalize_whitespace()** - `services/nis/shared/sanitizers.py`
+- **normalize_whitespace()** - `services/penelope/shared/sanitizers.py`
+- **operator_interface()** - `services/core/governance_sse/test_integration.py`
+- **operator_interface()** - `services/core/hitl/test_hitl.py`
+- **parse_args()** - `services/eureka/main.py`
+- **parse()** - `max-code-cli/core/epl/parser.py`
+- **parse_source()** - `services/core/test_predictive_coding_structure.py`
+- **pattern_detector()** - `services/eureka/test_eureka.py`
+- **playbook_generator()** - `services/eureka/test_eureka.py`
+- **policy_engine_no_enforce()** - `services/core/governance/test_policy_engine.py`
+- **policy_engine()** - `services/core/governance/test_constitutional_scenarios.py`
+- **policy_engine()** - `services/core/governance/test_governance.py`
+- **policy_engine()** - `services/core/governance/test_policy_engine_100pct.py`
+- **policy_engine()** - `services/core/governance/test_policy_engine.py`
+- **policy_engine()** - `services/core/test_ethical_ai_integration.py`
+- **policy_registry()** - `services/core/governance/test_constitutional_scenarios.py`
+- **policy_registry()** - `services/core/governance/test_governance.py`
+- **policy_registry()** - `services/core/governance/test_policies_100pct.py`
+- **policy_registry()** - `services/core/test_ethical_ai_integration.py`
+- **populated_erb()** - `services/core/governance/test_erb_100pct.py`
+- **predict()** - `max-code-cli/cli/predict_command.py`
+- **print_ast()** - `max-code-cli/core/epl/parser.py`
+- **print_banner()** - `cli/main.py`
+- **print_banner()** - `max-code-cli/ui/banner.py`
+- **print_banner()** - `services/core/_demonstration/demo_ethical_ai_complete.py`
+- **print_error()** - `max-code-cli/ui/utils.py`
+- **print_gpu_info()** - `services/core/performance/gpu_trainer.py`
+- **print_header()** - `max-code-cli/ui/utils.py`
+- **print_header()** - `services/core/compliance/example_usage.py`
+- **print_header()** - `services/core/federated_learning/example_usage.py`
+- **print_header()** - `services/core/governance/example_usage.py`
+- **print_header()** - `services/core/hitl/example_usage.py`
+- **print_header()** - `services/core/privacy/example_usage.py`
+- **print_info()** - `max-code-cli/ui/utils.py`
+- **print_section()** - `max-code-cli/ui/utils.py`
+- **print_section()** - `services/core/_demonstration/demo_ethical_ai_complete.py`
+- **print_success()** - `max-code-cli/ui/utils.py`
+- **print_warning()** - `max-code-cli/ui/utils.py`
+- **process_data()** - `services/core/governance/guardian/test_guardians.py`
+- **profile()** - `max-code-cli/cli/main.py`
+- **profiles()** - `max-code-cli/cli/main.py`
+- **quantize_to_fp16()** - `services/core/performance/quantizer.py`
+- **rate_limit()** - `services/eureka/middleware/rate_limiter.py`
+- **rate_limit()** - `services/maba/shared/middleware/rate_limiter.py`
+- **rate_limit()** - `services/nis/shared/middleware/rate_limiter.py`
+- **rate_limit()** - `services/penelope/shared/middleware/rate_limiter.py`
+- **read_file()** - `max-code-cli/core/tools/file_reader.py`
+- **read_source()** - `services/core/test_predictive_coding_structure.py`
+- **recognize_intent()** - `max-code-cli/core/epl/nlp_engine.py`
+- **record_constitutional_compliance()** - `libs/constitutional/metrics.py`
+- **record_constitutional_compliance()** - `libs/vortex-legacy/constitutional_metrics.py`
+- **record_constitutional_compliance()** - `services/core/shared/constitutional_metrics.py`
+- **record_constitutional_compliance()** - `services/dlq_monitor/shared/constitutional_metrics.py`
+- **record_constitutional_compliance()** - `services/eureka/shared/constitutional_metrics.py`
+- **record_constitutional_compliance()** - `services/maba/shared/constitutional_metrics.py`
+- **record_constitutional_compliance()** - `services/nis/shared/constitutional_metrics.py`
+- **record_constitutional_compliance()** - `services/oraculo/shared/constitutional_metrics.py`
+- **record_constitutional_compliance()** - `services/orchestrator/shared/constitutional_metrics.py`
+- **record_constitutional_compliance()** - `services/penelope/shared/constitutional_metrics.py`
+- **record_fpc_score()** - `libs/constitutional/metrics.py`
+- **record_fpc_score()** - `libs/vortex-legacy/constitutional_metrics.py`
+- **record_fpc_score()** - `services/core/shared/constitutional_metrics.py`
+- **record_fpc_score()** - `services/dlq_monitor/shared/constitutional_metrics.py`
+- **record_fpc_score()** - `services/eureka/shared/constitutional_metrics.py`
+- **record_fpc_score()** - `services/maba/shared/constitutional_metrics.py`
+- **record_fpc_score()** - `services/nis/shared/constitutional_metrics.py`
+- **record_fpc_score()** - `services/oraculo/shared/constitutional_metrics.py`
+- **record_fpc_score()** - `services/orchestrator/shared/constitutional_metrics.py`
+- **record_fpc_score()** - `services/penelope/shared/constitutional_metrics.py`
+- **record_fruit_compliance()** - `libs/constitutional/metrics.py`
+- **record_fruit_compliance()** - `libs/vortex-legacy/constitutional_metrics.py`
+- **record_fruit_compliance()** - `services/core/shared/constitutional_metrics.py`
+- **record_fruit_compliance()** - `services/dlq_monitor/shared/constitutional_metrics.py`
+- **record_fruit_compliance()** - `services/eureka/shared/constitutional_metrics.py`
+- **record_fruit_compliance()** - `services/maba/shared/constitutional_metrics.py`
+- **record_fruit_compliance()** - `services/nis/shared/constitutional_metrics.py`
+- **record_fruit_compliance()** - `services/oraculo/shared/constitutional_metrics.py`
+- **record_fruit_compliance()** - `services/orchestrator/shared/constitutional_metrics.py`
+- **record_fruit_compliance()** - `services/penelope/shared/constitutional_metrics.py`
+- **record_hallucination()** - `libs/constitutional/metrics.py`
+- **record_hallucination()** - `libs/vortex-legacy/constitutional_metrics.py`
+- **record_hallucination()** - `services/core/shared/constitutional_metrics.py`
+- **record_hallucination()** - `services/dlq_monitor/shared/constitutional_metrics.py`
+- **record_hallucination()** - `services/eureka/shared/constitutional_metrics.py`
+- **record_hallucination()** - `services/maba/shared/constitutional_metrics.py`
+- **record_hallucination()** - `services/nis/shared/constitutional_metrics.py`
+- **record_hallucination()** - `services/oraculo/shared/constitutional_metrics.py`
+- **record_hallucination()** - `services/orchestrator/shared/constitutional_metrics.py`
+- **record_hallucination()** - `services/penelope/shared/constitutional_metrics.py`
+- **record_humility_check()** - `libs/constitutional/metrics.py`
+- **record_humility_check()** - `libs/vortex-legacy/constitutional_metrics.py`
+- **record_humility_check()** - `services/core/shared/constitutional_metrics.py`
+- **record_humility_check()** - `services/dlq_monitor/shared/constitutional_metrics.py`
+- **record_humility_check()** - `services/eureka/shared/constitutional_metrics.py`
+- **record_humility_check()** - `services/maba/shared/constitutional_metrics.py`
+- **record_humility_check()** - `services/nis/shared/constitutional_metrics.py`
+- **record_humility_check()** - `services/oraculo/shared/constitutional_metrics.py`
+- **record_humility_check()** - `services/orchestrator/shared/constitutional_metrics.py`
+- **record_humility_check()** - `services/penelope/shared/constitutional_metrics.py`
+- **record_lei_score()** - `libs/constitutional/metrics.py`
+- **record_lei_score()** - `libs/vortex-legacy/constitutional_metrics.py`
+- **record_lei_score()** - `services/core/shared/constitutional_metrics.py`
+- **record_lei_score()** - `services/dlq_monitor/shared/constitutional_metrics.py`
+- **record_lei_score()** - `services/eureka/shared/constitutional_metrics.py`
+- **record_lei_score()** - `services/maba/shared/constitutional_metrics.py`
+- **record_lei_score()** - `services/nis/shared/constitutional_metrics.py`
+- **record_lei_score()** - `services/oraculo/shared/constitutional_metrics.py`
+- **record_lei_score()** - `services/orchestrator/shared/constitutional_metrics.py`
+- **record_lei_score()** - `services/penelope/shared/constitutional_metrics.py`
+- **record_principle_violation()** - `libs/constitutional/metrics.py`
+- **record_principle_violation()** - `libs/vortex-legacy/constitutional_metrics.py`
+- **record_principle_violation()** - `services/core/shared/constitutional_metrics.py`
+- **record_principle_violation()** - `services/dlq_monitor/shared/constitutional_metrics.py`
+- **record_principle_violation()** - `services/eureka/shared/constitutional_metrics.py`
+- **record_principle_violation()** - `services/maba/shared/constitutional_metrics.py`
+- **record_principle_violation()** - `services/nis/shared/constitutional_metrics.py`
+- **record_principle_violation()** - `services/oraculo/shared/constitutional_metrics.py`
+- **record_principle_violation()** - `services/orchestrator/shared/constitutional_metrics.py`
+- **record_principle_violation()** - `services/penelope/shared/constitutional_metrics.py`
+- **record_sabbath_status()** - `libs/constitutional/metrics.py`
+- **record_sabbath_status()** - `libs/vortex-legacy/constitutional_metrics.py`
+- **record_sabbath_status()** - `services/core/shared/constitutional_metrics.py`
+- **record_sabbath_status()** - `services/dlq_monitor/shared/constitutional_metrics.py`
+- **record_sabbath_status()** - `services/eureka/shared/constitutional_metrics.py`
+- **record_sabbath_status()** - `services/maba/shared/constitutional_metrics.py`
+- **record_sabbath_status()** - `services/nis/shared/constitutional_metrics.py`
+- **record_sabbath_status()** - `services/oraculo/shared/constitutional_metrics.py`
+- **record_sabbath_status()** - `services/orchestrator/shared/constitutional_metrics.py`
+- **record_sabbath_status()** - `services/penelope/shared/constitutional_metrics.py`
+- **record_wisdom_decision()** - `libs/constitutional/metrics.py`
+- **record_wisdom_decision()** - `libs/vortex-legacy/constitutional_metrics.py`
+- **record_wisdom_decision()** - `services/core/shared/constitutional_metrics.py`
+- **record_wisdom_decision()** - `services/dlq_monitor/shared/constitutional_metrics.py`
+- **record_wisdom_decision()** - `services/eureka/shared/constitutional_metrics.py`
+- **record_wisdom_decision()** - `services/maba/shared/constitutional_metrics.py`
+- **record_wisdom_decision()** - `services/nis/shared/constitutional_metrics.py`
+- **record_wisdom_decision()** - `services/oraculo/shared/constitutional_metrics.py`
+- **record_wisdom_decision()** - `services/orchestrator/shared/constitutional_metrics.py`
+- **record_wisdom_decision()** - `services/penelope/shared/constitutional_metrics.py`
+- **refresh_token()** - `core/auth/oauth.py`
+- **register_command()** - `max-code-cli/ui/command_palette.py`
+- **register_default_shortcuts()** - `max-code-cli/ui/keybindings.py`
+- **register_error_handlers()** - `services/maba/shared/error_handlers.py`
+- **register_error_handlers()** - `services/nis/shared/error_handlers.py`
+- **register_error_handlers()** - `services/penelope/shared/error_handlers.py`
+- **register_shortcut()** - `max-code-cli/ui/keybindings.py`
+- **remove_control_characters()** - `services/maba/shared/sanitizers.py`
+- **remove_control_characters()** - `services/nis/shared/sanitizers.py`
+- **remove_control_characters()** - `services/penelope/shared/sanitizers.py`
+- **render_progress_bar()** - `max-code-cli/ui/base.py`
+- **repl()** - `max-code-cli/cli/main.py`
+- **reset_constitutional_engine()** - `max-code-cli/core/constitutional/engine.py`
+- **reset_global_engine()** - `services/core/xai/engine.py`
+- **reset()** - `max-code-cli/cli/learn_command.py`
+- **reset_metrics()** - `services/core/consciousness/prometheus_metrics.py`
+- **risk_assessor()** - `services/core/hitl/test_hitl.py`
+- **run_all_examples()** - `services/core/compliance/example_usage.py`
+- **run_all_examples()** - `services/core/fairness/example_usage.py`
+- **run_all_examples()** - `services/core/federated_learning/example_usage.py`
+- **run_all_examples()** - `services/core/governance/example_usage.py`
+- **run_all_examples()** - `services/core/hitl/example_usage.py`
+- **run_all_examples()** - `services/core/privacy/example_usage.py`
+- **run_all_tests()** - `services/core/demo/test_demo_execution.py`
+- **run_all_tests()** - `services/core/privacy/test_privacy.py`
+- **run_single_request()** - `max-code-cli/scripts/load_test.py`
+- **run_tui()** - `max-code-cli/ui/tui_mode.py`
+- **sabbath()** - `max-code-cli/cli/sabbath_command.py`
+- **safe_pickle_load()** - `services/core/federated_learning/storage.py`
+- **sample_context()** - `services/core/hitl/test_hitl.py`
+- **sample_decision()** - `services/core/governance/test_governance_engine_edge_cases.py`
+- **sample_decision()** - `services/core/hitl/test_hitl.py`
+- **sample_instance()** - `services/core/xai/test_xai.py`
+- **sample_intervention()** - `services/core/governance/guardian/test_coordinator.py`
+- **sample_prediction()** - `services/core/xai/test_xai.py`
+- **sample_risk_assessment()** - `services/core/governance/test_governance_engine.py`
+- **sample_updates()** - `services/core/federated_learning/test_federated_learning.py`
+- **sample_veto()** - `services/core/governance/guardian/test_coordinator.py`
+- **sample_violation()** - `services/core/governance/guardian/test_base_guardian.py`
+- **sample_violation()** - `services/core/governance/guardian/test_coordinator.py`
+- **sample_weights()** - `services/core/federated_learning/test_federated_learning.py`
+- **sanitize_alphanumeric()** - `services/maba/shared/sanitizers.py`
+- **sanitize_alphanumeric()** - `services/nis/shared/sanitizers.py`
+- **sanitize_alphanumeric()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_email()** - `services/maba/shared/sanitizers.py`
+- **sanitize_email()** - `services/nis/shared/sanitizers.py`
+- **sanitize_email()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_html()** - `services/maba/shared/sanitizers.py`
+- **sanitize_html()** - `services/nis/shared/sanitizers.py`
+- **sanitize_html()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_http_header()** - `services/maba/shared/sanitizers.py`
+- **sanitize_http_header()** - `services/nis/shared/sanitizers.py`
+- **sanitize_http_header()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_ldap_dn()** - `services/maba/shared/sanitizers.py`
+- **sanitize_ldap_dn()** - `services/nis/shared/sanitizers.py`
+- **sanitize_ldap_dn()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_ldap_filter()** - `services/maba/shared/sanitizers.py`
+- **sanitize_ldap_filter()** - `services/nis/shared/sanitizers.py`
+- **sanitize_ldap_filter()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_nosql_operator()** - `services/maba/shared/sanitizers.py`
+- **sanitize_nosql_operator()** - `services/nis/shared/sanitizers.py`
+- **sanitize_nosql_operator()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_path()** - `services/maba/shared/sanitizers.py`
+- **sanitize_path()** - `services/nis/shared/sanitizers.py`
+- **sanitize_path()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_shell_argument()** - `services/maba/shared/sanitizers.py`
+- **sanitize_shell_argument()** - `services/nis/shared/sanitizers.py`
+- **sanitize_shell_argument()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_sql_identifier()** - `services/maba/shared/sanitizers.py`
+- **sanitize_sql_identifier()** - `services/nis/shared/sanitizers.py`
+- **sanitize_sql_identifier()** - `services/penelope/shared/sanitizers.py`
+- **sanitize_xml()** - `services/maba/shared/sanitizers.py`
+- **sanitize_xml()** - `services/nis/shared/sanitizers.py`
+- **sanitize_xml()** - `services/penelope/shared/sanitizers.py`
+- **save_credentials()** - `core/auth/credentials.py`
+- **score_to_color()** - `max-code-cli/ui/base.py`
+- **seed_database()** - `services/eureka/data/seed_few_shot_db.py`
+- **self_consistency_solve()** - `max-code-cli/core/deter_agent/deliberation/self_consistency.py`
+- **send_claude_message()** - `core/auth/http_client.py`
+- **serotonin_system()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **set_maba_service()** - `services/maba/api/routes.py`
+- **set_mvp_service()** - `services/nis/api/routes.py`
+- **set_span_error()** - `services/maba/shared/vertice_tracing.py`
+- **set_span_error()** - `services/nis/shared/vertice_tracing.py`
+- **set_span_error()** - `services/penelope/shared/vertice_tracing.py`
+- **set_theme()** - `max-code-cli/ui/themes.py`
+- **setup_for_distributed()** - `services/core/performance/distributed_trainer.py`
+- **setup()** - `max-code-cli/cli/main.py`
+- **setup_oauth_token()** - `max-code-cli/core/auth/oauth_handler.py`
+- **shell()** - `max-code-cli/cli/main.py`
+- **show_banner()** - `max-code-cli/ui/banner.py`
+- **show_banner()** - `max-code-cli/ui/banner_vcli_style.py`
+- **showcase_agents()** - `max-code-cli/ui/showcase.py`
+- **showcase_banner()** - `max-code-cli/ui/showcase.py`
+- **showcase_exceptions()** - `max-code-cli/ui/showcase.py`
+- **showcase_formatter()** - `max-code-cli/ui/showcase.py`
+- **showcase_progress()** - `max-code-cli/ui/showcase.py`
+- **showcase_streaming()** - `max-code-cli/ui/showcase.py`
+- **showcase_tree_of_thoughts()** - `max-code-cli/ui/showcase.py`
+- **showcase_validation()** - `max-code-cli/ui/showcase.py`
+- **show_shortcuts_help()** - `max-code-cli/ui/keybindings.py`
+- **simplify_onnx_model()** - `services/core/performance/onnx_exporter.py`
+- **simulate_code_generation()** - `max-code-cli/examples/guardian_auto_protection_demo.py`
+- **sla_config()** - `services/core/governance_sse/test_integration.py`
+- **solution()** - `max-code-cli/agents/code_agent.py`
+- **spawn_isolated_sub_agent()** - `max-code-cli/core/deter_agent/state/sub_agent_isolation.py`
+- **spinner()** - `max-code-cli/ui/progress.py`
+- **sse_server()** - `services/core/governance_sse/test_integration.py`
+- **start_enhanced_repl()** - `max-code-cli/cli/repl_enhanced.py`
+- **status()** - `cli/main.py`
+- **status_icon()** - `max-code-cli/ui/utils.py`
+- **status()** - `max-code-cli/cli/auth_command.py`
+- **status()** - `max-code-cli/cli/learn_command.py`
+- **status()** - `max-code-cli/cli/sabbath_command.py`
+- **step1_ethical_evaluation()** - `services/core/examples/01_ethical_decision_pipeline.py`
+- **step1_prepare_dataset()** - `services/core/examples/02_autonomous_training_workflow.py`
+- **step1_profile_baseline()** - `services/core/examples/03_performance_optimization_pipeline.py`
+- **step2_identify_bottlenecks()** - `services/core/examples/03_performance_optimization_pipeline.py`
+- **step2_train_model()** - `services/core/examples/02_autonomous_training_workflow.py`
+- **step2_xai_explanation()** - `services/core/examples/01_ethical_decision_pipeline.py`
+- **step3_evaluate_performance()** - `services/core/examples/02_autonomous_training_workflow.py`
+- **step3_governance_logging()** - `services/core/examples/01_ethical_decision_pipeline.py`
+- **step3_quantize_model()** - `services/core/examples/03_performance_optimization_pipeline.py`
+- **step4_benchmark_comparison()** - `services/core/examples/03_performance_optimization_pipeline.py`
+- **step4_check_fairness()** - `services/core/examples/02_autonomous_training_workflow.py`
+- **step4_hitl_escalation()** - `services/core/examples/01_ethical_decision_pipeline.py`
+- **step5_ethical_compliance()** - `services/core/examples/02_autonomous_training_workflow.py`
+- **step5_execution()** - `services/core/examples/01_ethical_decision_pipeline.py`
+- **step5_validate_accuracy()** - `services/core/examples/03_performance_optimization_pipeline.py`
+- **step6_deployment_decision()** - `services/core/examples/03_performance_optimization_pipeline.py`
+- **step6_deployment()** - `services/core/examples/02_autonomous_training_workflow.py`
+- **strip_html_tags()** - `services/maba/shared/sanitizers.py`
+- **strip_html_tags()** - `services/nis/shared/sanitizers.py`
+- **strip_html_tags()** - `services/penelope/shared/sanitizers.py`
+- **success()** - `max-code-cli/ui/formatter.py`
+- **success_response()** - `services/maba/shared/response_models.py`
+- **success_response()** - `services/nis/shared/response_models.py`
+- **success_response()** - `services/penelope/shared/response_models.py`
+- **task()** - `max-code-cli/cli/task_command.py`
+- **temp_python_file()** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **temp_python_file()** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **temp_python_file()** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **test_acetylcholine_modulates_attention_gain()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **test_acetylcholine_modulates_attention_threshold()** - `services/core/test_neuromodulation_integration_simple.py`
+- **test_add_erb_member()** - `services/core/governance/test_governance.py`
+- **test_agent_structure()** - `max-code-cli/examples/test_elite_agents_structure.py`
+- **test_alert_generation()** - `services/core/compliance/test_compliance.py`
+- **test_analyze_compliance_gaps()** - `services/core/compliance/test_compliance.py`
+- **test_approve_policy()** - `services/core/governance/test_governance.py`
+- **test_attention_system_initialized()** - `services/core/test_neuromodulation_maximus_integration.py`
+- **test_auto_mitigation()** - `services/core/fairness/test_fairness.py`
+- **test_basic_function()** - `max-code-cli/examples/test_code_agent.py`
+- **test_bias_detection_accuracy()** - `services/core/fairness/test_fairness.py`
+- **test_bias_detection_result_validation()** - `services/core/fairness/test_fairness.py`
+- **test_calibration_adjustment()** - `services/core/fairness/test_fairness.py`
+- **test_calibration()** - `services/core/fairness/test_fairness.py`
+- **test_certification_readiness_workflow()** - `services/core/compliance/test_compliance.py`
+- **test_check_action_allowed()** - `services/core/governance/test_governance.py`
+- **test_check_action_blocked()** - `services/core/governance/test_governance.py`
+- **test_check_compliance()** - `services/core/compliance/test_compliance.py`
+- **test_check_control()** - `services/core/compliance/test_compliance.py`
+- **test_class_generation()** - `max-code-cli/examples/test_code_agent.py`
+- **test_collect_evidence()** - `services/core/compliance/test_compliance.py`
+- **test_compose_skill_neuromodulation_connection()** - `services/core/test_skill_learning_integration.py`
+- **test_config_validation()** - `services/core/compliance/test_compliance.py`
+- **test_control_creation()** - `services/core/compliance/test_compliance.py`
+- **test_controller_coordinates_all_systems()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **test_create_evidence_package()** - `services/core/compliance/test_compliance.py`
+- **test_create_remediation_plan()** - `services/core/compliance/test_compliance.py`
+- **test_dataset_loading()** - `services/core/demo/test_demo_execution.py`
+- **test_decision()** - `services/core/governance_sse/test_integration.py`
+- **test_demographic_parity_fair()** - `services/core/fairness/test_fairness.py`
+- **test_demographic_parity_unfair()** - `services/core/fairness/test_fairness.py`
+- **test_detect_all_biases()** - `services/core/fairness/test_fairness.py`
+- **test_disparate_impact_4_5ths()** - `services/core/fairness/test_fairness.py`
+- **test_distribution_bias()** - `services/core/fairness/test_fairness.py`
+- **test_dopamine_modulates_learning_rate()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **test_drift_detection()** - `services/core/fairness/test_fairness.py`
+- **test_endpoint()** - `services/core/test_adw_real_integration.py`
+- **test_end_to_end_compliance_check()** - `services/core/compliance/test_compliance.py`
+- **test_end_to_end_compliance_workflow()** - `services/core/test_ethical_ai_integration.py`
+- **test_enforce_data_privacy_no_encryption()** - `services/core/governance/test_governance.py`
+- **test_enforce_ethical_use_authorized()** - `services/core/governance/test_governance.py`
+- **test_enforce_ethical_use_unauthorized()** - `services/core/governance/test_governance.py`
+- **test_enforce_red_teaming_no_authorization()** - `services/core/governance/test_governance.py`
+- **test_equalized_odds()** - `services/core/fairness/test_fairness.py`
+- **test_equal_opportunity()** - `services/core/fairness/test_fairness.py`
+- **test_erb_statistics()** - `services/core/governance/test_governance.py`
+- **test_ethical_ai_integration()** - `services/core/test_maximus_e2e_integration.py`
+- **test_evidence_creation()** - `services/core/compliance/test_compliance.py`
+- **test_execute_learned_skill_api()** - `services/core/test_skill_learning_integration.py`
+- **test_explanation_cache()** - `services/core/xai/test_xai.py`
+- **test_explanation_result_validation()** - `services/core/xai/test_xai.py`
+- **test_fairness_metric_enum()** - `services/core/fairness/test_fairness.py`
+- **test_fairness_monitor_alerts()** - `services/core/fairness/test_fairness.py`
+- **test_fairness_monitor_evaluation()** - `services/core/fairness/test_fairness.py`
+- **test_fairness_result_disparity_percentage()** - `services/core/fairness/test_fairness.py`
+- **test_fairness_result_validation()** - `services/core/fairness/test_fairness.py`
+- **test_fairness_trends()** - `services/core/fairness/test_fairness.py`
+- **test_fairness_violation_exception()** - `services/core/fairness/test_fairness.py`
+- **test_fallback_mode()** - `max-code-cli/examples/test_code_agent.py`
+- **test_feature_importance_validation()** - `services/core/xai/test_xai.py`
+- **test_feature_tracker()** - `services/core/xai/test_xai.py`
+- **test_free_energy_calculation_api()** - `services/core/predictive_coding/test_predictive_coding_integration.py`
+- **test_free_energy_principle()** - `services/core/test_predictive_coding_structure.py`
+- **test_full_fairness_workflow()** - `services/core/fairness/test_fairness.py`
+- **test_{func_name}_basic()** - `max-code-cli/agents/test_agent.py`
+- **test_{func_name}_edge_empty()** - `max-code-cli/agents/test_agent.py`
+- **test_{func_name}_edge_null()** - `max-code-cli/agents/test_agent.py`
+- **test_{func_name}_error_invalid()** - `max-code-cli/agents/test_agent.py`
+- **test_future_feature()** - `services/core/governance/guardian/test_guardians.py`
+- **test_generate_compliance_report()** - `services/core/compliance/test_compliance.py`
+- **test_get_all_policies()** - `services/core/governance/test_governance.py`
+- **test_get_all_scenarios()** - `services/core/compassion/test_tom_benchmark.py`
+- **test_get_policy_by_type()** - `services/core/governance/test_governance.py`
+- **test_get_predictive_coding_state_structure()** - `services/core/test_predictive_coding_maximus_integration.py`
+- **test_get_scenario_by_id()** - `services/core/compassion/test_tom_benchmark.py`
+- **test_get_scenario_invalid_id()** - `services/core/compassion/test_tom_benchmark.py`
+- **test_get_scenarios_by_difficulty()** - `services/core/compassion/test_tom_benchmark.py`
+- **test_get_scenarios_invalid_difficulty()** - `services/core/compassion/test_tom_benchmark.py`
+- **test_get_skill_learning_state_structure()** - `services/core/test_skill_learning_integration.py`
+- **test_get_voting_members()** - `services/core/governance/test_governance.py`
+- **test_global_state_provides_complete_info()** - `services/core/test_neuromodulation_integration_simple.py`
+- **test_governance_statistics()** - `services/core/test_ethical_ai_integration.py`
+- **test_graceful_degradation_complete()** - `services/core/test_maximus_e2e_integration.py`
+- **test_hierarchical_prediction_error_propagation()** - `services/core/predictive_coding/test_predictive_coding_integration.py`
+- **test_hierarchical_structure()** - `services/core/test_predictive_coding_structure.py`
+- **test_hpc_network_coordination()** - `services/core/predictive_coding/test_predictive_coding_integration.py`
+- **test_hpc_network_orchestration()** - `services/core/test_predictive_coding_structure.py`
+- **test_ieee7000_checker()** - `services/core/compliance/test_compliance.py`
+- **test_important_feature()** - `services/core/governance/guardian/test_guardians.py`
+- **test_insufficient_data_exception()** - `services/core/fairness/test_fairness.py`
+- **test_ioc_extractor_extract_domains()** - `services/eureka/test_eureka.py`
+- **test_ioc_extractor_extract_ips()** - `services/eureka/test_eureka.py`
+- **test_iso27001_checker()** - `services/core/compliance/test_compliance.py`
+- **test_layer1_sensory_structure()** - `services/core/predictive_coding/test_predictive_coding_integration.py`
+- **test_layer1_sensory_structure()** - `services/core/test_predictive_coding_structure.py`
+- **test_layer2_behavioral_structure()** - `services/core/predictive_coding/test_predictive_coding_integration.py`
+- **test_layer2_behavioral_structure()** - `services/core/test_predictive_coding_structure.py`
+- **test_layer3_operational_structure()** - `services/core/predictive_coding/test_predictive_coding_integration.py`
+- **test_layer3_operational_structure()** - `services/core/test_predictive_coding_structure.py`
+- **test_layer4_tactical_structure()** - `services/core/predictive_coding/test_predictive_coding_integration.py`
+- **test_layer4_tactical_structure()** - `services/core/test_predictive_coding_structure.py`
+- **test_layer5_strategic_structure()** - `services/core/predictive_coding/test_predictive_coding_integration.py`
+- **test_layer5_strategic_structure()** - `services/core/test_predictive_coding_structure.py`
+- **test_learn_skill_from_demonstration_memory_connection()** - `services/core/test_skill_learning_integration.py`
+- **test_maximus_initialization_complete()** - `services/core/test_maximus_e2e_integration.py`
+- **test_maximus_initializes_with_predictive_coding()** - `services/core/test_predictive_coding_maximus_integration.py`
+- **test_maximus_initializes_with_skill_learning()** - `services/core/test_skill_learning_integration.py`
+- **test_{method_name}_bounds_{var_name}()** - `services/core/scripts/industrial_test_generator_v5_hypothesis.py`
+- **test_{method_name}_preserves_dimensions()** - `services/core/scripts/industrial_test_generator_v5_hypothesis.py`
+- **test_metrics_tracking()** - `services/core/compliance/test_compliance.py`
+- **test_monitoring_initialization()** - `services/core/compliance/test_compliance.py`
+- **test_monitor_statistics()** - `services/core/fairness/test_fairness.py`
+- **test_neuromodulated_parameters_accessible()** - `services/core/test_neuromodulation_maximus_integration.py`
+- **test_neuromodulation_initialized()** - `services/core/test_neuromodulation_maximus_integration.py`
+- **test_neuromodulation_integration_across_systems()** - `services/core/test_maximus_e2e_integration.py`
+- **test_neuromodulation_provides_parameters()** - `services/core/test_neuromodulation_integration_simple.py`
+- **test_norepinephrine_responds_to_threats()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **test_outcome_processing_updates_neuromodulators()** - `services/core/test_neuromodulation_integration_simple.py`
+- **test_pattern_detector_high_cpu_anomaly()** - `services/eureka/test_eureka.py`
+- **test_performance_disparity()** - `services/core/fairness/test_fairness.py`
+- **test_playbook_generator_critical_insight()** - `services/eureka/test_eureka.py`
+- **test_policy_engine_statistics()** - `services/core/governance/test_governance.py`
+- **test_predictive_coding_availability_flag()** - `services/core/test_predictive_coding_maximus_integration.py`
+- **test_predictive_coding_neuromodulation_flow()** - `services/core/test_maximus_e2e_integration.py`
+- **test_predict_with_hpc_network_api()** - `services/core/test_predictive_coding_maximus_integration.py`
+- **test_prioritize_gaps()** - `services/core/compliance/test_compliance.py`
+- **test_process_prediction_error_neuromodulation_connection()** - `services/core/test_predictive_coding_maximus_integration.py`
+- **test_protected_attribute_enum()** - `services/core/fairness/test_fairness.py`
+- **test_record_attendance_quorum_met()** - `services/core/governance/test_governance.py`
+- **test_record_decision_approved()** - `services/core/governance/test_governance.py`
+- **test_record_decision_rejected()** - `services/core/governance/test_governance.py`
+- **test_regra_de_ouro_compliance()** - `services/core/test_maximus_e2e_integration.py`
+- **test_regulation_creation()** - `services/core/compliance/test_compliance.py`
+- **test_regulation_registry()** - `services/core/compliance/test_compliance.py`
+- **test_remove_erb_member()** - `services/core/governance/test_governance.py`
+- **test_run_all_checks()** - `services/core/compliance/test_compliance.py`
+- **test_schedule_meeting()** - `services/core/governance/test_governance.py`
+- **test_serotonin_controls_exploration_exploitation()** - `services/core/neuromodulation/test_neuromodulation_integration.py`
+- **test_serotonin_controls_exploration_temperature()** - `services/core/test_neuromodulation_integration_simple.py`
+- **test_skill_learning_availability_flag()** - `services/core/test_skill_learning_integration.py`
+- **test_skill_learning_multi_system_integration()** - `services/core/test_maximus_e2e_integration.py`
+- **test_skill_learning_predictive_coding_integration()** - `services/core/test_skill_learning_integration.py`
+- **test_soc2_checker()** - `services/core/compliance/test_compliance.py`
+- **test_statistical_parity_bias_fair()** - `services/core/fairness/test_fairness.py`
+- **test_statistical_parity_bias_unfair()** - `services/core/fairness/test_fairness.py`
+- **test_statistics_tracking()** - `services/core/test_maximus_ethical_integration.py`
+- **test_system_status_complete()** - `services/core/test_maximus_e2e_integration.py`
+- **test_system_status_includes_predictive_coding()** - `services/core/test_predictive_coding_maximus_integration.py`
+- **test_system_status_includes_skill_learning()** - `services/core/test_skill_learning_integration.py`
+- **test_threat_response_activates_norepinephrine()** - `services/core/test_neuromodulation_integration_simple.py`
+- **test_threshold_optimization()** - `services/core/fairness/test_fairness.py`
+- **test_verify_evidence_integrity()** - `services/core/compliance/test_compliance.py`
+- **test_violation_rate_target()** - `services/core/fairness/test_fairness.py`
+- **test_with_maximus()** - `max-code-cli/examples/test_code_agent.py`
+- **text_tool()** - `max-code-cli/core/tools/decorator.py`
+- **tokenize()** - `max-code-cli/core/epl/lexer.py`
+- **tool()** - `max-code-cli/core/tools/decorator.py`
+- **torch_available()** - `services/core/predictive_coding/test_predictive_coding_integration.py`
+- **traced()** - `services/maba/shared/vertice_tracing.py`
+- **traced()** - `services/nis/shared/vertice_tracing.py`
+- **traced()** - `services/penelope/shared/vertice_tracing.py`
+- **train_layer1_vae()** - `services/core/training/train_layer1_vae.py`
+- **translate_to_epl()** - `max-code-cli/core/epl/translator.py`
+- **translate_to_nl()** - `max-code-cli/core/epl/translator.py`
+- **tree_of_thoughts_solve()** - `max-code-cli/core/deter_agent/deliberation/tree_of_thoughts.py`
+- **truncate_string()** - `services/maba/shared/sanitizers.py`
+- **truncate_string()** - `services/nis/shared/sanitizers.py`
+- **truncate_string()** - `services/penelope/shared/sanitizers.py`
+- **truncate_text()** - `max-code-cli/ui/utils.py`
+- **tune_layer1_vae()** - `services/core/training/hyperparameter_tuner.py`
+- **update_metrics()** - `services/core/consciousness/prometheus_metrics.py`
+- **update_violation_metrics()** - `services/core/consciousness/prometheus_metrics.py`
+- **validate_action()** - `max-code-cli/core/constitutional/models.py`
+- **validate_before_execution()** - `max-code-cli/core/constitutional/guardians/pre_execution_guardian.py`
+- **validate_choice()** - `max-code-cli/ui/validation.py`
+- **validate_cidr()** - `services/maba/shared/validators.py`
+- **validate_cidr()** - `services/nis/shared/validators.py`
+- **validate_cidr()** - `services/penelope/shared/validators.py`
+- **validate_constitutional_result()** - `max-code-cli/core/constitutional/models.py`
+- **validate_credentials()** - `max-code-cli/core/auth/oauth_handler.py`
+- **validate_domain()** - `services/maba/shared/validators.py`
+- **validate_domain()** - `services/nis/shared/validators.py`
+- **validate_domain()** - `services/penelope/shared/validators.py`
+- **validate_email()** - `services/maba/shared/validators.py`
+- **validate_email()** - `services/nis/shared/validators.py`
+- **validate_email()** - `services/penelope/shared/validators.py`
+- **validate_filename()** - `services/maba/shared/validators.py`
+- **validate_filename()** - `services/nis/shared/validators.py`
+- **validate_filename()** - `services/penelope/shared/validators.py`
+- **validate_file_path()** - `services/maba/shared/validators.py`
+- **validate_file_path()** - `services/nis/shared/validators.py`
+- **validate_file_path()** - `services/penelope/shared/validators.py`
+- **validate_final_output()** - `max-code-cli/core/constitutional/guardians/post_execution_guardian.py`
+- **validate_hash()** - `services/maba/shared/validators.py`
+- **validate_hash()** - `services/nis/shared/validators.py`
+- **validate_hash()** - `services/penelope/shared/validators.py`
+- **validate_ioc()** - `services/maba/shared/validators.py`
+- **validate_ioc()** - `services/nis/shared/validators.py`
+- **validate_ioc()** - `services/penelope/shared/validators.py`
+- **validate_ip_address()** - `services/maba/shared/validators.py`
+- **validate_ip_address()** - `services/nis/shared/validators.py`
+- **validate_ip_address()** - `services/penelope/shared/validators.py`
+- **validate_ipv4()** - `services/maba/shared/validators.py`
+- **validate_ipv4()** - `services/nis/shared/validators.py`
+- **validate_ipv4()** - `services/penelope/shared/validators.py`
+- **validate_ipv6()** - `services/maba/shared/validators.py`
+- **validate_ipv6()** - `services/nis/shared/validators.py`
+- **validate_ipv6()** - `services/penelope/shared/validators.py`
+- **validate_items()** - `max-code-cli/ui/validation.py`
+- **validate_list_length()** - `services/maba/shared/validators.py`
+- **validate_list_length()** - `services/nis/shared/validators.py`
+- **validate_list_length()** - `services/penelope/shared/validators.py`
+- **validate_md5()** - `services/maba/shared/validators.py`
+- **validate_md5()** - `services/nis/shared/validators.py`
+- **validate_md5()** - `services/penelope/shared/validators.py`
+- **validate_percentage()** - `max-code-cli/ui/validation.py`
+- **validate_port()** - `services/maba/shared/validators.py`
+- **validate_port()** - `services/nis/shared/validators.py`
+- **validate_port()** - `services/penelope/shared/validators.py`
+- **validate_positive_int()** - `max-code-cli/ui/validation.py`
+- **validate_score()** - `max-code-cli/ui/validation.py`
+- **validate()** - `services/core/governance/guardian/test_guardians.py`
+- **validate_sha1()** - `services/maba/shared/validators.py`
+- **validate_sha1()** - `services/nis/shared/validators.py`
+- **validate_sha1()** - `services/penelope/shared/validators.py`
+- **validate_sha256()** - `services/maba/shared/validators.py`
+- **validate_sha256()** - `services/nis/shared/validators.py`
+- **validate_sha256()** - `services/penelope/shared/validators.py`
+- **validate_sha512()** - `services/maba/shared/validators.py`
+- **validate_sha512()** - `services/nis/shared/validators.py`
+- **validate_sha512()** - `services/penelope/shared/validators.py`
+- **validate_string_length()** - `services/maba/shared/validators.py`
+- **validate_string_length()** - `services/nis/shared/validators.py`
+- **validate_string_length()** - `services/penelope/shared/validators.py`
+- **validate_string()** - `max-code-cli/ui/validation.py`
+- **validate_task_parameters()** - `max-code-cli/agents/validation_schemas.py`
+- **validate_type()** - `max-code-cli/ui/validation.py`
+- **validate_url()** - `services/maba/shared/validators.py`
+- **validate_url()** - `services/nis/shared/validators.py`
+- **validate_url()** - `services/penelope/shared/validators.py`
+- **validate_username()** - `services/maba/shared/validators.py`
+- **validate_username()** - `services/nis/shared/validators.py`
+- **validate_username()** - `services/penelope/shared/validators.py`
+- **validator()** - `services/core/justice/test_constitutional_validator.py`
+- **verify_claude_cli_setup()** - `max-code-cli/core/llm/claude_cli.py`
+- **verify_oauth_roles()** - `max-code-cli/core/auth/token_converter.py`
+- **warning()** - `max-code-cli/ui/formatter.py`
+- **windowed_temporal_accuracy()** - `services/core/consciousness/episodic_memory/core.py`
+- **world_class_tools()** - `services/core/test_world_class_tools.py`
+- **write_file()** - `max-code-cli/core/tools/file_writer.py`
+- **xai_engine()** - `services/core/test_ethical_ai_integration.py`
+
+---
+
+## By Service
+
+### core
+
+- `acetylcholine_system()` (test_neuromodulation_integration.py)
+- `attention_system()` (test_neuromodulation_integration_simple.py)
+- `audit_logger()` (test_audit_infrastructure.py)
+- `audit_trail()` (test_hitl.py)
+- `auto_update_sabbath_status()` (metrics_exporter.py)
+- `background_worker()` (test_guardians.py)
+- `calculate_risk_score()` (osint_router.py)
+- `check_process_running()` (monitor_and_report.py)
+- `compliance_engine()` (test_ethical_ai_integration.py)
+- `config_no_auto_enforce()` (test_policy_engine.py)
+- `config()` (test_audit_infrastructure.py)
+- `config()` (test_constitutional_scenarios.py)
+- `config()` (test_erb_100pct.py)
+- `config()` (test_governance.py)
+- `config()` (test_policy_engine_100pct.py)
+- `config()` (test_policy_engine.py)
+- `configure_constitutional_logging()` (constitutional_logging.py)
+- `controller()` (test_neuromodulation_integration.py)
+- `convert_to_onnx_with_quantization()` (onnx_exporter.py)
+- `coordinator()` (test_coordinator.py)
+- `create_apv_api()` (api.py)
+- `create_consciousness_api()` (api.py)
+- `create_constitutional_tracer()` (constitutional_tracing.py)
+- `create_data_privacy_policy()` (policies.py)
+- `create_default_validators()` (validators.py)
+- `create_ethical_use_policy()` (policies.py)
+- `create_example_events()` (example_predictive_coding_usage.py)
+- `create_governance_api()` (api_routes.py)
+- `create_incident_response_policy()` (policies.py)
+- `create_layer1_vae_objective()` (hyperparameter_tuner.py)
+- `create_mock_data_source()` (test_attention_integration.py)
+- `create_model_adapter()` (model_adapters.py)
+- `create_red_teaming_policy()` (policies.py)
+- `create_security_action()` (01_ethical_decision_pipeline.py)
+- `create_test_decision_payload()` (enqueue_test_decision.py)
+- `create_whistleblower_policy()` (policies.py)
+- `decision_framework()` (test_hitl.py)
+- `decision_framework()` (test_integration.py)
+- `decision_queue()` (test_hitl.py)
+- `decision_queue()` (test_integration.py)
+- `decision_to_sse_data()` (sse_server.py)
+- `delete_everything()` (test_guardians.py)
+- `delete_user_account()` (test_guardians.py)
+- `demonstrate_neuromodulation_standalone()` (example_neuromodulation_standalone.py)
+- `dopamine_system()` (test_neuromodulation_integration.py)
+- `dummy_model()` (test_xai.py)
+- `engine()` (test_governance_engine_edge_cases.py)
+- `erb_manager()` (test_constitutional_scenarios.py)
+- `erb_manager()` (test_erb_100pct.py)
+- `erb_manager()` (test_ethical_ai_integration.py)
+- `erb_manager()` (test_governance.py)
+- `escalation_manager()` (test_hitl.py)
+- `ethical_guardian()` (test_maximus_ethical_integration.py)
+- `ethical_wrapper()` (test_maximus_ethical_integration.py)
+- `ethics_engine()` (test_ethical_ai_integration.py)
+- `example_1_basic_compliance_check()` (example_usage.py)
+- `example_1_basic_count()` (example_usage.py)
+- `example_1_basic_fairness_evaluation()` (example_usage.py)
+- `example_1_basic_fl_round()` (example_usage.py)
+- `example_1_basic_hitl_workflow()` (example_usage.py)
+- `example_1_erb_meeting_decision()` (example_usage.py)
+- `example_1_standalone_hpc_network()` (example_predictive_coding_usage.py)
+- `example_2_bias_detection()` (example_usage.py)
+- `example_2_gap_analysis_remediation()` (example_usage.py)
+- `example_2_geographic_distribution()` (example_usage.py)
+- `example_2_high_risk_escalation()` (example_usage.py)
+- `example_2_policy_enforcement()` (example_usage.py)
+- `example_2_secure_aggregation()` (example_usage.py)
+- `example_3_bias_mitigation()` (example_usage.py)
+- `example_3_certification_readiness()` (example_usage.py)
+- `example_3_compliance_reporting()` (example_usage.py)
+- `example_3_dp_federated_learning()` (example_usage.py)
+- `example_3_free_energy_principle()` (example_predictive_coding_usage.py)
+- `example_3_severity_statistics()` (example_usage.py)
+- `example_3_whistleblower_report()` (example_usage.py)
+- `example_4_attack_vector_histogram()` (example_usage.py)
+- `example_4_continuous_monitoring()` (example_usage.py)
+- `example_5_auto_mitigation()` (example_usage.py)
+- `example_5_budget_tracking()` (example_usage.py)
+- `extract_statistics()` (monitor_and_report.py)
+- `fix_file()` (fix_torch_imports.py)
+- `fl_config()` (test_federated_learning.py)
+- `generate_biased_data()` (example_usage.py)
+- `generate_biased_data()` (test_fairness.py)
+- `generate_fair_data()` (example_usage.py)
+- `generate_fair_data()` (test_fairness.py)
+- `generate_html_report()` (monitor_and_report.py)
+- `get_all_scenarios()` (sally_anne_dataset.py)
+- `get_attack_surface_workflow()` (adw_router.py)
+- `get_classes()` (test_predictive_coding_structure.py)
+- `get_config()` (config.py)
+- `get_config_for_risk()` (config.py)
+- `get_constitutional_logger()` (constitutional_logging.py)
+- `get_credential_intel_workflow()` (adw_router.py)
+- `get_framework_weights()` (config.py)
+- `get_global_engine()` (engine.py)
+- `get_methods()` (test_predictive_coding_structure.py)
+- `get_metrics_handler()` (prometheus_metrics.py)
+- `get_mode_policy()` (mode_definitions.py)
+- `get_optimal_batch_size()` (gpu_trainer.py)
+- `get_progress()` (monitor_and_report.py)
+- `get_public_data()` (test_guardians.py)
+- `get_rank()` (distributed_trainer.py)
+- `get_regulation()` (regulations.py)
+- `get_scenario()` (sally_anne_dataset.py)
+- `get_scenarios_by_difficulty()` (sally_anne_dataset.py)
+- `get_target_profiling_workflow()` (adw_router.py)
+- `get_thresholds()` (config.py)
+- `get_version_info()` (version.py)
+- `get_version()` (version.py)
+- `get_world_size()` (distributed_trainer.py)
+- `governance_app()` (test_integration.py)
+- `governance_config()` (test_ethical_ai_integration.py)
+- `governance_config()` (test_maximus_ethical_integration.py)
+- `governance_engine()` (test_governance_engine.py)
+- `governance_engine()` (test_hitl_interface.py)
+- `guardian()` (test_article_ii_guardian.py)
+- `guardian()` (test_article_iii_guardian.py)
+- `guardian()` (test_article_iv_guardian.py)
+- `guardian()` (test_article_v_guardian.py)
+- `guardian()` (test_base_guardian.py)
+- `handle_request()` (test_guardians.py)
+- `hitl_config()` (test_hitl.py)
+- `hitl_interface()` (test_hitl_interface.py)
+- `is_dist_available_and_initialized()` (distributed_trainer.py)
+- `is_sabbath()` (metrics_exporter.py)
+- `log_aletheia_check()` (constitutional_logging.py)
+- `log_constitutional_violation()` (constitutional_logging.py)
+- `log_praotes_check()` (constitutional_logging.py)
+- `log_sabbath_check()` (constitutional_logging.py)
+- `log_sophia_decision()` (constitutional_logging.py)
+- `log_tapeinophrosyne_check()` (constitutional_logging.py)
+- `main()` (01_ethical_decision_pipeline.py)
+- `main()` (02_autonomous_training_workflow.py)
+- `main()` (03_performance_optimization_pipeline.py)
+- `main()` (batch_predictor.py)
+- `main()` (batch_test_generator.py)
+- `main()` (benchmark_suite.py)
+- `main()` (coverage_commander.py)
+- `main()` (coverage_report.py)
+- `main()` (coverage_tracker.py)
+- `main()` (enqueue_test_decision.py)
+- `main()` (example_predictive_coding_usage.py)
+- `main()` (generate_tests_gemini.py)
+- `main()` (generate_tests.py)
+- `main()` (hyperparameter_tuner.py)
+- `main()` (industrial_test_generator.py)
+- `main()` (industrial_test_generator_v2.py)
+- `main()` (industrial_test_generator_v3.py)
+- `main()` (industrial_test_generator_v4.py)
+- `main()` (industrial_test_generator_v5_hypothesis.py)
+- `main()` (inference_engine.py)
+- `main()` (monitor_and_report.py)
+- `main()` (onnx_exporter.py)
+- `main()` (profiler.py)
+- `main()` (pruner.py)
+- `main()` (quantizer.py)
+- `main()` (test_adw_real_integration.py)
+- `main()` (train_layer1_vae.py)
+- `main()` (validate_regra_de_ouro.py)
+- `mock_gemini_client()` (test_world_class_tools.py)
+- `mock_psycopg2()` (test_audit_infrastructure.py)
+- `neuromodulation()` (test_neuromodulation_integration_simple.py)
+- `norepinephrine_system()` (test_neuromodulation_integration.py)
+- `operator_interface()` (test_hitl.py)
+- `operator_interface()` (test_integration.py)
+- `parse_source()` (test_predictive_coding_structure.py)
+- `policy_engine_no_enforce()` (test_policy_engine.py)
+- `policy_engine()` (test_constitutional_scenarios.py)
+- `policy_engine()` (test_ethical_ai_integration.py)
+- `policy_engine()` (test_governance.py)
+- `policy_engine()` (test_policy_engine_100pct.py)
+- `policy_engine()` (test_policy_engine.py)
+- `policy_registry()` (test_constitutional_scenarios.py)
+- `policy_registry()` (test_ethical_ai_integration.py)
+- `policy_registry()` (test_governance.py)
+- `policy_registry()` (test_policies_100pct.py)
+- `populated_erb()` (test_erb_100pct.py)
+- `print_banner()` (demo_ethical_ai_complete.py)
+- `print_gpu_info()` (gpu_trainer.py)
+- `print_header()` (example_usage.py)
+- `print_header()` (example_usage.py)
+- `print_header()` (example_usage.py)
+- `print_header()` (example_usage.py)
+- `print_header()` (example_usage.py)
+- `print_section()` (demo_ethical_ai_complete.py)
+- `process_data()` (test_guardians.py)
+- `quantize_to_fp16()` (quantizer.py)
+- `read_source()` (test_predictive_coding_structure.py)
+- `record_constitutional_compliance()` (constitutional_metrics.py)
+- `record_fpc_score()` (constitutional_metrics.py)
+- `record_fruit_compliance()` (constitutional_metrics.py)
+- `record_hallucination()` (constitutional_metrics.py)
+- `record_humility_check()` (constitutional_metrics.py)
+- `record_lei_score()` (constitutional_metrics.py)
+- `record_principle_violation()` (constitutional_metrics.py)
+- `record_sabbath_status()` (constitutional_metrics.py)
+- `record_wisdom_decision()` (constitutional_metrics.py)
+- `reset_global_engine()` (engine.py)
+- `reset_metrics()` (prometheus_metrics.py)
+- `risk_assessor()` (test_hitl.py)
+- `run_all_examples()` (example_usage.py)
+- `run_all_examples()` (example_usage.py)
+- `run_all_examples()` (example_usage.py)
+- `run_all_examples()` (example_usage.py)
+- `run_all_examples()` (example_usage.py)
+- `run_all_examples()` (example_usage.py)
+- `run_all_tests()` (test_demo_execution.py)
+- `run_all_tests()` (test_privacy.py)
+- `safe_pickle_load()` (storage.py)
+- `sample_context()` (test_hitl.py)
+- `sample_decision()` (test_governance_engine_edge_cases.py)
+- `sample_decision()` (test_hitl.py)
+- `sample_instance()` (test_xai.py)
+- `sample_intervention()` (test_coordinator.py)
+- `sample_prediction()` (test_xai.py)
+- `sample_risk_assessment()` (test_governance_engine.py)
+- `sample_updates()` (test_federated_learning.py)
+- `sample_veto()` (test_coordinator.py)
+- `sample_violation()` (test_base_guardian.py)
+- `sample_violation()` (test_coordinator.py)
+- `sample_weights()` (test_federated_learning.py)
+- `serotonin_system()` (test_neuromodulation_integration.py)
+- `setup_for_distributed()` (distributed_trainer.py)
+- `simplify_onnx_model()` (onnx_exporter.py)
+- `sla_config()` (test_integration.py)
+- `sse_server()` (test_integration.py)
+- `step1_ethical_evaluation()` (01_ethical_decision_pipeline.py)
+- `step1_prepare_dataset()` (02_autonomous_training_workflow.py)
+- `step1_profile_baseline()` (03_performance_optimization_pipeline.py)
+- `step2_identify_bottlenecks()` (03_performance_optimization_pipeline.py)
+- `step2_train_model()` (02_autonomous_training_workflow.py)
+- `step2_xai_explanation()` (01_ethical_decision_pipeline.py)
+- `step3_evaluate_performance()` (02_autonomous_training_workflow.py)
+- `step3_governance_logging()` (01_ethical_decision_pipeline.py)
+- `step3_quantize_model()` (03_performance_optimization_pipeline.py)
+- `step4_benchmark_comparison()` (03_performance_optimization_pipeline.py)
+- `step4_check_fairness()` (02_autonomous_training_workflow.py)
+- `step4_hitl_escalation()` (01_ethical_decision_pipeline.py)
+- `step5_ethical_compliance()` (02_autonomous_training_workflow.py)
+- `step5_execution()` (01_ethical_decision_pipeline.py)
+- `step5_validate_accuracy()` (03_performance_optimization_pipeline.py)
+- `step6_deployment()` (02_autonomous_training_workflow.py)
+- `step6_deployment_decision()` (03_performance_optimization_pipeline.py)
+- `temp_python_file()` (test_article_ii_guardian.py)
+- `temp_python_file()` (test_article_iii_guardian.py)
+- `temp_python_file()` (test_article_iv_guardian.py)
+- `test_acetylcholine_modulates_attention_gain()` (test_neuromodulation_integration.py)
+- `test_acetylcholine_modulates_attention_threshold()` (test_neuromodulation_integration_simple.py)
+- `test_add_erb_member()` (test_governance.py)
+- `test_alert_generation()` (test_compliance.py)
+- `test_analyze_compliance_gaps()` (test_compliance.py)
+- `test_approve_policy()` (test_governance.py)
+- `test_attention_system_initialized()` (test_neuromodulation_maximus_integration.py)
+- `test_auto_mitigation()` (test_fairness.py)
+- `test_bias_detection_accuracy()` (test_fairness.py)
+- `test_bias_detection_result_validation()` (test_fairness.py)
+- `test_calibration_adjustment()` (test_fairness.py)
+- `test_calibration()` (test_fairness.py)
+- `test_certification_readiness_workflow()` (test_compliance.py)
+- `test_check_action_allowed()` (test_governance.py)
+- `test_check_action_blocked()` (test_governance.py)
+- `test_check_compliance()` (test_compliance.py)
+- `test_check_control()` (test_compliance.py)
+- `test_collect_evidence()` (test_compliance.py)
+- `test_compose_skill_neuromodulation_connection()` (test_skill_learning_integration.py)
+- `test_config_validation()` (test_compliance.py)
+- `test_control_creation()` (test_compliance.py)
+- `test_controller_coordinates_all_systems()` (test_neuromodulation_integration.py)
+- `test_create_evidence_package()` (test_compliance.py)
+- `test_create_remediation_plan()` (test_compliance.py)
+- `test_dataset_loading()` (test_demo_execution.py)
+- `test_decision()` (test_integration.py)
+- `test_demographic_parity_fair()` (test_fairness.py)
+- `test_demographic_parity_unfair()` (test_fairness.py)
+- `test_detect_all_biases()` (test_fairness.py)
+- `test_disparate_impact_4_5ths()` (test_fairness.py)
+- `test_distribution_bias()` (test_fairness.py)
+- `test_dopamine_modulates_learning_rate()` (test_neuromodulation_integration.py)
+- `test_drift_detection()` (test_fairness.py)
+- `test_endpoint()` (test_adw_real_integration.py)
+- `test_end_to_end_compliance_check()` (test_compliance.py)
+- `test_end_to_end_compliance_workflow()` (test_ethical_ai_integration.py)
+- `test_enforce_data_privacy_no_encryption()` (test_governance.py)
+- `test_enforce_ethical_use_authorized()` (test_governance.py)
+- `test_enforce_ethical_use_unauthorized()` (test_governance.py)
+- `test_enforce_red_teaming_no_authorization()` (test_governance.py)
+- `test_equalized_odds()` (test_fairness.py)
+- `test_equal_opportunity()` (test_fairness.py)
+- `test_erb_statistics()` (test_governance.py)
+- `test_ethical_ai_integration()` (test_maximus_e2e_integration.py)
+- `test_evidence_creation()` (test_compliance.py)
+- `test_execute_learned_skill_api()` (test_skill_learning_integration.py)
+- `test_explanation_cache()` (test_xai.py)
+- `test_explanation_result_validation()` (test_xai.py)
+- `test_fairness_metric_enum()` (test_fairness.py)
+- `test_fairness_monitor_alerts()` (test_fairness.py)
+- `test_fairness_monitor_evaluation()` (test_fairness.py)
+- `test_fairness_result_disparity_percentage()` (test_fairness.py)
+- `test_fairness_result_validation()` (test_fairness.py)
+- `test_fairness_trends()` (test_fairness.py)
+- `test_fairness_violation_exception()` (test_fairness.py)
+- `test_feature_importance_validation()` (test_xai.py)
+- `test_feature_tracker()` (test_xai.py)
+- `test_free_energy_calculation_api()` (test_predictive_coding_integration.py)
+- `test_free_energy_principle()` (test_predictive_coding_structure.py)
+- `test_full_fairness_workflow()` (test_fairness.py)
+- `test_future_feature()` (test_guardians.py)
+- `test_generate_compliance_report()` (test_compliance.py)
+- `test_get_all_policies()` (test_governance.py)
+- `test_get_all_scenarios()` (test_tom_benchmark.py)
+- `test_get_policy_by_type()` (test_governance.py)
+- `test_get_predictive_coding_state_structure()` (test_predictive_coding_maximus_integration.py)
+- `test_get_scenario_by_id()` (test_tom_benchmark.py)
+- `test_get_scenario_invalid_id()` (test_tom_benchmark.py)
+- `test_get_scenarios_by_difficulty()` (test_tom_benchmark.py)
+- `test_get_scenarios_invalid_difficulty()` (test_tom_benchmark.py)
+- `test_get_skill_learning_state_structure()` (test_skill_learning_integration.py)
+- `test_get_voting_members()` (test_governance.py)
+- `test_global_state_provides_complete_info()` (test_neuromodulation_integration_simple.py)
+- `test_governance_statistics()` (test_ethical_ai_integration.py)
+- `test_graceful_degradation_complete()` (test_maximus_e2e_integration.py)
+- `test_hierarchical_prediction_error_propagation()` (test_predictive_coding_integration.py)
+- `test_hierarchical_structure()` (test_predictive_coding_structure.py)
+- `test_hpc_network_coordination()` (test_predictive_coding_integration.py)
+- `test_hpc_network_orchestration()` (test_predictive_coding_structure.py)
+- `test_ieee7000_checker()` (test_compliance.py)
+- `test_important_feature()` (test_guardians.py)
+- `test_insufficient_data_exception()` (test_fairness.py)
+- `test_iso27001_checker()` (test_compliance.py)
+- `test_layer1_sensory_structure()` (test_predictive_coding_integration.py)
+- `test_layer1_sensory_structure()` (test_predictive_coding_structure.py)
+- `test_layer2_behavioral_structure()` (test_predictive_coding_integration.py)
+- `test_layer2_behavioral_structure()` (test_predictive_coding_structure.py)
+- `test_layer3_operational_structure()` (test_predictive_coding_integration.py)
+- `test_layer3_operational_structure()` (test_predictive_coding_structure.py)
+- `test_layer4_tactical_structure()` (test_predictive_coding_integration.py)
+- `test_layer4_tactical_structure()` (test_predictive_coding_structure.py)
+- `test_layer5_strategic_structure()` (test_predictive_coding_integration.py)
+- `test_layer5_strategic_structure()` (test_predictive_coding_structure.py)
+- `test_learn_skill_from_demonstration_memory_connection()` (test_skill_learning_integration.py)
+- `test_maximus_initialization_complete()` (test_maximus_e2e_integration.py)
+- `test_maximus_initializes_with_predictive_coding()` (test_predictive_coding_maximus_integration.py)
+- `test_maximus_initializes_with_skill_learning()` (test_skill_learning_integration.py)
+- `test_{method_name}_bounds_{var_name}()` (industrial_test_generator_v5_hypothesis.py)
+- `test_{method_name}_preserves_dimensions()` (industrial_test_generator_v5_hypothesis.py)
+- `test_metrics_tracking()` (test_compliance.py)
+- `test_monitoring_initialization()` (test_compliance.py)
+- `test_monitor_statistics()` (test_fairness.py)
+- `test_neuromodulated_parameters_accessible()` (test_neuromodulation_maximus_integration.py)
+- `test_neuromodulation_initialized()` (test_neuromodulation_maximus_integration.py)
+- `test_neuromodulation_integration_across_systems()` (test_maximus_e2e_integration.py)
+- `test_neuromodulation_provides_parameters()` (test_neuromodulation_integration_simple.py)
+- `test_norepinephrine_responds_to_threats()` (test_neuromodulation_integration.py)
+- `test_outcome_processing_updates_neuromodulators()` (test_neuromodulation_integration_simple.py)
+- `test_performance_disparity()` (test_fairness.py)
+- `test_policy_engine_statistics()` (test_governance.py)
+- `test_predictive_coding_availability_flag()` (test_predictive_coding_maximus_integration.py)
+- `test_predictive_coding_neuromodulation_flow()` (test_maximus_e2e_integration.py)
+- `test_predict_with_hpc_network_api()` (test_predictive_coding_maximus_integration.py)
+- `test_prioritize_gaps()` (test_compliance.py)
+- `test_process_prediction_error_neuromodulation_connection()` (test_predictive_coding_maximus_integration.py)
+- `test_protected_attribute_enum()` (test_fairness.py)
+- `test_record_attendance_quorum_met()` (test_governance.py)
+- `test_record_decision_approved()` (test_governance.py)
+- `test_record_decision_rejected()` (test_governance.py)
+- `test_regra_de_ouro_compliance()` (test_maximus_e2e_integration.py)
+- `test_regulation_creation()` (test_compliance.py)
+- `test_regulation_registry()` (test_compliance.py)
+- `test_remove_erb_member()` (test_governance.py)
+- `test_run_all_checks()` (test_compliance.py)
+- `test_schedule_meeting()` (test_governance.py)
+- `test_serotonin_controls_exploration_exploitation()` (test_neuromodulation_integration.py)
+- `test_serotonin_controls_exploration_temperature()` (test_neuromodulation_integration_simple.py)
+- `test_skill_learning_availability_flag()` (test_skill_learning_integration.py)
+- `test_skill_learning_multi_system_integration()` (test_maximus_e2e_integration.py)
+- `test_skill_learning_predictive_coding_integration()` (test_skill_learning_integration.py)
+- `test_soc2_checker()` (test_compliance.py)
+- `test_statistical_parity_bias_fair()` (test_fairness.py)
+- `test_statistical_parity_bias_unfair()` (test_fairness.py)
+- `test_statistics_tracking()` (test_maximus_ethical_integration.py)
+- `test_system_status_complete()` (test_maximus_e2e_integration.py)
+- `test_system_status_includes_predictive_coding()` (test_predictive_coding_maximus_integration.py)
+- `test_system_status_includes_skill_learning()` (test_skill_learning_integration.py)
+- `test_threat_response_activates_norepinephrine()` (test_neuromodulation_integration_simple.py)
+- `test_threshold_optimization()` (test_fairness.py)
+- `test_verify_evidence_integrity()` (test_compliance.py)
+- `test_violation_rate_target()` (test_fairness.py)
+- `torch_available()` (test_predictive_coding_integration.py)
+- `train_layer1_vae()` (train_layer1_vae.py)
+- `tune_layer1_vae()` (hyperparameter_tuner.py)
+- `update_metrics()` (prometheus_metrics.py)
+- `update_violation_metrics()` (prometheus_metrics.py)
+- `validate()` (test_guardians.py)
+- `validator()` (test_constitutional_validator.py)
+- `windowed_temporal_accuracy()` (core.py)
+- `world_class_tools()` (test_world_class_tools.py)
+- `xai_engine()` (test_ethical_ai_integration.py)
+
+### dlq_monitor
+
+- `auto_update_sabbath_status()` (metrics_exporter.py)
+- `configure_constitutional_logging()` (constitutional_logging.py)
+- `create_constitutional_tracer()` (constitutional_tracing.py)
+- `get_constitutional_logger()` (constitutional_logging.py)
+- `is_sabbath()` (metrics_exporter.py)
+- `log_aletheia_check()` (constitutional_logging.py)
+- `log_constitutional_violation()` (constitutional_logging.py)
+- `log_praotes_check()` (constitutional_logging.py)
+- `log_sabbath_check()` (constitutional_logging.py)
+- `log_sophia_decision()` (constitutional_logging.py)
+- `log_tapeinophrosyne_check()` (constitutional_logging.py)
+- `record_constitutional_compliance()` (constitutional_metrics.py)
+- `record_fpc_score()` (constitutional_metrics.py)
+- `record_fruit_compliance()` (constitutional_metrics.py)
+- `record_hallucination()` (constitutional_metrics.py)
+- `record_humility_check()` (constitutional_metrics.py)
+- `record_lei_score()` (constitutional_metrics.py)
+- `record_principle_violation()` (constitutional_metrics.py)
+- `record_sabbath_status()` (constitutional_metrics.py)
+- `record_wisdom_decision()` (constitutional_metrics.py)
+
+### eureka
+
+- `auto_update_sabbath_status()` (metrics_exporter.py)
+- `configure_constitutional_logging()` (constitutional_logging.py)
+- `create_constitutional_tracer()` (constitutional_tracing.py)
+- `eureka_engine()` (test_eureka.py)
+- `format_patch_explanation()` (prompt_templates.py)
+- `generate_complexity_assessment_prompt()` (prompt_templates.py)
+- `generate_patch_prompt()` (prompt_templates.py)
+- `generate_validation_prompt()` (prompt_templates.py)
+- `get_constitutional_logger()` (constitutional_logging.py)
+- `get_cost_tracker()` (llm_cost_tracker.py)
+- `get_few_shot_examples()` (few_shot_database.py)
+- `ioc_extractor()` (test_eureka.py)
+- `is_sabbath()` (metrics_exporter.py)
+- `log_aletheia_check()` (constitutional_logging.py)
+- `log_constitutional_violation()` (constitutional_logging.py)
+- `log_praotes_check()` (constitutional_logging.py)
+- `log_sabbath_check()` (constitutional_logging.py)
+- `log_sophia_decision()` (constitutional_logging.py)
+- `log_tapeinophrosyne_check()` (constitutional_logging.py)
+- `main()` (consumer.py)
+- `parse_args()` (main.py)
+- `pattern_detector()` (test_eureka.py)
+- `playbook_generator()` (test_eureka.py)
+- `rate_limit()` (rate_limiter.py)
+- `record_constitutional_compliance()` (constitutional_metrics.py)
+- `record_fpc_score()` (constitutional_metrics.py)
+- `record_fruit_compliance()` (constitutional_metrics.py)
+- `record_hallucination()` (constitutional_metrics.py)
+- `record_humility_check()` (constitutional_metrics.py)
+- `record_lei_score()` (constitutional_metrics.py)
+- `record_principle_violation()` (constitutional_metrics.py)
+- `record_sabbath_status()` (constitutional_metrics.py)
+- `record_wisdom_decision()` (constitutional_metrics.py)
+- `seed_database()` (seed_few_shot_db.py)
+- `test_ioc_extractor_extract_domains()` (test_eureka.py)
+- `test_ioc_extractor_extract_ips()` (test_eureka.py)
+- `test_pattern_detector_high_cpu_anomaly()` (test_eureka.py)
+- `test_playbook_generator_critical_insight()` (test_eureka.py)
+
+### maba
+
+- `add_span_attribute()` (vertice_tracing.py)
+- `add_span_event()` (vertice_tracing.py)
+- `audit_context()` (audit_logger.py)
+- `auto_update_sabbath_status()` (metrics_exporter.py)
+- `build_error_response()` (error_handlers.py)
+- `compare_results()` (benchmark_cognitive_map.py)
+- `configure_constitutional_logging()` (constitutional_logging.py)
+- `create_constitutional_tracer()` (constitutional_tracing.py)
+- `create_openapi_config()` (openapi_config.py)
+- `create_rate_limiter()` (rate_limiter.py)
+- `create_websocket_app()` (websocket_gateway.py)
+- `detect_command_injection()` (sanitizers.py)
+- `detect_sql_injection()` (sanitizers.py)
+- `error_response()` (response_models.py)
+- `example_1_get_api_key()` (vault_example.py)
+- `example_2_get_database_connection()` (vault_example.py)
+- `example_3_get_dynamic_database_credentials()` (vault_example.py)
+- `example_4_get_redis_connection()` (vault_example.py)
+- `example_5_fastapi_dependency()` (vault_example.py)
+- `example_6_service_configuration()` (vault_example.py)
+- `example_7_vault_health_check()` (vault_example.py)
+- `example_8_circuit_breaker_demo()` (vault_example.py)
+- `extract_request_id()` (error_handlers.py)
+- `generate_env_example()` (base_config.py)
+- `get_api_key()` (vault_client.py)
+- `get_audit_logger()` (audit_logger.py)
+- `get_canary_manager()` (vertice_canary.py)
+- `get_constitutional_logger()` (constitutional_logging.py)
+- `get_consumer_topics()` (topics.py)
+- `get_database_config()` (vault_client.py)
+- `get_ip_intelligence_config()` (openapi_config.py)
+- `get_jwt_secret()` (vault_client.py)
+- `get_maba_service()` (routes.py)
+- `get_malware_analysis_config()` (openapi_config.py)
+- `get_maximus_core_config()` (openapi_config.py)
+- `get_producer_topics()` (topics.py)
+- `get_rate_limit_status()` (rate_limiter.py)
+- `get_servers()` (openapi_config.py)
+- `get_topic_config()` (topics.py)
+- `get_tracer()` (vertice_tracing.py)
+- `get_vault_client()` (vault_client.py)
+- `init_tracing()` (vertice_tracing.py)
+- `instrument_fastapi()` (vertice_tracing.py)
+- `instrument_httpx()` (vertice_tracing.py)
+- `instrument_redis()` (vertice_tracing.py)
+- `is_private_ip()` (validators.py)
+- `is_public_ip()` (validators.py)
+- `is_sabbath()` (metrics_exporter.py)
+- `list_response()` (response_models.py)
+- `load_config()` (base_config.py)
+- `log_aletheia_check()` (constitutional_logging.py)
+- `log_constitutional_violation()` (constitutional_logging.py)
+- `log_praotes_check()` (constitutional_logging.py)
+- `log_sabbath_check()` (constitutional_logging.py)
+- `log_sophia_decision()` (constitutional_logging.py)
+- `log_tapeinophrosyne_check()` (constitutional_logging.py)
+- `main()` (main.py)
+- `normalize_unicode()` (sanitizers.py)
+- `normalize_whitespace()` (sanitizers.py)
+- `rate_limit()` (rate_limiter.py)
+- `record_constitutional_compliance()` (constitutional_metrics.py)
+- `record_fpc_score()` (constitutional_metrics.py)
+- `record_fruit_compliance()` (constitutional_metrics.py)
+- `record_hallucination()` (constitutional_metrics.py)
+- `record_humility_check()` (constitutional_metrics.py)
+- `record_lei_score()` (constitutional_metrics.py)
+- `record_principle_violation()` (constitutional_metrics.py)
+- `record_sabbath_status()` (constitutional_metrics.py)
+- `record_wisdom_decision()` (constitutional_metrics.py)
+- `register_error_handlers()` (error_handlers.py)
+- `remove_control_characters()` (sanitizers.py)
+- `sanitize_alphanumeric()` (sanitizers.py)
+- `sanitize_email()` (sanitizers.py)
+- `sanitize_html()` (sanitizers.py)
+- `sanitize_http_header()` (sanitizers.py)
+- `sanitize_ldap_dn()` (sanitizers.py)
+- `sanitize_ldap_filter()` (sanitizers.py)
+- `sanitize_nosql_operator()` (sanitizers.py)
+- `sanitize_path()` (sanitizers.py)
+- `sanitize_shell_argument()` (sanitizers.py)
+- `sanitize_sql_identifier()` (sanitizers.py)
+- `sanitize_xml()` (sanitizers.py)
+- `set_maba_service()` (routes.py)
+- `set_span_error()` (vertice_tracing.py)
+- `strip_html_tags()` (sanitizers.py)
+- `success_response()` (response_models.py)
+- `traced()` (vertice_tracing.py)
+- `truncate_string()` (sanitizers.py)
+- `validate_cidr()` (validators.py)
+- `validate_domain()` (validators.py)
+- `validate_email()` (validators.py)
+- `validate_filename()` (validators.py)
+- `validate_file_path()` (validators.py)
+- `validate_hash()` (validators.py)
+- `validate_ioc()` (validators.py)
+- `validate_ip_address()` (validators.py)
+- `validate_ipv4()` (validators.py)
+- `validate_ipv6()` (validators.py)
+- `validate_list_length()` (validators.py)
+- `validate_md5()` (validators.py)
+- `validate_port()` (validators.py)
+- `validate_sha1()` (validators.py)
+- `validate_sha256()` (validators.py)
+- `validate_sha512()` (validators.py)
+- `validate_string_length()` (validators.py)
+- `validate_url()` (validators.py)
+- `validate_username()` (validators.py)
+
+### nis
+
+- `add_span_attribute()` (vertice_tracing.py)
+- `add_span_event()` (vertice_tracing.py)
+- `audit_context()` (audit_logger.py)
+- `auto_update_sabbath_status()` (metrics_exporter.py)
+- `build_error_response()` (error_handlers.py)
+- `configure_constitutional_logging()` (constitutional_logging.py)
+- `create_constitutional_tracer()` (constitutional_tracing.py)
+- `create_openapi_config()` (openapi_config.py)
+- `create_rate_limiter()` (rate_limiter.py)
+- `create_websocket_app()` (websocket_gateway.py)
+- `detect_command_injection()` (sanitizers.py)
+- `detect_sql_injection()` (sanitizers.py)
+- `error_response()` (response_models.py)
+- `example_1_get_api_key()` (vault_example.py)
+- `example_2_get_database_connection()` (vault_example.py)
+- `example_3_get_dynamic_database_credentials()` (vault_example.py)
+- `example_4_get_redis_connection()` (vault_example.py)
+- `example_5_fastapi_dependency()` (vault_example.py)
+- `example_6_service_configuration()` (vault_example.py)
+- `example_7_vault_health_check()` (vault_example.py)
+- `example_8_circuit_breaker_demo()` (vault_example.py)
+- `extract_request_id()` (error_handlers.py)
+- `generate_env_example()` (base_config.py)
+- `get_api_key()` (vault_client.py)
+- `get_audit_logger()` (audit_logger.py)
+- `get_canary_manager()` (vertice_canary.py)
+- `get_constitutional_logger()` (constitutional_logging.py)
+- `get_consumer_topics()` (topics.py)
+- `get_database_config()` (vault_client.py)
+- `get_ip_intelligence_config()` (openapi_config.py)
+- `get_jwt_secret()` (vault_client.py)
+- `get_malware_analysis_config()` (openapi_config.py)
+- `get_maximus_core_config()` (openapi_config.py)
+- `get_mvp_service()` (routes.py)
+- `get_producer_topics()` (topics.py)
+- `get_rate_limit_status()` (rate_limiter.py)
+- `get_servers()` (openapi_config.py)
+- `get_topic_config()` (topics.py)
+- `get_tracer()` (vertice_tracing.py)
+- `get_vault_client()` (vault_client.py)
+- `init_tracing()` (vertice_tracing.py)
+- `instrument_fastapi()` (vertice_tracing.py)
+- `instrument_httpx()` (vertice_tracing.py)
+- `instrument_redis()` (vertice_tracing.py)
+- `is_private_ip()` (validators.py)
+- `is_public_ip()` (validators.py)
+- `is_sabbath()` (metrics_exporter.py)
+- `list_response()` (response_models.py)
+- `load_config()` (base_config.py)
+- `log_aletheia_check()` (constitutional_logging.py)
+- `log_constitutional_violation()` (constitutional_logging.py)
+- `log_praotes_check()` (constitutional_logging.py)
+- `log_sabbath_check()` (constitutional_logging.py)
+- `log_sophia_decision()` (constitutional_logging.py)
+- `log_tapeinophrosyne_check()` (constitutional_logging.py)
+- `main()` (main.py)
+- `normalize_unicode()` (sanitizers.py)
+- `normalize_whitespace()` (sanitizers.py)
+- `rate_limit()` (rate_limiter.py)
+- `record_constitutional_compliance()` (constitutional_metrics.py)
+- `record_fpc_score()` (constitutional_metrics.py)
+- `record_fruit_compliance()` (constitutional_metrics.py)
+- `record_hallucination()` (constitutional_metrics.py)
+- `record_humility_check()` (constitutional_metrics.py)
+- `record_lei_score()` (constitutional_metrics.py)
+- `record_principle_violation()` (constitutional_metrics.py)
+- `record_sabbath_status()` (constitutional_metrics.py)
+- `record_wisdom_decision()` (constitutional_metrics.py)
+- `register_error_handlers()` (error_handlers.py)
+- `remove_control_characters()` (sanitizers.py)
+- `sanitize_alphanumeric()` (sanitizers.py)
+- `sanitize_email()` (sanitizers.py)
+- `sanitize_html()` (sanitizers.py)
+- `sanitize_http_header()` (sanitizers.py)
+- `sanitize_ldap_dn()` (sanitizers.py)
+- `sanitize_ldap_filter()` (sanitizers.py)
+- `sanitize_nosql_operator()` (sanitizers.py)
+- `sanitize_path()` (sanitizers.py)
+- `sanitize_shell_argument()` (sanitizers.py)
+- `sanitize_sql_identifier()` (sanitizers.py)
+- `sanitize_xml()` (sanitizers.py)
+- `set_mvp_service()` (routes.py)
+- `set_span_error()` (vertice_tracing.py)
+- `strip_html_tags()` (sanitizers.py)
+- `success_response()` (response_models.py)
+- `traced()` (vertice_tracing.py)
+- `truncate_string()` (sanitizers.py)
+- `validate_cidr()` (validators.py)
+- `validate_domain()` (validators.py)
+- `validate_email()` (validators.py)
+- `validate_filename()` (validators.py)
+- `validate_file_path()` (validators.py)
+- `validate_hash()` (validators.py)
+- `validate_ioc()` (validators.py)
+- `validate_ip_address()` (validators.py)
+- `validate_ipv4()` (validators.py)
+- `validate_ipv6()` (validators.py)
+- `validate_list_length()` (validators.py)
+- `validate_md5()` (validators.py)
+- `validate_port()` (validators.py)
+- `validate_sha1()` (validators.py)
+- `validate_sha256()` (validators.py)
+- `validate_sha512()` (validators.py)
+- `validate_string_length()` (validators.py)
+- `validate_url()` (validators.py)
+- `validate_username()` (validators.py)
+
+### oraculo
+
+- `auto_update_sabbath_status()` (metrics_exporter.py)
+- `configure_constitutional_logging()` (constitutional_logging.py)
+- `create_constitutional_tracer()` (constitutional_tracing.py)
+- `get_constitutional_logger()` (constitutional_logging.py)
+- `initialize_stream_manager()` (websocket_endpoints.py)
+- `is_sabbath()` (metrics_exporter.py)
+- `log_aletheia_check()` (constitutional_logging.py)
+- `log_constitutional_violation()` (constitutional_logging.py)
+- `log_praotes_check()` (constitutional_logging.py)
+- `log_sabbath_check()` (constitutional_logging.py)
+- `log_sophia_decision()` (constitutional_logging.py)
+- `log_tapeinophrosyne_check()` (constitutional_logging.py)
+- `main()` (auto_implementer.py)
+- `main()` (auto_implementer.py)
+- `record_constitutional_compliance()` (constitutional_metrics.py)
+- `record_fpc_score()` (constitutional_metrics.py)
+- `record_fruit_compliance()` (constitutional_metrics.py)
+- `record_hallucination()` (constitutional_metrics.py)
+- `record_humility_check()` (constitutional_metrics.py)
+- `record_lei_score()` (constitutional_metrics.py)
+- `record_principle_violation()` (constitutional_metrics.py)
+- `record_sabbath_status()` (constitutional_metrics.py)
+- `record_wisdom_decision()` (constitutional_metrics.py)
+
+### orchestrator
+
+- `auto_update_sabbath_status()` (metrics_exporter.py)
+- `configure_constitutional_logging()` (constitutional_logging.py)
+- `create_constitutional_tracer()` (constitutional_tracing.py)
+- `get_constitutional_logger()` (constitutional_logging.py)
+- `is_sabbath()` (metrics_exporter.py)
+- `log_aletheia_check()` (constitutional_logging.py)
+- `log_constitutional_violation()` (constitutional_logging.py)
+- `log_praotes_check()` (constitutional_logging.py)
+- `log_sabbath_check()` (constitutional_logging.py)
+- `log_sophia_decision()` (constitutional_logging.py)
+- `log_tapeinophrosyne_check()` (constitutional_logging.py)
+- `record_constitutional_compliance()` (constitutional_metrics.py)
+- `record_fpc_score()` (constitutional_metrics.py)
+- `record_fruit_compliance()` (constitutional_metrics.py)
+- `record_hallucination()` (constitutional_metrics.py)
+- `record_humility_check()` (constitutional_metrics.py)
+- `record_lei_score()` (constitutional_metrics.py)
+- `record_principle_violation()` (constitutional_metrics.py)
+- `record_sabbath_status()` (constitutional_metrics.py)
+- `record_wisdom_decision()` (constitutional_metrics.py)
+
+### penelope
+
+- `add_span_attribute()` (vertice_tracing.py)
+- `add_span_event()` (vertice_tracing.py)
+- `audit_context()` (audit_logger.py)
+- `auto_update_sabbath_status()` (metrics_exporter.py)
+- `build_error_response()` (error_handlers.py)
+- `configure_constitutional_logging()` (constitutional_logging.py)
+- `create_constitutional_tracer()` (constitutional_tracing.py)
+- `create_openapi_config()` (openapi_config.py)
+- `create_rate_limiter()` (rate_limiter.py)
+- `create_websocket_app()` (websocket_gateway.py)
+- `detect_command_injection()` (sanitizers.py)
+- `detect_sql_injection()` (sanitizers.py)
+- `error_response()` (response_models.py)
+- `example_1_get_api_key()` (vault_example.py)
+- `example_2_get_database_connection()` (vault_example.py)
+- `example_3_get_dynamic_database_credentials()` (vault_example.py)
+- `example_4_get_redis_connection()` (vault_example.py)
+- `example_5_fastapi_dependency()` (vault_example.py)
+- `example_6_service_configuration()` (vault_example.py)
+- `example_7_vault_health_check()` (vault_example.py)
+- `example_8_circuit_breaker_demo()` (vault_example.py)
+- `extract_request_id()` (error_handlers.py)
+- `generate_env_example()` (base_config.py)
+- `get_api_key()` (vault_client.py)
+- `get_audit_logger()` (audit_logger.py)
+- `get_canary_manager()` (vertice_canary.py)
+- `get_constitutional_logger()` (constitutional_logging.py)
+- `get_consumer_topics()` (topics.py)
+- `get_database_config()` (vault_client.py)
+- `get_ip_intelligence_config()` (openapi_config.py)
+- `get_jwt_secret()` (vault_client.py)
+- `get_malware_analysis_config()` (openapi_config.py)
+- `get_maximus_core_config()` (openapi_config.py)
+- `get_producer_topics()` (topics.py)
+- `get_rate_limit_status()` (rate_limiter.py)
+- `get_servers()` (openapi_config.py)
+- `get_topic_config()` (topics.py)
+- `get_tracer()` (vertice_tracing.py)
+- `get_vault_client()` (vault_client.py)
+- `init_tracing()` (vertice_tracing.py)
+- `instrument_fastapi()` (vertice_tracing.py)
+- `instrument_httpx()` (vertice_tracing.py)
+- `instrument_redis()` (vertice_tracing.py)
+- `is_private_ip()` (validators.py)
+- `is_public_ip()` (validators.py)
+- `is_sabbath()` (main.py)
+- `is_sabbath()` (metrics_exporter.py)
+- `list_response()` (response_models.py)
+- `load_config()` (base_config.py)
+- `log_aletheia_check()` (constitutional_logging.py)
+- `log_constitutional_violation()` (constitutional_logging.py)
+- `log_praotes_check()` (constitutional_logging.py)
+- `log_sabbath_check()` (constitutional_logging.py)
+- `log_sophia_decision()` (constitutional_logging.py)
+- `log_tapeinophrosyne_check()` (constitutional_logging.py)
+- `main()` (main.py)
+- `normalize_unicode()` (sanitizers.py)
+- `normalize_whitespace()` (sanitizers.py)
+- `rate_limit()` (rate_limiter.py)
+- `record_constitutional_compliance()` (constitutional_metrics.py)
+- `record_fpc_score()` (constitutional_metrics.py)
+- `record_fruit_compliance()` (constitutional_metrics.py)
+- `record_hallucination()` (constitutional_metrics.py)
+- `record_humility_check()` (constitutional_metrics.py)
+- `record_lei_score()` (constitutional_metrics.py)
+- `record_principle_violation()` (constitutional_metrics.py)
+- `record_sabbath_status()` (constitutional_metrics.py)
+- `record_wisdom_decision()` (constitutional_metrics.py)
+- `register_error_handlers()` (error_handlers.py)
+- `remove_control_characters()` (sanitizers.py)
+- `sanitize_alphanumeric()` (sanitizers.py)
+- `sanitize_email()` (sanitizers.py)
+- `sanitize_html()` (sanitizers.py)
+- `sanitize_http_header()` (sanitizers.py)
+- `sanitize_ldap_dn()` (sanitizers.py)
+- `sanitize_ldap_filter()` (sanitizers.py)
+- `sanitize_nosql_operator()` (sanitizers.py)
+- `sanitize_path()` (sanitizers.py)
+- `sanitize_shell_argument()` (sanitizers.py)
+- `sanitize_sql_identifier()` (sanitizers.py)
+- `sanitize_xml()` (sanitizers.py)
+- `set_span_error()` (vertice_tracing.py)
+- `strip_html_tags()` (sanitizers.py)
+- `success_response()` (response_models.py)
+- `traced()` (vertice_tracing.py)
+- `truncate_string()` (sanitizers.py)
+- `validate_cidr()` (validators.py)
+- `validate_domain()` (validators.py)
+- `validate_email()` (validators.py)
+- `validate_filename()` (validators.py)
+- `validate_file_path()` (validators.py)
+- `validate_hash()` (validators.py)
+- `validate_ioc()` (validators.py)
+- `validate_ip_address()` (validators.py)
+- `validate_ipv4()` (validators.py)
+- `validate_ipv6()` (validators.py)
+- `validate_list_length()` (validators.py)
+- `validate_md5()` (validators.py)
+- `validate_port()` (validators.py)
+- `validate_sha1()` (validators.py)
+- `validate_sha256()` (validators.py)
+- `validate_sha512()` (validators.py)
+- `validate_string_length()` (validators.py)
+- `validate_url()` (validators.py)
+- `validate_username()` (validators.py)
+

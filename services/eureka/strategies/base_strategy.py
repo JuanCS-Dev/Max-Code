@@ -34,7 +34,7 @@ from abc import ABC, abstractmethod
 
 # Import APV and related enums from Oráculo
 
-from backend.shared.models.apv import APV, RemediationStrategy, RemediationComplexity
+from shared.models.apv import APV, RemediationStrategy, RemediationComplexity
 
 # Import Eureka models
 from eureka_models.confirmation.confirmation_result import ConfirmationResult

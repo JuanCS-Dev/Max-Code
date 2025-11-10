@@ -44,7 +44,7 @@ from typing import Optional, Any
 
 # APV from Oráculo
 
-from backend.shared.models.apv import APV
+from shared.models.apv import APV
 
 from consumers.apv_consumer import APVConsumer, APVConsumerConfig
 from confirmation.vulnerability_confirmer import (

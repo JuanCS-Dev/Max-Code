@@ -8,8 +8,8 @@ Critical security module - NO compromises.
 
 import pytest
 
-from backend.shared.exceptions import ValidationError
-from backend.shared.sanitizers import (
+from shared.exceptions import ValidationError
+from shared.sanitizers import (
     detect_command_injection,
     detect_sql_injection,
     normalize_unicode,

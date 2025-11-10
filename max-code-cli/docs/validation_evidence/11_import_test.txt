@@ -1,0 +1,25 @@
+Warning: Input is not a terminal (fd=0).
+2025-11-07 18:48:00,620 - core.tools.registry - INFO - ToolRegistry initialized
+═══════════════════════════════════════════════════════════════
+FASE 1.2 - TESTE DE IMPORTS
+═══════════════════════════════════════════════════════════════
+
+Testando imports de módulos críticos:
+
+✅ ui.colors
+✅ ui.banner
+✅ ui.status_bar
+✅ ui.command_palette
+✅ ui.dashboard
+✅ cli.repl_enhanced
+✅ cli.main
+✅ core.llm.client
+✅ core.auth.oauth_handler
+✅ agents
+
+════════════════════════════════════════════════════════════
+RESULTADO:
+  Passed: 10/10
+  Failed: 0/10
+  Taxa de sucesso: 100%
+════════════════════════════════════════════════════════════

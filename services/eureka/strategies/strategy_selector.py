@@ -24,7 +24,7 @@ import logging
 
 # Import APV from Oráculo
 
-from backend.shared.models.apv import APV
+from shared.models.apv import APV
 
 from eureka_models.confirmation.confirmation_result import ConfirmationResult
 from strategies.base_strategy import BaseStrategy

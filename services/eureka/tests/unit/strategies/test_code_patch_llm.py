@@ -21,7 +21,7 @@ from strategies.code_patch_llm import CodePatchLLMStrategy
 from llm import LLMResponse
 
 # Import models
-from backend.shared.models.apv import APV, AffectedPackage, ASTGrepPattern, RemediationStrategy
+from shared.models.apv import APV, AffectedPackage, ASTGrepPattern, RemediationStrategy
 
 
 # ===================== CODE PATCH LLM TESTS =====================

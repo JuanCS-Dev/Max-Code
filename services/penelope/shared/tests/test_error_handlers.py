@@ -12,7 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError as PydanticValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from backend.shared.error_handlers import (
+from shared.error_handlers import (
     build_error_response,
     extract_request_id,
     generic_exception_handler,
@@ -23,7 +23,7 @@ from backend.shared.error_handlers import (
     validation_exception_handler,
     vertice_exception_handler,
 )
-from backend.shared.exceptions import (
+from shared.exceptions import (
     DatabaseQueryError,
     RecordNotFoundError,
     VerticeException,

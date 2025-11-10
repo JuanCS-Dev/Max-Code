@@ -20,7 +20,7 @@ from strategies.base_strategy import BaseStrategy
 from strategies.strategy_selector import StrategySelector, NoStrategyAvailableError
 
 # Import models
-from backend.shared.models.apv import RemediationStrategy
+from shared.models.apv import RemediationStrategy
 
 
 # ===================== CONCRETE STRATEGY FOR TESTING =====================

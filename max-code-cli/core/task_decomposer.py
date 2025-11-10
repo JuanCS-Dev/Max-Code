@@ -22,6 +22,7 @@ Soli Deo Gloria
 """
 
 from anthropic import Anthropic, AsyncAnthropic
+from core.tree_of_thoughts import TreeOfThoughts
 from typing import List, Dict, Optional, Tuple, Any
 import json
 import os

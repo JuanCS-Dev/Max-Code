@@ -46,7 +46,7 @@ import logging
 from pathlib import Path
 from typing import Optional, List
 
-from backend.shared.models.apv import APV, RemediationStrategy
+from shared.models.apv import APV, RemediationStrategy
 
 from eureka_models.confirmation.confirmation_result import (
     ConfirmationResult,

@@ -28,7 +28,7 @@ from pydantic import BaseModel, Field
 
 # Import APV and RemediationStrategy from Oráculo
 
-from backend.shared.models.apv import RemediationStrategy
+from shared.models.apv import RemediationStrategy
 
 
 class PatchStatus(str, Enum):

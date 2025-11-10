@@ -1,0 +1,69 @@
+./sdk/base_agent.py:115:    TODOS os agentes herdam desta classe e implementam:
+./sdk/base_agent.py:119:    TODOS os agentes têm acesso a:
+./agents/code_agent.py:311:    TODO: Implement {task.description}
+./agents/code_agent.py:316:    raise NotImplementedError("TODO: Implement this function")
+./agents/code_agent.py:322:            return f"// {task.description}\n// TODO: Implement this in {language}"
+./agents/test_agent.py:271:    # TODO: Implement test
+./agents/test_agent.py:276:    # TODO: Implement test
+./agents/test_agent.py:281:    # TODO: Implement test
+./agents/test_agent.py:286:    # TODO: Implement test
+./cli/repl_enhanced.py:124:        Carregar TODOS comandos disponíveis.
+./tests/test_guardian_system_comprehensive.py:612:    # TODO: implement this
+./tests/test_guardian_system_comprehensive.py:1059:    # TODO: implement calculation
+./tests/test_guardian_system_comprehensive.py:1063:    # TODO: add processing logic
+./tests/test_guardian_system_comprehensive.py:1072:        "Contains TODO placeholders",
+./tests/test_guardian_system_comprehensive.py:1073:        "Remove TODOs",
+./tests/test_guardian_system_comprehensive.py:1085:    # Should detect TODOs - quality should not be excellent
+./tests/test_explore_agent.py:78:    # TODO: Add error handling
+./tests/test_explore_agent.py:119:- TODO: Add more features
+./tests/test_explore_agent.py:321:    """Test searching for TODO comments"""
+./tests/test_explore_agent.py:324:        description="Find all TODO comments",
+./tests/test_explore_agent.py:327:            "search_pattern": "TODO",
+./tests/test_explore_agent.py:336:    assert len(matches) >= 2  # We added 2 TODO comments
+./tests/test_explore_agent.py:337:    print(f"✅ Test 12: Found {len(matches)} TODO comments")
+./tests/test_file_tools.py:82:# TODO: Add more functions
+./tests/test_file_tools.py:83:# FIXME: Fix the bug
+./tests/test_file_tools.py:814:        assert result.total_matches >= 2  # TODO and FIXME
+./examples/guardian_auto_protection_demo.py:58:    print("TEST 1: Code with TODO placeholder (P1 VIOLATION)")
+./examples/guardian_auto_protection_demo.py:66:    # TODO: implement this function
+./examples/guardian_auto_protection_demo.py:276:✅ Bloqueiam código com placeholders/TODOs (P1)
+./examples/hooks_example.py:245:            "pattern": "TODO",
+./core/streaming/agent.py:147:        TODO: Implement real Anthropic API streaming.
+./core/context/strategies.py:358:        # TODO: Implement LLM summarization
+./core/context/strategies.py:387:        """Create placeholder summary (TODO: replace with real LLM summary)"""
+./core/context/monitor.py:324:        # TODO: Implement user prompt
+./core/context/compactor.py:120:        messages_summarized = 0  # TODO: Track from strategy
+./core/deter_agent/state/sub_agent_isolation.py:8:- Sub-agent NÃO deve ter acesso a TODO contexto do parent
+./core/deter_agent/guardian.py:355:        cot_quality = 0.8  # TODO: Implementar análise real
+./core/deter_agent/guardian.py:358:        consistency_score = 0.85  # TODO: Implementar análise real
+./core/deter_agent/guardian.py:361:        critic_score = 0.75  # TODO: Implementar análise real
+./core/deter_agent/guardian.py:417:        # TODO: Implementar tracking real de performance
+./core/deter_agent/incentive/feedback_loop.py:51:                suggested_action="Review code for TODOs, placeholders, and NotImplementedError",
+./core/tools/grep_tool.py:68:        GrepTool().grep("TODO", output_mode="files")  - Files with TODOs
+./core/tools/grep_tool.py:120:            >>> result = tool.grep("TODO", path="src/", output_mode="content")
+./core/tools/grep_tool.py:325:        """Find TODO comments in code"""
+./core/tools/grep_tool.py:327:            pattern=r"(TODO|FIXME|XXX|HACK|NOTE):",
+./core/tools/grep_tool.py:370:        >>> files = grep_files("TODO", path="src/")
+./core/tools/grep_tool.py:392:    # Test 1: Find TODOs
+./core/tools/grep_tool.py:394:    logger.info("TEST 1: Find TODO comments in code")
+./core/tools/grep_tool.py:400:        logger.info(f"✓ Found {result.total_matches} TODOs in {len(result.files_with_matches)} files")
+./core/task_planner.py:380:                    parameters={'file_path': 'main.cpp', 'content': '// TODO'},
+./core/constitutional/validators/kantian_anti_deception.py:85:        regex=r'(def\s+\w+.*:\s*(pass|\.\.\.|\.\.\.)(\s*#.*)?$|return\s+None\s*#\s*TODO)',
+./core/constitutional/validators/kantian_anti_deception.py:92:        regex=r'return\s+(True|"success"|{"success":\s*true})\s*#\s*(mock|fake|placeholder|TODO)',
+./core/constitutional/validators/p3_truth.py:9:- No placeholder implementations (TODO, FIXME)
+./core/constitutional/validators/p3_truth.py:113:            r'\bTODO\b',
+./core/constitutional/validators/p3_truth.py:114:            r'\bFIXME\b',
+./core/constitutional/validators/p3_truth.py:115:            r'\bHACK\b',
+./core/constitutional/validators/p3_truth.py:116:            r'\bXXX\b',
+./core/constitutional/validators/p3_truth.py:334:        """Check for TODO/FIXME/etc placeholders."""
+./core/constitutional/guardians/guardian_coordinator.py:5:AUTORIDADE: SUPREMA - controla TODO o ciclo de enforcement constitucional.
+./core/constitutional/guardians/post_execution_guardian.py:321:            suggestions.append(f"Reduce LEI from {metrics.lei:.2f} to <1.0 by removing placeholders/TODOs")
+./core/constitutional/guardians/auto_protection.py:292:        # Fix 1: Remover TODOs/placeholders
+./core/constitutional/guardians/auto_protection.py:294:        if any('TODO' in v.pattern for v in violations):
+./core/constitutional/guardians/auto_protection.py:295:            fixed_code = re.sub(r'#\s*TODO:.*', '', fixed_code)
+./core/constitutional/guardians/auto_protection.py:296:            fixed_code = re.sub(r'//\s*TODO:.*', '', fixed_code)
+./core/constitutional/guardians/auto_protection.py:319:                    'fixes_applied': ['TODO removal', 'pass removal'],
+./core/skeptic/dream.py:73:        # "100% completo? You have 3 TODOs in the code.
+./core/skeptic/dream.py:167:        # Check 1: "100% complete" mas tem TODOs
+./core/skeptic/dream.py:169:            if 'TODO' in content or 'FIXME' in content:
+./core/skeptic/dream.py:170:                checks.append("Claims '100% complete' but I see TODOs/FIXMEs in the code")

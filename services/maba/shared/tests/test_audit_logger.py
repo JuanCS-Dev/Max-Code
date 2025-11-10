@@ -8,7 +8,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from backend.shared.audit_logger import (
+from shared.audit_logger import (
     AuditConfig,
     AuditLogger,
     audit_context,

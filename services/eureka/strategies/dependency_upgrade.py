@@ -33,7 +33,7 @@ from pathlib import Path
 from typing import Optional, List
 import re
 
-from backend.shared.models.apv import APV, RemediationStrategy, AffectedPackage
+from shared.models.apv import APV, RemediationStrategy, AffectedPackage
 from eureka_models.confirmation.confirmation_result import ConfirmationResult
 from eureka_models.patch import Patch
 from strategies.base_strategy import BaseStrategy, StrategyFailedError

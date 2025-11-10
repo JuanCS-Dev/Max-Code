@@ -1,0 +1,4064 @@
+# MAXIMUS - Class Index
+
+**Complete list of all classes in the system**
+**Generated:** 2025-11-07 20:48:00
+
+---
+
+## All Classes (Alphabetical)
+
+- **AbstractEthicalFramework** - `services/core/motor_integridade_processual/frameworks/base.py`
+- **AbstractNeeds** - `services/core/consciousness/archived_old_v4/monitor_old.py`
+- **AbstractNeeds** - `services/core/consciousness/mmei/monitor.py`
+- **ABTestMetricsResponse** - `services/core/motor_integridade_processual/api.py`
+- **ABTestResult** - `services/core/motor_integridade_processual/api.py`
+- **AcetylcholineModulator** - `services/core/consciousness/neuromodulation/acetylcholine_hardened.py`
+- **AcetylcholineState** - `services/core/neuromodulation/acetylcholine_system.py`
+- **AcetylcholineSystem** - `services/core/neuromodulation/acetylcholine_system.py`
+- **ActionContext** - `services/core/ethics/base.py`
+- **Action** - `max-code-cli/core/constitutional/models.py`
+- **Action** - `max-code-cli/core/deter_agent/execution/action_validator.py`
+- **ActionPlan** - `max-code-cli/core/deter_agent/execution/structured_actions.py`
+- **ActionPlan** - `services/core/motor_integridade_processual/models/action_plan.py`
+- **ActionStep** - `max-code-cli/core/deter_agent/execution/structured_actions.py`
+- **ActionStep** - `services/core/motor_integridade_processual/models/action_plan.py`
+- **ActionType** - `max-code-cli/core/constitutional/models.py`
+- **ActionType** - `max-code-cli/core/deter_agent/execution/action_validator.py`
+- **ActionType** - `services/core/autonomic_core/resource_executor.py`
+- **ActionType** - `services/core/autonomic_core/resource_planner.py`
+- **ActionType** - `services/core/hitl/base.py`
+- **ActionType** - `services/core/motor_integridade_processual/models/action_plan.py`
+- **ActionValidator** - `max-code-cli/core/deter_agent/execution/action_validator.py`
+- **AdaptiveLearningSystem** - `max-code-cli/core/adaptive_learning.py`
+- **AdvancedNoiseMechanisms** - `services/core/privacy/dp_mechanisms.py`
+- **AdvancedTools** - `services/core/advanced_tools.py`
+- **AdversarialCritic** - `max-code-cli/core/deter_agent/deliberation/adversarial_critic.py`
+- **AffectedPackage** - `services/eureka/models/apv.py`
+- **AffectedPackage** - `services/maba/shared/models/apv.py`
+- **AffectedPackage** - `services/nis/shared/models/apv.py`
+- **AffectedPackage** - `services/oraculo/models/apv.py`
+- **AffectedPackage** - `services/penelope/shared/models/apv.py`
+- **AgentCapability** - `max-code-cli/sdk/base_agent.py`
+- **AgentData** - `max-code-cli/ui/types.py`
+- **AgentDisplay** - `max-code-cli/ui/agents.py`
+- **AgentEvent** - `max-code-cli/ui/agents.py`
+- **Agent** - `max-code-cli/ui/agents.py`
+- **AgentMessage** - `max-code-cli/ui/agents.py`
+- **AgentOrchestrator** - `max-code-cli/sdk/agent_orchestrator.py`
+- **AgentPool** - `max-code-cli/sdk/agent_pool.py`
+- **AgentRegistry** - `max-code-cli/sdk/agent_registry.py`
+- **AgentResult** - `max-code-cli/sdk/base_agent.py`
+- **AgentsPanel** - `max-code-cli/ui/dashboard.py`
+- **AgentSpinner** - `max-code-cli/ui/spinners.py`
+- **AgentStatus** - `max-code-cli/ui/agents.py`
+- **AgentTask** - `max-code-cli/sdk/base_agent.py`
+- **AgentTemplates** - `services/core/agent_templates.py`
+- **AggregationResult** - `services/core/federated_learning/aggregation.py`
+- **AggregationStrategy** - `services/core/federated_learning/base.py`
+- **AIAnalyzer** - `services/core/workflows/ai_analyzer.py`
+- **AlertPriority** - `services/maba/shared/enums.py`
+- **AlertPriority** - `services/nis/shared/enums.py`
+- **AlertPriority** - `services/penelope/shared/enums.py`
+- **AllServicesTools** - `services/core/_demonstration/all_services_tools.py`
+- **AlternativeGenerator** - `services/core/motor_integridade_processual/arbiter/alternatives.py`
+- **AlternativeSuggester** - `services/core/motor_integridade_processual/arbiter/alternatives.py`
+- **AnalysisEngine** - `services/maba/shared/enums.py`
+- **AnalysisEngine** - `services/nis/shared/enums.py`
+- **AnalysisEngine** - `services/penelope/shared/enums.py`
+- **AnalysisError** - `services/eureka/llm/breaking_changes_analyzer.py`
+- **AnalysisException** - `services/maba/shared/exceptions.py`
+- **AnalysisException** - `services/nis/shared/exceptions.py`
+- **AnalysisException** - `services/penelope/shared/exceptions.py`
+- **AnalysisResult** - `max-code-cli/core/deter_agent/execution/bugbot.py`
+- **AnalysisStatus** - `services/maba/shared/enums.py`
+- **AnalysisStatus** - `services/nis/shared/enums.py`
+- **AnalysisStatus** - `services/penelope/shared/enums.py`
+- **AnalysisTimeoutError** - `services/maba/shared/exceptions.py`
+- **AnalysisTimeoutError** - `services/nis/shared/exceptions.py`
+- **AnalysisTimeoutError** - `services/penelope/shared/exceptions.py`
+- **AnomalyDetector** - `services/core/autonomic_core/analyze/anomaly_detector.py`
+- **AnomalyDetector** - `services/core/consciousness/safety.py`
+- **Anomaly** - `services/core/autonomic_core/resource_analyzer.py`
+- **Anomaly** - `services/penelope/models.py`
+- **AnomalyType** - `services/core/autonomic_core/resource_analyzer.py`
+- **APIEndpoints** - `services/maba/shared/constants.py`
+- **APIEndpoints** - `services/nis/shared/constants.py`
+- **APIEndpoints** - `services/penelope/shared/constants.py`
+- **APIQuotaExceededError** - `services/maba/shared/exceptions.py`
+- **APIQuotaExceededError** - `services/nis/shared/exceptions.py`
+- **APIQuotaExceededError** - `services/penelope/shared/exceptions.py`
+- **ApplicationSensors** - `services/core/autonomic_core/monitor/sensor_definitions.py`
+- **ApplyMaximus** - `services/core/_demonstration/apply_maximus.py`
+- **ApprovalRequest** - `services/penelope/core/human_approval.py`
+- **ApprovalStatus** - `services/penelope/core/human_approval.py`
+- **ApproveDecisionRequest** - `services/core/governance_sse/api_routes.py`
+- **APVBase** - `services/maba/shared/models/apv_legacy.py`
+- **APVBase** - `services/nis/shared/models/apv_legacy.py`
+- **APVBase** - `services/penelope/shared/models/apv_legacy.py`
+- **APVConsumerConfig** - `services/eureka/consumers/apv_consumer.py`
+- **APVConsumer** - `services/eureka/consumers/apv_consumer.py`
+- **APVCreate** - `services/maba/shared/models/apv_legacy.py`
+- **APVCreate** - `services/nis/shared/models/apv_legacy.py`
+- **APVCreate** - `services/penelope/shared/models/apv_legacy.py`
+- **APVDispatchMessage** - `services/maba/shared/models/apv_legacy.py`
+- **APVDispatchMessage** - `services/nis/shared/models/apv_legacy.py`
+- **APVDispatchMessage** - `services/penelope/shared/models/apv_legacy.py`
+- **APVEvent** - `services/core/apv/api.py`
+- **APVModel** - `services/maba/shared/models/apv_legacy.py`
+- **APVModel** - `services/nis/shared/models/apv_legacy.py`
+- **APVModel** - `services/penelope/shared/models/apv_legacy.py`
+- **APVPublisher** - `services/oraculo/kafka_integration/apv_publisher.py`
+- **APVResponse** - `services/maba/shared/models/apv_legacy.py`
+- **APVResponse** - `services/nis/shared/models/apv_legacy.py`
+- **APVResponse** - `services/penelope/shared/models/apv_legacy.py`
+- **APV** - `services/eureka/models/apv.py`
+- **APV** - `services/maba/shared/models/apv.py`
+- **APV** - `services/nis/shared/models/apv.py`
+- **APV** - `services/oraculo/models/apv.py`
+- **APV** - `services/penelope/shared/models/apv.py`
+- **APVStats** - `services/core/apv/api.py`
+- **APVStatusUpdate** - `services/maba/shared/models/apv_legacy.py`
+- **APVStatusUpdate** - `services/nis/shared/models/apv_legacy.py`
+- **APVStatusUpdate** - `services/penelope/shared/models/apv_legacy.py`
+- **APVStreamManager** - `services/oraculo/websocket/apv_stream_manager.py`
+- **APVUpdate** - `services/maba/shared/models/apv_legacy.py`
+- **APVUpdate** - `services/nis/shared/models/apv_legacy.py`
+- **APVUpdate** - `services/penelope/shared/models/apv_legacy.py`
+- **ArchitectAgent** - `max-code-cli/agents/architect_agent.py`
+- **ArchitectAgentParameters** - `max-code-cli/agents/validation_schemas.py`
+- **ArchitecturalConcern** - `max-code-cli/agents/architect_agent.py`
+- **ArchitecturalDecision** - `max-code-cli/agents/architect_agent.py`
+- **ArchitecturalRisk** - `max-code-cli/agents/architect_agent.py`
+- **ArousalAdjustment** - `max-code-cli/integration/maximus_client.py`
+- **ArousalAdjustment** - `services/core/consciousness/api.py`
+- **ArousalBoundEnforcer** - `services/core/consciousness/mcea/controller.py`
+- **ArousalConfig** - `services/core/consciousness/archived_old_v4/controller_old.py`
+- **ArousalConfig** - `services/core/consciousness/mcea/controller.py`
+- **ArousalController** - `services/core/consciousness/archived_old_v4/controller_old.py`
+- **ArousalController** - `services/core/consciousness/mcea/controller.py`
+- **ArousalLevel** - `services/core/consciousness/archived_old_v4/controller_old.py`
+- **ArousalLevel** - `services/core/consciousness/mcea/controller.py`
+- **ArousalModulationConfig** - `services/core/consciousness/esgt/arousal_integration.py`
+- **ArousalModulation** - `services/core/consciousness/archived_old_v4/controller_old.py`
+- **ArousalModulation** - `services/core/consciousness/mcea/controller.py`
+- **ArousalRateLimiter** - `services/core/consciousness/mcea/controller.py`
+- **ArousalState** - `services/core/consciousness/archived_old_v4/controller_old.py`
+- **ArousalState** - `services/core/consciousness/mcea/controller.py`
+- **ArticleIIGuardian** - `services/core/governance/guardian/article_ii_guardian.py`
+- **ArticleIIIGuardian** - `services/core/governance/guardian/article_iii_guardian.py`
+- **ArticleIVGuardian** - `services/core/governance/guardian/article_iv_guardian.py`
+- **ArticleVGuardian** - `services/core/governance/guardian/article_v_guardian.py`
+- **AssetType** - `services/maba/shared/enums.py`
+- **AssetType** - `services/nis/shared/enums.py`
+- **AssetType** - `services/penelope/shared/enums.py`
+- **ASTGrepConfig** - `services/eureka/confirmation/ast_grep_engine.py`
+- **ASTGrepEngine** - `services/eureka/confirmation/ast_grep_engine.py`
+- **ASTGrepMatch** - `services/eureka/confirmation/ast_grep_engine.py`
+- **ASTGrepPattern** - `services/eureka/models/apv.py`
+- **ASTGrepPattern** - `services/maba/shared/models/apv.py`
+- **ASTGrepPattern** - `services/nis/shared/models/apv.py`
+- **ASTGrepPattern** - `services/oraculo/models/apv.py`
+- **ASTGrepPattern** - `services/penelope/shared/models/apv.py`
+- **ASTNode** - `max-code-cli/core/epl/parser.py`
+- **ASTNodeType** - `max-code-cli/core/epl/parser.py`
+- **AsyncTracedOperation** - `services/maba/shared/vertice_tracing.py`
+- **AsyncTracedOperation** - `services/nis/shared/vertice_tracing.py`
+- **AsyncTracedOperation** - `services/penelope/shared/vertice_tracing.py`
+- **AtlasClient** - `max-code-cli/integration/atlas_client.py`
+- **AttackSurfaceReport** - `services/core/workflows/attack_surface_adw.py`
+- **AttackSurfaceRequest** - `services/core/adw_router.py`
+- **AttackSurfaceTarget** - `services/core/workflows/attack_surface_adw.py`
+- **AttackSurfaceWorkflow** - `services/core/workflows/attack_surface_adw.py`
+- **AttackTactic** - `services/maba/shared/enums.py`
+- **AttackTactic** - `services/nis/shared/enums.py`
+- **AttackTactic** - `services/penelope/shared/enums.py`
+- **AttackTactics** - `services/maba/shared/constants.py`
+- **AttackTactics** - `services/nis/shared/constants.py`
+- **AttackTactics** - `services/penelope/shared/constants.py`
+- **AttackTechnique** - `services/maba/shared/enums.py`
+- **AttackTechnique** - `services/nis/shared/enums.py`
+- **AttackTechnique** - `services/penelope/shared/enums.py`
+- **AttackVectorType** - `services/eureka/integrations/coagulation_client.py`
+- **AttentionSchemaModel** - `services/core/consciousness/mea/attention_schema.py`
+- **AttentionSignal** - `services/core/consciousness/mea/attention_schema.py`
+- **AttentionState** - `services/core/consciousness/mea/attention_schema.py`
+- **AttentionSystem** - `services/core/attention_system/attention_core.py`
+- **AuditConfig** - `services/maba/shared/audit_logger.py`
+- **AuditConfig** - `services/nis/shared/audit_logger.py`
+- **AuditConfig** - `services/penelope/shared/audit_logger.py`
+- **AuditEntry** - `services/core/hitl/base.py`
+- **AuditLogger** - `services/core/governance/audit_infrastructure.py`
+- **AuditLogger** - `services/core/motor_integridade_processual/infrastructure/audit_trail.py`
+- **AuditLogger** - `services/maba/shared/audit_logger.py`
+- **AuditLogger** - `services/nis/shared/audit_logger.py`
+- **AuditLogger** - `services/penelope/shared/audit_logger.py`
+- **AuditLogLevel** - `services/core/governance/base.py`
+- **AuditLog** - `services/core/governance/base.py`
+- **AuditQuery** - `services/core/hitl/audit_trail.py`
+- **AuditTrail** - `services/core/hitl/audit_trail.py`
+- **AuthConfig** - `core/auth/config.py`
+- **AuthenticatedHTTPClient** - `core/auth/http_client.py`
+- **AutobiographicalNarrative** - `services/core/consciousness/autobiographical_narrative.py`
+- **AutoCompactionMonitor** - `max-code-cli/core/context/monitor.py`
+- **AutoCorrectionStrategy** - `max-code-cli/core/constitutional/guardians/auto_protection.py`
+- **AutoImplementer** - `services/oraculo/auto_implementer.py`
+- **AutomationAction** - `services/maba/shared/enums.py`
+- **AutomationAction** - `services/nis/shared/enums.py`
+- **AutomationAction** - `services/penelope/shared/enums.py`
+- **AutomationLevel** - `services/core/hitl/base.py`
+- **AutonomousAgent** - `services/core/governance/guardian/test_guardians.py`
+- **AutonomousGoalGenerator** - `services/core/consciousness/mmei/goals.py`
+- **AutoProtectionMode** - `max-code-cli/core/constitutional/guardians/auto_protection.py`
+- **AutoProtectionSystem** - `max-code-cli/core/constitutional/guardians/auto_protection.py`
+- **BannerConfig** - `max-code-cli/ui/types.py`
+- **BaseAgent** - `max-code-cli/sdk/base_agent.py`
+- **BaseAggregator** - `services/core/federated_learning/aggregation.py`
+- **BaseCompactionStrategy** - `max-code-cli/core/context/strategies.py`
+- **BaseDisplay** - `max-code-cli/ui/base.py`
+- **BaseFeedClient** - `services/oraculo/threat_feeds/base_feed.py`
+- **BaseHandler** - `services/core/governance/guardian/test_guardians.py`
+- **BaseLLMClient** - `services/eureka/llm/base_client.py`
+- **BaseModelAdapter** - `services/core/federated_learning/model_adapters.py`
+- **BaseResponse** - `services/maba/shared/response_models.py`
+- **BaseResponse** - `services/nis/shared/response_models.py`
+- **BaseResponse** - `services/penelope/shared/response_models.py`
+- **BaseServiceConfig** - `services/maba/shared/base_config.py`
+- **BaseServiceConfig** - `services/nis/shared/base_config.py`
+- **BaseServiceConfig** - `services/penelope/shared/base_config.py`
+- **BaseStrategy** - `services/eureka/strategies/base_strategy.py`
+- **BatchConfig** - `services/core/performance/batch_predictor.py`
+- **BatchPredictor** - `services/core/performance/batch_predictor.py`
+- **BatchRequest** - `services/core/performance/batch_predictor.py`
+- **BatchResponse** - `services/core/performance/batch_predictor.py`
+- **BatchTestRunner** - `services/core/scripts/batch_test_generator.py`
+- **BehavioralGNN** - `services/core/predictive_coding/layer2_behavioral.py`
+- **BehavioralLayer** - `services/core/predictive_coding/layer2_behavioral.py`
+- **BeliefExplainer** - `services/core/consciousness/lrr/introspection_engine.py`
+- **BeliefGraph** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **BeliefRevision** - `services/core/consciousness/lrr/contradiction_detector.py`
+- **Belief** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **BeliefType** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **BenchmarkMetrics** - `services/core/performance/benchmark_suite.py`
+- **BenchmarkResult** - `max-code-cli/benchmarks/ui_benchmarks.py`
+- **BenchmarkResult** - `services/core/performance/benchmark_suite.py`
+- **BenchmarkResults** - `services/maba/scripts/benchmark_cognitive_map.py`
+- **BenchmarkSuite** - `services/core/performance/benchmark_suite.py`
+- **BiasDetectionResult** - `services/core/fairness/base.py`
+- **BiasDetector** - `services/core/consciousness/lrr/meta_monitor.py`
+- **BiasDetector** - `services/core/fairness/bias_detector.py`
+- **BiasInsight** - `services/core/consciousness/lrr/meta_monitor.py`
+- **BiblicalArticleProcessor** - `libs/constitutional/logging.py`
+- **BiblicalArticleProcessor** - `libs/vortex-legacy/constitutional_logging.py`
+- **BiblicalArticleProcessor** - `services/core/shared/constitutional_logging.py`
+- **BiblicalArticleProcessor** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **BiblicalArticleProcessor** - `services/eureka/shared/constitutional_logging.py`
+- **BiblicalArticleProcessor** - `services/maba/shared/constitutional_logging.py`
+- **BiblicalArticleProcessor** - `services/nis/shared/constitutional_logging.py`
+- **BiblicalArticleProcessor** - `services/oraculo/shared/constitutional_logging.py`
+- **BiblicalArticleProcessor** - `services/orchestrator/shared/constitutional_logging.py`
+- **BiblicalArticleProcessor** - `services/penelope/shared/constitutional_logging.py`
+- **BiblicalMessages** - `max-code-cli/core/messages.py`
+- **BiblicalVerseManager** - `max-code-cli/core/verses.py`
+- **BiblicalVerse** - `max-code-cli/core/verses.py`
+- **BidirectionalStreamClient** - `max-code-cli/core/streaming/client.py`
+- **BiomimeticSafetyBridge** - `services/core/consciousness/biomimetic_safety_bridge.py`
+- **BlockManager** - `max-code-cli/ui/output_block.py`
+- **BlockStyle** - `max-code-cli/ui/output_block.py`
+- **BlockType** - `max-code-cli/ui/output_block.py`
+- **BoundaryAssessment** - `services/core/consciousness/mea/boundary_detector.py`
+- **BoundaryDetector** - `services/core/consciousness/mea/boundary_detector.py`
+- **BranchStatus** - `max-code-cli/ui/tree_of_thoughts.py`
+- **BreakingChangesAnalyzer** - `services/eureka/llm/breaking_changes_analyzer.py`
+- **BreakingChange** - `services/eureka/llm/breaking_changes_analyzer.py`
+- **BreakingChangesReport** - `services/eureka/llm/breaking_changes_analyzer.py`
+- **BreakingSeverity** - `services/eureka/llm/breaking_changes_analyzer.py`
+- **BridgeConfig** - `services/core/consciousness/biomimetic_safety_bridge.py`
+- **BridgeState** - `services/core/consciousness/biomimetic_safety_bridge.py`
+- **BroadcastOptions** - `services/core/governance_sse/event_broadcaster.py`
+- **BrowserActionRequest** - `services/maba/models.py`
+- **BrowserActionResponse** - `services/maba/models.py`
+- **BrowserAction** - `services/maba/models.py`
+- **BrowserController** - `services/maba/core/browser_controller.py`
+- **BrowserInstance** - `services/maba/core/dynamic_browser_pool.py`
+- **BrowserSessionRequest** - `services/maba/models.py`
+- **BrowserSession** - `services/maba/core/session_manager.py`
+- **BudgetExceededError** - `services/eureka/tracking/llm_cost_tracker.py`
+- **BugBot** - `max-code-cli/core/deter_agent/execution/bugbot.py`
+- **BugDetection** - `max-code-cli/core/deter_agent/execution/bugbot.py`
+- **BusinessLogicException** - `services/maba/shared/exceptions.py`
+- **BusinessLogicException** - `services/nis/shared/exceptions.py`
+- **BusinessLogicException** - `services/penelope/shared/exceptions.py`
+- **CacheActuator** - `services/core/autonomic_core/execute/cache_actuator.py`
+- **CacheBackend** - `max-code-cli/core/maximus_integration/cache.py`
+- **CacheEntry** - `max-code-cli/core/maximus_integration/cache.py`
+- **CacheStats** - `max-code-cli/core/maximus_integration/cache.py`
+- **CalibrationMetrics** - `services/core/consciousness/lrr/meta_monitor.py`
+- **CampaignRequest** - `services/core/adw_router.py`
+- **CampaignResponse** - `services/core/adw_router.py`
+- **CanaryConfig** - `services/penelope/core/canary_deployment.py`
+- **CanaryDecision** - `services/penelope/core/canary_deployment.py`
+- **CanaryDeploymentManager** - `services/maba/shared/vertice_canary.py`
+- **CanaryDeploymentManager** - `services/nis/shared/vertice_canary.py`
+- **CanaryDeploymentManager** - `services/penelope/shared/vertice_canary.py`
+- **CanaryDeployment** - `services/penelope/core/canary_deployment.py`
+- **CanaryManager** - `services/penelope/core/canary_deployment.py`
+- **CanaryStatus** - `services/penelope/core/canary_deployment.py`
+- **CapabilitiesResponse** - `max-code-cli/integration/oraculo_client.py`
+- **CascadePathway** - `services/core/consciousness/coagulation/cascade.py`
+- **CascadePhase** - `services/core/consciousness/coagulation/cascade.py`
+- **CascadeState** - `services/core/consciousness/coagulation/cascade.py`
+- **CaseEmbedder** - `services/core/justice/embeddings.py`
+- **CasePrecedent** - `services/core/justice/precedent_database.py`
+- **CausalChainStep** - `max-code-cli/integration/penelope_client.py`
+- **CausalChainStep** - `services/penelope/models.py`
+- **CBREngine** - `services/core/justice/cbr_engine.py`
+- **CBRResult** - `services/core/justice/cbr_engine.py`
+- **CertificationResult** - `services/core/compliance/certifications.py`
+- **ChainOfThought** - `max-code-cli/core/deter_agent/deliberation/chain_of_thought.py`
+- **ChainOfThought** - `max-code-cli/core/deter_agent/deliberation_old.py`
+- **ChainOfThoughtResult** - `max-code-cli/core/deter_agent/deliberation/chain_of_thought.py`
+- **ChainOfThought** - `services/core/_demonstration/chain_of_thought.py`
+- **Channel** - `services/maba/shared/websocket_gateway.py`
+- **Channel** - `services/nis/shared/websocket_gateway.py`
+- **Channel** - `services/penelope/shared/websocket_gateway.py`
+- **ChatContext** - `max-code-cli/core/chat_integration.py`
+- **ChatIntegration** - `max-code-cli/core/chat_integration.py`
+- **CircuitBreaker** - `services/core/autonomic_core/execute/loadbalancer_actuator.py`
+- **CircuitBreaker** - `services/core/consciousness/tig/fabric.py`
+- **CircuitBreaker** - `services/core/_demonstration/reasoning_engine.py`
+- **CircuitState** - `services/core/_demonstration/reasoning_engine.py`
+- **ClaudeClient** - `max-code-cli/core/llm/client.py`
+- **ClaudeClient** - `services/eureka/llm/claude_client.py`
+- **ClaudeConfig** - `max-code-cli/config/settings.py`
+- **ClickRequest** - `services/maba/models.py`
+- **ClientConfig** - `services/core/federated_learning/fl_client.py`
+- **ClientInfo** - `services/core/federated_learning/base.py`
+- **ClockOffset** - `services/core/consciousness/tig/sync.py`
+- **ClockRole** - `services/core/consciousness/tig/sync.py`
+- **ClonalExpansionEvent** - `services/maba/shared/messaging/event_schemas.py`
+- **ClonalExpansionEvent** - `services/nis/shared/messaging/event_schemas.py`
+- **ClonalExpansionEvent** - `services/penelope/shared/messaging/event_schemas.py`
+- **ClusterHealth** - `services/maba/shared/devops_tools/container_health.py`
+- **ClusterHealth** - `services/nis/shared/devops_tools/container_health.py`
+- **ClusterHealth** - `services/penelope/shared/devops_tools/container_health.py`
+- **CoagulationCascade** - `services/core/consciousness/coagulation/cascade.py`
+- **CoagulationClient** - `services/eureka/integrations/coagulation_client.py`
+- **CoagulationError** - `services/eureka/integrations/coagulation_client.py`
+- **CoagulationResponse** - `services/core/consciousness/coagulation/cascade.py`
+- **CoagulationRule** - `services/eureka/integrations/coagulation_client.py`
+- **CodeAgent** - `max-code-cli/agents/code_agent.py`
+- **CodeAgentParameters** - `max-code-cli/agents/validation_schemas.py`
+- **CodeAnalysisRequest** - `max-code-cli/integration/oraculo_client.py`
+- **CodeAnalysisRequest** - `services/oraculo/api.py`
+- **CodeAnalysisResponse** - `max-code-cli/integration/oraculo_client.py`
+- **CodeAnalysisResult** - `max-code-cli/integration/oraculo_client.py`
+- **CodeAnalyzer** - `services/core/scripts/batch_test_generator.py`
+- **CodeChange** - `max-code-cli/agents/validation_schemas.py`
+- **CodeChange** - `max-code-cli/core/deter_agent/execution/tdd_enforcer.py`
+- **CodeChange** - `max-code-cli/core/maximus_integration/nis_client.py`
+- **CodeGenerationResult** - `services/oraculo/llm/openai_client.py`
+- **CodePatchLLMStrategy** - `services/eureka/strategies/code_patch_llm.py`
+- **CodePatch** - `services/penelope/models.py`
+- **CodeScanner** - `services/oraculo/code_scanner.py`
+- **CognitiveMapEngine** - `services/maba/core/cognitive_map.py`
+- **CognitiveMapQueryRequest** - `services/maba/models.py`
+- **CognitiveMapQueryResponse** - `services/maba/models.py`
+- **CognitiveMapSQL** - `services/maba/core/cognitive_map_sql.py`
+- **CoherenceQuality** - `services/core/consciousness/validation/coherence.py`
+- **CoherenceValidator** - `services/core/consciousness/validation/coherence.py`
+- **CollectedEvent** - `services/core/training/data_collection.py`
+- **ColorPalette** - `max-code-cli/ui/colors.py`
+- **Colors** - `services/core/demo/demo_maximus_complete.py`
+- **CommandCategory** - `max-code-cli/ui/command_palette.py`
+- **CommandCompleter** - `max-code-cli/ui/command_palette.py`
+- **CommandHistory** - `max-code-cli/core/predictive_engine.py`
+- **Command** - `max-code-cli/ui/command_palette.py`
+- **Command** - `max-code-cli/ui/menus.py`
+- **CommandPalette** - `max-code-cli/ui/command_palette.py`
+- **CommandPalette** - `max-code-cli/ui/menus.py`
+- **CommitResult** - `max-code-cli/core/deter_agent/execution/git_native.py`
+- **CompactionConfig** - `max-code-cli/core/context/types.py`
+- **CompactionManager** - `max-code-cli/core/context/compactor.py`
+- **CompactionResult** - `max-code-cli/core/context/types.py`
+- **CompactionStrategy** - `max-code-cli/core/context/types.py`
+- **CompassionateResponse** - `services/core/consciousness/prefrontal_cortex.py`
+- **CompetenceLevel** - `services/penelope/models.py`
+- **CompletenessViolationType** - `max-code-cli/core/constitutional/validators/p1_completeness.py`
+- **ComplianceAlert** - `services/core/compliance/monitoring.py`
+- **ComplianceCheckResult** - `services/core/compliance/compliance_engine.py`
+- **ComplianceCheckResult** - `services/core/ethical_guardian.py`
+- **ComplianceConfig** - `services/core/compliance/base.py`
+- **ComplianceEngine** - `services/core/compliance/compliance_engine.py`
+- **ComplianceFramework** - `services/maba/shared/enums.py`
+- **ComplianceFramework** - `services/nis/shared/enums.py`
+- **ComplianceFramework** - `services/penelope/shared/enums.py`
+- **ComplianceMonitor** - `services/core/compliance/monitoring.py`
+- **ComplianceReport** - `services/core/hitl/audit_trail.py`
+- **ComplianceResult** - `services/core/compliance/base.py`
+- **ComplianceSnapshot** - `services/core/compliance/compliance_engine.py`
+- **ComplianceStatus** - `services/core/compliance/base.py`
+- **ComplianceViolation** - `services/core/compliance/base.py`
+- **CompositeValidator** - `services/core/justice/validators.py`
+- **CompositionType** - `services/core/privacy/privacy_accountant.py`
+- **CompressionResult** - `max-code-cli/core/deter_agent/state/context_compression.py`
+- **CompressionStrategy** - `max-code-cli/core/deter_agent/state/context_compression.py`
+- **ComputeSensors** - `services/core/autonomic_core/monitor/sensor_definitions.py`
+- **ConcreteGuardian** - `services/core/governance/guardian/test_base_guardian.py`
+- **ConfidenceBucket** - `services/eureka/api/ml_metrics.py`
+- **ConfidenceCalibrator** - `services/core/consciousness/lrr/meta_monitor.py`
+- **ConfidenceLevel** - `services/maba/shared/enums.py`
+- **ConfidenceLevel** - `services/nis/shared/enums.py`
+- **ConfidenceLevel** - `services/penelope/shared/enums.py`
+- **ConfidenceScoring** - `services/core/confidence_scoring.py`
+- **ConfidenceTracker** - `services/core/compassion/confidence_tracker.py`
+- **ConfigMenu** - `max-code-cli/ui/menus.py`
+- **ConfigurationError** - `max-code-cli/core/constitutional/validators/p1_completeness.py`
+- **ConfigurationError** - `max-code-cli/core/constitutional/validators/p2_api_validator.py`
+- **ConfigurationError** - `max-code-cli/core/constitutional/validators/p3_truth.py`
+- **ConfigurationError** - `max-code-cli/core/constitutional/validators/p4_user_sovereignty.py`
+- **ConfigurationError** - `max-code-cli/core/constitutional/validators/p5_systemic.py`
+- **ConfigurationError** - `max-code-cli/core/constitutional/validators/p6_token_efficiency.py`
+- **ConfirmationConfig** - `services/eureka/confirmation/vulnerability_confirmer.py`
+- **ConfirmationMetadata** - `services/eureka/eureka_models/confirmation/confirmation_result.py`
+- **ConfirmationMetadata** - `services/eureka/models/confirmation/confirmation_result.py`
+- **ConfirmationResult** - `services/eureka/eureka_models/confirmation/confirmation_result.py`
+- **ConfirmationResult** - `services/eureka/models/confirmation/confirmation_result.py`
+- **ConfirmationStatus** - `services/eureka/eureka_models/confirmation/confirmation_result.py`
+- **ConfirmationStatus** - `services/eureka/models/confirmation/confirmation_result.py`
+- **ConflictReport** - `services/eureka/git_integration/models.py`
+- **ConflictResolution** - `services/core/governance/guardian/coordinator.py`
+- **ConflictResolver** - `services/core/motor_integridade_processual/resolution/conflict_resolver.py`
+- **ConfusionMatrixData** - `services/eureka/api/ml_metrics.py`
+- **ConnectionManager** - `services/core/governance_sse/sse_server.py`
+- **ConnectionManager** - `services/maba/shared/websocket_gateway.py`
+- **ConnectionManager** - `services/nis/shared/websocket_gateway.py`
+- **ConnectionManager** - `services/penelope/shared/websocket_gateway.py`
+- **ConsciousnessConfig** - `services/core/consciousness/system.py`
+- **ConsciousnessContainer** - `services/core/consciousness/sandboxing/__init__.py`
+- **ConsciousnessEvent** - `services/core/consciousness/reactive_fabric/collectors/event_collector.py`
+- **ConsciousnessIntegrationDemo** - `services/core/consciousness/integration_example.py`
+- **ConsciousnessSafetyProtocol** - `services/core/consciousness/safety.py`
+- **ConsciousnessStateResponse** - `max-code-cli/integration/maximus_client.py`
+- **ConsciousnessStateResponse** - `services/core/consciousness/api.py`
+- **ConsciousnessSystem** - `services/core/consciousness/system.py`
+- **ConsensusResult** - `max-code-cli/core/deter_agent/deliberation/self_consistency.py`
+- **ConsequentialistEngine** - `services/core/ethics/consequentialist_engine.py`
+- **ConsoleProtocol** - `max-code-cli/ui/types.py`
+- **ConstitutionalAnalysis** - `max-code-cli/ui/tree_of_thoughts.py`
+- **ConstitutionalArticle** - `services/core/governance/guardian/base.py`
+- **ConstitutionalEngine** - `max-code-cli/core/constitutional/engine.py`
+- **ConstitutionalHealthCheck** - `libs/common/health.py`
+- **ConstitutionalHealthCheck** - `libs/vortex-legacy/health_checks.py`
+- **ConstitutionalHealthCheck** - `services/core/shared/health_checks.py`
+- **ConstitutionalHealthCheck** - `services/dlq_monitor/shared/health_checks.py`
+- **ConstitutionalHealthCheck** - `services/eureka/shared/health_checks.py`
+- **ConstitutionalHealthCheck** - `services/maba/shared/health_checks.py`
+- **ConstitutionalHealthCheck** - `services/nis/shared/health_checks.py`
+- **ConstitutionalHealthCheck** - `services/oraculo/shared/health_checks.py`
+- **ConstitutionalHealthCheck** - `services/orchestrator/shared/health_checks.py`
+- **ConstitutionalHealthCheck** - `services/penelope/shared/health_checks.py`
+- **ConstitutionalLogProcessor** - `libs/constitutional/logging.py`
+- **ConstitutionalLogProcessor** - `libs/vortex-legacy/constitutional_logging.py`
+- **ConstitutionalLogProcessor** - `services/core/shared/constitutional_logging.py`
+- **ConstitutionalLogProcessor** - `services/dlq_monitor/shared/constitutional_logging.py`
+- **ConstitutionalLogProcessor** - `services/eureka/shared/constitutional_logging.py`
+- **ConstitutionalLogProcessor** - `services/maba/shared/constitutional_logging.py`
+- **ConstitutionalLogProcessor** - `services/nis/shared/constitutional_logging.py`
+- **ConstitutionalLogProcessor** - `services/oraculo/shared/constitutional_logging.py`
+- **ConstitutionalLogProcessor** - `services/orchestrator/shared/constitutional_logging.py`
+- **ConstitutionalLogProcessor** - `services/penelope/shared/constitutional_logging.py`
+- **ConstitutionalResult** - `max-code-cli/core/constitutional/models.py`
+- **ConstitutionalScore** - `max-code-cli/ui/tree_of_thoughts.py`
+- **ConstitutionalTracer** - `libs/constitutional/tracing.py`
+- **ConstitutionalTracer** - `libs/vortex-legacy/constitutional_tracing.py`
+- **ConstitutionalTracer** - `services/core/shared/constitutional_tracing.py`
+- **ConstitutionalTracer** - `services/dlq_monitor/shared/constitutional_tracing.py`
+- **ConstitutionalTracer** - `services/eureka/shared/constitutional_tracing.py`
+- **ConstitutionalTracer** - `services/maba/shared/constitutional_tracing.py`
+- **ConstitutionalTracer** - `services/nis/shared/constitutional_tracing.py`
+- **ConstitutionalTracer** - `services/oraculo/shared/constitutional_tracing.py`
+- **ConstitutionalTracer** - `services/orchestrator/shared/constitutional_tracing.py`
+- **ConstitutionalTracer** - `services/penelope/shared/constitutional_tracing.py`
+- **ConstitutionalValidator** - `services/core/justice/constitutional_validator.py`
+- **ConstitutionalValidator** - `services/core/justice/validators.py`
+- **ConstitutionalViolation** - `services/core/governance/guardian/base.py`
+- **ConstitutionalViolation** - `services/core/justice/constitutional_validator.py`
+- **ContainerHealthMonitor** - `services/maba/shared/devops_tools/container_health.py`
+- **ContainerHealthMonitor** - `services/nis/shared/devops_tools/container_health.py`
+- **ContainerHealthMonitor** - `services/penelope/shared/devops_tools/container_health.py`
+- **ContainerInfo** - `services/maba/shared/devops_tools/container_health.py`
+- **ContainerInfo** - `services/nis/shared/devops_tools/container_health.py`
+- **ContainerInfo** - `services/penelope/shared/devops_tools/container_health.py`
+- **ContainerMetrics** - `services/maba/shared/devops_tools/container_health.py`
+- **ContainerMetrics** - `services/nis/shared/devops_tools/container_health.py`
+- **ContainerMetrics** - `services/penelope/shared/devops_tools/container_health.py`
+- **ContainerStatus** - `services/maba/shared/devops_tools/container_health.py`
+- **ContainerStatus** - `services/nis/shared/devops_tools/container_health.py`
+- **ContainerStatus** - `services/penelope/shared/devops_tools/container_health.py`
+- **ContextCompactor** - `max-code-cli/core/context/compactor.py`
+- **ContextCompressor** - `max-code-cli/core/deter_agent/state/context_compression.py`
+- **ContextItem** - `max-code-cli/core/deter_agent/state/context_compression.py`
+- **ContextMonitor** - `max-code-cli/core/context/monitor.py`
+- **ContinuousTrainingPipeline** - `services/core/training/continuous_training.py`
+- **ContradictionDetector** - `services/core/compassion/contradiction_detector.py`
+- **ContradictionDetector** - `services/core/consciousness/lrr/contradiction_detector.py`
+- **Contradiction** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **ContradictionSummary** - `services/core/consciousness/lrr/contradiction_detector.py`
+- **ContradictionType** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **ControlCategory** - `services/core/compliance/base.py`
+- **Control** - `services/core/compliance/base.py`
+- **ConversationContext** - `max-code-cli/core/context/types.py`
+- **CoordinatorConfig** - `services/core/consciousness/neuromodulation/coordinator_hardened.py`
+- **CoordinatorConfig** - `services/core/federated_learning/fl_coordinator.py`
+- **CoordinatorMetrics** - `services/core/governance/guardian/coordinator.py`
+- **CorrectionAttempt** - `max-code-cli/core/deter_agent/execution/self_correction.py`
+- **CorrectionStrategy** - `max-code-cli/core/deter_agent/execution/self_correction.py`
+- **CostRecord** - `services/eureka/tracking/llm_cost_tracker.py`
+- **CostTracker** - `services/nis/core/cost_tracker.py`
+- **CounterfactualConfig** - `services/core/xai/counterfactual.py`
+- **CounterfactualGenerator** - `services/core/xai/counterfactual.py`
+- **CoverageAnalyzer** - `services/core/scripts/coverage_report.py`
+- **CoverageCommander** - `services/core/scripts/coverage_commander.py`
+- **CoverageSnapshot** - `services/core/scripts/coverage_tracker.py`
+- **CoverageTracker** - `services/core/scripts/coverage_tracker.py`
+- **CreatedResponse** - `services/maba/shared/response_models.py`
+- **CreatedResponse** - `services/nis/shared/response_models.py`
+- **CreatedResponse** - `services/penelope/shared/response_models.py`
+- **CredentialFinding** - `services/core/workflows/credential_intel_adw.py`
+- **CredentialIntelReport** - `services/core/workflows/credential_intel_adw.py`
+- **CredentialIntelRequest** - `services/core/adw_router.py`
+- **CredentialIntelWorkflow** - `services/core/workflows/credential_intel_adw.py`
+- **CredentialRiskLevel** - `services/core/workflows/credential_intel_adw.py`
+- **Credentials** - `core/auth/credentials.py`
+- **CredentialsManager** - `core/auth/credentials.py`
+- **CredentialTarget** - `services/core/workflows/credential_intel_adw.py`
+- **CredentialType** - `max-code-cli/core/auth/oauth_handler.py`
+- **Critique** - `max-code-cli/core/deter_agent/deliberation/adversarial_critic.py`
+- **CritiqueReport** - `max-code-cli/core/deter_agent/deliberation/adversarial_critic.py`
+- **CritiqueType** - `max-code-cli/core/deter_agent/deliberation/adversarial_critic.py`
+- **CVSSScore** - `services/eureka/models/apv.py`
+- **CVSSScore** - `services/maba/shared/models/apv.py`
+- **CVSSScore** - `services/nis/shared/models/apv.py`
+- **CVSSScore** - `services/oraculo/models/apv.py`
+- **CVSSScore** - `services/penelope/shared/models/apv.py`
+- **CyberSecLIME** - `services/core/xai/lime_cybersec.py`
+- **CyberSecSHAP** - `services/core/xai/shap_cybersec.py`
+- **DashboardPanel** - `max-code-cli/ui/dashboard.py`
+- **DatabaseActuator** - `services/core/autonomic_core/execute/database_actuator.py`
+- **DatabaseConnectionError** - `services/maba/shared/exceptions.py`
+- **DatabaseConnectionError** - `services/nis/shared/exceptions.py`
+- **DatabaseConnectionError** - `services/penelope/shared/exceptions.py`
+- **DatabaseException** - `services/maba/shared/exceptions.py`
+- **DatabaseException** - `services/nis/shared/exceptions.py`
+- **DatabaseException** - `services/penelope/shared/exceptions.py`
+- **DatabaseNames** - `services/maba/shared/constants.py`
+- **DatabaseNames** - `services/nis/shared/constants.py`
+- **DatabaseNames** - `services/penelope/shared/constants.py`
+- **DatabaseQueryError** - `services/maba/shared/exceptions.py`
+- **DatabaseQueryError** - `services/nis/shared/exceptions.py`
+- **DatabaseQueryError** - `services/penelope/shared/exceptions.py`
+- **DataClassification** - `services/maba/shared/enums.py`
+- **DataClassification** - `services/nis/shared/enums.py`
+- **DataClassification** - `services/penelope/shared/enums.py`
+- **DataCollector** - `services/core/training/data_collection.py`
+- **DataOrchestrator** - `services/core/consciousness/reactive_fabric/orchestration/data_orchestrator.py`
+- **DataPreprocessor** - `services/core/training/data_preprocessor.py`
+- **DataProcessor** - `services/core/governance/guardian/test_guardians.py`
+- **DataService** - `services/core/governance/guardian/test_guardians.py`
+- **DatasetBuilder** - `services/core/training/dataset_builder.py`
+- **DatasetSplit** - `services/core/training/dataset_builder.py`
+- **DataSource** - `services/core/training/data_collection.py`
+- **DataSourceType** - `services/core/training/data_collection.py`
+- **DataValidator** - `services/core/training/data_validator.py`
+- **DecisionActionRequest** - `services/core/governance_sse/api_routes.py`
+- **DecisionActionResponse** - `services/core/governance_sse/api_routes.py`
+- **DecisionAPI** - `services/core/autonomic_core/knowledge_base/decision_api.py`
+- **DecisionArbiter** - `services/core/motor_integridade_processual/arbiter/decision.py`
+- **DecisionAuditLogger** - `services/penelope/core/decision_audit_logger.py`
+- **DecisionContext** - `services/core/hitl/base.py`
+- **DecisionFormatter** - `services/core/motor_integridade_processual/arbiter/decision.py`
+- **DecisionFusion** - `max-code-cli/core/maximus_integration/decision_fusion.py`
+- **DecisionImpact** - `max-code-cli/agents/architect_agent.py`
+- **DecisionLevel** - `services/core/motor_integridade_processual/models/verdict.py`
+- **Decision** - `max-code-cli/core/maximus_integration/decision_fusion.py`
+- **DecisionQueue** - `services/core/hitl/decision_queue.py`
+- **DecisionResponse** - `services/core/governance_sse/api_routes.py`
+- **DecisionResult** - `services/core/hitl/decision_framework.py`
+- **Decision** - `services/core/governance/governance_engine.py`
+- **DecisionStatus** - `services/core/governance/governance_engine.py`
+- **DecisionStatus** - `services/core/hitl/base.py`
+- **DecisionType** - `max-code-cli/core/maximus_integration/decision_fusion.py`
+- **DecisionType** - `services/core/governance/base.py`
+- **DeepSearchOptions** - `services/core/osint_router.py`
+- **DeepSearchRequest** - `services/core/osint_router.py`
+- **DeletedResponse** - `services/maba/shared/response_models.py`
+- **DeletedResponse** - `services/nis/shared/response_models.py`
+- **DeletedResponse** - `services/penelope/shared/response_models.py`
+- **DependencyGraphBuilder** - `services/oraculo/filtering/dependency_graph.py`
+- **DependencySummary** - `services/maba/shared/models/apv_legacy.py`
+- **DependencySummary** - `services/nis/shared/models/apv_legacy.py`
+- **DependencySummary** - `services/penelope/shared/models/apv_legacy.py`
+- **DependencyUpgradeStrategy** - `services/eureka/strategies/dependency_upgrade.py`
+- **DeploymentResponse** - `services/penelope/models.py`
+- **DeploymentStage** - `services/maba/shared/vertice_canary.py`
+- **DeploymentStage** - `services/nis/shared/vertice_canary.py`
+- **DeploymentStage** - `services/penelope/shared/vertice_canary.py`
+- **DeployPatchRequest** - `services/penelope/models.py`
+- **DesignPattern** - `max-code-cli/agents/architect_agent.py`
+- **DetailLevel** - `services/core/xai/base.py`
+- **DetectionMethod** - `services/maba/shared/enums.py`
+- **DetectionMethod** - `services/nis/shared/enums.py`
+- **DetectionMethod** - `services/penelope/shared/enums.py`
+- **DiagnoseRequest** - `max-code-cli/integration/penelope_client.py`
+- **DiagnoseRequest** - `services/penelope/models.py`
+- **DiagnoseResponse** - `max-code-cli/integration/penelope_client.py`
+- **DiagnosisResponse** - `services/penelope/models.py`
+- **Diagnosis** - `services/penelope/models.py`
+- **DifficultyLevel** - `services/eureka/data/few_shot_database.py`
+- **DigitalTwinEnvironment** - `services/penelope/core/digital_twin.py`
+- **DisclosableItem** - `max-code-cli/core/deter_agent/state/progressive_disclosure.py`
+- **DisclosureContext** - `max-code-cli/core/deter_agent/state/progressive_disclosure.py`
+- **DisclosureLevel** - `max-code-cli/core/deter_agent/state/progressive_disclosure.py`
+- **DistributedConfig** - `services/core/performance/distributed_trainer.py`
+- **DistributedOrganismTools** - `services/core/distributed_organism_tools.py`
+- **DistributedTrainer** - `services/core/performance/distributed_trainer.py`
+- **DLQMonitor** - `services/dlq_monitor/main.py`
+- **DockerActuator** - `services/core/autonomic_core/execute/docker_actuator.py`
+- **DocsAgent** - `max-code-cli/agents/docs_agent.py`
+- **DocsAgentParameters** - `max-code-cli/agents/validation_schemas.py`
+- **DopamineModulator** - `services/core/consciousness/neuromodulation/dopamine_hardened.py`
+- **DopamineState** - `services/core/neuromodulation/dopamine_system.py`
+- **DopamineSystem** - `services/core/neuromodulation/dopamine_system.py`
+- **DPAggregator** - `services/core/federated_learning/aggregation.py`
+- **DPAggregator** - `services/core/privacy/dp_aggregator.py`
+- **DPQueryType** - `services/core/privacy/dp_aggregator.py`
+- **DPResult** - `services/core/privacy/base.py`
+- **DreamComment** - `max-code-cli/core/skeptic/dream.py`
+- **Dream** - `max-code-cli/core/skeptic/dream.py`
+- **DummyModel** - `services/core/xai/engine.py`
+- **DummyThreatClassifier** - `services/core/xai/test_xai.py`
+- **DuplicateRecordError** - `services/maba/shared/exceptions.py`
+- **DuplicateRecordError** - `services/nis/shared/exceptions.py`
+- **DuplicateRecordError** - `services/penelope/shared/exceptions.py`
+- **DynamicBrowserPool** - `services/maba/core/dynamic_browser_pool.py`
+- **EarlyStopping** - `services/core/training/layer_trainer.py`
+- **EdgeCase** - `max-code-cli/core/maximus_integration/client.py`
+- **EdgeCaseSeverity** - `max-code-cli/core/maximus_integration/client.py`
+- **EdgeCasesTester** - `services/core/test_edge_cases.py`
+- **Effect** - `services/core/motor_integridade_processual/models/action_plan.py`
+- **EffectsManager** - `max-code-cli/ui/effects.py`
+- **EfficiencyViolationType** - `max-code-cli/core/constitutional/validators/p6_token_efficiency.py`
+- **ElementMatch** - `services/maba/core/robust_element_locator.py`
+- **EmailSearchRequest** - `services/core/osint_router.py`
+- **EmergencyCircuitBreaker** - `services/core/justice/emergency_circuit_breaker.py`
+- **EmergencyShutdownRequest** - `services/core/consciousness/api.py`
+- **EmojiCategory** - `max-code-cli/core/epl/vocabulary.py`
+- **EmojiDefinition** - `max-code-cli/core/epl/vocabulary.py`
+- **EmptyDataError** - `max-code-cli/ui/exceptions.py`
+- **EncryptedMessage** - `services/core/federated_learning/communication.py`
+- **EnforcementLevel** - `max-code-cli/core/constitutional/guardians/guardian_coordinator.py`
+- **EngineConfig** - `services/core/xai/engine.py`
+- **EnhancedCognitionTools** - `services/core/enhanced_cognition_tools.py`
+- **EnhancedCompleter** - `max-code-cli/cli/repl_enhanced.py`
+- **EnhancedREPL** - `max-code-cli/cli/repl_enhanced.py`
+- **Environment** - `services/maba/shared/base_config.py`
+- **Environment** - `services/nis/shared/base_config.py`
+- **Environment** - `services/penelope/shared/base_config.py`
+- **Environments** - `services/maba/shared/constants.py`
+- **Environments** - `services/nis/shared/constants.py`
+- **Environments** - `services/penelope/shared/constants.py`
+- **Episode** - `services/core/consciousness/episodic_memory/core.py`
+- **EpisodicBuffer** - `services/core/consciousness/episodic_memory/memory_buffer.py`
+- **EpisodicMemory** - `services/core/consciousness/episodic_memory/core.py`
+- **EPLExecutor** - `max-code-cli/core/epl/executor.py`
+- **ERBDecision** - `services/core/governance/base.py`
+- **ERBManager** - `services/core/governance/ethics_review_board.py`
+- **ERBMeeting** - `services/core/governance/base.py`
+- **ERBMemberRole** - `services/core/governance/base.py`
+- **ERBMember** - `services/core/governance/base.py`
+- **ErrorAnalysis** - `max-code-cli/core/deter_agent/execution/self_correction.py`
+- **ErrorCategory** - `max-code-cli/core/deter_agent/execution/bugbot.py`
+- **ErrorCategory** - `max-code-cli/core/deter_agent/execution/self_correction.py`
+- **ErrorCategory** - `max-code-cli/ui/smart_errors.py`
+- **ErrorContext** - `max-code-cli/ui/smart_errors.py`
+- **ErrorDetail** - `services/maba/shared/response_models.py`
+- **ErrorDetail** - `services/nis/shared/response_models.py`
+- **ErrorDetail** - `services/penelope/shared/response_models.py`
+- **ErrorResponse** - `services/maba/shared/response_models.py`
+- **ErrorResponse** - `services/nis/shared/response_models.py`
+- **ErrorResponse** - `services/penelope/shared/response_models.py`
+- **ErrorSeverity** - `max-code-cli/core/deter_agent/execution/bugbot.py`
+- **ErrorSeverity** - `max-code-cli/ui/smart_errors.py`
+- **ErrorSuggester** - `max-code-cli/ui/smart_errors.py`
+- **ErrorSuggestion** - `max-code-cli/ui/smart_errors.py`
+- **EscalateDecisionRequest** - `services/core/governance_sse/api_routes.py`
+- **EscalationConfig** - `services/core/hitl/base.py`
+- **EscalationEvent** - `services/core/hitl/escalation_manager.py`
+- **EscalationManager** - `services/core/hitl/escalation_manager.py`
+- **EscalationRule** - `services/core/hitl/escalation_manager.py`
+- **EscalationType** - `services/core/hitl/escalation_manager.py`
+- **ESGTArousalBridge** - `services/core/consciousness/esgt/arousal_integration.py`
+- **ESGTCoherenceMetrics** - `services/core/consciousness/validation/coherence.py`
+- **ESGTCoordinator** - `services/core/consciousness/archived_old_v4/coordinator_old.py`
+- **ESGTCoordinator** - `services/core/consciousness/esgt/coordinator.py`
+- **ESGTEventResponse** - `max-code-cli/integration/maximus_client.py`
+- **ESGTEventResponse** - `services/core/consciousness/api.py`
+- **ESGTEvent** - `services/core/consciousness/archived_old_v4/coordinator_old.py`
+- **ESGTEvent** - `services/core/consciousness/esgt/coordinator.py`
+- **ESGTPhase** - `services/core/consciousness/archived_old_v4/coordinator_old.py`
+- **ESGTPhase** - `services/core/consciousness/esgt/coordinator.py`
+- **ESGTSubscriber** - `services/core/consciousness/integration_archive_dead_code/esgt_subscriber.py`
+- **EthicalCache** - `services/core/ethics/base.py`
+- **EthicalDecisionResult** - `services/core/ethical_guardian.py`
+- **EthicalDecisionType** - `services/core/ethical_guardian.py`
+- **EthicalException** - `services/core/ethics/base.py`
+- **EthicalFramework** - `max-code-cli/core/maximus_integration/client.py`
+- **EthicalFrameworkResult** - `services/core/ethics/base.py`
+- **EthicalFramework** - `services/core/ethics/base.py`
+- **EthicalFramework** - `services/core/motor_integridade_processual/frameworks/base.py`
+- **EthicalGuardian** - `services/core/ethical_guardian.py`
+- **EthicalIntegrationEngine** - `services/core/ethics/integration_engine.py`
+- **EthicalToolWrapper** - `services/core/ethical_tool_wrapper.py`
+- **EthicalVerdict** - `max-code-cli/core/maximus_integration/client.py`
+- **EthicalVerdict** - `services/core/ethics/base.py`
+- **EthicalVerdict** - `services/core/motor_integridade_processual/models/verdict.py`
+- **EthicsCheckResult** - `services/core/ethical_guardian.py`
+- **EurekaEngine** - `services/eureka/eureka.py`
+- **EurekaMetrics** - `services/eureka/orchestration/eureka_orchestrator.py`
+- **EurekaOrchestrator** - `services/eureka/orchestration/eureka_orchestrator.py`
+- **EvaluationDimension** - `max-code-cli/core/deter_agent/deliberation/tree_of_thoughts.py`
+- **EvaluationMetrics** - `services/core/training/evaluator.py`
+- **EvaluationRequest** - `services/core/motor_integridade_processual/api.py`
+- **EvaluationResponse** - `services/core/motor_integridade_processual/api.py`
+- **EventBase** - `services/maba/shared/messaging/event_schemas.py`
+- **EventBase** - `services/nis/shared/messaging/event_schemas.py`
+- **EventBase** - `services/penelope/shared/messaging/event_schemas.py`
+- **EventBroadcaster** - `services/core/governance_sse/event_broadcaster.py`
+- **EventCollector** - `services/core/consciousness/reactive_fabric/collectors/event_collector.py`
+- **EventGraph** - `services/core/predictive_coding/layer2_behavioral.py`
+- **EventPriority** - `services/maba/shared/messaging/event_schemas.py`
+- **EventPriority** - `services/nis/shared/messaging/event_schemas.py`
+- **EventPriority** - `services/penelope/shared/messaging/event_schemas.py`
+- **EventRouter** - `services/maba/shared/messaging/event_router.py`
+- **EventRouter** - `services/nis/shared/messaging/event_router.py`
+- **EventRouter** - `services/penelope/shared/messaging/event_router.py`
+- **Event** - `services/core/consciousness/episodic_memory/event.py`
+- **EventSeverity** - `services/core/consciousness/reactive_fabric/collectors/event_collector.py`
+- **EventSource** - `services/maba/shared/messaging/event_schemas.py`
+- **EventSource** - `services/nis/shared/messaging/event_schemas.py`
+- **EventSource** - `services/penelope/shared/messaging/event_schemas.py`
+- **EventTopic** - `services/maba/shared/messaging/topics.py`
+- **EventTopic** - `services/nis/shared/messaging/topics.py`
+- **EventTopic** - `services/penelope/shared/messaging/topics.py`
+- **EventType** - `services/core/consciousness/episodic_memory/event.py`
+- **EventType** - `services/core/consciousness/reactive_fabric/collectors/event_collector.py`
+- **EventVAE** - `services/core/predictive_coding/layer1_sensory.py`
+- **EvidenceCollector** - `services/core/compliance/evidence_collector.py`
+- **EvidenceItem** - `services/core/compliance/evidence_collector.py`
+- **EvidencePackage** - `services/core/compliance/evidence_collector.py`
+- **Evidence** - `services/core/compliance/base.py`
+- **EvidenceType** - `services/core/compliance/base.py`
+- **EvidenceType** - `services/maba/shared/enums.py`
+- **EvidenceType** - `services/nis/shared/enums.py`
+- **EvidenceType** - `services/penelope/shared/enums.py`
+- **ExecutionContext** - `max-code-cli/core/adaptive_learning.py`
+- **ExecutionPhase** - `max-code-cli/core/constitutional/guardians/runtime_guardian.py`
+- **ExecutionPlan** - `max-code-cli/core/task_planner.py`
+- **ExecutionResult** - `max-code-cli/core/epl/executor.py`
+- **ExecutionResult** - `services/core/autonomic_core/resource_executor.py`
+- **ExecutionSession** - `max-code-cli/core/constitutional/guardians/runtime_guardian.py`
+- **ExecutionStatus** - `max-code-cli/core/epl/executor.py`
+- **ExplainerBase** - `services/core/xai/base.py`
+- **ExplanationCache** - `services/core/xai/base.py`
+- **ExplanationEngine** - `services/core/xai/engine.py`
+- **ExplanationException** - `services/core/xai/base.py`
+- **ExplanationResult** - `services/core/xai/base.py`
+- **ExplanationTimeoutException** - `services/core/xai/base.py`
+- **ExplanationType** - `services/core/xai/base.py`
+- **ExploreAgent** - `max-code-cli/agents/explore_agent.py`
+- **ExploreAgentParameters** - `max-code-cli/agents/validation_schemas.py`
+- **ExponentialMechanism** - `services/core/privacy/dp_mechanisms.py`
+- **ExternalAPIError** - `services/maba/shared/exceptions.py`
+- **ExternalAPIError** - `services/nis/shared/exceptions.py`
+- **ExternalAPIError** - `services/penelope/shared/exceptions.py`
+- **ExternalAPIException** - `services/maba/shared/exceptions.py`
+- **ExternalAPIException** - `services/nis/shared/exceptions.py`
+- **ExternalAPIException** - `services/penelope/shared/exceptions.py`
+- **ExternalAPITimeoutError** - `services/maba/shared/exceptions.py`
+- **ExternalAPITimeoutError** - `services/nis/shared/exceptions.py`
+- **ExternalAPITimeoutError** - `services/penelope/shared/exceptions.py`
+- **ExtractRequest** - `services/maba/models.py`
+- **FabricMetrics** - `services/core/consciousness/archived_old_v4/fabric_old.py`
+- **FabricMetrics** - `services/core/consciousness/tig/fabric.py`
+- **FailurePredictor** - `services/core/autonomic_core/analyze/failure_predictor.py`
+- **FairnessAlert** - `services/core/fairness/monitor.py`
+- **FairnessCheckResult** - `services/core/ethical_guardian.py`
+- **FairnessConstraints** - `services/core/fairness/constraints.py`
+- **FairnessException** - `services/core/fairness/base.py`
+- **FairnessMetric** - `services/core/fairness/base.py`
+- **FairnessMonitor** - `services/core/fairness/monitor.py`
+- **FairnessResult** - `services/core/fairness/base.py`
+- **FairnessSnapshot** - `services/core/fairness/monitor.py`
+- **FairnessViolationException** - `services/core/fairness/base.py`
+- **FallbackContext** - `max-code-cli/core/maximus_integration/fallback.py`
+- **FallbackMetrics** - `max-code-cli/core/maximus_integration/fallback.py`
+- **FallbackMode** - `max-code-cli/core/maximus_integration/fallback.py`
+- **FallbackResult** - `max-code-cli/core/maximus_integration/fallback.py`
+- **FallbackStrategy** - `max-code-cli/core/maximus_integration/fallback.py`
+- **FallbackSystem** - `max-code-cli/core/maximus_integration/fallback.py`
+- **FeatureHistory** - `services/core/xai/feature_tracker.py`
+- **FeatureImportance** - `services/core/xai/base.py`
+- **FeatureImportanceTracker** - `services/core/xai/feature_tracker.py`
+- **FedAvgAggregator** - `services/core/federated_learning/aggregation.py`
+- **FeedbackLoop** - `max-code-cli/core/deter_agent/incentive/feedback_loop.py`
+- **Feedback** - `max-code-cli/core/deter_agent/incentive/feedback_loop.py`
+- **FeedUnavailableError** - `services/oraculo/threat_feeds/base_feed.py`
+- **FewShotDatabase** - `services/eureka/data/few_shot_database.py`
+- **FieldInfo** - `services/core/scripts/industrial_test_generator_v3.py`
+- **FieldInfo** - `services/core/scripts/industrial_test_generator_v4.py`
+- **FileEditor** - `max-code-cli/core/tools/file_editor.py`
+- **FileEditResult** - `max-code-cli/core/tools/file_editor.py`
+- **FileExtensions** - `services/maba/shared/constants.py`
+- **FileExtensions** - `services/nis/shared/constants.py`
+- **FileExtensions** - `services/penelope/shared/constants.py`
+- **FileReader** - `max-code-cli/core/tools/file_reader.py`
+- **FileReadResult** - `max-code-cli/core/tools/file_reader.py`
+- **FileWriteResult** - `max-code-cli/core/tools/file_writer.py`
+- **FileWriter** - `max-code-cli/core/tools/file_writer.py`
+- **FinalVerdict** - `max-code-cli/core/constitutional/guardians/post_execution_guardian.py`
+- **Finding** - `services/core/workflows/attack_surface_adw.py`
+- **FirstOrderLogic** - `services/core/consciousness/lrr/contradiction_detector.py`
+- **FirstPersonPerspective** - `services/core/consciousness/mea/self_model.py`
+- **FixAgent** - `max-code-cli/agents/fix_agent.py`
+- **FixAgentParameters** - `max-code-cli/agents/validation_schemas.py`
+- **FixOption** - `max-code-cli/core/maximus_integration/client.py`
+- **FixOption** - `max-code-cli/core/maximus_integration/penelope_client.py`
+- **FLCheckResult** - `services/core/ethical_guardian.py`
+- **FLClient** - `services/core/federated_learning/fl_client.py`
+- **FLCommunicationChannel** - `services/core/federated_learning/communication.py`
+- **FLConfig** - `services/core/federated_learning/base.py`
+- **FLCoordinator** - `services/core/federated_learning/fl_coordinator.py`
+- **FLMetrics** - `services/core/federated_learning/base.py`
+- **FLModelRegistry** - `services/core/federated_learning/storage.py`
+- **FLRoundHistory** - `services/core/federated_learning/storage.py`
+- **FLRound** - `services/core/federated_learning/base.py`
+- **FLStatus** - `services/core/federated_learning/base.py`
+- **FooterPanel** - `max-code-cli/ui/dashboard.py`
+- **ForbiddenError** - `services/maba/shared/exceptions.py`
+- **ForbiddenError** - `services/nis/shared/exceptions.py`
+- **ForbiddenError** - `services/penelope/shared/exceptions.py`
+- **FovealAnalysis** - `services/core/attention_system/attention_core.py`
+- **FovealAnalyzer** - `services/core/attention_system/attention_core.py`
+- **FrameworkInfo** - `services/core/motor_integridade_processual/api.py`
+- **FrameworkName** - `services/core/motor_integridade_processual/models/verdict.py`
+- **FrameworkVerdict** - `services/core/motor_integridade_processual/models/verdict.py`
+- **FrequencyLimiter** - `services/core/consciousness/esgt/coordinator.py`
+- **FruitsStatusResponse** - `max-code-cli/integration/penelope_client.py`
+- **FruitStatus** - `max-code-cli/integration/penelope_client.py`
+- **FusedDecision** - `max-code-cli/core/maximus_integration/decision_fusion.py`
+- **FusionMethod** - `max-code-cli/core/maximus_integration/decision_fusion.py`
+- **FuzzyLogicController** - `services/core/autonomic_core/plan/fuzzy_controller.py`
+- **GapAnalysisResult** - `services/core/compliance/base.py`
+- **GapAnalyzer** - `services/core/compliance/gap_analyzer.py`
+- **Gap** - `services/core/compliance/base.py`
+- **GaussianMechanism** - `services/core/privacy/dp_mechanisms.py`
+- **GeminiClient** - `services/core/gemini_client.py`
+- **GeminiConfig** - `services/core/gemini_client.py`
+- **GeminiTestGenerator** - `services/core/scripts/generate_tests_gemini.py`
+- **GenerateNarrativeRequest** - `services/nis/api/routes.py`
+- **GeneratePatchRequest** - `services/penelope/models.py`
+- **GitApplyResult** - `services/eureka/git_integration/models.py`
+- **GitConfig** - `services/eureka/git_integration/models.py`
+- **GitNativeWorkflow** - `max-code-cli/core/deter_agent/execution/git_native.py`
+- **GitOperationsError** - `services/eureka/git_integration/git_operations.py`
+- **GitOperations** - `services/eureka/git_integration/git_operations.py`
+- **GitStatus** - `max-code-cli/core/deter_agent/execution/git_native.py`
+- **GitStatus** - `max-code-cli/core/predictive_engine.py`
+- **GlobalCommandRegistry** - `max-code-cli/ui/command_palette.py`
+- **GlobalNeuromodulationState** - `services/core/neuromodulation/neuromodulation_controller.py`
+- **GlobalShortcuts** - `max-code-cli/ui/keybindings.py`
+- **GlobResult** - `max-code-cli/core/tools/glob_tool.py`
+- **GlobTool** - `max-code-cli/core/tools/glob_tool.py`
+- **GoalGenerationConfig** - `services/core/consciousness/mmei/goals.py`
+- **GoalPriority** - `services/core/consciousness/mmei/goals.py`
+- **Goal** - `services/core/consciousness/mmei/goals.py`
+- **Goal** - `services/core/consciousness/mmei/monitor.py`
+- **GoalType** - `services/core/consciousness/mmei/goals.py`
+- **GovernanceAction** - `services/core/governance/base.py`
+- **GovernanceCheckResult** - `services/core/ethical_guardian.py`
+- **GovernanceConfig** - `services/core/governance/base.py`
+- **GovernanceE2EValidator** - `services/core/test_governance_e2e.py`
+- **GovernanceEngine** - `services/core/governance/governance_engine.py`
+- **GovernanceResult** - `services/core/governance/base.py`
+- **GovernanceSSEServer** - `services/core/governance_sse/sse_server.py`
+- **GPUTrainer** - `services/core/performance/gpu_trainer.py`
+- **GPUTrainingConfig** - `services/core/performance/gpu_trainer.py`
+- **GradientColors** - `max-code-cli/ui/colors.py`
+- **GraphConvLayer** - `services/core/predictive_coding/layer2_behavioral.py`
+- **GrepMatch** - `max-code-cli/core/tools/grep_tool.py`
+- **GrepResult** - `max-code-cli/core/tools/grep_tool.py`
+- **GrepTool** - `max-code-cli/core/tools/grep_tool.py`
+- **GuardianAgent** - `services/core/governance/guardian/base.py`
+- **GuardianCoordinator** - `max-code-cli/core/constitutional/guardians/guardian_coordinator.py`
+- **GuardianCoordinator** - `services/core/governance/guardian/coordinator.py`
+- **GuardianDecision** - `max-code-cli/core/constitutional/guardians/pre_execution_guardian.py`
+- **GuardianDecision** - `max-code-cli/core/deter_agent/guardian.py`
+- **GuardianDecision** - `services/core/governance/guardian/base.py`
+- **GuardianIntervention** - `services/core/governance/guardian/base.py`
+- **Guardian** - `max-code-cli/core/deter_agent/guardian.py`
+- **GuardianMode** - `max-code-cli/core/deter_agent/guardian.py`
+- **GuardianPriority** - `services/core/governance/guardian/base.py`
+- **GuardianReport** - `max-code-cli/core/constitutional/guardians/guardian_coordinator.py`
+- **GuardianReport** - `services/core/governance/guardian/base.py`
+- **GuardianVerdict** - `max-code-cli/core/constitutional/guardians/pre_execution_guardian.py`
+- **GWDCompliance** - `services/core/consciousness/validation/coherence.py`
+- **HeaderPanel** - `max-code-cli/ui/dashboard.py`
+- **HealingCircuitBreaker** - `services/penelope/core/circuit_breaker.py`
+- **HealingContext** - `max-code-cli/core/maximus_integration/penelope_client.py`
+- **HealingEvent** - `max-code-cli/integration/penelope_client.py`
+- **HealingHistoryResponse** - `max-code-cli/integration/penelope_client.py`
+- **HealingSuggestion** - `max-code-cli/core/maximus_integration/client.py`
+- **HealingSuggestion** - `max-code-cli/core/maximus_integration/penelope_client.py`
+- **HealthCheckResponse** - `services/penelope/models.py`
+- **HealthResponse** - `services/core/governance_sse/api_routes.py`
+- **HealthResponse** - `services/core/motor_integridade_processual/api.py`
+- **HealthResponse** - `services/maba/shared/response_models.py`
+- **HealthResponse** - `services/nis/shared/response_models.py`
+- **HealthResponse** - `services/penelope/shared/response_models.py`
+- **HealthStatus** - `libs/common/health.py`
+- **HealthStatus** - `libs/vortex-legacy/health_checks.py`
+- **HealthStatusResponse** - `max-code-cli/integration/oraculo_client.py`
+- **HealthStatus** - `services/core/shared/health_checks.py`
+- **HealthStatus** - `services/dlq_monitor/shared/health_checks.py`
+- **HealthStatus** - `services/eureka/shared/health_checks.py`
+- **HealthStatus** - `services/maba/shared/devops_tools/container_health.py`
+- **HealthStatus** - `services/maba/shared/health_checks.py`
+- **HealthStatus** - `services/maba/shared/response_models.py`
+- **HealthStatus** - `services/nis/shared/devops_tools/container_health.py`
+- **HealthStatus** - `services/nis/shared/health_checks.py`
+- **HealthStatus** - `services/nis/shared/response_models.py`
+- **HealthStatus** - `services/oraculo/shared/health_checks.py`
+- **HealthStatus** - `services/orchestrator/shared/health_checks.py`
+- **HealthStatus** - `services/penelope/shared/devops_tools/container_health.py`
+- **HealthStatus** - `services/penelope/shared/health_checks.py`
+- **HealthStatus** - `services/penelope/shared/response_models.py`
+- **HierarchicalPredictiveCodingNetwork** - `services/core/predictive_coding/hpc_network.py`
+- **HierarchyConfig** - `services/core/consciousness/predictive_coding/hierarchy_hardened.py`
+- **HierarchyState** - `services/core/consciousness/predictive_coding/hierarchy_hardened.py`
+- **HITLCheckResult** - `services/core/ethical_guardian.py`
+- **HITLConfig** - `services/core/hitl/base.py`
+- **HITLDecisionFramework** - `services/core/hitl/decision_framework.py`
+- **HITLDecision** - `services/core/hitl/base.py`
+- **HITLInterface** - `services/core/governance/hitl_interface.py`
+- **HITLQueue** - `services/core/motor_integridade_processual/infrastructure/hitl_queue.py`
+- **HomeostaticControlLoop** - `services/core/autonomic_core/hcl_orchestrator.py`
+- **HomeostaticControlLoop** - `services/core/autonomic_core/homeostatic_control.py`
+- **HomeostaticStateEvent** - `services/maba/shared/messaging/event_schemas.py`
+- **HomeostaticStateEvent** - `services/nis/shared/messaging/event_schemas.py`
+- **HomeostaticStateEvent** - `services/penelope/shared/messaging/event_schemas.py`
+- **HoneypotStatusEvent** - `services/maba/shared/messaging/event_schemas.py`
+- **HoneypotStatusEvent** - `services/nis/shared/messaging/event_schemas.py`
+- **HoneypotStatusEvent** - `services/penelope/shared/messaging/event_schemas.py`
+- **HookConfig** - `max-code-cli/core/hooks/types.py`
+- **HookConfigNotFoundError** - `max-code-cli/core/hooks/manager.py`
+- **HookDefinition** - `max-code-cli/core/hooks/types.py`
+- **HookEvent** - `max-code-cli/core/hooks/types.py`
+- **HookExecutionError** - `max-code-cli/core/hooks/executor.py`
+- **HookExecutor** - `max-code-cli/core/hooks/executor.py`
+- **HookManagerError** - `max-code-cli/core/hooks/manager.py`
+- **HookManager** - `max-code-cli/core/hooks/manager.py`
+- **HookPayload** - `max-code-cli/core/hooks/types.py`
+- **HookResult** - `max-code-cli/core/hooks/types.py`
+- **HTTPStatusCode** - `services/maba/shared/response_models.py`
+- **HTTPStatusCode** - `services/nis/shared/response_models.py`
+- **HTTPStatusCode** - `services/penelope/shared/response_models.py`
+- **HumanApprovalWorkflow** - `services/penelope/core/human_approval.py`
+- **HumanReadableFormatter** - `max-code-cli/config/logging_config.py`
+- **HyperparameterTuner** - `services/core/training/hyperparameter_tuner.py`
+- **HypothesisTestGenerator** - `services/core/scripts/industrial_test_generator_v5_hypothesis.py`
+- **IEEE7000Checker** - `services/core/compliance/certifications.py`
+- **ImmuneEnhancementTools** - `services/core/immune_enhancement_tools.py`
+- **ImmuneResponseEvent** - `services/maba/shared/messaging/event_schemas.py`
+- **ImmuneResponseEvent** - `services/nis/shared/messaging/event_schemas.py`
+- **ImmuneResponseEvent** - `services/penelope/shared/messaging/event_schemas.py`
+- **ImplementationRequest** - `max-code-cli/integration/oraculo_client.py`
+- **ImplementationRequest** - `services/oraculo/api.py`
+- **ImplementationResponse** - `max-code-cli/integration/oraculo_client.py`
+- **ImplementationResult** - `max-code-cli/integration/oraculo_client.py`
+- **ImportError** - `max-code-cli/ui/exceptions.py`
+- **IncidentReport** - `services/core/consciousness/safety.py`
+- **IncidentStatus** - `services/maba/shared/enums.py`
+- **IncidentStatus** - `services/nis/shared/enums.py`
+- **IncidentStatus** - `services/penelope/shared/enums.py`
+- **IndustrialTestGenerator** - `services/core/scripts/industrial_test_generator.py`
+- **IndustrialTestGeneratorV2** - `services/core/scripts/industrial_test_generator_v2.py`
+- **IndustrialTestGeneratorV3** - `services/core/scripts/industrial_test_generator_v3.py`
+- **IndustrialTestGeneratorV4** - `services/core/scripts/industrial_test_generator_v4.py`
+- **InferenceConfig** - `services/core/performance/inference_engine.py`
+- **InferenceEngine** - `services/core/performance/inference_engine.py`
+- **InMemoryAPVQueue** - `services/oraculo/queue/memory_queue.py`
+- **InsightRequest** - `services/eureka/api.py`
+- **InsufficientDataError** - `services/maba/shared/exceptions.py`
+- **InsufficientDataError** - `services/nis/shared/exceptions.py`
+- **InsufficientDataError** - `services/penelope/shared/exceptions.py`
+- **InsufficientDataException** - `services/core/fairness/base.py`
+- **IntegratedEthicalDecision** - `services/core/ethics/integration_engine.py`
+- **IntegrationEvent** - `services/maba/shared/messaging/event_schemas.py`
+- **IntegrationEvent** - `services/nis/shared/messaging/event_schemas.py`
+- **IntegrationEvent** - `services/penelope/shared/messaging/event_schemas.py`
+- **IntegrationManager** - `max-code-cli/core/integration_manager.py`
+- **IntegrationMode** - `max-code-cli/core/integration_manager.py`
+- **Intent** - `max-code-cli/core/epl/nlp_engine.py`
+- **IntentType** - `max-code-cli/core/epl/nlp_engine.py`
+- **InternalStateMonitor** - `services/core/consciousness/archived_old_v4/monitor_old.py`
+- **InternalStateMonitor** - `services/core/consciousness/mmei/monitor.py`
+- **InteroceptionConfig** - `services/core/consciousness/archived_old_v4/monitor_old.py`
+- **InteroceptionConfig** - `services/core/consciousness/mmei/monitor.py`
+- **InterruptionReason** - `max-code-cli/core/constitutional/guardians/runtime_guardian.py`
+- **InterventionDecision** - `services/penelope/models.py`
+- **InterventionLevel** - `services/penelope/models.py`
+- **InterventionType** - `services/core/governance/guardian/base.py`
+- **IntrospectionEngine** - `services/core/consciousness/lrr/introspection_engine.py`
+- **IntrospectionHighlight** - `services/core/consciousness/lrr/introspection_engine.py`
+- **IntrospectionReport** - `services/core/consciousness/lrr/introspection_engine.py`
+- **IntrospectiveSummary** - `services/core/consciousness/mea/self_model.py`
+- **InvalidActionError** - `max-code-cli/core/constitutional/validators/p1_completeness.py`
+- **InvalidActionError** - `max-code-cli/core/constitutional/validators/p2_api_validator.py`
+- **InvalidActionError** - `max-code-cli/core/constitutional/validators/p3_truth.py`
+- **InvalidActionError** - `max-code-cli/core/constitutional/validators/p4_user_sovereignty.py`
+- **InvalidActionError** - `max-code-cli/core/constitutional/validators/p5_systemic.py`
+- **InvalidActionError** - `max-code-cli/core/constitutional/validators/p6_token_efficiency.py`
+- **InvalidConfigError** - `max-code-cli/ui/exceptions.py`
+- **InvalidInputError** - `max-code-cli/ui/exceptions.py`
+- **InvalidInputError** - `services/maba/shared/exceptions.py`
+- **InvalidInputError** - `services/nis/shared/exceptions.py`
+- **InvalidInputError** - `services/penelope/shared/exceptions.py`
+- **InvalidOperationError** - `services/maba/shared/exceptions.py`
+- **InvalidOperationError** - `services/nis/shared/exceptions.py`
+- **InvalidOperationError** - `services/penelope/shared/exceptions.py`
+- **InvalidTokenError** - `services/maba/shared/exceptions.py`
+- **InvalidTokenError** - `services/nis/shared/exceptions.py`
+- **InvalidTokenError** - `services/penelope/shared/exceptions.py`
+- **IoCExtractor** - `services/eureka/ioc_extractor.py`
+- **IPVersion** - `services/maba/shared/enums.py`
+- **IPVersion** - `services/nis/shared/enums.py`
+- **IPVersion** - `services/penelope/shared/enums.py`
+- **ISO27001Checker** - `services/core/compliance/certifications.py`
+- **IsolatedContext** - `max-code-cli/core/deter_agent/state/sub_agent_isolation.py`
+- **IsolationLevel** - `max-code-cli/core/deter_agent/state/sub_agent_isolation.py`
+- **KafkaMetricsStreamer** - `services/core/autonomic_core/monitor/kafka_streamer.py`
+- **KantianAntiDeceptionValidator** - `max-code-cli/core/constitutional/validators/kantian_anti_deception.py`
+- **KantianDeontology** - `services/core/motor_integridade_processual/frameworks/kantian.py`
+- **KantianImperativeChecker** - `services/core/ethics/kantian_checker.py`
+- **KeybindingsManager** - `max-code-cli/ui/keybindings.py`
+- **KeyInsight** - `max-code-cli/core/maximus_integration/nis_client.py`
+- **KeyShortcut** - `max-code-cli/ui/keybindings.py`
+- **KillSwitch** - `services/core/consciousness/safety.py`
+- **KillSwitch** - `services/core/consciousness/sandboxing/kill_switch.py`
+- **KillSwitchTrigger** - `services/core/consciousness/sandboxing/kill_switch.py`
+- **KnowledgeBase** - `services/core/motor_integridade_processual/infrastructure/knowledge_base.py`
+- **KubernetesActuator** - `services/core/autonomic_core/execute/kubernetes_actuator.py`
+- **KuramotoNetwork** - `services/core/consciousness/esgt/kuramoto.py`
+- **KuramotoOscillator** - `services/core/consciousness/esgt/kuramoto.py`
+- **Language** - `max-code-cli/core/epl/nlp_engine.py`
+- **LaplaceMechanism** - `services/core/privacy/dp_mechanisms.py`
+- **LargeDetectionModel** - `services/core/examples/03_performance_optimization_pipeline.py`
+- **LatestAPVResponse** - `services/core/apv/api.py`
+- **Layer1Preprocessor** - `services/core/training/data_preprocessor.py`
+- **Layer1Sensory** - `services/core/consciousness/predictive_coding/layer1_sensory_hardened.py`
+- **Layer2Behavioral** - `services/core/consciousness/predictive_coding/layer2_behavioral_hardened.py`
+- **Layer2Preprocessor** - `services/core/training/data_preprocessor.py`
+- **Layer3Operational** - `services/core/consciousness/predictive_coding/layer3_operational_hardened.py`
+- **Layer3Preprocessor** - `services/core/training/data_preprocessor.py`
+- **Layer4Tactical** - `services/core/consciousness/predictive_coding/layer4_tactical_hardened.py`
+- **Layer5Strategic** - `services/core/consciousness/predictive_coding/layer5_strategic_hardened.py`
+- **LayerConfig** - `services/core/consciousness/predictive_coding/layer_base_hardened.py`
+- **LayerPreprocessor** - `services/core/training/data_preprocessor.py`
+- **LayerState** - `services/core/consciousness/predictive_coding/layer_base_hardened.py`
+- **LayerTrainer** - `services/core/training/layer_trainer.py`
+- **LayerType** - `services/core/training/data_preprocessor.py`
+- **LearningConfig** - `max-code-cli/core/adaptive_learning.py`
+- **LearningHint** - `max-code-cli/core/epl/learning_mode.py`
+- **LearningInsights** - `max-code-cli/core/adaptive_learning.py`
+- **LearningMode** - `max-code-cli/core/epl/learning_mode.py`
+- **LearningPhase** - `max-code-cli/core/epl/learning_mode.py`
+- **Lexer** - `max-code-cli/core/epl/lexer.py`
+- **ListResponse** - `services/maba/shared/response_models.py`
+- **ListResponse** - `services/nis/shared/response_models.py`
+- **ListResponse** - `services/penelope/shared/response_models.py`
+- **LiveLogViewer** - `max-code-cli/ui/streaming.py`
+- **LLMAuthenticationError** - `services/eureka/llm/base_client.py`
+- **LLMCostTracker** - `services/eureka/tracking/llm_cost_tracker.py`
+- **LLMError** - `services/eureka/llm/base_client.py`
+- **LLMInvalidRequestError** - `services/eureka/llm/base_client.py`
+- **LLMMessage** - `services/eureka/llm/base_client.py`
+- **LLMModel** - `services/eureka/tracking/llm_cost_tracker.py`
+- **LLMProvider** - `services/eureka/llm/base_client.py`
+- **LLMRateLimitError** - `services/eureka/llm/base_client.py`
+- **LLMResponse** - `services/eureka/llm/base_client.py`
+- **LLMSummaryStrategy** - `max-code-cli/core/context/strategies.py`
+- **LoadBalancerActuator** - `services/core/autonomic_core/execute/loadbalancer_actuator.py`
+- **LoadTestConfig** - `max-code-cli/scripts/load_test.py`
+- **LoadTester** - `max-code-cli/scripts/load_test.py`
+- **LoadTestResult** - `max-code-cli/scripts/load_test.py`
+- **LocalDatabase** - `max-code-cli/core/adaptive_learning.py`
+- **LocatorStrategy** - `services/maba/core/robust_element_locator.py`
+- **LogEntryData** - `max-code-cli/ui/types.py`
+- **LogEntry** - `max-code-cli/ui/streaming.py`
+- **LoggingConfig** - `max-code-cli/config/settings.py`
+- **LogLevel** - `max-code-cli/config/logging_config.py`
+- **LogLevel** - `max-code-cli/ui/streaming.py`
+- **LogLevel** - `services/maba/shared/enums.py`
+- **LogLevel** - `services/nis/shared/enums.py`
+- **LogLevel** - `services/penelope/shared/enums.py`
+- **LogLevels** - `services/maba/shared/constants.py`
+- **LogLevels** - `services/nis/shared/constants.py`
+- **LogLevels** - `services/penelope/shared/constants.py`
+- **LRUCache** - `services/core/compassion/social_memory.py`
+- **LRUCache** - `services/core/compassion/social_memory_sqlite.py`
+- **LRUCache** - `services/core/performance/inference_engine.py`
+- **LSTMAutoencoder** - `services/core/autonomic_core/analyze/anomaly_detector.py`
+- **MABAChannel** - `services/maba/websocket_routes.py`
+- **MABAClientContext** - `max-code-cli/core/maximus_integration/maba_client.py`
+- **MABAClient** - `max-code-cli/core/maximus_integration/maba_client.py`
+- **MABAConnectionManager** - `services/maba/websocket_routes.py`
+- **MABAMessageType** - `services/maba/websocket_routes.py`
+- **MABASearchResult** - `max-code-cli/core/maximus_integration/client.py`
+- **MABASearchResult** - `max-code-cli/core/maximus_integration/maba_client.py`
+- **MABAService** - `services/maba/models.py`
+- **MABAWebSocketMessage** - `services/maba/websocket_routes.py`
+- **MalwareDetectedError** - `services/maba/shared/exceptions.py`
+- **MalwareDetectedError** - `services/nis/shared/exceptions.py`
+- **MalwareDetectedError** - `services/penelope/shared/exceptions.py`
+- **MalwareDetectorAdapter** - `services/core/federated_learning/model_adapters.py`
+- **MalwareFamily** - `services/maba/shared/enums.py`
+- **MalwareFamily** - `services/nis/shared/enums.py`
+- **MalwareFamily** - `services/penelope/shared/enums.py`
+- **MalwareTypes** - `services/maba/shared/constants.py`
+- **MalwareTypes** - `services/nis/shared/constants.py`
+- **MalwareTypes** - `services/penelope/shared/constants.py`
+- **MatchResult** - `max-code-cli/core/epl/pattern_matcher.py`
+- **MaxCodeAuthConfig** - `max-code-cli/core/auth/max_code_config.py`
+- **MaxCodeBanner** - `max-code-cli/ui/banner.py`
+- **MaxCodeDashboard** - `max-code-cli/ui/dashboard.py`
+- **MaxCodeFormatter** - `max-code-cli/ui/formatter.py`
+- **MaxCodeProfiler** - `max-code-cli/scripts/benchmark.py`
+- **MaxCodeProgress** - `max-code-cli/ui/progress.py`
+- **MaximusAPIError** - `max-code-cli/core/maximus_integration/client.py`
+- **MaximusCache** - `max-code-cli/core/maximus_integration/cache.py`
+- **MaximusClientContext** - `max-code-cli/core/maximus_integration/client.py`
+- **MaximusClient** - `max-code-cli/core/maximus_integration/client.py`
+- **MaximusDemo** - `services/core/demo/demo_maximus_complete.py`
+- **MaximusIntegrated** - `services/core/_demonstration/maximus_integrated.py`
+- **MaximusIntegrationMixin** - `services/maba/shared/maximus_integration.py`
+- **MaximusIntegrationMixin** - `services/nis/shared/maximus_integration.py`
+- **MaximusIntegrationMixin** - `services/penelope/shared/maximus_integration.py`
+- **MaximusMetricsExporter** - `services/core/monitoring/prometheus_exporter.py`
+- **MaximusOfflineError** - `max-code-cli/core/maximus_integration/client.py`
+- **MaximusServiceConfig** - `max-code-cli/config/settings.py`
+- **MaximusTimeoutError** - `max-code-cli/core/maximus_integration/client.py`
+- **MCEAClient** - `services/core/consciousness/integration_archive_dead_code/mcea_client.py`
+- **MCPClientError** - `max-code-cli/core/mcp/client.py`
+- **MCPClient** - `max-code-cli/core/mcp/client.py`
+- **MCPConfig** - `max-code-cli/core/mcp/types.py`
+- **MCPConnectionError** - `max-code-cli/core/mcp/client.py`
+- **MCPContext** - `max-code-cli/core/mcp/types.py`
+- **MCPPrimitiveType** - `max-code-cli/core/mcp/types.py`
+- **MCPPrompt** - `max-code-cli/core/mcp/types.py`
+- **MCPRequest** - `max-code-cli/core/mcp/types.py`
+- **MCPResource** - `max-code-cli/core/mcp/types.py`
+- **MCPResponse** - `max-code-cli/core/mcp/types.py`
+- **MCPServerInfo** - `max-code-cli/core/mcp/types.py`
+- **MCPServer** - `max-code-cli/core/mcp/server.py`
+- **MCPTool** - `max-code-cli/core/mcp/types.py`
+- **MCPTransportType** - `max-code-cli/core/mcp/types.py`
+- **MEABridge** - `services/core/consciousness/integration_archive_dead_code/mea_bridge.py`
+- **MEAContextSnapshot** - `services/core/consciousness/integration_archive_dead_code/mea_bridge.py`
+- **MemoryCache** - `max-code-cli/core/maximus_integration/cache.py`
+- **MemoryEntry** - `max-code-cli/core/deter_agent/state/memory_manager.py`
+- **MemoryImportance** - `max-code-cli/core/deter_agent/state/memory_manager.py`
+- **MemoryManager** - `max-code-cli/core/deter_agent/state/memory_manager.py`
+- **MemoryManager** - `max-code-cli/core/deter_agent/state_old.py`
+- **MemoryRetrievalSPM** - `services/core/consciousness/esgt/spm/base.py`
+- **MemorySystem** - `services/core/memory_system.py`
+- **MemoryType** - `max-code-cli/core/deter_agent/state/memory_manager.py`
+- **MenuItemData** - `max-code-cli/ui/types.py`
+- **MenuItem** - `max-code-cli/ui/menus.py`
+- **Message** - `max-code-cli/core/context/types.py`
+- **MessageRole** - `max-code-cli/core/context/types.py`
+- **MessageType** - `services/core/federated_learning/communication.py`
+- **MessageType** - `services/maba/shared/websocket_gateway.py`
+- **MessageType** - `services/nis/shared/websocket_gateway.py`
+- **MessageType** - `services/penelope/shared/websocket_gateway.py`
+- **MetacognitionMetrics** - `services/core/consciousness/validation/metacognition.py`
+- **MetacognitionValidator** - `services/core/consciousness/validation/metacognition.py`
+- **MetacognitiveMonitor** - `services/core/consciousness/metacognition/monitor.py`
+- **MetaMonitoringReport** - `services/core/consciousness/lrr/meta_monitor.py`
+- **MetaMonitor** - `services/core/consciousness/lrr/meta_monitor.py`
+- **MetricCategory** - `services/core/consciousness/esgt/spm/metrics_monitor.py`
+- **MetricComparison** - `services/penelope/core/canary_deployment.py`
+- **MetricsCollector** - `services/core/consciousness/lrr/meta_monitor.py`
+- **MetricsCollector** - `services/core/consciousness/reactive_fabric/collectors/metrics_collector.py`
+- **MetricsCollector** - `services/core/motor_integridade_processual/infrastructure/metrics.py`
+- **MetricsCollector** - `services/core/observability/metrics.py`
+- **MetricsExporter** - `libs/vortex-legacy/metrics_exporter.py`
+- **MetricsExporter** - `services/core/shared/metrics_exporter.py`
+- **MetricsExporter** - `services/dlq_monitor/shared/metrics_exporter.py`
+- **MetricsExporter** - `services/eureka/shared/metrics_exporter.py`
+- **MetricsExporter** - `services/maba/shared/metrics_exporter.py`
+- **MetricsExporter** - `services/nis/shared/metrics_exporter.py`
+- **MetricsExporter** - `services/oraculo/shared/metrics_exporter.py`
+- **MetricsExporter** - `services/orchestrator/shared/metrics_exporter.py`
+- **MetricsExporter** - `services/penelope/shared/metrics_exporter.py`
+- **Metrics** - `max-code-cli/core/deter_agent/incentive/metrics_tracker.py`
+- **MetricsMonitorConfig** - `services/core/consciousness/esgt/spm/metrics_monitor.py`
+- **MetricsQueryRequest** - `services/nis/api/routes.py`
+- **MetricsResponse** - `services/core/motor_integridade_processual/api.py`
+- **MetricsSnapshot** - `services/core/consciousness/esgt/spm/metrics_monitor.py`
+- **MetricsSPM** - `services/core/consciousness/esgt/spm/metrics_monitor.py`
+- **MetricsTracker** - `max-code-cli/core/deter_agent/incentive/metrics_tracker.py`
+- **MetricsTracker** - `max-code-cli/core/deter_agent/incentive_old.py`
+- **MetricType** - `services/maba/shared/enums.py`
+- **MetricType** - `services/nis/shared/enums.py`
+- **MetricType** - `services/penelope/shared/enums.py`
+- **MIPClientContext** - `services/core/mip_client/client.py`
+- **MIPClientError** - `services/core/mip_client/client.py`
+- **MIPClient** - `services/core/mip_client/client.py`
+- **MIPSettings** - `services/core/motor_integridade_processual/config.py`
+- **MIPTimeoutError** - `services/core/mip_client/client.py`
+- **MissingFieldError** - `services/maba/shared/exceptions.py`
+- **MissingFieldError** - `services/nis/shared/exceptions.py`
+- **MissingFieldError** - `services/penelope/shared/exceptions.py`
+- **MitigationEngine** - `services/core/fairness/mitigation.py`
+- **MitigationResult** - `services/core/fairness/base.py`
+- **MLMetricsResponse** - `services/eureka/api/ml_metrics.py`
+- **MLModelSensors** - `services/core/autonomic_core/monitor/sensor_definitions.py`
+- **MMEIClient** - `services/core/consciousness/integration_archive_dead_code/mmei_client.py`
+- **ModelEvaluator** - `services/core/training/evaluator.py`
+- **ModelMetadata** - `services/core/training/model_registry.py`
+- **ModelNotFoundError** - `services/maba/shared/exceptions.py`
+- **ModelNotFoundError** - `services/nis/shared/exceptions.py`
+- **ModelNotFoundError** - `services/penelope/shared/exceptions.py`
+- **ModelNotSupportedException** - `services/core/xai/base.py`
+- **ModelPruner** - `services/core/performance/pruner.py`
+- **ModelQuantizer** - `services/core/performance/quantizer.py`
+- **ModelRegistry** - `services/core/training/model_registry.py`
+- **ModelType** - `services/core/federated_learning/base.py`
+- **ModelUpdate** - `services/core/federated_learning/base.py`
+- **ModelVersion** - `services/core/federated_learning/storage.py`
+- **ModulationRequest** - `services/core/consciousness/neuromodulation/coordinator_hardened.py`
+- **ModulatorConfig** - `services/core/consciousness/neuromodulation/dopamine_hardened.py`
+- **ModulatorConfig** - `services/core/consciousness/neuromodulation/modulator_base.py`
+- **ModulatorState** - `services/core/consciousness/neuromodulation/dopamine_hardened.py`
+- **ModulatorState** - `services/core/consciousness/neuromodulation/modulator_base.py`
+- **ModuleCoverage** - `services/core/scripts/coverage_tracker.py`
+- **ModuleInfo** - `services/core/scripts/industrial_test_generator.py`
+- **ModuleInfo** - `services/core/scripts/industrial_test_generator_v2.py`
+- **ModuleInfo** - `services/core/scripts/industrial_test_generator_v3.py`
+- **ModuleInfo** - `services/core/scripts/industrial_test_generator_v4.py`
+- **ModuleStatus** - `services/core/scripts/coverage_commander.py`
+- **MonitoringMetrics** - `services/core/compliance/monitoring.py`
+- **MultiSpinnerDisplay** - `max-code-cli/ui/spinners.py`
+- **MVPChannel** - `services/nis/websocket_routes.py`
+- **MVPConnectionManager** - `services/nis/websocket_routes.py`
+- **MVPMessageType** - `services/nis/websocket_routes.py`
+- **MVPService** - `services/nis/models.py`
+- **MVPWebSocketMessage** - `services/nis/websocket_routes.py`
+- **NarrativeCache** - `services/nis/core/narrative_cache.py`
+- **NarrativeEngine** - `services/nis/core/narrative_engine.py`
+- **NarrativeGenerator** - `services/core/consciousness/lrr/introspection_engine.py`
+- **Narrative** - `max-code-cli/core/maximus_integration/client.py`
+- **Narrative** - `max-code-cli/core/maximus_integration/nis_client.py`
+- **NarrativeRateLimiter** - `services/nis/core/rate_limiter.py`
+- **NarrativeRequest** - `services/nis/models.py`
+- **NarrativeResponse** - `services/nis/models.py`
+- **NarrativeResult** - `services/core/consciousness/autobiographical_narrative.py`
+- **NarrativeStyle** - `max-code-cli/core/maximus_integration/nis_client.py`
+- **NarrativeType** - `services/nis/models.py`
+- **NavigationRequest** - `services/maba/models.py`
+- **NeedUrgency** - `services/core/consciousness/archived_old_v4/monitor_old.py`
+- **NeedUrgency** - `services/core/consciousness/mmei/monitor.py`
+- **NetworkProtocols** - `services/maba/shared/constants.py`
+- **NetworkProtocols** - `services/nis/shared/constants.py`
+- **NetworkProtocols** - `services/penelope/shared/constants.py`
+- **NetworkSensors** - `services/core/autonomic_core/monitor/sensor_definitions.py`
+- **NeuromodulationController** - `services/core/neuromodulation/neuromodulation_controller.py`
+- **NeuromodulationCoordinator** - `services/core/consciousness/neuromodulation/coordinator_hardened.py`
+- **NeuromodulatorBase** - `services/core/consciousness/neuromodulation/modulator_base.py`
+- **NISClientContext** - `max-code-cli/core/maximus_integration/nis_client.py`
+- **NISClient** - `max-code-cli/core/maximus_integration/nis_client.py`
+- **NLPEngine** - `max-code-cli/core/epl/nlp_engine.py`
+- **NodeHealth** - `services/core/consciousness/tig/fabric.py`
+- **NodeState** - `services/core/consciousness/archived_old_v4/fabric_old.py`
+- **NodeState** - `services/core/consciousness/tig/fabric.py`
+- **NorepinephrineModulator** - `services/core/consciousness/neuromodulation/norepinephrine_hardened.py`
+- **NorepinephrineState** - `services/core/neuromodulation/norepinephrine_system.py`
+- **NorepinephrineSystem** - `services/core/neuromodulation/norepinephrine_system.py`
+- **NoStrategyAvailableError** - `services/eureka/strategies/strategy_selector.py`
+- **OAuthCallbackHandler** - `core/auth/oauth.py`
+- **OAuthCallbackResult** - `core/auth/oauth.py`
+- **OAuthFlow** - `core/auth/oauth.py`
+- **ObservabilityClient** - `services/penelope/core/observability_client.py`
+- **OffensiveArsenalTools** - `services/core/offensive_arsenal_tools.py`
+- **ONNXExportConfig** - `services/core/performance/onnx_exporter.py`
+- **ONNXExporter** - `services/core/performance/onnx_exporter.py`
+- **ONNXExportResult** - `services/core/performance/onnx_exporter.py`
+- **OpenAICodeGenerator** - `services/oraculo/llm/openai_client.py`
+- **OperationalLayer** - `services/core/predictive_coding/layer3_operational.py`
+- **OperationalMode** - `services/core/autonomic_core/homeostatic_control.py`
+- **OperationalTCN** - `services/core/predictive_coding/layer3_operational.py`
+- **OperatorAction** - `services/core/hitl/base.py`
+- **OperatorConnection** - `services/core/governance_sse/sse_server.py`
+- **OperatorInterface** - `services/core/hitl/operator_interface.py`
+- **OperatorMetrics** - `services/core/hitl/operator_interface.py`
+- **OperatorSession** - `services/core/hitl/operator_interface.py`
+- **OperatorSession** - `services/core/test_workflow_complete.py`
+- **OperatorStatsResponse** - `services/core/governance_sse/api_routes.py`
+- **OraculoConfig** - `services/oraculo/config.py`
+- **OraculoEngine** - `services/oraculo/oraculo_engine.py`
+- **OraculoEngine** - `services/oraculo/oraculo.py`
+- **OrchestrationDecision** - `services/core/consciousness/reactive_fabric/orchestration/data_orchestrator.py`
+- **OrchestrationRequest** - `max-code-cli/integration/orchestrator_client.py`
+- **OrchestrationRequest** - `services/orchestrator/main.py`
+- **OscillatorConfig** - `services/core/consciousness/esgt/kuramoto.py`
+- **OscillatorState** - `services/core/consciousness/esgt/kuramoto.py`
+- **OSINTSource** - `services/maba/shared/enums.py`
+- **OSINTSource** - `services/nis/shared/enums.py`
+- **OSINTSource** - `services/penelope/shared/enums.py`
+- **OSVClient** - `services/oraculo/threat_feeds/osv_client.py`
+- **OutputBlock** - `max-code-cli/ui/output_block.py`
+- **OutputMetrics** - `max-code-cli/core/constitutional/guardians/post_execution_guardian.py`
+- **OutputPanel** - `max-code-cli/ui/dashboard.py`
+- **OutputQuality** - `max-code-cli/core/constitutional/guardians/post_execution_guardian.py`
+- **P1_Completeness_Validator** - `max-code-cli/core/constitutional/validators/p1_completeness.py`
+- **P1Config** - `max-code-cli/core/constitutional/validators/p1_completeness.py`
+- **P1ValidationError** - `max-code-cli/core/constitutional/validators/p1_completeness.py`
+- **P2_API_Validator** - `max-code-cli/core/constitutional/validators/p2_api_validator.py`
+- **P2Config** - `max-code-cli/core/constitutional/validators/p2_api_validator.py`
+- **P2ValidationError** - `max-code-cli/core/constitutional/validators/p2_api_validator.py`
+- **P3Config** - `max-code-cli/core/constitutional/validators/p3_truth.py`
+- **P3_Truth_Validator** - `max-code-cli/core/constitutional/validators/p3_truth.py`
+- **P3ValidationError** - `max-code-cli/core/constitutional/validators/p3_truth.py`
+- **P4Config** - `max-code-cli/core/constitutional/validators/p4_user_sovereignty.py`
+- **P4_User_Sovereignty_Validator** - `max-code-cli/core/constitutional/validators/p4_user_sovereignty.py`
+- **P4ValidationError** - `max-code-cli/core/constitutional/validators/p4_user_sovereignty.py`
+- **P5Config** - `max-code-cli/core/constitutional/validators/p5_systemic.py`
+- **P5_Systemic_Analyzer** - `max-code-cli/core/constitutional/validators/p5_systemic.py`
+- **P5ValidationError** - `max-code-cli/core/constitutional/validators/p5_systemic.py`
+- **P6Config** - `max-code-cli/core/constitutional/validators/p6_token_efficiency.py`
+- **P6_Token_Efficiency_Monitor** - `max-code-cli/core/constitutional/validators/p6_token_efficiency.py`
+- **P6ValidationError** - `max-code-cli/core/constitutional/validators/p6_token_efficiency.py`
+- **PackageDependency** - `services/oraculo/filtering/dependency_graph.py`
+- **PageAnalysisRequest** - `services/maba/models.py`
+- **PageAnalysisResponse** - `services/maba/models.py`
+- **PaginationMeta** - `services/maba/shared/response_models.py`
+- **PaginationMeta** - `services/nis/shared/response_models.py`
+- **PaginationMeta** - `services/penelope/shared/response_models.py`
+- **PanelConfig** - `max-code-cli/ui/types.py`
+- **Parser** - `max-code-cli/core/epl/parser.py`
+- **PatchesResponse** - `max-code-cli/integration/penelope_client.py`
+- **PatchHistory** - `services/penelope/core/patch_history.py`
+- **Patch** - `max-code-cli/integration/penelope_client.py`
+- **PatchMetrics** - `services/penelope/models.py`
+- **PatchResponse** - `services/penelope/models.py`
+- **Patch** - `services/eureka/eureka_models/patch.py`
+- **PatchStatus** - `services/eureka/eureka_models/patch.py`
+- **PatternDetectionRequest** - `services/eureka/api.py`
+- **PatternDetector** - `services/eureka/pattern_detector.py`
+- **PatternMatcher** - `max-code-cli/core/epl/pattern_matcher.py`
+- **Pattern** - `max-code-cli/core/epl/pattern_matcher.py`
+- **PatternNotFoundError** - `services/core/compassion/social_memory.py`
+- **PatternNotFoundError** - `services/core/compassion/social_memory_sqlite.py`
+- **PendingStatsResponse** - `services/core/governance_sse/api_routes.py`
+- **PenelopeChannel** - `services/penelope/websocket_routes.py`
+- **PENELOPEClientContext** - `max-code-cli/core/maximus_integration/penelope_client.py`
+- **PENELOPEClient** - `max-code-cli/core/maximus_integration/penelope_client.py`
+- **PenelopeConnectionManager** - `services/penelope/websocket_routes.py`
+- **PenelopeMessageType** - `services/penelope/websocket_routes.py`
+- **PenelopeWebSocketMessage** - `services/penelope/websocket_routes.py`
+- **PerformanceDegradationDetector** - `services/core/autonomic_core/analyze/degradation_detector.py`
+- **PerformanceMonitor** - `max-code-cli/core/deter_agent/incentive/performance_monitor.py`
+- **PerformanceReport** - `max-code-cli/core/deter_agent/incentive/performance_monitor.py`
+- **PerformanceTarget** - `max-code-cli/scripts/benchmark.py`
+- **PeripheralDetection** - `services/core/attention_system/attention_core.py`
+- **PeripheralMonitor** - `services/core/attention_system/attention_core.py`
+- **Permission** - `services/maba/shared/enums.py`
+- **Permission** - `services/nis/shared/enums.py`
+- **Permission** - `services/penelope/shared/enums.py`
+- **PerturbationConfig** - `services/core/xai/lime_cybersec.py`
+- **PhaseCoherence** - `services/core/consciousness/esgt/kuramoto.py`
+- **PhiProxyMetrics** - `services/core/consciousness/validation/phi_proxies.py`
+- **PhiProxyValidator** - `services/core/consciousness/validation/phi_proxies.py`
+- **PhoneSearchRequest** - `services/core/osint_router.py`
+- **PhysicalMetrics** - `services/core/consciousness/archived_old_v4/monitor_old.py`
+- **PhysicalMetrics** - `services/core/consciousness/mmei/monitor.py`
+- **PKCEGenerator** - `core/auth/oauth.py`
+- **PlanAgent** - `max-code-cli/agents/plan_agent.py`
+- **PlanAgentParameters** - `max-code-cli/agents/validation_schemas.py`
+- **PlanStatus** - `max-code-cli/core/task_planner.py`
+- **PlaybookGenerator** - `services/eureka/playbook_generator.py`
+- **PluginManager** - `max-code-cli/core/plugins.py`
+- **Plugin** - `max-code-cli/core/plugins.py`
+- **PluginMetadata** - `max-code-cli/core/plugins.py`
+- **PluginRegistry** - `max-code-cli/core/plugins.py`
+- **PluginState** - `max-code-cli/core/plugins.py`
+- **PolicyEnforcementResult** - `services/core/governance/base.py`
+- **PolicyEngine** - `services/core/governance/policy_engine.py`
+- **PolicyRegistry** - `services/core/governance/policies.py`
+- **Policy** - `services/core/governance/base.py`
+- **PolicySeverity** - `services/core/governance/base.py`
+- **PolicyType** - `services/core/governance/base.py`
+- **PolicyViolation** - `services/core/governance/base.py`
+- **PositionalEncoding** - `services/core/predictive_coding/layer5_strategic.py`
+- **PostExecutionGuardian** - `max-code-cli/core/constitutional/guardians/post_execution_guardian.py`
+- **PraotesValidator** - `services/penelope/core/praotes_validator.py`
+- **PRCreatorError** - `services/eureka/git_integration/pr_creator.py`
+- **PRCreator** - `services/eureka/git_integration/pr_creator.py`
+- **PrecedentDB** - `services/core/justice/precedent_database.py`
+- **PrecedentFeedbackRequest** - `services/core/motor_integridade_processual/api.py`
+- **Precedent** - `max-code-cli/integration/penelope_client.py`
+- **PrecedentMetricsResponse** - `services/core/motor_integridade_processual/api.py`
+- **PrecedentResponse** - `services/core/motor_integridade_processual/api.py`
+- **Precedent** - `services/penelope/models.py`
+- **Precondition** - `services/core/motor_integridade_processual/models/action_plan.py`
+- **PredictionContext** - `max-code-cli/core/predictive_engine.py`
+- **PredictionError** - `services/core/consciousness/integration_archive_dead_code/sensory_esgt_bridge.py`
+- **Prediction** - `max-code-cli/core/predictive_engine.py`
+- **PredictionRequest** - `max-code-cli/integration/oraculo_client.py`
+- **PredictionRequest** - `services/oraculo/api.py`
+- **PredictionResponse** - `max-code-cli/integration/oraculo_client.py`
+- **PredictionResult** - `max-code-cli/integration/oraculo_client.py`
+- **PredictionSource** - `max-code-cli/core/predictive_engine.py`
+- **PredictionTrace** - `services/core/consciousness/mea/attention_schema.py`
+- **PredictionValidator** - `services/core/consciousness/mea/prediction_validator.py`
+- **PredictiveCodingHierarchy** - `services/core/consciousness/predictive_coding/hierarchy_hardened.py`
+- **PredictiveCodingLayerBase** - `services/core/consciousness/predictive_coding/layer_base_hardened.py`
+- **PredictiveEngine** - `max-code-cli/core/predictive_engine.py`
+- **PreExecutionGuardian** - `max-code-cli/core/constitutional/guardians/pre_execution_guardian.py`
+- **PrefrontalCortex** - `services/core/consciousness/prefrontal_cortex.py`
+- **PreprocessedSample** - `services/core/training/data_preprocessor.py`
+- **Principialism** - `services/core/motor_integridade_processual/frameworks/principialism.py`
+- **PrinciplismFramework** - `services/core/ethics/principialism.py`
+- **PriorityLevel** - `services/eureka/models/apv.py`
+- **PriorityLevel** - `services/maba/shared/models/apv.py`
+- **PriorityLevel** - `services/nis/shared/models/apv.py`
+- **PriorityLevel** - `services/oraculo/models/apv.py`
+- **PriorityLevel** - `services/penelope/shared/models/apv.py`
+- **Priority** - `services/core/performance/batch_predictor.py`
+- **PrivacyAccountant** - `services/core/privacy/privacy_accountant.py`
+- **PrivacyBudget** - `services/core/privacy/base.py`
+- **PrivacyCheckResult** - `services/core/ethical_guardian.py`
+- **PrivacyLevel** - `services/core/privacy/base.py`
+- **PrivacyMechanism** - `services/core/privacy/base.py`
+- **PrivacyParameters** - `services/core/privacy/base.py`
+- **ProcessingPriority** - `services/core/consciousness/esgt/spm/base.py`
+- **ProcessingState** - `services/core/consciousness/archived_old_v4/fabric_old.py`
+- **ProcessingState** - `services/core/consciousness/tig/fabric.py`
+- **ProfileConfig** - `max-code-cli/config/profiles.py`
+- **ProfileFinding** - `services/core/workflows/target_profiling_adw.py`
+- **ProfileManager** - `max-code-cli/config/profiles.py`
+- **Profile** - `max-code-cli/config/profiles.py`
+- **ProfilerConfig** - `services/core/performance/profiler.py`
+- **ProfileResult** - `services/core/performance/profiler.py`
+- **Profiler** - `services/core/performance/profiler.py`
+- **ProfileTargetRequest** - `services/core/adw_router.py`
+- **ProfileTarget** - `services/core/workflows/target_profiling_adw.py`
+- **ProfilingResult** - `max-code-cli/scripts/benchmark.py`
+- **ProgressConfig** - `max-code-cli/ui/types.py`
+- **ProgressiveDisclosure** - `max-code-cli/core/deter_agent/state/progressive_disclosure.py`
+- **ProgressStream** - `max-code-cli/ui/streaming.py`
+- **ProjectDetector** - `max-code-cli/core/predictive_engine.py`
+- **ProjectType** - `max-code-cli/core/predictive_engine.py`
+- **PropertyTest** - `services/core/scripts/industrial_test_generator_v5_hypothesis.py`
+- **ProtectedAttribute** - `services/core/fairness/base.py`
+- **ProtectionEvent** - `max-code-cli/core/constitutional/guardians/auto_protection.py`
+- **ProtocolType** - `services/maba/shared/enums.py`
+- **ProtocolType** - `services/nis/shared/enums.py`
+- **ProtocolType** - `services/penelope/shared/enums.py`
+- **PRResult** - `services/eureka/git_integration/models.py`
+- **PruningConfig** - `services/core/performance/pruner.py`
+- **PruningResult** - `services/core/performance/pruner.py`
+- **PTPCluster** - `services/core/consciousness/tig/sync.py`
+- **PTPSynchronizer** - `services/core/consciousness/tig/sync.py`
+- **PushResult** - `services/eureka/git_integration/models.py`
+- **PyTorchDatasetWrapper** - `services/core/training/dataset_builder.py`
+- **QuantizationConfig** - `services/core/performance/quantizer.py`
+- **QueryRecord** - `services/core/privacy/privacy_accountant.py`
+- **QueryRequest** - `services/core/main.py`
+- **QueuedDecision** - `services/core/hitl/decision_queue.py`
+- **QueuePriority** - `services/maba/shared/enums.py`
+- **QueuePriority** - `services/nis/shared/enums.py`
+- **QueuePriority** - `services/penelope/shared/enums.py`
+- **QuotaExceededError** - `services/maba/shared/exceptions.py`
+- **QuotaExceededError** - `services/nis/shared/exceptions.py`
+- **QuotaExceededError** - `services/penelope/shared/exceptions.py`
+- **RAGSystem** - `services/core/_demonstration/rag_system.py`
+- **RateLimitConfig** - `services/maba/shared/middleware/rate_limiter.py`
+- **RateLimitConfig** - `services/maba/shared/security_tools/rate_limiter.py`
+- **RateLimitConfig** - `services/nis/shared/middleware/rate_limiter.py`
+- **RateLimitConfig** - `services/nis/shared/security_tools/rate_limiter.py`
+- **RateLimitConfig** - `services/penelope/shared/middleware/rate_limiter.py`
+- **RateLimitConfig** - `services/penelope/shared/security_tools/rate_limiter.py`
+- **RateLimiter** - `max-code-cli/core/predictive_engine.py`
+- **RateLimitError** - `services/oraculo/threat_feeds/base_feed.py`
+- **RateLimiter** - `services/core/consciousness/mmei/monitor.py`
+- **RateLimiter** - `services/maba/shared/middleware/rate_limiter.py`
+- **RateLimiter** - `services/maba/shared/security_tools/rate_limiter.py`
+- **RateLimiter** - `services/nis/shared/middleware/rate_limiter.py`
+- **RateLimiter** - `services/nis/shared/security_tools/rate_limiter.py`
+- **RateLimiter** - `services/penelope/shared/middleware/rate_limiter.py`
+- **RateLimiter** - `services/penelope/shared/security_tools/rate_limiter.py`
+- **RateLimitExceeded** - `services/maba/shared/exceptions.py`
+- **RateLimitExceeded** - `services/maba/shared/security_tools/rate_limiter.py`
+- **RateLimitExceeded** - `services/nis/shared/exceptions.py`
+- **RateLimitExceeded** - `services/nis/shared/security_tools/rate_limiter.py`
+- **RateLimitExceeded** - `services/penelope/shared/exceptions.py`
+- **RateLimitExceeded** - `services/penelope/shared/security_tools/rate_limiter.py`
+- **RateLimitMiddleware** - `services/eureka/middleware/rate_limiter.py`
+- **RateLimitStrategy** - `services/maba/shared/security_tools/rate_limiter.py`
+- **RateLimitStrategy** - `services/nis/shared/security_tools/rate_limiter.py`
+- **RateLimitStrategy** - `services/penelope/shared/security_tools/rate_limiter.py`
+- **ReactiveConfig** - `services/core/consciousness/system.py`
+- **RealityManipulationPattern** - `max-code-cli/core/constitutional/validators/kantian_anti_deception.py`
+- **RealityManipulationType** - `max-code-cli/core/constitutional/validators/kantian_anti_deception.py`
+- **ReasoningEngine** - `services/core/_demonstration/reasoning_engine.py`
+- **ReasoningLevel** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **ReasoningStep** - `max-code-cli/core/deter_agent/deliberation/chain_of_thought.py`
+- **ReasoningStep** - `max-code-cli/ui/tree_of_thoughts.py`
+- **ReasoningStep** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **ReasoningSteps** - `max-code-cli/ui/tree_of_thoughts.py`
+- **ReasoningType** - `max-code-cli/core/deter_agent/deliberation/chain_of_thought.py`
+- **RecentPrediction** - `services/eureka/api/ml_metrics.py`
+- **RecordNotFoundError** - `services/maba/shared/exceptions.py`
+- **RecordNotFoundError** - `services/nis/shared/exceptions.py`
+- **RecordNotFoundError** - `services/penelope/shared/exceptions.py`
+- **RecursiveReasoner** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **RecursiveReasoningResult** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **RedisCache** - `max-code-cli/core/maximus_integration/cache.py`
+- **RegexPatterns** - `services/maba/shared/constants.py`
+- **RegexPatterns** - `services/nis/shared/constants.py`
+- **RegexPatterns** - `services/penelope/shared/constants.py`
+- **RegistryClient** - `libs/registry/client.py`
+- **RegistryClient** - `services/maba/shared/vertice_registry_client.py`
+- **RegistryClient** - `services/nis/shared/vertice_registry_client.py`
+- **RegistryClient** - `services/penelope/shared/vertice_registry_client.py`
+- **RegraDeOuroValidator** - `services/core/validate_regra_de_ouro.py`
+- **Regulation** - `services/core/compliance/base.py`
+- **RegulationType** - `services/core/compliance/base.py`
+- **RejectDecisionRequest** - `services/core/governance_sse/api_routes.py`
+- **RejectionReason** - `services/core/motor_integridade_processual/models/verdict.py`
+- **RelevanceFilter** - `services/oraculo/filtering/relevance_filter.py`
+- **RelevanceMatch** - `services/oraculo/filtering/relevance_filter.py`
+- **RemediationAction** - `services/core/compliance/base.py`
+- **RemediationComplexity** - `services/eureka/models/apv.py`
+- **RemediationComplexity** - `services/maba/shared/models/apv.py`
+- **RemediationComplexity** - `services/nis/shared/models/apv.py`
+- **RemediationComplexity** - `services/oraculo/models/apv.py`
+- **RemediationComplexity** - `services/penelope/shared/models/apv.py`
+- **RemediationPlan** - `services/core/compliance/base.py`
+- **RemediationResult** - `services/eureka/eureka_models/patch.py`
+- **RemediationStatus** - `services/core/compliance/base.py`
+- **RemediationStrategy** - `services/eureka/models/apv.py`
+- **RemediationStrategy** - `services/maba/shared/models/apv.py`
+- **RemediationStrategy** - `services/nis/shared/models/apv.py`
+- **RemediationStrategy** - `services/oraculo/models/apv.py`
+- **RemediationStrategy** - `services/penelope/shared/models/apv.py`
+- **RenderError** - `max-code-cli/ui/exceptions.py`
+- **Report** - `services/penelope/models.py`
+- **ReputationScore** - `services/maba/shared/enums.py`
+- **ReputationScore** - `services/nis/shared/enums.py`
+- **ReputationScore** - `services/penelope/shared/enums.py`
+- **ResolutionRules** - `services/core/motor_integridade_processual/resolution/rules.py`
+- **Resolution** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **ResolutionStrategy** - `services/core/consciousness/lrr/recursive_reasoner.py`
+- **ResourceAnalysis** - `services/core/autonomic_core/resource_analyzer.py`
+- **ResourceAnalyzer** - `services/core/autonomic_core/resource_analyzer.py`
+- **ResourceConflictError** - `services/maba/shared/exceptions.py`
+- **ResourceConflictError** - `services/nis/shared/exceptions.py`
+- **ResourceConflictError** - `services/penelope/shared/exceptions.py`
+- **ResourceDemandForecaster** - `services/core/autonomic_core/analyze/demand_forecaster.py`
+- **ResourceException** - `services/maba/shared/exceptions.py`
+- **ResourceException** - `services/nis/shared/exceptions.py`
+- **ResourceException** - `services/penelope/shared/exceptions.py`
+- **ResourceExecutor** - `services/core/autonomic_core/resource_executor.py`
+- **ResourceExhaustedError** - `services/maba/shared/exceptions.py`
+- **ResourceExhaustedError** - `services/nis/shared/exceptions.py`
+- **ResourceExhaustedError** - `services/penelope/shared/exceptions.py`
+- **ResourceLimiter** - `services/core/consciousness/sandboxing/resource_limiter.py`
+- **ResourceLimits** - `services/core/consciousness/sandboxing/__init__.py`
+- **ResourceLimits** - `services/core/consciousness/sandboxing/resource_limiter.py`
+- **ResourceNotFoundError** - `services/maba/shared/exceptions.py`
+- **ResourceNotFoundError** - `services/nis/shared/exceptions.py`
+- **ResourceNotFoundError** - `services/penelope/shared/exceptions.py`
+- **ResourcePlanner** - `services/core/autonomic_core/resource_planner.py`
+- **ResourcePlan** - `services/core/autonomic_core/resource_planner.py`
+- **ResponseCodes** - `services/maba/shared/constants.py`
+- **ResponseCodes** - `services/nis/shared/constants.py`
+- **ResponseCodes** - `services/penelope/shared/constants.py`
+- **ResponseFuture** - `services/core/performance/batch_predictor.py`
+- **ResponseProtocol** - `services/core/justice/constitutional_validator.py`
+- **ResponseStatus** - `services/maba/shared/enums.py`
+- **ResponseStatus** - `services/nis/shared/enums.py`
+- **ResponseStatus** - `services/penelope/shared/enums.py`
+- **RestrictedUnpickler** - `services/core/federated_learning/storage.py`
+- **RetrainingConfig** - `services/core/training/continuous_training.py`
+- **ReviewAgent** - `max-code-cli/agents/review_agent.py`
+- **ReviewAgentParameters** - `max-code-cli/agents/validation_schemas.py`
+- **RevisionOutcome** - `services/core/consciousness/lrr/contradiction_detector.py`
+- **Reward** - `max-code-cli/core/deter_agent/incentive/reward_model.py`
+- **RewardModel** - `max-code-cli/core/deter_agent/incentive_old.py`
+- **RewardModel** - `max-code-cli/core/deter_agent/incentive/reward_model.py`
+- **RewardType** - `max-code-cli/core/deter_agent/incentive/reward_model.py`
+- **RiskAssessment** - `services/core/governance/governance_engine.py`
+- **RiskAssessor** - `services/core/hitl/risk_assessor.py`
+- **RiskFactors** - `services/core/hitl/risk_assessor.py`
+- **RiskLevel** - `services/core/hitl/base.py`
+- **RiskLevel** - `services/core/workflows/attack_surface_adw.py`
+- **RiskLevel** - `services/maba/shared/maximus_integration.py`
+- **RiskLevel** - `services/nis/shared/maximus_integration.py`
+- **RiskLevel** - `services/penelope/shared/maximus_integration.py`
+- **RiskLevelValidator** - `services/core/justice/validators.py`
+- **RiskScore** - `services/core/hitl/risk_assessor.py`
+- **RobustElementLocator** - `services/maba/core/robust_element_locator.py`
+- **RollingWindowStrategy** - `max-code-cli/core/context/strategies.py`
+- **RootCause** - `max-code-cli/core/maximus_integration/penelope_client.py`
+- **RuntimeGuardian** - `max-code-cli/core/constitutional/guardians/runtime_guardian.py`
+- **RuntimeSnapshot** - `max-code-cli/core/constitutional/guardians/runtime_guardian.py`
+- **SabbathConfig** - `max-code-cli/core/sabbath_manager.py`
+- **SabbathManager** - `max-code-cli/core/sabbath_manager.py`
+- **SabbathSchedule** - `max-code-cli/core/sabbath_manager.py`
+- **SabbathStatus** - `max-code-cli/core/sabbath_manager.py`
+- **SabbathTradition** - `max-code-cli/core/sabbath_manager.py`
+- **SACAgent** - `services/core/autonomic_core/plan/rl_agent.py`
+- **SafetyChecksError** - `services/eureka/git_integration/safety_checks.py`
+- **SafetyChecks** - `services/eureka/git_integration/safety_checks.py`
+- **SafetyLevel** - `services/core/consciousness/safety.py`
+- **SafetyManager** - `services/core/autonomic_core/execute/safety_manager.py`
+- **SafetyStatusResponse** - `max-code-cli/integration/maximus_client.py`
+- **SafetyStatusResponse** - `services/core/consciousness/api.py`
+- **SafetyThresholds** - `services/core/consciousness/safety.py`
+- **SafetyViolationResponse** - `services/core/consciousness/api.py`
+- **SafetyViolation** - `services/core/consciousness/safety.py`
+- **SafetyViolationType** - `services/core/consciousness/safety.py`
+- **SalienceDetectorConfig** - `services/core/consciousness/esgt/spm/salience_detector.py`
+- **SalienceEvent** - `services/core/consciousness/esgt/spm/salience_detector.py`
+- **SalienceFactors** - `services/core/consciousness/integration_archive_dead_code/sensory_esgt_bridge.py`
+- **SalienceInput** - `max-code-cli/integration/maximus_client.py`
+- **SalienceInput** - `services/core/consciousness/api.py`
+- **SalienceLevel** - `services/core/attention_system/salience_scorer.py`
+- **SalienceLevel** - `services/core/consciousness/archived_old_v4/coordinator_old.py`
+- **SalienceLevel** - `services/core/consciousness/esgt/coordinator.py`
+- **SalienceMode** - `services/core/consciousness/esgt/spm/salience_detector.py`
+- **SalienceScorer** - `services/core/attention_system/salience_scorer.py`
+- **SalienceScore** - `services/core/attention_system/salience_scorer.py`
+- **SalienceScore** - `services/core/consciousness/archived_old_v4/coordinator_old.py`
+- **SalienceScore** - `services/core/consciousness/esgt/coordinator.py`
+- **Salience** - `services/core/consciousness/episodic_memory/event.py`
+- **SalienceSPM** - `services/core/consciousness/esgt/spm/salience_detector.py`
+- **SalienceThresholds** - `services/core/consciousness/esgt/spm/salience_detector.py`
+- **ScanFailedError** - `services/maba/shared/exceptions.py`
+- **ScanFailedError** - `services/nis/shared/exceptions.py`
+- **ScanFailedError** - `services/penelope/shared/exceptions.py`
+- **ScanResult** - `services/maba/shared/security_tools/vulnerability_scanner.py`
+- **ScanResult** - `services/nis/shared/security_tools/vulnerability_scanner.py`
+- **ScanResult** - `services/penelope/shared/security_tools/vulnerability_scanner.py`
+- **ScanStatus** - `services/maba/shared/enums.py`
+- **ScanStatus** - `services/nis/shared/enums.py`
+- **ScanStatus** - `services/penelope/shared/enums.py`
+- **SchemaValidationError** - `services/maba/shared/exceptions.py`
+- **SchemaValidationError** - `services/nis/shared/exceptions.py`
+- **SchemaValidationError** - `services/penelope/shared/exceptions.py`
+- **ScreenshotRequest** - `services/maba/models.py`
+- **SearchResult** - `max-code-cli/core/maximus_integration/client.py`
+- **SearchResult** - `max-code-cli/core/maximus_integration/maba_client.py`
+- **SearchType** - `max-code-cli/core/maximus_integration/maba_client.py`
+- **SecureAggregator** - `services/core/federated_learning/aggregation.py`
+- **SecurityException** - `services/maba/shared/exceptions.py`
+- **SecurityException** - `services/nis/shared/exceptions.py`
+- **SecurityException** - `services/penelope/shared/exceptions.py`
+- **SecurityPolicy** - `services/maba/core/security_policy.py`
+- **SecurityViolationError** - `services/maba/shared/exceptions.py`
+- **SecurityViolationError** - `services/nis/shared/exceptions.py`
+- **SecurityViolationError** - `services/penelope/shared/exceptions.py`
+- **SelectionMenu** - `max-code-cli/ui/menus.py`
+- **SelectiveStrategy** - `max-code-cli/core/context/strategies.py`
+- **SelfConsistency** - `max-code-cli/core/deter_agent/deliberation/self_consistency.py`
+- **SelfCorrectionEngine** - `max-code-cli/core/deter_agent/execution/self_correction.py`
+- **SelfCorrectionResult** - `max-code-cli/core/deter_agent/execution/self_correction.py`
+- **SelfModel** - `services/core/consciousness/mea/self_model.py`
+- **SelfReflection** - `services/core/self_reflection.py`
+- **SensitivityCalculator** - `services/core/privacy/base.py`
+- **SensoryContext** - `services/core/consciousness/integration_archive_dead_code/sensory_esgt_bridge.py`
+- **SensoryESGTBridge** - `services/core/consciousness/integration_archive_dead_code/sensory_esgt_bridge.py`
+- **SensoryLayer** - `services/core/predictive_coding/layer1_sensory.py`
+- **SerotoninModulator** - `services/core/consciousness/neuromodulation/serotonin_hardened.py`
+- **SerotoninState** - `services/core/neuromodulation/serotonin_system.py`
+- **SerotoninSystem** - `services/core/neuromodulation/serotonin_system.py`
+- **ServiceConfigurationError** - `services/maba/shared/exceptions.py`
+- **ServiceConfigurationError** - `services/nis/shared/exceptions.py`
+- **ServiceConfigurationError** - `services/penelope/shared/exceptions.py`
+- **ServiceDependencies** - `services/oraculo/filtering/dependency_graph.py`
+- **ServiceException** - `services/maba/shared/exceptions.py`
+- **ServiceException** - `services/nis/shared/exceptions.py`
+- **ServiceException** - `services/penelope/shared/exceptions.py`
+- **ServiceHealth** - `max-code-cli/core/integration_manager.py`
+- **ServiceHealthStatus** - `services/maba/shared/subordinate_service.py`
+- **ServiceHealthStatus** - `services/nis/shared/subordinate_service.py`
+- **ServiceHealthStatus** - `services/penelope/shared/subordinate_service.py`
+- **ServiceInfo** - `libs/registry/client.py`
+- **ServiceInfo** - `services/penelope/models.py`
+- **ServicePorts** - `services/maba/shared/constants.py`
+- **ServicePorts** - `services/nis/shared/constants.py`
+- **ServicePorts** - `services/penelope/shared/constants.py`
+- **Service** - `services/core/governance/guardian/test_guardians.py`
+- **ServiceStatus** - `services/maba/shared/constants.py`
+- **ServiceStatus** - `services/maba/shared/enums.py`
+- **ServiceStatus** - `services/nis/shared/constants.py`
+- **ServiceStatus** - `services/nis/shared/enums.py`
+- **ServiceStatus** - `services/penelope/shared/constants.py`
+- **ServiceStatus** - `services/penelope/shared/enums.py`
+- **ServiceTimeoutError** - `services/maba/shared/exceptions.py`
+- **ServiceTimeoutError** - `services/nis/shared/exceptions.py`
+- **ServiceTimeoutError** - `services/penelope/shared/exceptions.py`
+- **ServiceUnavailableError** - `services/maba/shared/exceptions.py`
+- **ServiceUnavailableError** - `services/nis/shared/exceptions.py`
+- **ServiceUnavailableError** - `services/penelope/shared/exceptions.py`
+- **ServiceVersion** - `services/maba/shared/vertice_canary.py`
+- **ServiceVersion** - `services/nis/shared/vertice_canary.py`
+- **ServiceVersion** - `services/penelope/shared/vertice_canary.py`
+- **SessionCreateRequest** - `services/core/governance_sse/api_routes.py`
+- **SessionCreateResponse** - `services/core/governance_sse/api_routes.py`
+- **SessionManager** - `services/maba/core/session_manager.py`
+- **SessionSource** - `max-code-cli/core/hooks/types.py`
+- **Settings** - `max-code-cli/config/settings.py`
+- **SeverityLevel** - `services/maba/shared/messaging/event_schemas.py`
+- **SeverityLevel** - `services/nis/shared/messaging/event_schemas.py`
+- **SeverityLevel** - `services/penelope/shared/messaging/event_schemas.py`
+- **Severity** - `max-code-cli/core/deter_agent/deliberation/adversarial_critic.py`
+- **Severity** - `services/penelope/models.py`
+- **SEVulnerability** - `services/core/workflows/target_profiling_adw.py`
+- **SHAPConfig** - `services/core/xai/shap_cybersec.py`
+- **ShortcutCategory** - `max-code-cli/ui/keybindings.py`
+- **ShutdownReason** - `services/core/consciousness/safety.py`
+- **SimpleSPMConfig** - `services/core/consciousness/esgt/spm/simple.py`
+- **SimpleSPM** - `services/core/consciousness/esgt/spm/simple.py`
+- **SkepticalTone** - `max-code-cli/core/skeptic/dream.py`
+- **SkillExecutionResult** - `services/core/skill_learning/skill_learning_controller.py`
+- **SkillLearningController** - `services/core/skill_learning/skill_learning_controller.py`
+- **SLAConfig** - `services/core/hitl/base.py`
+- **SLAMonitor** - `services/core/hitl/decision_queue.py`
+- **SleepAgent** - `max-code-cli/agents/sleep_agent.py`
+- **SleepAgentParameters** - `max-code-cli/agents/validation_schemas.py`
+- **SlidingWindowRateLimiter** - `services/eureka/middleware/rate_limiter.py`
+- **SmartErrorDisplay** - `max-code-cli/ui/smart_errors.py`
+- **SmartErrorHandler** - `max-code-cli/ui/smart_errors.py`
+- **SOC2Checker** - `services/core/compliance/certifications.py`
+- **SocialMemoryConfig** - `services/core/compassion/social_memory.py`
+- **SocialMemory** - `services/core/compassion/social_memory.py`
+- **SocialMemorySQLiteConfig** - `services/core/compassion/social_memory_sqlite.py`
+- **SocialMemorySQLite** - `services/core/compassion/social_memory_sqlite.py`
+- **SocialSignal** - `services/core/consciousness/prefrontal_cortex.py`
+- **Solution** - `max-code-cli/core/deter_agent/deliberation/self_consistency.py`
+- **SophiaEngine** - `services/penelope/core/sophia_engine.py`
+- **SovereigntyViolationType** - `max-code-cli/core/constitutional/validators/p4_user_sovereignty.py`
+- **SpecializedProcessingModule** - `services/core/consciousness/esgt/spm/base.py`
+- **SpinnerType** - `max-code-cli/ui/spinners.py`
+- **SplitStrategy** - `services/core/training/dataset_builder.py`
+- **SPMOutput** - `services/core/consciousness/esgt/spm/base.py`
+- **SPMType** - `services/core/consciousness/esgt/spm/base.py`
+- **SSEEvent** - `services/core/governance_sse/sse_server.py`
+- **SSEEvent** - `services/core/test_sse_streaming.py`
+- **SSEStreamingValidator** - `services/core/test_sse_streaming.py`
+- **SSETestMetrics** - `services/core/test_sse_streaming.py`
+- **StakeholderType** - `services/core/motor_integridade_processual/models/action_plan.py`
+- **StateSnapshot** - `services/core/consciousness/safety.py`
+- **StateTransitionError** - `services/maba/shared/exceptions.py`
+- **StateTransitionError** - `services/nis/shared/exceptions.py`
+- **StateTransitionError** - `services/penelope/shared/exceptions.py`
+- **StatisticalAnomalyDetector** - `services/nis/core/anomaly_detector.py`
+- **StatusBar** - `max-code-cli/ui/status_bar.py`
+- **StatusBarState** - `max-code-cli/ui/status_bar.py`
+- **StorageSensors** - `services/core/autonomic_core/monitor/sensor_definitions.py`
+- **StorageTier** - `max-code-cli/core/deter_agent/state/context_compression.py`
+- **StrategicLayer** - `services/core/predictive_coding/layer5_strategic.py`
+- **StrategicTransformer** - `services/core/predictive_coding/layer5_strategic.py`
+- **StrategyError** - `services/eureka/strategies/base_strategy.py`
+- **StrategyFailedError** - `services/eureka/strategies/base_strategy.py`
+- **StrategyNotApplicableError** - `services/eureka/strategies/base_strategy.py`
+- **StrategySelector** - `services/eureka/strategies/strategy_selector.py`
+- **StreamChunk** - `max-code-cli/core/streaming/types.py`
+- **StreamCollector** - `max-code-cli/core/streaming/agent.py`
+- **StreamConfig** - `max-code-cli/core/streaming/types.py`
+- **StreamEventType** - `max-code-cli/core/streaming/types.py`
+- **StreamingAgent** - `max-code-cli/core/streaming/agent.py`
+- **StreamingConversation** - `max-code-cli/core/streaming/client.py`
+- **StreamingDisplay** - `max-code-cli/ui/streaming.py`
+- **StreamMessage** - `max-code-cli/core/streaming/types.py`
+- **StreamMessage** - `services/oraculo/websocket/apv_stream_manager.py`
+- **StreamProgress** - `max-code-cli/core/streaming/types.py`
+- **StreamResult** - `max-code-cli/core/streaming/types.py`
+- **StreamUpdateData** - `max-code-cli/ui/types.py`
+- **StreamUpdate** - `max-code-cli/ui/streaming.py`
+- **StressLevel** - `services/core/consciousness/mcea/stress.py`
+- **StressMetrics** - `services/core/test_stress_conditions.py`
+- **StressMonitor** - `services/core/consciousness/mcea/stress.py`
+- **StressResponse** - `services/core/consciousness/mcea/stress.py`
+- **StressTestConfig** - `services/core/consciousness/mcea/stress.py`
+- **StressType** - `services/core/consciousness/mcea/stress.py`
+- **StressValidator** - `services/core/test_stress_conditions.py`
+- **StructuralCompliance** - `services/core/consciousness/validation/phi_proxies.py`
+- **StructuredAction** - `max-code-cli/core/deter_agent/execution/structured_actions.py`
+- **StructuredFormatter** - `max-code-cli/config/logging_config.py`
+- **StructuredLogger** - `services/core/observability/logger.py`
+- **SubAgentIsolation** - `max-code-cli/core/deter_agent/state/sub_agent_isolation.py`
+- **SubAgentReport** - `max-code-cli/core/deter_agent/state/sub_agent_isolation.py`
+- **SubordinateServiceBase** - `services/maba/shared/subordinate_service.py`
+- **SubordinateServiceBase** - `services/nis/shared/subordinate_service.py`
+- **SubordinateServiceBase** - `services/penelope/shared/subordinate_service.py`
+- **SubsampledPrivacyAccountant** - `services/core/privacy/privacy_accountant.py`
+- **SuccessResponse** - `services/maba/shared/response_models.py`
+- **SuccessResponse** - `services/nis/shared/response_models.py`
+- **SuccessResponse** - `services/penelope/shared/response_models.py`
+- **SuggestionGenerator** - `services/oraculo/suggestion_generator.py`
+- **SynchronizationDynamics** - `services/core/consciousness/esgt/kuramoto.py`
+- **SyncResult** - `services/core/consciousness/tig/sync.py`
+- **SyncState** - `services/core/consciousness/tig/sync.py`
+- **SyntheticDatasetGenerator** - `services/core/demo/synthetic_dataset.py`
+- **SystemHealthEvent** - `services/maba/shared/messaging/event_schemas.py`
+- **SystemHealthEvent** - `services/nis/shared/messaging/event_schemas.py`
+- **SystemHealthEvent** - `services/penelope/shared/messaging/event_schemas.py`
+- **SystemicAnalysis** - `max-code-cli/core/maximus_integration/client.py`
+- **SystemicViolationType** - `max-code-cli/core/constitutional/validators/p5_systemic.py`
+- **SystemLimits** - `services/maba/shared/constants.py`
+- **SystemLimits** - `services/nis/shared/constants.py`
+- **SystemLimits** - `services/penelope/shared/constants.py`
+- **SystemMetrics** - `services/core/consciousness/reactive_fabric/collectors/metrics_collector.py`
+- **SystemMonitor** - `services/core/autonomic_core/monitor/system_monitor.py`
+- **SystemMonitor** - `services/core/autonomic_core/system_monitor.py`
+- **SystemObserver** - `services/nis/core/system_observer.py`
+- **SystemState** - `services/core/autonomic_core/homeostatic_control.py`
+- **TableConfig** - `max-code-cli/ui/types.py`
+- **TacticalLayer** - `services/core/predictive_coding/layer4_tactical.py`
+- **TacticalLSTM** - `services/core/predictive_coding/layer4_tactical.py`
+- **TapeinophrosyneMonitor** - `services/penelope/core/tapeinophrosyne_monitor.py`
+- **TargetIdentifiers** - `services/core/osint_router.py`
+- **TargetProfileReport** - `services/core/workflows/target_profiling_adw.py`
+- **TargetProfilingWorkflow** - `services/core/workflows/target_profiling_adw.py`
+- **TaskParametersBase** - `max-code-cli/agents/validation_schemas.py`
+- **TaskPlanner** - `max-code-cli/core/task_planner.py`
+- **TDDCycle** - `max-code-cli/core/deter_agent/execution/tdd_enforcer.py`
+- **TDDEnforcer** - `max-code-cli/core/deter_agent/execution_old.py`
+- **TDDEnforcer** - `max-code-cli/core/deter_agent/execution/tdd_enforcer.py`
+- **TDDPhase** - `max-code-cli/core/deter_agent/execution/tdd_enforcer.py`
+- **TDDViolation** - `max-code-cli/core/deter_agent/execution/tdd_enforcer.py`
+- **TemporalBinder** - `services/core/consciousness/temporal_binding.py`
+- **TemporalBlock** - `services/core/predictive_coding/layer3_operational.py`
+- **TemporalConvNet** - `services/core/predictive_coding/layer3_operational.py`
+- **TemporalLink** - `services/core/consciousness/temporal_binding.py`
+- **TerminalError** - `max-code-cli/ui/exceptions.py`
+- **TestAgent** - `max-code-cli/agents/test_agent.py`
+- **TestAgentParameters** - `max-code-cli/agents/validation_schemas.py`
+- **TestAggregation** - `services/core/federated_learning/test_federated_learning.py`
+- **TestAIArtifactChecking** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestArticleIIGuardianInit** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestArticleIIGuardian** - `services/core/governance/guardian/test_guardians.py`
+- **TestArticleIIIGuardianInit** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestArticleIIIGuardian** - `services/core/governance/guardian/test_guardians.py`
+- **TestArticleIVGuardianInit** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestArticleIVGuardian** - `services/core/governance/guardian/test_guardians.py`
+- **TestArticleVGuardianInit** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestArticleVGuardian** - `services/core/governance/guardian/test_guardians.py`
+- **TestAuditLoggerInit** - `services/core/governance/test_audit_infrastructure.py`
+- **TestAuditLog** - `services/core/governance/test_base_100pct.py`
+- **TestAuditTrailChecking** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestAuditTrail** - `services/core/hitl/test_hitl.py`
+- **TestAuthenticationChecking** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestAutonomousGovernance** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestBaseClasses** - `services/core/federated_learning/test_federated_learning.py`
+- **TestBaseClasses** - `services/core/hitl/test_hitl.py`
+- **TestBaseClasses** - `services/core/privacy/test_privacy.py`
+- **TestCallbacks** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestCase** - `max-code-cli/core/deter_agent/execution/tdd_enforcer.py`
+- **TestChaosEngineering** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestChaosExperimentExecution** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestCommunication** - `services/core/federated_learning/test_federated_learning.py`
+- **TestConflictResolution** - `services/core/governance/guardian/test_coordinator.py`
+- **TestConstitutionalViolationException** - `services/core/justice/test_constitutional_validator.py`
+- **TestConstitutionalViolation** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestConstitutionalViolation** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestCoordinatorLifecycle** - `services/core/governance/guardian/test_coordinator.py`
+- **TestCoverageCompletion** - `services/core/justice/test_constitutional_validator.py`
+- **TestCreateDecisionEdgeCases** - `services/core/governance/test_governance_engine_edge_cases.py`
+- **Test_CreateVeto** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestDataPrivacyPolicyRules** - `services/core/governance/test_policy_engine.py`
+- **TestDataPrivacyRulesCoverage** - `services/core/governance/test_policy_engine_100pct.py`
+- **TestDecisionDataclass** - `services/core/governance/test_governance_engine.py`
+- **TestDecisionExpiration** - `services/core/governance/test_governance_engine_edge_cases.py`
+- **TestDecisionExpiration** - `services/core/governance/test_governance_engine.py`
+- **TestDecisionFiltering** - `services/core/governance/test_governance_engine.py`
+- **TestDecisionFramework** - `services/core/hitl/test_hitl.py`
+- **TestDecisionLifecycle** - `services/core/governance/test_governance_engine.py`
+- **TestDecisionMaking** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestDecisionMaking** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestDecisionMaking** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestDecisionMaking** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestDecisionManagement** - `services/core/governance/test_erb_100pct.py`
+- **TestDecisionOperations** - `services/core/governance/test_hitl_interface.py`
+- **TestDecisionQueue** - `services/core/hitl/test_hitl.py`
+- **TestDPAggregator** - `services/core/privacy/test_privacy.py`
+- **TestDPMechanisms** - `services/core/privacy/test_privacy.py`
+- **TestEdgeCases** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestEdgeCases** - `services/core/governance/test_governance_engine.py`
+- **TestEdgeCases** - `services/core/governance/test_policy_engine.py`
+- **TestEdgeCases** - `services/core/justice/test_constitutional_validator.py`
+- **TestEnforceAllPolicies** - `services/core/governance/test_policy_engine.py`
+- **TestEnforcePolicy** - `services/core/governance/test_policy_engine.py`
+- **TestEnums** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestEnums** - `services/core/governance/test_base_100pct.py`
+- **TestERBDecision** - `services/core/governance/test_base_100pct.py`
+- **TestERBMeeting** - `services/core/governance/test_base_100pct.py`
+- **TestERBMember** - `services/core/governance/test_base_100pct.py`
+- **TestErrorHandling** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestEscalationManager** - `services/core/hitl/test_hitl.py`
+- **TestEthicalUsePolicyRules** - `services/core/governance/test_policy_engine.py`
+- **TestEthicalUseRulesCoverage** - `services/core/governance/test_policy_engine_100pct.py`
+- **TestEventStreaming** - `services/core/governance/test_governance_engine.py`
+- **TestEventSubscription** - `services/core/governance/test_governance_engine_edge_cases.py`
+- **TestExperimentalFeatures** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestExport** - `services/core/governance/test_audit_infrastructure.py`
+- **TestFailureRecovery** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestFeatureQuarantine** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestFileChecking** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestFLClient** - `services/core/federated_learning/test_federated_learning.py`
+- **TestFLCoordinator** - `services/core/federated_learning/test_federated_learning.py`
+- **TestGenerator** - `services/core/scripts/batch_test_generator.py`
+- **TestGenerator** - `services/core/scripts/generate_tests.py`
+- **TestGetMetricsEdgeCases** - `services/core/governance/test_governance_engine_edge_cases.py`
+- **TestGetPendingDecisionsEdgeCases** - `services/core/governance/test_governance_engine_edge_cases.py`
+- **TestGitStatusChecking** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestGovernanceConfig** - `services/core/governance/test_base_100pct.py`
+- **TestGovernanceEngineInit** - `services/core/governance/test_governance_engine.py`
+- **TestGovernancePrecedence** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestGovernanceRegistration** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestGovernanceResult** - `services/core/governance/test_base_100pct.py`
+- **TestGuardianAgentInit** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestGuardianAgentLifecycle** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestGuardianBase** - `services/core/governance/guardian/test_guardians.py`
+- **TestGuardianCoordinator** - `services/core/governance/guardian/test_guardians.py`
+- **TestGuardianDecision** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestGuardianDecision** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestGuardianIntegration** - `services/core/governance/guardian/test_guardians.py`
+- **TestGuardianIntervention** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestGuardianIntervention** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestGuardianLifecycle** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestGuardianReport** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestGuardianReport** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestGuardian** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestHITLControls** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestIncidentResponsePolicyRules** - `services/core/governance/test_policy_engine.py`
+- **TestIncidentResponseRulesCoverage** - `services/core/governance/test_policy_engine_100pct.py`
+- **TestInputValidationChecking** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestIntegrationCoverage** - `services/core/governance/test_policy_engine_100pct.py`
+- **TestIntegration** - `services/core/federated_learning/test_federated_learning.py`
+- **TestIntegration** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestIntegration** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestIntegration** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestIntegration** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestIntegration** - `services/core/governance/test_governance_engine.py`
+- **TestIntegration** - `services/core/governance/test_hitl_interface.py`
+- **TestIntegration** - `services/core/hitl/test_hitl.py`
+- **TestIntegrity** - `services/core/governance/test_audit_infrastructure.py`
+- **TestInternalStructure** - `services/core/governance/test_policy_engine_100pct.py`
+- **TestInterventionHandling** - `services/core/governance/guardian/test_coordinator.py`
+- **TestIntervention** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestIntervention** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestIntervention** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestIntervention** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestKillSwitch** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestLeiIAxiomaOvelhaPerdida** - `services/core/governance/test_constitutional_scenarios.py`
+- **TestLeiI** - `services/core/justice/test_constitutional_validator.py`
+- **TestLeiZeroAndLeiIIntegration** - `services/core/governance/test_constitutional_scenarios.py`
+- **TestLeiZeroFlorescimentoHumano** - `services/core/governance/test_constitutional_scenarios.py`
+- **TestLeiZero** - `services/core/justice/test_constitutional_validator.py`
+- **TestLogging** - `services/core/governance/test_audit_infrastructure.py`
+- **TestMeetingManagement** - `services/core/governance/test_erb_100pct.py`
+- **TestMemberManagement** - `services/core/governance/test_erb_100pct.py`
+- **TestMetrics** - `services/core/governance/guardian/test_coordinator.py`
+- **TestMetrics** - `services/core/governance/test_governance_engine.py`
+- **TestMetrics** - `services/core/justice/test_constitutional_validator.py`
+- **TestModelAdapters** - `services/core/federated_learning/test_federated_learning.py`
+- **TestMonitoringLoop** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestMonitoring** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestMonitoring** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestMonitoring** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestMonitoring** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestOperatorInterface** - `services/core/hitl/test_hitl.py`
+- **TestOperatorStats** - `services/core/governance/test_hitl_interface.py`
+- **TestPatternDetection** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestPatternDetection** - `services/core/governance/guardian/test_coordinator.py`
+- **TestPerformance** - `services/core/privacy/test_privacy.py`
+- **TestPolicyEnforcementResult** - `services/core/governance/test_base_100pct.py`
+- **TestPolicyEngineInit** - `services/core/governance/test_policy_engine.py`
+- **TestPolicyRegistryErrorPaths** - `services/core/governance/test_policies_100pct.py`
+- **TestPolicyRegistryIntegration** - `services/core/governance/test_policies_100pct.py`
+- **TestPolicyRegistryUntestedMethods** - `services/core/governance/test_policies_100pct.py`
+- **TestPolicy** - `services/core/governance/test_base_100pct.py`
+- **TestPolicyViolation** - `services/core/governance/test_base_100pct.py`
+- **TestPrivacyAccountant** - `services/core/privacy/test_privacy.py`
+- **TestPrivacyGuarantees** - `services/core/privacy/test_privacy.py`
+- **TestPullRequestScanning** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestQuerying** - `services/core/governance/test_audit_infrastructure.py`
+- **TestQuorumVoting** - `services/core/governance/test_erb_100pct.py`
+- **TestRealWorldScenarios** - `services/core/justice/test_constitutional_validator.py`
+- **TestRedTeamingPolicyRules** - `services/core/governance/test_policy_engine.py`
+- **TestRedTeamingRulesCoverage** - `services/core/governance/test_policy_engine_100pct.py`
+- **TestRemainingBranches** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestReporting** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestReporting** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestReporting** - `services/core/governance/guardian/test_coordinator.py`
+- **TestReporting** - `services/core/governance/test_erb_100pct.py`
+- **TestResiliencePatterns** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestResponsibilityDoctrine** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestRetention** - `services/core/governance/test_audit_infrastructure.py`
+- **TestRiskAssessment** - `services/core/governance/test_governance_engine.py`
+- **TestRiskAssessor** - `services/core/hitl/test_hitl.py`
+- **TestSchemaInitialization** - `services/core/governance/test_audit_infrastructure.py`
+- **TestSessionInfo** - `services/core/governance/test_hitl_interface.py`
+- **TestSessionManagement** - `services/core/governance/test_hitl_interface.py`
+- **TestStatistics** - `services/core/governance/test_audit_infrastructure.py`
+- **TestStats** - `services/core/scripts/industrial_test_generator.py`
+- **TestStats** - `services/core/scripts/industrial_test_generator_v2.py`
+- **TestStats** - `services/core/scripts/industrial_test_generator_v3.py`
+- **TestStats** - `services/core/scripts/industrial_test_generator_v4.py`
+- **TestStatusAndMetrics** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestStatus** - `max-code-cli/core/deter_agent/execution/tdd_enforcer.py`
+- **TestStatusMethods** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestStorage** - `services/core/federated_learning/test_federated_learning.py`
+- **TestSuiteResult** - `services/core/generate_validation_report.py`
+- **TestSystemFragility** - `services/core/governance/guardian/test_article_iv_guardian.py`
+- **TestTestHealthChecking** - `services/core/governance/guardian/test_article_ii_guardian.py`
+- **TestThresholds** - `services/core/governance/guardian/test_coordinator.py`
+- **TestTrustAssumptionChecking** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestTwoManRule** - `services/core/governance/guardian/test_article_v_guardian.py`
+- **TestUpdateDecisionStatusEdgeCases** - `services/core/governance/test_governance_engine_edge_cases.py`
+- **TestUptime** - `services/core/governance/test_governance_engine.py`
+- **TestUtilityMethods** - `services/core/governance/test_policy_engine.py`
+- **TestValidationFlow** - `services/core/justice/test_constitutional_validator.py`
+- **TestValidationWorkflow** - `services/core/governance/guardian/test_article_iii_guardian.py`
+- **TestVetoAction** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestVetoAction** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestVetoOverride** - `services/core/governance/guardian/test_coordinator.py`
+- **TestVetoPower** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestVetoPower** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestViolationHandling** - `services/core/governance/guardian/test_coordinator.py`
+- **TestViolationProcessing** - `services/core/governance/guardian/test_base_coverage.py`
+- **TestViolationProcessing** - `services/core/governance/guardian/test_base_guardian.py`
+- **TestViolationReport** - `services/core/justice/test_constitutional_validator.py`
+- **TestWhistleblowerPolicyRules** - `services/core/governance/test_policy_engine.py`
+- **TestWhistleblowerReport** - `services/core/governance/test_base_100pct.py`
+- **TestWhistleblowerRulesCoverage** - `services/core/governance/test_policy_engine_100pct.py`
+- **TestYourClass** - `services/core/scripts/generate_tests_gemini.py`
+- **TestYourClass** - `services/core/scripts/generate_tests.py`
+- **ThalamusClient** - `services/maba/shared/thalamus_client.py`
+- **ThalamusClient** - `services/nis/shared/thalamus_client.py`
+- **ThalamusClient** - `services/penelope/shared/thalamus_client.py`
+- **ThemeColors** - `max-code-cli/ui/themes.py`
+- **ThemeManager** - `max-code-cli/ui/themes.py`
+- **Theme** - `max-code-cli/ui/themes.py`
+- **ThemeName** - `max-code-cli/ui/themes.py`
+- **ThemeRegistry** - `max-code-cli/ui/themes.py`
+- **ThoughtEvaluation** - `max-code-cli/core/deter_agent/deliberation/tree_of_thoughts.py`
+- **Thought** - `max-code-cli/core/deter_agent/deliberation/tree_of_thoughts.py`
+- **ThoughtNodeData** - `max-code-cli/ui/types.py`
+- **ThoughtNode** - `max-code-cli/ui/tree_of_thoughts.py`
+- **ThoughtTree** - `max-code-cli/ui/tree_of_thoughts.py`
+- **ThreatClassifierAdapter** - `services/core/federated_learning/model_adapters.py`
+- **ThreatDetectionEvent** - `services/maba/shared/messaging/event_schemas.py`
+- **ThreatDetectionEvent** - `services/nis/shared/messaging/event_schemas.py`
+- **ThreatDetectionEvent** - `services/penelope/shared/messaging/event_schemas.py`
+- **ThreatDetectionModel** - `services/core/examples/02_autonomous_training_workflow.py`
+- **ThreatDetectionSPM** - `services/core/consciousness/esgt/spm/base.py`
+- **ThreatException** - `services/maba/shared/exceptions.py`
+- **ThreatException** - `services/nis/shared/exceptions.py`
+- **ThreatException** - `services/penelope/shared/exceptions.py`
+- **ThreatFeedError** - `services/oraculo/threat_feeds/base_feed.py`
+- **ThreatLevel** - `services/core/consciousness/safety.py`
+- **ThreatLevel** - `services/maba/shared/enums.py`
+- **ThreatLevel** - `services/nis/shared/enums.py`
+- **ThreatLevel** - `services/penelope/shared/enums.py`
+- **ThreatLevels** - `services/maba/shared/constants.py`
+- **ThreatLevels** - `services/nis/shared/constants.py`
+- **ThreatLevels** - `services/penelope/shared/constants.py`
+- **ThreatSignal** - `services/core/consciousness/coagulation/cascade.py`
+- **ThreatSummary** - `services/maba/shared/models/apv_legacy.py`
+- **ThreatSummary** - `services/nis/shared/models/apv_legacy.py`
+- **ThreatSummary** - `services/penelope/shared/models/apv_legacy.py`
+- **ThreatType** - `services/maba/shared/enums.py`
+- **ThreatType** - `services/nis/shared/enums.py`
+- **ThreatType** - `services/penelope/shared/enums.py`
+- **ThresholdMonitor** - `services/core/consciousness/safety.py`
+- **TIGConnection** - `services/core/consciousness/archived_old_v4/fabric_old.py`
+- **TIGConnection** - `services/core/consciousness/tig/fabric.py`
+- **TIGFabric** - `services/core/consciousness/archived_old_v4/fabric_old.py`
+- **TIGFabric** - `services/core/consciousness/tig/fabric.py`
+- **TIGNode** - `services/core/consciousness/archived_old_v4/fabric_old.py`
+- **TIGNode** - `services/core/consciousness/tig/fabric.py`
+- **TimeConstants** - `services/maba/shared/constants.py`
+- **TimeConstants** - `services/nis/shared/constants.py`
+- **TimeConstants** - `services/penelope/shared/constants.py`
+- **TimeframeEnum** - `services/eureka/api/ml_metrics.py`
+- **TimeSeriesPoint** - `services/eureka/api/ml_metrics.py`
+- **TokenBucket** - `services/maba/shared/middleware/rate_limiter.py`
+- **TokenBucket** - `services/nis/shared/middleware/rate_limiter.py`
+- **TokenBucket** - `services/penelope/shared/middleware/rate_limiter.py`
+- **TokenConverter** - `max-code-cli/core/auth/token_converter.py`
+- **TokenManager** - `core/auth/token_manager.py`
+- **Token** - `max-code-cli/core/epl/lexer.py`
+- **TokenType** - `max-code-cli/core/epl/lexer.py`
+- **ToMBenchmarkRunner** - `services/core/compassion/tom_benchmark.py`
+- **ToMEngine** - `services/core/compassion/tom_engine.py`
+- **ToolAlreadyRegisteredError** - `max-code-cli/core/tools/registry.py`
+- **ToolBase** - `services/maba/shared/tool_protocol.py`
+- **ToolBase** - `services/nis/shared/tool_protocol.py`
+- **ToolBase** - `services/penelope/shared/tool_protocol.py`
+- **ToolCategory** - `services/maba/shared/maximus_integration.py`
+- **ToolCategory** - `services/nis/shared/maximus_integration.py`
+- **ToolCategory** - `services/penelope/shared/maximus_integration.py`
+- **ToolContent** - `max-code-cli/core/tools/types.py`
+- **ToolExecutionResult** - `services/core/ethical_tool_wrapper.py`
+- **ToolExecutor** - `max-code-cli/core/deter_agent/execution_old.py`
+- **ToolExecutor** - `max-code-cli/core/deter_agent/execution/tool_executor.py`
+- **ToolInvocationRequest** - `services/maba/shared/tool_protocol.py`
+- **ToolInvocationRequest** - `services/nis/shared/tool_protocol.py`
+- **ToolInvocationRequest** - `services/penelope/shared/tool_protocol.py`
+- **ToolInvocationResponse** - `services/maba/shared/tool_protocol.py`
+- **ToolInvocationResponse** - `services/nis/shared/tool_protocol.py`
+- **ToolInvocationResponse** - `services/penelope/shared/tool_protocol.py`
+- **Tool** - `max-code-cli/core/deter_agent/execution/tool_executor.py`
+- **ToolMetadata** - `max-code-cli/core/tools/types.py`
+- **ToolNotFoundError** - `max-code-cli/core/tools/registry.py`
+- **ToolOrchestrator** - `services/core/tool_orchestrator.py`
+- **ToolParameter** - `max-code-cli/core/tools/types.py`
+- **ToolParameter** - `services/maba/shared/tool_protocol.py`
+- **ToolParameter** - `services/nis/shared/tool_protocol.py`
+- **ToolParameter** - `services/penelope/shared/tool_protocol.py`
+- **ToolParameterType** - `services/maba/shared/tool_protocol.py`
+- **ToolParameterType** - `services/nis/shared/tool_protocol.py`
+- **ToolParameterType** - `services/penelope/shared/tool_protocol.py`
+- **ToolRegistryError** - `max-code-cli/core/tools/registry.py`
+- **ToolRegistry** - `max-code-cli/core/tools/registry.py`
+- **ToolResult** - `max-code-cli/core/deter_agent/execution/tool_executor.py`
+- **ToolResult** - `max-code-cli/core/tools/types.py`
+- **ToolResultType** - `max-code-cli/core/tools/types.py`
+- **ToolSchema** - `max-code-cli/core/tools/types.py`
+- **ToolStatus** - `max-code-cli/core/deter_agent/execution/tool_executor.py`
+- **ToolStatus** - `services/maba/shared/tool_protocol.py`
+- **ToolStatus** - `services/nis/shared/tool_protocol.py`
+- **ToolStatus** - `services/penelope/shared/tool_protocol.py`
+- **ToolStep** - `max-code-cli/core/task_planner.py`
+- **ToolType** - `max-code-cli/core/deter_agent/execution/tool_executor.py`
+- **TopicConfig** - `services/maba/shared/messaging/topics.py`
+- **TopicConfig** - `services/nis/shared/messaging/topics.py`
+- **TopicConfig** - `services/penelope/shared/messaging/topics.py`
+- **TopologyConfig** - `services/core/consciousness/archived_old_v4/fabric_old.py`
+- **TopologyConfig** - `services/core/consciousness/tig/fabric.py`
+- **TracedOperation** - `services/maba/shared/vertice_tracing.py`
+- **TracedOperation** - `services/nis/shared/vertice_tracing.py`
+- **TracedOperation** - `services/penelope/shared/vertice_tracing.py`
+- **TrainingConfig** - `services/core/training/layer_trainer.py`
+- **TrainingMetrics** - `services/core/training/layer_trainer.py`
+- **TranslationResult** - `max-code-cli/core/epl/translator.py`
+- **Translator** - `max-code-cli/core/epl/translator.py`
+- **TransparencyViolationType** - `max-code-cli/core/constitutional/validators/p2_api_validator.py`
+- **TreeOfThoughts** - `max-code-cli/core/deter_agent/deliberation_old.py`
+- **TreeOfThoughts** - `max-code-cli/core/deter_agent/deliberation/tree_of_thoughts.py`
+- **TriggerConditions** - `services/core/consciousness/archived_old_v4/coordinator_old.py`
+- **TriggerConditions** - `services/core/consciousness/esgt/coordinator.py`
+- **TriggerType** - `services/core/consciousness/sandboxing/kill_switch.py`
+- **TruncateStrategy** - `max-code-cli/core/context/strategies.py`
+- **TruthViolationType** - `max-code-cli/core/constitutional/validators/p3_truth.py`
+- **TUIIntegrationValidator** - `services/core/test_tui_integration.py`
+- **TUIValidationResult** - `services/core/test_tui_integration.py`
+- **TuningConfig** - `services/core/training/hyperparameter_tuner.py`
+- **TypeRequest** - `services/maba/models.py`
+- **UIBenchmarkSuite** - `max-code-cli/benchmarks/ui_benchmarks.py`
+- **UIConfig** - `max-code-cli/config/settings.py`
+- **UIError** - `max-code-cli/ui/exceptions.py`
+- **UnauthorizedError** - `services/maba/shared/exceptions.py`
+- **UnauthorizedError** - `services/nis/shared/exceptions.py`
+- **UnauthorizedError** - `services/penelope/shared/exceptions.py`
+- **UnifiedKafkaClient** - `services/maba/shared/messaging/kafka_client.py`
+- **UnifiedKafkaClient** - `services/nis/shared/messaging/kafka_client.py`
+- **UnifiedKafkaClient** - `services/penelope/shared/messaging/kafka_client.py`
+- **UnifiedToolExecutor** - `max-code-cli/core/tools/executor_bridge.py`
+- **UpdatedResponse** - `services/maba/shared/response_models.py`
+- **UpdatedResponse** - `services/nis/shared/response_models.py`
+- **UpdatedResponse** - `services/penelope/shared/response_models.py`
+- **UsageBreakdown** - `services/eureka/api/ml_metrics.py`
+- **UserManager** - `max-code-cli/examples/test_all_elite_agents.py`
+- **UsernameSearchRequest** - `services/core/osint_router.py`
+- **UserProgress** - `max-code-cli/core/epl/learning_mode.py`
+- **UserRole** - `services/maba/shared/enums.py`
+- **UserRole** - `services/nis/shared/enums.py`
+- **UserRole** - `services/penelope/shared/enums.py`
+- **UserRoles** - `services/maba/shared/constants.py`
+- **UserRoles** - `services/nis/shared/constants.py`
+- **UserRoles** - `services/penelope/shared/constants.py`
+- **UtilitarianCalculus** - `services/core/motor_integridade_processual/frameworks/utilitarian.py`
+- **ValidatePatchRequest** - `services/penelope/models.py`
+- **ValidationErrorResponse** - `services/maba/shared/response_models.py`
+- **ValidationErrorResponse** - `services/nis/shared/response_models.py`
+- **ValidationErrorResponse** - `services/penelope/shared/response_models.py`
+- **ValidationError** - `services/maba/shared/exceptions.py`
+- **ValidationError** - `services/nis/shared/exceptions.py`
+- **ValidationError** - `services/penelope/shared/exceptions.py`
+- **ValidationIssue** - `services/core/training/data_validator.py`
+- **ValidationMetrics** - `services/core/consciousness/mea/prediction_validator.py`
+- **ValidationReportGenerator** - `services/core/generate_validation_report.py`
+- **ValidationReport** - `max-code-cli/validate_fase2.py`
+- **ValidationResponse** - `services/penelope/models.py`
+- **ValidationResult** - `services/core/training/data_validator.py`
+- **ValidationResult** - `services/core/validate_regra_de_ouro.py`
+- **ValidationResult** - `services/eureka/git_integration/models.py`
+- **ValidationResult** - `services/penelope/models.py`
+- **ValidationSeverity** - `services/core/training/data_validator.py`
+- **ValidationTestResult** - `services/penelope/models.py`
+- **VaultClient** - `services/maba/shared/vault_client.py`
+- **VaultClient** - `services/nis/shared/vault_client.py`
+- **VaultClient** - `services/penelope/shared/vault_client.py`
+- **VaultConfig** - `services/maba/shared/vault_client.py`
+- **VaultConfig** - `services/nis/shared/vault_client.py`
+- **VaultConfig** - `services/penelope/shared/vault_client.py`
+- **VectorDBClient** - `services/core/_demonstration/vector_db_client.py`
+- **VerticeException** - `services/maba/shared/exceptions.py`
+- **VerticeException** - `services/nis/shared/exceptions.py`
+- **VerticeException** - `services/penelope/shared/exceptions.py`
+- **VetoAction** - `services/core/governance/guardian/base.py`
+- **VetoException** - `services/core/ethics/base.py`
+- **ViolationLevel** - `services/core/justice/constitutional_validator.py`
+- **Violation** - `max-code-cli/core/constitutional/models.py`
+- **ViolationReport** - `services/core/justice/constitutional_validator.py`
+- **ViolationSeverity** - `max-code-cli/core/constitutional/models.py`
+- **ViolationSeverity** - `services/core/compliance/base.py`
+- **_ViolationTypeAdapter** - `services/core/consciousness/safety.py`
+- **ViolationType** - `services/core/consciousness/safety.py`
+- **ViolationType** - `services/core/justice/constitutional_validator.py`
+- **VirtueEthicsAssessment** - `services/core/ethics/virtue_ethics.py`
+- **VirtueEthics** - `services/core/motor_integridade_processual/frameworks/virtue.py`
+- **VirtueMetrics** - `max-code-cli/integration/penelope_client.py`
+- **VirtuesMetricsResponse** - `max-code-cli/integration/penelope_client.py`
+- **VisualizationData** - `max-code-cli/core/maximus_integration/nis_client.py`
+- **VulnerabilityConfirmer** - `services/eureka/confirmation/vulnerability_confirmer.py`
+- **VulnerabilityFix** - `services/eureka/data/few_shot_database.py`
+- **VulnerabilityRecord** - `services/maba/shared/security_tools/vulnerability_scanner.py`
+- **VulnerabilityRecord** - `services/nis/shared/security_tools/vulnerability_scanner.py`
+- **VulnerabilityRecord** - `services/penelope/shared/security_tools/vulnerability_scanner.py`
+- **VulnerabilityScanner** - `services/maba/shared/security_tools/vulnerability_scanner.py`
+- **VulnerabilityScanner** - `services/nis/shared/security_tools/vulnerability_scanner.py`
+- **VulnerabilityScanner** - `services/penelope/shared/security_tools/vulnerability_scanner.py`
+- **VulnerabilitySeverity** - `services/maba/shared/security_tools/vulnerability_scanner.py`
+- **VulnerabilitySeverity** - `services/nis/shared/security_tools/vulnerability_scanner.py`
+- **VulnerabilitySeverity** - `services/penelope/shared/security_tools/vulnerability_scanner.py`
+- **VulnerableLocation** - `services/eureka/eureka_models/confirmation/confirmation_result.py`
+- **VulnerableLocation** - `services/eureka/models/confirmation/confirmation_result.py`
+- **WebSocketConnection** - `services/oraculo/websocket/apv_stream_manager.py`
+- **WebSocketMessage** - `services/maba/shared/websocket_gateway.py`
+- **WebSocketMessage** - `services/nis/shared/websocket_gateway.py`
+- **WebSocketMessage** - `services/penelope/shared/websocket_gateway.py`
+- **WhistleblowerReport** - `services/core/governance/base.py`
+- **WisdomBaseClient** - `services/penelope/core/wisdom_base_client.py`
+- **WisdomBaseResponse** - `max-code-cli/integration/penelope_client.py`
+- **WisdomPrecedent** - `max-code-cli/integration/penelope_client.py`
+- **WisdomPrecedent** - `services/penelope/models.py`
+- **WisdomQueryRequest** - `services/penelope/models.py`
+- **WisdomQueryResponse** - `services/penelope/models.py`
+- **WorkflowException** - `services/maba/shared/exceptions.py`
+- **WorkflowException** - `services/nis/shared/exceptions.py`
+- **WorkflowException** - `services/penelope/shared/exceptions.py`
+- **WorkflowMetrics** - `services/core/test_workflow_complete.py`
+- **WorkflowPhase** - `services/core/test_workflow_complete.py`
+- **WorkflowStatus** - `max-code-cli/integration/orchestrator_client.py`
+- **WorkflowStatus** - `services/core/workflows/attack_surface_adw.py`
+- **WorkflowStatus** - `services/core/workflows/credential_intel_adw.py`
+- **WorkflowStatus** - `services/core/workflows/target_profiling_adw.py`
+- **WorkflowStatus** - `services/orchestrator/main.py`
+- **WorkflowValidator** - `services/core/test_workflow_complete.py`
+- **WorldClassTools** - `services/core/_demonstration/tools_world_class.py`
+- **XAICheckResult** - `services/core/ethical_guardian.py`
+
+---
+
+## By Service
+
+### core
+
+- `AbstractEthicalFramework` (base.py)
+- `AbstractNeeds` (monitor_old.py)
+- `AbstractNeeds` (monitor.py)
+- `ABTestMetricsResponse` (api.py)
+- `ABTestResult` (api.py)
+- `AcetylcholineModulator` (acetylcholine_hardened.py)
+- `AcetylcholineState` (acetylcholine_system.py)
+- `AcetylcholineSystem` (acetylcholine_system.py)
+- `ActionContext` (base.py)
+- `ActionPlan` (action_plan.py)
+- `ActionStep` (action_plan.py)
+- `ActionType` (action_plan.py)
+- `ActionType` (base.py)
+- `ActionType` (resource_executor.py)
+- `ActionType` (resource_planner.py)
+- `AdvancedNoiseMechanisms` (dp_mechanisms.py)
+- `AdvancedTools` (advanced_tools.py)
+- `AgentTemplates` (agent_templates.py)
+- `AggregationResult` (aggregation.py)
+- `AggregationStrategy` (base.py)
+- `AIAnalyzer` (ai_analyzer.py)
+- `AllServicesTools` (all_services_tools.py)
+- `AlternativeGenerator` (alternatives.py)
+- `AlternativeSuggester` (alternatives.py)
+- `AnomalyDetector` (anomaly_detector.py)
+- `AnomalyDetector` (safety.py)
+- `Anomaly` (resource_analyzer.py)
+- `AnomalyType` (resource_analyzer.py)
+- `ApplicationSensors` (sensor_definitions.py)
+- `ApplyMaximus` (apply_maximus.py)
+- `ApproveDecisionRequest` (api_routes.py)
+- `APVEvent` (api.py)
+- `APVStats` (api.py)
+- `ArousalAdjustment` (api.py)
+- `ArousalBoundEnforcer` (controller.py)
+- `ArousalConfig` (controller_old.py)
+- `ArousalConfig` (controller.py)
+- `ArousalController` (controller_old.py)
+- `ArousalController` (controller.py)
+- `ArousalLevel` (controller_old.py)
+- `ArousalLevel` (controller.py)
+- `ArousalModulationConfig` (arousal_integration.py)
+- `ArousalModulation` (controller_old.py)
+- `ArousalModulation` (controller.py)
+- `ArousalRateLimiter` (controller.py)
+- `ArousalState` (controller_old.py)
+- `ArousalState` (controller.py)
+- `ArticleIIGuardian` (article_ii_guardian.py)
+- `ArticleIIIGuardian` (article_iii_guardian.py)
+- `ArticleIVGuardian` (article_iv_guardian.py)
+- `ArticleVGuardian` (article_v_guardian.py)
+- `AttackSurfaceReport` (attack_surface_adw.py)
+- `AttackSurfaceRequest` (adw_router.py)
+- `AttackSurfaceTarget` (attack_surface_adw.py)
+- `AttackSurfaceWorkflow` (attack_surface_adw.py)
+- `AttentionSchemaModel` (attention_schema.py)
+- `AttentionSignal` (attention_schema.py)
+- `AttentionState` (attention_schema.py)
+- `AttentionSystem` (attention_core.py)
+- `AuditEntry` (base.py)
+- `AuditLog` (base.py)
+- `AuditLogger` (audit_infrastructure.py)
+- `AuditLogger` (audit_trail.py)
+- `AuditLogLevel` (base.py)
+- `AuditQuery` (audit_trail.py)
+- `AuditTrail` (audit_trail.py)
+- `AutobiographicalNarrative` (autobiographical_narrative.py)
+- `AutomationLevel` (base.py)
+- `AutonomousAgent` (test_guardians.py)
+- `AutonomousGoalGenerator` (goals.py)
+- `BaseAggregator` (aggregation.py)
+- `BaseHandler` (test_guardians.py)
+- `BaseModelAdapter` (model_adapters.py)
+- `BatchConfig` (batch_predictor.py)
+- `BatchPredictor` (batch_predictor.py)
+- `BatchRequest` (batch_predictor.py)
+- `BatchResponse` (batch_predictor.py)
+- `BatchTestRunner` (batch_test_generator.py)
+- `BehavioralGNN` (layer2_behavioral.py)
+- `BehavioralLayer` (layer2_behavioral.py)
+- `BeliefExplainer` (introspection_engine.py)
+- `BeliefGraph` (recursive_reasoner.py)
+- `Belief` (recursive_reasoner.py)
+- `BeliefRevision` (contradiction_detector.py)
+- `BeliefType` (recursive_reasoner.py)
+- `BenchmarkMetrics` (benchmark_suite.py)
+- `BenchmarkResult` (benchmark_suite.py)
+- `BenchmarkSuite` (benchmark_suite.py)
+- `BiasDetectionResult` (base.py)
+- `BiasDetector` (bias_detector.py)
+- `BiasDetector` (meta_monitor.py)
+- `BiasInsight` (meta_monitor.py)
+- `BiblicalArticleProcessor` (constitutional_logging.py)
+- `BiomimeticSafetyBridge` (biomimetic_safety_bridge.py)
+- `BoundaryAssessment` (boundary_detector.py)
+- `BoundaryDetector` (boundary_detector.py)
+- `BridgeConfig` (biomimetic_safety_bridge.py)
+- `BridgeState` (biomimetic_safety_bridge.py)
+- `BroadcastOptions` (event_broadcaster.py)
+- `CacheActuator` (cache_actuator.py)
+- `CalibrationMetrics` (meta_monitor.py)
+- `CampaignRequest` (adw_router.py)
+- `CampaignResponse` (adw_router.py)
+- `CascadePathway` (cascade.py)
+- `CascadePhase` (cascade.py)
+- `CascadeState` (cascade.py)
+- `CaseEmbedder` (embeddings.py)
+- `CasePrecedent` (precedent_database.py)
+- `CBREngine` (cbr_engine.py)
+- `CBRResult` (cbr_engine.py)
+- `CertificationResult` (certifications.py)
+- `ChainOfThought` (chain_of_thought.py)
+- `CircuitBreaker` (fabric.py)
+- `CircuitBreaker` (loadbalancer_actuator.py)
+- `CircuitBreaker` (reasoning_engine.py)
+- `CircuitState` (reasoning_engine.py)
+- `ClientConfig` (fl_client.py)
+- `ClientInfo` (base.py)
+- `ClockOffset` (sync.py)
+- `ClockRole` (sync.py)
+- `CoagulationCascade` (cascade.py)
+- `CoagulationResponse` (cascade.py)
+- `CodeAnalyzer` (batch_test_generator.py)
+- `CoherenceQuality` (coherence.py)
+- `CoherenceValidator` (coherence.py)
+- `CollectedEvent` (data_collection.py)
+- `Colors` (demo_maximus_complete.py)
+- `CompassionateResponse` (prefrontal_cortex.py)
+- `ComplianceAlert` (monitoring.py)
+- `ComplianceCheckResult` (compliance_engine.py)
+- `ComplianceCheckResult` (ethical_guardian.py)
+- `ComplianceConfig` (base.py)
+- `ComplianceEngine` (compliance_engine.py)
+- `ComplianceMonitor` (monitoring.py)
+- `ComplianceReport` (audit_trail.py)
+- `ComplianceResult` (base.py)
+- `ComplianceSnapshot` (compliance_engine.py)
+- `ComplianceStatus` (base.py)
+- `ComplianceViolation` (base.py)
+- `CompositeValidator` (validators.py)
+- `CompositionType` (privacy_accountant.py)
+- `ComputeSensors` (sensor_definitions.py)
+- `ConcreteGuardian` (test_base_guardian.py)
+- `ConfidenceCalibrator` (meta_monitor.py)
+- `ConfidenceScoring` (confidence_scoring.py)
+- `ConfidenceTracker` (confidence_tracker.py)
+- `ConflictResolution` (coordinator.py)
+- `ConflictResolver` (conflict_resolver.py)
+- `ConnectionManager` (sse_server.py)
+- `ConsciousnessConfig` (system.py)
+- `ConsciousnessContainer` (__init__.py)
+- `ConsciousnessEvent` (event_collector.py)
+- `ConsciousnessIntegrationDemo` (integration_example.py)
+- `ConsciousnessSafetyProtocol` (safety.py)
+- `ConsciousnessStateResponse` (api.py)
+- `ConsciousnessSystem` (system.py)
+- `ConsequentialistEngine` (consequentialist_engine.py)
+- `ConstitutionalArticle` (base.py)
+- `ConstitutionalHealthCheck` (health_checks.py)
+- `ConstitutionalLogProcessor` (constitutional_logging.py)
+- `ConstitutionalTracer` (constitutional_tracing.py)
+- `ConstitutionalValidator` (constitutional_validator.py)
+- `ConstitutionalValidator` (validators.py)
+- `ConstitutionalViolation` (base.py)
+- `ConstitutionalViolation` (constitutional_validator.py)
+- `ContinuousTrainingPipeline` (continuous_training.py)
+- `ContradictionDetector` (contradiction_detector.py)
+- `ContradictionDetector` (contradiction_detector.py)
+- `Contradiction` (recursive_reasoner.py)
+- `ContradictionSummary` (contradiction_detector.py)
+- `ContradictionType` (recursive_reasoner.py)
+- `Control` (base.py)
+- `ControlCategory` (base.py)
+- `CoordinatorConfig` (coordinator_hardened.py)
+- `CoordinatorConfig` (fl_coordinator.py)
+- `CoordinatorMetrics` (coordinator.py)
+- `CounterfactualConfig` (counterfactual.py)
+- `CounterfactualGenerator` (counterfactual.py)
+- `CoverageAnalyzer` (coverage_report.py)
+- `CoverageCommander` (coverage_commander.py)
+- `CoverageSnapshot` (coverage_tracker.py)
+- `CoverageTracker` (coverage_tracker.py)
+- `CredentialFinding` (credential_intel_adw.py)
+- `CredentialIntelReport` (credential_intel_adw.py)
+- `CredentialIntelRequest` (adw_router.py)
+- `CredentialIntelWorkflow` (credential_intel_adw.py)
+- `CredentialRiskLevel` (credential_intel_adw.py)
+- `CredentialTarget` (credential_intel_adw.py)
+- `CyberSecLIME` (lime_cybersec.py)
+- `CyberSecSHAP` (shap_cybersec.py)
+- `DatabaseActuator` (database_actuator.py)
+- `DataCollector` (data_collection.py)
+- `DataOrchestrator` (data_orchestrator.py)
+- `DataPreprocessor` (data_preprocessor.py)
+- `DataProcessor` (test_guardians.py)
+- `DataService` (test_guardians.py)
+- `DatasetBuilder` (dataset_builder.py)
+- `DatasetSplit` (dataset_builder.py)
+- `DataSource` (data_collection.py)
+- `DataSourceType` (data_collection.py)
+- `DataValidator` (data_validator.py)
+- `DecisionActionRequest` (api_routes.py)
+- `DecisionActionResponse` (api_routes.py)
+- `DecisionAPI` (decision_api.py)
+- `DecisionArbiter` (decision.py)
+- `DecisionContext` (base.py)
+- `DecisionFormatter` (decision.py)
+- `Decision` (governance_engine.py)
+- `DecisionLevel` (verdict.py)
+- `DecisionQueue` (decision_queue.py)
+- `DecisionResponse` (api_routes.py)
+- `DecisionResult` (decision_framework.py)
+- `DecisionStatus` (base.py)
+- `DecisionStatus` (governance_engine.py)
+- `DecisionType` (base.py)
+- `DeepSearchOptions` (osint_router.py)
+- `DeepSearchRequest` (osint_router.py)
+- `DetailLevel` (base.py)
+- `DistributedConfig` (distributed_trainer.py)
+- `DistributedOrganismTools` (distributed_organism_tools.py)
+- `DistributedTrainer` (distributed_trainer.py)
+- `DockerActuator` (docker_actuator.py)
+- `DopamineModulator` (dopamine_hardened.py)
+- `DopamineState` (dopamine_system.py)
+- `DopamineSystem` (dopamine_system.py)
+- `DPAggregator` (aggregation.py)
+- `DPAggregator` (dp_aggregator.py)
+- `DPQueryType` (dp_aggregator.py)
+- `DPResult` (base.py)
+- `DummyModel` (engine.py)
+- `DummyThreatClassifier` (test_xai.py)
+- `EarlyStopping` (layer_trainer.py)
+- `EdgeCasesTester` (test_edge_cases.py)
+- `Effect` (action_plan.py)
+- `EmailSearchRequest` (osint_router.py)
+- `EmergencyCircuitBreaker` (emergency_circuit_breaker.py)
+- `EmergencyShutdownRequest` (api.py)
+- `EncryptedMessage` (communication.py)
+- `EngineConfig` (engine.py)
+- `EnhancedCognitionTools` (enhanced_cognition_tools.py)
+- `Episode` (core.py)
+- `EpisodicBuffer` (memory_buffer.py)
+- `EpisodicMemory` (core.py)
+- `ERBDecision` (base.py)
+- `ERBManager` (ethics_review_board.py)
+- `ERBMeeting` (base.py)
+- `ERBMember` (base.py)
+- `ERBMemberRole` (base.py)
+- `EscalateDecisionRequest` (api_routes.py)
+- `EscalationConfig` (base.py)
+- `EscalationEvent` (escalation_manager.py)
+- `EscalationManager` (escalation_manager.py)
+- `EscalationRule` (escalation_manager.py)
+- `EscalationType` (escalation_manager.py)
+- `ESGTArousalBridge` (arousal_integration.py)
+- `ESGTCoherenceMetrics` (coherence.py)
+- `ESGTCoordinator` (coordinator_old.py)
+- `ESGTCoordinator` (coordinator.py)
+- `ESGTEvent` (coordinator_old.py)
+- `ESGTEvent` (coordinator.py)
+- `ESGTEventResponse` (api.py)
+- `ESGTPhase` (coordinator_old.py)
+- `ESGTPhase` (coordinator.py)
+- `ESGTSubscriber` (esgt_subscriber.py)
+- `EthicalCache` (base.py)
+- `EthicalDecisionResult` (ethical_guardian.py)
+- `EthicalDecisionType` (ethical_guardian.py)
+- `EthicalException` (base.py)
+- `EthicalFramework` (base.py)
+- `EthicalFramework` (base.py)
+- `EthicalFrameworkResult` (base.py)
+- `EthicalGuardian` (ethical_guardian.py)
+- `EthicalIntegrationEngine` (integration_engine.py)
+- `EthicalToolWrapper` (ethical_tool_wrapper.py)
+- `EthicalVerdict` (base.py)
+- `EthicalVerdict` (verdict.py)
+- `EthicsCheckResult` (ethical_guardian.py)
+- `EvaluationMetrics` (evaluator.py)
+- `EvaluationRequest` (api.py)
+- `EvaluationResponse` (api.py)
+- `EventBroadcaster` (event_broadcaster.py)
+- `EventCollector` (event_collector.py)
+- `Event` (event.py)
+- `EventGraph` (layer2_behavioral.py)
+- `EventSeverity` (event_collector.py)
+- `EventType` (event_collector.py)
+- `EventType` (event.py)
+- `EventVAE` (layer1_sensory.py)
+- `Evidence` (base.py)
+- `EvidenceCollector` (evidence_collector.py)
+- `EvidenceItem` (evidence_collector.py)
+- `EvidencePackage` (evidence_collector.py)
+- `EvidenceType` (base.py)
+- `ExecutionResult` (resource_executor.py)
+- `ExplainerBase` (base.py)
+- `ExplanationCache` (base.py)
+- `ExplanationEngine` (engine.py)
+- `ExplanationException` (base.py)
+- `ExplanationResult` (base.py)
+- `ExplanationTimeoutException` (base.py)
+- `ExplanationType` (base.py)
+- `ExponentialMechanism` (dp_mechanisms.py)
+- `FabricMetrics` (fabric_old.py)
+- `FabricMetrics` (fabric.py)
+- `FailurePredictor` (failure_predictor.py)
+- `FairnessAlert` (monitor.py)
+- `FairnessCheckResult` (ethical_guardian.py)
+- `FairnessConstraints` (constraints.py)
+- `FairnessException` (base.py)
+- `FairnessMetric` (base.py)
+- `FairnessMonitor` (monitor.py)
+- `FairnessResult` (base.py)
+- `FairnessSnapshot` (monitor.py)
+- `FairnessViolationException` (base.py)
+- `FeatureHistory` (feature_tracker.py)
+- `FeatureImportance` (base.py)
+- `FeatureImportanceTracker` (feature_tracker.py)
+- `FedAvgAggregator` (aggregation.py)
+- `FieldInfo` (industrial_test_generator_v3.py)
+- `FieldInfo` (industrial_test_generator_v4.py)
+- `Finding` (attack_surface_adw.py)
+- `FirstOrderLogic` (contradiction_detector.py)
+- `FirstPersonPerspective` (self_model.py)
+- `FLCheckResult` (ethical_guardian.py)
+- `FLClient` (fl_client.py)
+- `FLCommunicationChannel` (communication.py)
+- `FLConfig` (base.py)
+- `FLCoordinator` (fl_coordinator.py)
+- `FLMetrics` (base.py)
+- `FLModelRegistry` (storage.py)
+- `FLRound` (base.py)
+- `FLRoundHistory` (storage.py)
+- `FLStatus` (base.py)
+- `FovealAnalysis` (attention_core.py)
+- `FovealAnalyzer` (attention_core.py)
+- `FrameworkInfo` (api.py)
+- `FrameworkName` (verdict.py)
+- `FrameworkVerdict` (verdict.py)
+- `FrequencyLimiter` (coordinator.py)
+- `FuzzyLogicController` (fuzzy_controller.py)
+- `GapAnalysisResult` (base.py)
+- `GapAnalyzer` (gap_analyzer.py)
+- `Gap` (base.py)
+- `GaussianMechanism` (dp_mechanisms.py)
+- `GeminiClient` (gemini_client.py)
+- `GeminiConfig` (gemini_client.py)
+- `GeminiTestGenerator` (generate_tests_gemini.py)
+- `GlobalNeuromodulationState` (neuromodulation_controller.py)
+- `GoalGenerationConfig` (goals.py)
+- `Goal` (goals.py)
+- `Goal` (monitor.py)
+- `GoalPriority` (goals.py)
+- `GoalType` (goals.py)
+- `GovernanceAction` (base.py)
+- `GovernanceCheckResult` (ethical_guardian.py)
+- `GovernanceConfig` (base.py)
+- `GovernanceE2EValidator` (test_governance_e2e.py)
+- `GovernanceEngine` (governance_engine.py)
+- `GovernanceResult` (base.py)
+- `GovernanceSSEServer` (sse_server.py)
+- `GPUTrainer` (gpu_trainer.py)
+- `GPUTrainingConfig` (gpu_trainer.py)
+- `GraphConvLayer` (layer2_behavioral.py)
+- `GuardianAgent` (base.py)
+- `GuardianCoordinator` (coordinator.py)
+- `GuardianDecision` (base.py)
+- `GuardianIntervention` (base.py)
+- `GuardianPriority` (base.py)
+- `GuardianReport` (base.py)
+- `GWDCompliance` (coherence.py)
+- `HealthResponse` (api.py)
+- `HealthResponse` (api_routes.py)
+- `HealthStatus` (health_checks.py)
+- `HierarchicalPredictiveCodingNetwork` (hpc_network.py)
+- `HierarchyConfig` (hierarchy_hardened.py)
+- `HierarchyState` (hierarchy_hardened.py)
+- `HITLCheckResult` (ethical_guardian.py)
+- `HITLConfig` (base.py)
+- `HITLDecision` (base.py)
+- `HITLDecisionFramework` (decision_framework.py)
+- `HITLInterface` (hitl_interface.py)
+- `HITLQueue` (hitl_queue.py)
+- `HomeostaticControlLoop` (hcl_orchestrator.py)
+- `HomeostaticControlLoop` (homeostatic_control.py)
+- `HyperparameterTuner` (hyperparameter_tuner.py)
+- `HypothesisTestGenerator` (industrial_test_generator_v5_hypothesis.py)
+- `IEEE7000Checker` (certifications.py)
+- `ImmuneEnhancementTools` (immune_enhancement_tools.py)
+- `IncidentReport` (safety.py)
+- `IndustrialTestGenerator` (industrial_test_generator.py)
+- `IndustrialTestGeneratorV2` (industrial_test_generator_v2.py)
+- `IndustrialTestGeneratorV3` (industrial_test_generator_v3.py)
+- `IndustrialTestGeneratorV4` (industrial_test_generator_v4.py)
+- `InferenceConfig` (inference_engine.py)
+- `InferenceEngine` (inference_engine.py)
+- `InsufficientDataException` (base.py)
+- `IntegratedEthicalDecision` (integration_engine.py)
+- `InternalStateMonitor` (monitor_old.py)
+- `InternalStateMonitor` (monitor.py)
+- `InteroceptionConfig` (monitor_old.py)
+- `InteroceptionConfig` (monitor.py)
+- `InterventionType` (base.py)
+- `IntrospectionEngine` (introspection_engine.py)
+- `IntrospectionHighlight` (introspection_engine.py)
+- `IntrospectionReport` (introspection_engine.py)
+- `IntrospectiveSummary` (self_model.py)
+- `ISO27001Checker` (certifications.py)
+- `KafkaMetricsStreamer` (kafka_streamer.py)
+- `KantianDeontology` (kantian.py)
+- `KantianImperativeChecker` (kantian_checker.py)
+- `KillSwitch` (kill_switch.py)
+- `KillSwitch` (safety.py)
+- `KillSwitchTrigger` (kill_switch.py)
+- `KnowledgeBase` (knowledge_base.py)
+- `KubernetesActuator` (kubernetes_actuator.py)
+- `KuramotoNetwork` (kuramoto.py)
+- `KuramotoOscillator` (kuramoto.py)
+- `LaplaceMechanism` (dp_mechanisms.py)
+- `LargeDetectionModel` (03_performance_optimization_pipeline.py)
+- `LatestAPVResponse` (api.py)
+- `Layer1Preprocessor` (data_preprocessor.py)
+- `Layer1Sensory` (layer1_sensory_hardened.py)
+- `Layer2Behavioral` (layer2_behavioral_hardened.py)
+- `Layer2Preprocessor` (data_preprocessor.py)
+- `Layer3Operational` (layer3_operational_hardened.py)
+- `Layer3Preprocessor` (data_preprocessor.py)
+- `Layer4Tactical` (layer4_tactical_hardened.py)
+- `Layer5Strategic` (layer5_strategic_hardened.py)
+- `LayerConfig` (layer_base_hardened.py)
+- `LayerPreprocessor` (data_preprocessor.py)
+- `LayerState` (layer_base_hardened.py)
+- `LayerTrainer` (layer_trainer.py)
+- `LayerType` (data_preprocessor.py)
+- `LoadBalancerActuator` (loadbalancer_actuator.py)
+- `LRUCache` (inference_engine.py)
+- `LRUCache` (social_memory.py)
+- `LRUCache` (social_memory_sqlite.py)
+- `LSTMAutoencoder` (anomaly_detector.py)
+- `MalwareDetectorAdapter` (model_adapters.py)
+- `MaximusDemo` (demo_maximus_complete.py)
+- `MaximusIntegrated` (maximus_integrated.py)
+- `MaximusMetricsExporter` (prometheus_exporter.py)
+- `MCEAClient` (mcea_client.py)
+- `MEABridge` (mea_bridge.py)
+- `MEAContextSnapshot` (mea_bridge.py)
+- `MemoryRetrievalSPM` (base.py)
+- `MemorySystem` (memory_system.py)
+- `MessageType` (communication.py)
+- `MetacognitionMetrics` (metacognition.py)
+- `MetacognitionValidator` (metacognition.py)
+- `MetacognitiveMonitor` (monitor.py)
+- `MetaMonitoringReport` (meta_monitor.py)
+- `MetaMonitor` (meta_monitor.py)
+- `MetricCategory` (metrics_monitor.py)
+- `MetricsCollector` (meta_monitor.py)
+- `MetricsCollector` (metrics_collector.py)
+- `MetricsCollector` (metrics.py)
+- `MetricsCollector` (metrics.py)
+- `MetricsExporter` (metrics_exporter.py)
+- `MetricsMonitorConfig` (metrics_monitor.py)
+- `MetricsResponse` (api.py)
+- `MetricsSnapshot` (metrics_monitor.py)
+- `MetricsSPM` (metrics_monitor.py)
+- `MIPClient` (client.py)
+- `MIPClientContext` (client.py)
+- `MIPClientError` (client.py)
+- `MIPSettings` (config.py)
+- `MIPTimeoutError` (client.py)
+- `MitigationEngine` (mitigation.py)
+- `MitigationResult` (base.py)
+- `MLModelSensors` (sensor_definitions.py)
+- `MMEIClient` (mmei_client.py)
+- `ModelEvaluator` (evaluator.py)
+- `ModelMetadata` (model_registry.py)
+- `ModelNotSupportedException` (base.py)
+- `ModelPruner` (pruner.py)
+- `ModelQuantizer` (quantizer.py)
+- `ModelRegistry` (model_registry.py)
+- `ModelType` (base.py)
+- `ModelUpdate` (base.py)
+- `ModelVersion` (storage.py)
+- `ModulationRequest` (coordinator_hardened.py)
+- `ModulatorConfig` (dopamine_hardened.py)
+- `ModulatorConfig` (modulator_base.py)
+- `ModulatorState` (dopamine_hardened.py)
+- `ModulatorState` (modulator_base.py)
+- `ModuleCoverage` (coverage_tracker.py)
+- `ModuleInfo` (industrial_test_generator.py)
+- `ModuleInfo` (industrial_test_generator_v2.py)
+- `ModuleInfo` (industrial_test_generator_v3.py)
+- `ModuleInfo` (industrial_test_generator_v4.py)
+- `ModuleStatus` (coverage_commander.py)
+- `MonitoringMetrics` (monitoring.py)
+- `NarrativeGenerator` (introspection_engine.py)
+- `NarrativeResult` (autobiographical_narrative.py)
+- `NeedUrgency` (monitor_old.py)
+- `NeedUrgency` (monitor.py)
+- `NetworkSensors` (sensor_definitions.py)
+- `NeuromodulationController` (neuromodulation_controller.py)
+- `NeuromodulationCoordinator` (coordinator_hardened.py)
+- `NeuromodulatorBase` (modulator_base.py)
+- `NodeHealth` (fabric.py)
+- `NodeState` (fabric_old.py)
+- `NodeState` (fabric.py)
+- `NorepinephrineModulator` (norepinephrine_hardened.py)
+- `NorepinephrineState` (norepinephrine_system.py)
+- `NorepinephrineSystem` (norepinephrine_system.py)
+- `OffensiveArsenalTools` (offensive_arsenal_tools.py)
+- `ONNXExportConfig` (onnx_exporter.py)
+- `ONNXExporter` (onnx_exporter.py)
+- `ONNXExportResult` (onnx_exporter.py)
+- `OperationalLayer` (layer3_operational.py)
+- `OperationalMode` (homeostatic_control.py)
+- `OperationalTCN` (layer3_operational.py)
+- `OperatorAction` (base.py)
+- `OperatorConnection` (sse_server.py)
+- `OperatorInterface` (operator_interface.py)
+- `OperatorMetrics` (operator_interface.py)
+- `OperatorSession` (operator_interface.py)
+- `OperatorSession` (test_workflow_complete.py)
+- `OperatorStatsResponse` (api_routes.py)
+- `OrchestrationDecision` (data_orchestrator.py)
+- `OscillatorConfig` (kuramoto.py)
+- `OscillatorState` (kuramoto.py)
+- `PatternNotFoundError` (social_memory.py)
+- `PatternNotFoundError` (social_memory_sqlite.py)
+- `PendingStatsResponse` (api_routes.py)
+- `PerformanceDegradationDetector` (degradation_detector.py)
+- `PeripheralDetection` (attention_core.py)
+- `PeripheralMonitor` (attention_core.py)
+- `PerturbationConfig` (lime_cybersec.py)
+- `PhaseCoherence` (kuramoto.py)
+- `PhiProxyMetrics` (phi_proxies.py)
+- `PhiProxyValidator` (phi_proxies.py)
+- `PhoneSearchRequest` (osint_router.py)
+- `PhysicalMetrics` (monitor_old.py)
+- `PhysicalMetrics` (monitor.py)
+- `Policy` (base.py)
+- `PolicyEnforcementResult` (base.py)
+- `PolicyEngine` (policy_engine.py)
+- `PolicyRegistry` (policies.py)
+- `PolicySeverity` (base.py)
+- `PolicyType` (base.py)
+- `PolicyViolation` (base.py)
+- `PositionalEncoding` (layer5_strategic.py)
+- `PrecedentDB` (precedent_database.py)
+- `PrecedentFeedbackRequest` (api.py)
+- `PrecedentMetricsResponse` (api.py)
+- `PrecedentResponse` (api.py)
+- `Precondition` (action_plan.py)
+- `PredictionError` (sensory_esgt_bridge.py)
+- `PredictionTrace` (attention_schema.py)
+- `PredictionValidator` (prediction_validator.py)
+- `PredictiveCodingHierarchy` (hierarchy_hardened.py)
+- `PredictiveCodingLayerBase` (layer_base_hardened.py)
+- `PrefrontalCortex` (prefrontal_cortex.py)
+- `PreprocessedSample` (data_preprocessor.py)
+- `Principialism` (principialism.py)
+- `PrinciplismFramework` (principialism.py)
+- `Priority` (batch_predictor.py)
+- `PrivacyAccountant` (privacy_accountant.py)
+- `PrivacyBudget` (base.py)
+- `PrivacyCheckResult` (ethical_guardian.py)
+- `PrivacyLevel` (base.py)
+- `PrivacyMechanism` (base.py)
+- `PrivacyParameters` (base.py)
+- `ProcessingPriority` (base.py)
+- `ProcessingState` (fabric_old.py)
+- `ProcessingState` (fabric.py)
+- `ProfileFinding` (target_profiling_adw.py)
+- `ProfilerConfig` (profiler.py)
+- `ProfileResult` (profiler.py)
+- `Profiler` (profiler.py)
+- `ProfileTargetRequest` (adw_router.py)
+- `ProfileTarget` (target_profiling_adw.py)
+- `PropertyTest` (industrial_test_generator_v5_hypothesis.py)
+- `ProtectedAttribute` (base.py)
+- `PruningConfig` (pruner.py)
+- `PruningResult` (pruner.py)
+- `PTPCluster` (sync.py)
+- `PTPSynchronizer` (sync.py)
+- `PyTorchDatasetWrapper` (dataset_builder.py)
+- `QuantizationConfig` (quantizer.py)
+- `QueryRecord` (privacy_accountant.py)
+- `QueryRequest` (main.py)
+- `QueuedDecision` (decision_queue.py)
+- `RAGSystem` (rag_system.py)
+- `RateLimiter` (monitor.py)
+- `ReactiveConfig` (system.py)
+- `ReasoningEngine` (reasoning_engine.py)
+- `ReasoningLevel` (recursive_reasoner.py)
+- `ReasoningStep` (recursive_reasoner.py)
+- `RecursiveReasoner` (recursive_reasoner.py)
+- `RecursiveReasoningResult` (recursive_reasoner.py)
+- `RegraDeOuroValidator` (validate_regra_de_ouro.py)
+- `Regulation` (base.py)
+- `RegulationType` (base.py)
+- `RejectDecisionRequest` (api_routes.py)
+- `RejectionReason` (verdict.py)
+- `RemediationAction` (base.py)
+- `RemediationPlan` (base.py)
+- `RemediationStatus` (base.py)
+- `Resolution` (recursive_reasoner.py)
+- `ResolutionRules` (rules.py)
+- `ResolutionStrategy` (recursive_reasoner.py)
+- `ResourceAnalysis` (resource_analyzer.py)
+- `ResourceAnalyzer` (resource_analyzer.py)
+- `ResourceDemandForecaster` (demand_forecaster.py)
+- `ResourceExecutor` (resource_executor.py)
+- `ResourceLimiter` (resource_limiter.py)
+- `ResourceLimits` (__init__.py)
+- `ResourceLimits` (resource_limiter.py)
+- `ResourcePlanner` (resource_planner.py)
+- `ResourcePlan` (resource_planner.py)
+- `ResponseFuture` (batch_predictor.py)
+- `ResponseProtocol` (constitutional_validator.py)
+- `RestrictedUnpickler` (storage.py)
+- `RetrainingConfig` (continuous_training.py)
+- `RevisionOutcome` (contradiction_detector.py)
+- `RiskAssessment` (governance_engine.py)
+- `RiskAssessor` (risk_assessor.py)
+- `RiskFactors` (risk_assessor.py)
+- `RiskLevel` (attack_surface_adw.py)
+- `RiskLevel` (base.py)
+- `RiskLevelValidator` (validators.py)
+- `RiskScore` (risk_assessor.py)
+- `SACAgent` (rl_agent.py)
+- `SafetyLevel` (safety.py)
+- `SafetyManager` (safety_manager.py)
+- `SafetyStatusResponse` (api.py)
+- `SafetyThresholds` (safety.py)
+- `SafetyViolationResponse` (api.py)
+- `SafetyViolation` (safety.py)
+- `SafetyViolationType` (safety.py)
+- `SalienceDetectorConfig` (salience_detector.py)
+- `Salience` (event.py)
+- `SalienceEvent` (salience_detector.py)
+- `SalienceFactors` (sensory_esgt_bridge.py)
+- `SalienceInput` (api.py)
+- `SalienceLevel` (coordinator_old.py)
+- `SalienceLevel` (coordinator.py)
+- `SalienceLevel` (salience_scorer.py)
+- `SalienceMode` (salience_detector.py)
+- `SalienceScore` (coordinator_old.py)
+- `SalienceScore` (coordinator.py)
+- `SalienceScorer` (salience_scorer.py)
+- `SalienceScore` (salience_scorer.py)
+- `SalienceSPM` (salience_detector.py)
+- `SalienceThresholds` (salience_detector.py)
+- `SecureAggregator` (aggregation.py)
+- `SelfModel` (self_model.py)
+- `SelfReflection` (self_reflection.py)
+- `SensitivityCalculator` (base.py)
+- `SensoryContext` (sensory_esgt_bridge.py)
+- `SensoryESGTBridge` (sensory_esgt_bridge.py)
+- `SensoryLayer` (layer1_sensory.py)
+- `SerotoninModulator` (serotonin_hardened.py)
+- `SerotoninState` (serotonin_system.py)
+- `SerotoninSystem` (serotonin_system.py)
+- `Service` (test_guardians.py)
+- `SessionCreateRequest` (api_routes.py)
+- `SessionCreateResponse` (api_routes.py)
+- `SEVulnerability` (target_profiling_adw.py)
+- `SHAPConfig` (shap_cybersec.py)
+- `ShutdownReason` (safety.py)
+- `SimpleSPMConfig` (simple.py)
+- `SimpleSPM` (simple.py)
+- `SkillExecutionResult` (skill_learning_controller.py)
+- `SkillLearningController` (skill_learning_controller.py)
+- `SLAConfig` (base.py)
+- `SLAMonitor` (decision_queue.py)
+- `SOC2Checker` (certifications.py)
+- `SocialMemoryConfig` (social_memory.py)
+- `SocialMemory` (social_memory.py)
+- `SocialMemorySQLiteConfig` (social_memory_sqlite.py)
+- `SocialMemorySQLite` (social_memory_sqlite.py)
+- `SocialSignal` (prefrontal_cortex.py)
+- `SpecializedProcessingModule` (base.py)
+- `SplitStrategy` (dataset_builder.py)
+- `SPMOutput` (base.py)
+- `SPMType` (base.py)
+- `SSEEvent` (sse_server.py)
+- `SSEEvent` (test_sse_streaming.py)
+- `SSEStreamingValidator` (test_sse_streaming.py)
+- `SSETestMetrics` (test_sse_streaming.py)
+- `StakeholderType` (action_plan.py)
+- `StateSnapshot` (safety.py)
+- `StorageSensors` (sensor_definitions.py)
+- `StrategicLayer` (layer5_strategic.py)
+- `StrategicTransformer` (layer5_strategic.py)
+- `StressLevel` (stress.py)
+- `StressMetrics` (test_stress_conditions.py)
+- `StressMonitor` (stress.py)
+- `StressResponse` (stress.py)
+- `StressTestConfig` (stress.py)
+- `StressType` (stress.py)
+- `StressValidator` (test_stress_conditions.py)
+- `StructuralCompliance` (phi_proxies.py)
+- `StructuredLogger` (logger.py)
+- `SubsampledPrivacyAccountant` (privacy_accountant.py)
+- `SynchronizationDynamics` (kuramoto.py)
+- `SyncResult` (sync.py)
+- `SyncState` (sync.py)
+- `SyntheticDatasetGenerator` (synthetic_dataset.py)
+- `SystemMetrics` (metrics_collector.py)
+- `SystemMonitor` (system_monitor.py)
+- `SystemMonitor` (system_monitor.py)
+- `SystemState` (homeostatic_control.py)
+- `TacticalLayer` (layer4_tactical.py)
+- `TacticalLSTM` (layer4_tactical.py)
+- `TargetIdentifiers` (osint_router.py)
+- `TargetProfileReport` (target_profiling_adw.py)
+- `TargetProfilingWorkflow` (target_profiling_adw.py)
+- `TemporalBinder` (temporal_binding.py)
+- `TemporalBlock` (layer3_operational.py)
+- `TemporalConvNet` (layer3_operational.py)
+- `TemporalLink` (temporal_binding.py)
+- `TestAggregation` (test_federated_learning.py)
+- `TestAIArtifactChecking` (test_article_iii_guardian.py)
+- `TestArticleIIGuardianInit` (test_article_ii_guardian.py)
+- `TestArticleIIGuardian` (test_guardians.py)
+- `TestArticleIIIGuardianInit` (test_article_iii_guardian.py)
+- `TestArticleIIIGuardian` (test_guardians.py)
+- `TestArticleIVGuardianInit` (test_article_iv_guardian.py)
+- `TestArticleIVGuardian` (test_guardians.py)
+- `TestArticleVGuardianInit` (test_article_v_guardian.py)
+- `TestArticleVGuardian` (test_guardians.py)
+- `TestAuditLoggerInit` (test_audit_infrastructure.py)
+- `TestAuditLog` (test_base_100pct.py)
+- `TestAuditTrailChecking` (test_article_iii_guardian.py)
+- `TestAuditTrail` (test_hitl.py)
+- `TestAuthenticationChecking` (test_article_iii_guardian.py)
+- `TestAutonomousGovernance` (test_article_v_guardian.py)
+- `TestBaseClasses` (test_federated_learning.py)
+- `TestBaseClasses` (test_hitl.py)
+- `TestBaseClasses` (test_privacy.py)
+- `TestCallbacks` (test_base_guardian.py)
+- `TestChaosEngineering` (test_article_iv_guardian.py)
+- `TestChaosExperimentExecution` (test_article_iv_guardian.py)
+- `TestCommunication` (test_federated_learning.py)
+- `TestConflictResolution` (test_coordinator.py)
+- `TestConstitutionalViolationException` (test_constitutional_validator.py)
+- `TestConstitutionalViolation` (test_base_coverage.py)
+- `TestConstitutionalViolation` (test_base_guardian.py)
+- `TestCoordinatorLifecycle` (test_coordinator.py)
+- `TestCoverageCompletion` (test_constitutional_validator.py)
+- `TestCreateDecisionEdgeCases` (test_governance_engine_edge_cases.py)
+- `Test_CreateVeto` (test_base_coverage.py)
+- `TestDataPrivacyPolicyRules` (test_policy_engine.py)
+- `TestDataPrivacyRulesCoverage` (test_policy_engine_100pct.py)
+- `TestDecisionDataclass` (test_governance_engine.py)
+- `TestDecisionExpiration` (test_governance_engine_edge_cases.py)
+- `TestDecisionExpiration` (test_governance_engine.py)
+- `TestDecisionFiltering` (test_governance_engine.py)
+- `TestDecisionFramework` (test_hitl.py)
+- `TestDecisionLifecycle` (test_governance_engine.py)
+- `TestDecisionMaking` (test_article_ii_guardian.py)
+- `TestDecisionMaking` (test_article_iii_guardian.py)
+- `TestDecisionMaking` (test_article_iv_guardian.py)
+- `TestDecisionMaking` (test_article_v_guardian.py)
+- `TestDecisionManagement` (test_erb_100pct.py)
+- `TestDecisionOperations` (test_hitl_interface.py)
+- `TestDecisionQueue` (test_hitl.py)
+- `TestDPAggregator` (test_privacy.py)
+- `TestDPMechanisms` (test_privacy.py)
+- `TestEdgeCases` (test_base_guardian.py)
+- `TestEdgeCases` (test_constitutional_validator.py)
+- `TestEdgeCases` (test_governance_engine.py)
+- `TestEdgeCases` (test_policy_engine.py)
+- `TestEnforceAllPolicies` (test_policy_engine.py)
+- `TestEnforcePolicy` (test_policy_engine.py)
+- `TestEnums` (test_base_100pct.py)
+- `TestEnums` (test_base_guardian.py)
+- `TestERBDecision` (test_base_100pct.py)
+- `TestERBMeeting` (test_base_100pct.py)
+- `TestERBMember` (test_base_100pct.py)
+- `TestErrorHandling` (test_base_coverage.py)
+- `TestEscalationManager` (test_hitl.py)
+- `TestEthicalUsePolicyRules` (test_policy_engine.py)
+- `TestEthicalUseRulesCoverage` (test_policy_engine_100pct.py)
+- `TestEventStreaming` (test_governance_engine.py)
+- `TestEventSubscription` (test_governance_engine_edge_cases.py)
+- `TestExperimentalFeatures` (test_article_iv_guardian.py)
+- `TestExport` (test_audit_infrastructure.py)
+- `TestFailureRecovery` (test_article_iv_guardian.py)
+- `TestFeatureQuarantine` (test_article_iv_guardian.py)
+- `TestFileChecking` (test_article_ii_guardian.py)
+- `TestFLClient` (test_federated_learning.py)
+- `TestFLCoordinator` (test_federated_learning.py)
+- `TestGenerator` (batch_test_generator.py)
+- `TestGenerator` (generate_tests.py)
+- `TestGetMetricsEdgeCases` (test_governance_engine_edge_cases.py)
+- `TestGetPendingDecisionsEdgeCases` (test_governance_engine_edge_cases.py)
+- `TestGitStatusChecking` (test_article_ii_guardian.py)
+- `TestGovernanceConfig` (test_base_100pct.py)
+- `TestGovernanceEngineInit` (test_governance_engine.py)
+- `TestGovernancePrecedence` (test_article_v_guardian.py)
+- `TestGovernanceRegistration` (test_article_v_guardian.py)
+- `TestGovernanceResult` (test_base_100pct.py)
+- `TestGuardianAgentInit` (test_base_guardian.py)
+- `TestGuardianAgentLifecycle` (test_base_coverage.py)
+- `TestGuardianBase` (test_guardians.py)
+- `TestGuardianCoordinator` (test_guardians.py)
+- `TestGuardianDecision` (test_base_coverage.py)
+- `TestGuardianDecision` (test_base_guardian.py)
+- `TestGuardianIntegration` (test_guardians.py)
+- `TestGuardianIntervention` (test_base_coverage.py)
+- `TestGuardianIntervention` (test_base_guardian.py)
+- `TestGuardianLifecycle` (test_base_guardian.py)
+- `TestGuardianReport` (test_base_coverage.py)
+- `TestGuardianReport` (test_base_guardian.py)
+- `TestGuardian` (test_base_coverage.py)
+- `TestHITLControls` (test_article_v_guardian.py)
+- `TestIncidentResponsePolicyRules` (test_policy_engine.py)
+- `TestIncidentResponseRulesCoverage` (test_policy_engine_100pct.py)
+- `TestInputValidationChecking` (test_article_iii_guardian.py)
+- `TestIntegrationCoverage` (test_policy_engine_100pct.py)
+- `TestIntegration` (test_article_ii_guardian.py)
+- `TestIntegration` (test_article_iii_guardian.py)
+- `TestIntegration` (test_article_iv_guardian.py)
+- `TestIntegration` (test_base_guardian.py)
+- `TestIntegration` (test_federated_learning.py)
+- `TestIntegration` (test_governance_engine.py)
+- `TestIntegration` (test_hitl_interface.py)
+- `TestIntegration` (test_hitl.py)
+- `TestIntegrity` (test_audit_infrastructure.py)
+- `TestInternalStructure` (test_policy_engine_100pct.py)
+- `TestInterventionHandling` (test_coordinator.py)
+- `TestIntervention` (test_article_ii_guardian.py)
+- `TestIntervention` (test_article_iii_guardian.py)
+- `TestIntervention` (test_article_iv_guardian.py)
+- `TestIntervention` (test_article_v_guardian.py)
+- `TestKillSwitch` (test_article_v_guardian.py)
+- `TestLeiIAxiomaOvelhaPerdida` (test_constitutional_scenarios.py)
+- `TestLeiI` (test_constitutional_validator.py)
+- `TestLeiZeroAndLeiIIntegration` (test_constitutional_scenarios.py)
+- `TestLeiZeroFlorescimentoHumano` (test_constitutional_scenarios.py)
+- `TestLeiZero` (test_constitutional_validator.py)
+- `TestLogging` (test_audit_infrastructure.py)
+- `TestMeetingManagement` (test_erb_100pct.py)
+- `TestMemberManagement` (test_erb_100pct.py)
+- `TestMetrics` (test_constitutional_validator.py)
+- `TestMetrics` (test_coordinator.py)
+- `TestMetrics` (test_governance_engine.py)
+- `TestModelAdapters` (test_federated_learning.py)
+- `TestMonitoringLoop` (test_base_guardian.py)
+- `TestMonitoring` (test_article_ii_guardian.py)
+- `TestMonitoring` (test_article_iii_guardian.py)
+- `TestMonitoring` (test_article_iv_guardian.py)
+- `TestMonitoring` (test_article_v_guardian.py)
+- `TestOperatorInterface` (test_hitl.py)
+- `TestOperatorStats` (test_hitl_interface.py)
+- `TestPatternDetection` (test_article_ii_guardian.py)
+- `TestPatternDetection` (test_coordinator.py)
+- `TestPerformance` (test_privacy.py)
+- `TestPolicyEnforcementResult` (test_base_100pct.py)
+- `TestPolicyEngineInit` (test_policy_engine.py)
+- `TestPolicyRegistryErrorPaths` (test_policies_100pct.py)
+- `TestPolicyRegistryIntegration` (test_policies_100pct.py)
+- `TestPolicyRegistryUntestedMethods` (test_policies_100pct.py)
+- `TestPolicy` (test_base_100pct.py)
+- `TestPolicyViolation` (test_base_100pct.py)
+- `TestPrivacyAccountant` (test_privacy.py)
+- `TestPrivacyGuarantees` (test_privacy.py)
+- `TestPullRequestScanning` (test_article_ii_guardian.py)
+- `TestQuerying` (test_audit_infrastructure.py)
+- `TestQuorumVoting` (test_erb_100pct.py)
+- `TestRealWorldScenarios` (test_constitutional_validator.py)
+- `TestRedTeamingPolicyRules` (test_policy_engine.py)
+- `TestRedTeamingRulesCoverage` (test_policy_engine_100pct.py)
+- `TestRemainingBranches` (test_article_ii_guardian.py)
+- `TestReporting` (test_base_coverage.py)
+- `TestReporting` (test_base_guardian.py)
+- `TestReporting` (test_coordinator.py)
+- `TestReporting` (test_erb_100pct.py)
+- `TestResiliencePatterns` (test_article_iv_guardian.py)
+- `TestResponsibilityDoctrine` (test_article_v_guardian.py)
+- `TestRetention` (test_audit_infrastructure.py)
+- `TestRiskAssessment` (test_governance_engine.py)
+- `TestRiskAssessor` (test_hitl.py)
+- `TestSchemaInitialization` (test_audit_infrastructure.py)
+- `TestSessionInfo` (test_hitl_interface.py)
+- `TestSessionManagement` (test_hitl_interface.py)
+- `TestStatistics` (test_audit_infrastructure.py)
+- `TestStats` (industrial_test_generator.py)
+- `TestStats` (industrial_test_generator_v2.py)
+- `TestStats` (industrial_test_generator_v3.py)
+- `TestStats` (industrial_test_generator_v4.py)
+- `TestStatusAndMetrics` (test_base_guardian.py)
+- `TestStatusMethods` (test_base_coverage.py)
+- `TestStorage` (test_federated_learning.py)
+- `TestSuiteResult` (generate_validation_report.py)
+- `TestSystemFragility` (test_article_iv_guardian.py)
+- `TestTestHealthChecking` (test_article_ii_guardian.py)
+- `TestThresholds` (test_coordinator.py)
+- `TestTrustAssumptionChecking` (test_article_iii_guardian.py)
+- `TestTwoManRule` (test_article_v_guardian.py)
+- `TestUpdateDecisionStatusEdgeCases` (test_governance_engine_edge_cases.py)
+- `TestUptime` (test_governance_engine.py)
+- `TestUtilityMethods` (test_policy_engine.py)
+- `TestValidationFlow` (test_constitutional_validator.py)
+- `TestValidationWorkflow` (test_article_iii_guardian.py)
+- `TestVetoAction` (test_base_coverage.py)
+- `TestVetoAction` (test_base_guardian.py)
+- `TestVetoOverride` (test_coordinator.py)
+- `TestVetoPower` (test_base_coverage.py)
+- `TestVetoPower` (test_base_guardian.py)
+- `TestViolationHandling` (test_coordinator.py)
+- `TestViolationProcessing` (test_base_coverage.py)
+- `TestViolationProcessing` (test_base_guardian.py)
+- `TestViolationReport` (test_constitutional_validator.py)
+- `TestWhistleblowerPolicyRules` (test_policy_engine.py)
+- `TestWhistleblowerReport` (test_base_100pct.py)
+- `TestWhistleblowerRulesCoverage` (test_policy_engine_100pct.py)
+- `TestYourClass` (generate_tests_gemini.py)
+- `TestYourClass` (generate_tests.py)
+- `ThreatClassifierAdapter` (model_adapters.py)
+- `ThreatDetectionModel` (02_autonomous_training_workflow.py)
+- `ThreatDetectionSPM` (base.py)
+- `ThreatLevel` (safety.py)
+- `ThreatSignal` (cascade.py)
+- `ThresholdMonitor` (safety.py)
+- `TIGConnection` (fabric_old.py)
+- `TIGConnection` (fabric.py)
+- `TIGFabric` (fabric_old.py)
+- `TIGFabric` (fabric.py)
+- `TIGNode` (fabric_old.py)
+- `TIGNode` (fabric.py)
+- `ToMBenchmarkRunner` (tom_benchmark.py)
+- `ToMEngine` (tom_engine.py)
+- `ToolExecutionResult` (ethical_tool_wrapper.py)
+- `ToolOrchestrator` (tool_orchestrator.py)
+- `TopologyConfig` (fabric_old.py)
+- `TopologyConfig` (fabric.py)
+- `TrainingConfig` (layer_trainer.py)
+- `TrainingMetrics` (layer_trainer.py)
+- `TriggerConditions` (coordinator_old.py)
+- `TriggerConditions` (coordinator.py)
+- `TriggerType` (kill_switch.py)
+- `TUIIntegrationValidator` (test_tui_integration.py)
+- `TUIValidationResult` (test_tui_integration.py)
+- `TuningConfig` (hyperparameter_tuner.py)
+- `UsernameSearchRequest` (osint_router.py)
+- `UtilitarianCalculus` (utilitarian.py)
+- `ValidationIssue` (data_validator.py)
+- `ValidationMetrics` (prediction_validator.py)
+- `ValidationReportGenerator` (generate_validation_report.py)
+- `ValidationResult` (data_validator.py)
+- `ValidationResult` (validate_regra_de_ouro.py)
+- `ValidationSeverity` (data_validator.py)
+- `VectorDBClient` (vector_db_client.py)
+- `VetoAction` (base.py)
+- `VetoException` (base.py)
+- `ViolationLevel` (constitutional_validator.py)
+- `ViolationReport` (constitutional_validator.py)
+- `ViolationSeverity` (base.py)
+- `_ViolationTypeAdapter` (safety.py)
+- `ViolationType` (constitutional_validator.py)
+- `ViolationType` (safety.py)
+- `VirtueEthicsAssessment` (virtue_ethics.py)
+- `VirtueEthics` (virtue.py)
+- `WhistleblowerReport` (base.py)
+- `WorkflowMetrics` (test_workflow_complete.py)
+- `WorkflowPhase` (test_workflow_complete.py)
+- `WorkflowStatus` (attack_surface_adw.py)
+- `WorkflowStatus` (credential_intel_adw.py)
+- `WorkflowStatus` (target_profiling_adw.py)
+- `WorkflowValidator` (test_workflow_complete.py)
+- `WorldClassTools` (tools_world_class.py)
+- `XAICheckResult` (ethical_guardian.py)
+
+### dlq_monitor
+
+- `BiblicalArticleProcessor` (constitutional_logging.py)
+- `ConstitutionalHealthCheck` (health_checks.py)
+- `ConstitutionalLogProcessor` (constitutional_logging.py)
+- `ConstitutionalTracer` (constitutional_tracing.py)
+- `DLQMonitor` (main.py)
+- `HealthStatus` (health_checks.py)
+- `MetricsExporter` (metrics_exporter.py)
+
+### eureka
+
+- `AffectedPackage` (apv.py)
+- `AnalysisError` (breaking_changes_analyzer.py)
+- `APV` (apv.py)
+- `APVConsumer` (apv_consumer.py)
+- `APVConsumerConfig` (apv_consumer.py)
+- `ASTGrepConfig` (ast_grep_engine.py)
+- `ASTGrepEngine` (ast_grep_engine.py)
+- `ASTGrepMatch` (ast_grep_engine.py)
+- `ASTGrepPattern` (apv.py)
+- `AttackVectorType` (coagulation_client.py)
+- `BaseLLMClient` (base_client.py)
+- `BaseStrategy` (base_strategy.py)
+- `BiblicalArticleProcessor` (constitutional_logging.py)
+- `BreakingChange` (breaking_changes_analyzer.py)
+- `BreakingChangesAnalyzer` (breaking_changes_analyzer.py)
+- `BreakingChangesReport` (breaking_changes_analyzer.py)
+- `BreakingSeverity` (breaking_changes_analyzer.py)
+- `BudgetExceededError` (llm_cost_tracker.py)
+- `ClaudeClient` (claude_client.py)
+- `CoagulationClient` (coagulation_client.py)
+- `CoagulationError` (coagulation_client.py)
+- `CoagulationRule` (coagulation_client.py)
+- `CodePatchLLMStrategy` (code_patch_llm.py)
+- `ConfidenceBucket` (ml_metrics.py)
+- `ConfirmationConfig` (vulnerability_confirmer.py)
+- `ConfirmationMetadata` (confirmation_result.py)
+- `ConfirmationMetadata` (confirmation_result.py)
+- `ConfirmationResult` (confirmation_result.py)
+- `ConfirmationResult` (confirmation_result.py)
+- `ConfirmationStatus` (confirmation_result.py)
+- `ConfirmationStatus` (confirmation_result.py)
+- `ConflictReport` (models.py)
+- `ConfusionMatrixData` (ml_metrics.py)
+- `ConstitutionalHealthCheck` (health_checks.py)
+- `ConstitutionalLogProcessor` (constitutional_logging.py)
+- `ConstitutionalTracer` (constitutional_tracing.py)
+- `CostRecord` (llm_cost_tracker.py)
+- `CVSSScore` (apv.py)
+- `DependencyUpgradeStrategy` (dependency_upgrade.py)
+- `DifficultyLevel` (few_shot_database.py)
+- `EurekaEngine` (eureka.py)
+- `EurekaMetrics` (eureka_orchestrator.py)
+- `EurekaOrchestrator` (eureka_orchestrator.py)
+- `FewShotDatabase` (few_shot_database.py)
+- `GitApplyResult` (models.py)
+- `GitConfig` (models.py)
+- `GitOperationsError` (git_operations.py)
+- `GitOperations` (git_operations.py)
+- `HealthStatus` (health_checks.py)
+- `InsightRequest` (api.py)
+- `IoCExtractor` (ioc_extractor.py)
+- `LLMAuthenticationError` (base_client.py)
+- `LLMCostTracker` (llm_cost_tracker.py)
+- `LLMError` (base_client.py)
+- `LLMInvalidRequestError` (base_client.py)
+- `LLMMessage` (base_client.py)
+- `LLMModel` (llm_cost_tracker.py)
+- `LLMProvider` (base_client.py)
+- `LLMRateLimitError` (base_client.py)
+- `LLMResponse` (base_client.py)
+- `MetricsExporter` (metrics_exporter.py)
+- `MLMetricsResponse` (ml_metrics.py)
+- `NoStrategyAvailableError` (strategy_selector.py)
+- `Patch` (patch.py)
+- `PatchStatus` (patch.py)
+- `PatternDetectionRequest` (api.py)
+- `PatternDetector` (pattern_detector.py)
+- `PlaybookGenerator` (playbook_generator.py)
+- `PRCreatorError` (pr_creator.py)
+- `PRCreator` (pr_creator.py)
+- `PriorityLevel` (apv.py)
+- `PRResult` (models.py)
+- `PushResult` (models.py)
+- `RateLimitMiddleware` (rate_limiter.py)
+- `RecentPrediction` (ml_metrics.py)
+- `RemediationComplexity` (apv.py)
+- `RemediationResult` (patch.py)
+- `RemediationStrategy` (apv.py)
+- `SafetyChecksError` (safety_checks.py)
+- `SafetyChecks` (safety_checks.py)
+- `SlidingWindowRateLimiter` (rate_limiter.py)
+- `StrategyError` (base_strategy.py)
+- `StrategyFailedError` (base_strategy.py)
+- `StrategyNotApplicableError` (base_strategy.py)
+- `StrategySelector` (strategy_selector.py)
+- `TimeframeEnum` (ml_metrics.py)
+- `TimeSeriesPoint` (ml_metrics.py)
+- `UsageBreakdown` (ml_metrics.py)
+- `ValidationResult` (models.py)
+- `VulnerabilityConfirmer` (vulnerability_confirmer.py)
+- `VulnerabilityFix` (few_shot_database.py)
+- `VulnerableLocation` (confirmation_result.py)
+- `VulnerableLocation` (confirmation_result.py)
+
+### maba
+
+- `AffectedPackage` (apv.py)
+- `AlertPriority` (enums.py)
+- `AnalysisEngine` (enums.py)
+- `AnalysisException` (exceptions.py)
+- `AnalysisStatus` (enums.py)
+- `AnalysisTimeoutError` (exceptions.py)
+- `APIEndpoints` (constants.py)
+- `APIQuotaExceededError` (exceptions.py)
+- `APV` (apv.py)
+- `APVBase` (apv_legacy.py)
+- `APVCreate` (apv_legacy.py)
+- `APVDispatchMessage` (apv_legacy.py)
+- `APVModel` (apv_legacy.py)
+- `APVResponse` (apv_legacy.py)
+- `APVStatusUpdate` (apv_legacy.py)
+- `APVUpdate` (apv_legacy.py)
+- `AssetType` (enums.py)
+- `ASTGrepPattern` (apv.py)
+- `AsyncTracedOperation` (vertice_tracing.py)
+- `AttackTactic` (enums.py)
+- `AttackTactics` (constants.py)
+- `AttackTechnique` (enums.py)
+- `AuditConfig` (audit_logger.py)
+- `AuditLogger` (audit_logger.py)
+- `AutomationAction` (enums.py)
+- `BaseResponse` (response_models.py)
+- `BaseServiceConfig` (base_config.py)
+- `BenchmarkResults` (benchmark_cognitive_map.py)
+- `BiblicalArticleProcessor` (constitutional_logging.py)
+- `BrowserAction` (models.py)
+- `BrowserActionRequest` (models.py)
+- `BrowserActionResponse` (models.py)
+- `BrowserController` (browser_controller.py)
+- `BrowserInstance` (dynamic_browser_pool.py)
+- `BrowserSessionRequest` (models.py)
+- `BrowserSession` (session_manager.py)
+- `BusinessLogicException` (exceptions.py)
+- `CanaryDeploymentManager` (vertice_canary.py)
+- `Channel` (websocket_gateway.py)
+- `ClickRequest` (models.py)
+- `ClonalExpansionEvent` (event_schemas.py)
+- `ClusterHealth` (container_health.py)
+- `CognitiveMapEngine` (cognitive_map.py)
+- `CognitiveMapQueryRequest` (models.py)
+- `CognitiveMapQueryResponse` (models.py)
+- `CognitiveMapSQL` (cognitive_map_sql.py)
+- `ComplianceFramework` (enums.py)
+- `ConfidenceLevel` (enums.py)
+- `ConnectionManager` (websocket_gateway.py)
+- `ConstitutionalHealthCheck` (health_checks.py)
+- `ConstitutionalLogProcessor` (constitutional_logging.py)
+- `ConstitutionalTracer` (constitutional_tracing.py)
+- `ContainerHealthMonitor` (container_health.py)
+- `ContainerInfo` (container_health.py)
+- `ContainerMetrics` (container_health.py)
+- `ContainerStatus` (container_health.py)
+- `CreatedResponse` (response_models.py)
+- `CVSSScore` (apv.py)
+- `DatabaseConnectionError` (exceptions.py)
+- `DatabaseException` (exceptions.py)
+- `DatabaseNames` (constants.py)
+- `DatabaseQueryError` (exceptions.py)
+- `DataClassification` (enums.py)
+- `DeletedResponse` (response_models.py)
+- `DependencySummary` (apv_legacy.py)
+- `DeploymentStage` (vertice_canary.py)
+- `DetectionMethod` (enums.py)
+- `DuplicateRecordError` (exceptions.py)
+- `DynamicBrowserPool` (dynamic_browser_pool.py)
+- `ElementMatch` (robust_element_locator.py)
+- `Environment` (base_config.py)
+- `Environments` (constants.py)
+- `ErrorDetail` (response_models.py)
+- `ErrorResponse` (response_models.py)
+- `EventBase` (event_schemas.py)
+- `EventPriority` (event_schemas.py)
+- `EventRouter` (event_router.py)
+- `EventSource` (event_schemas.py)
+- `EventTopic` (topics.py)
+- `EvidenceType` (enums.py)
+- `ExternalAPIError` (exceptions.py)
+- `ExternalAPIException` (exceptions.py)
+- `ExternalAPITimeoutError` (exceptions.py)
+- `ExtractRequest` (models.py)
+- `FileExtensions` (constants.py)
+- `ForbiddenError` (exceptions.py)
+- `HealthResponse` (response_models.py)
+- `HealthStatus` (container_health.py)
+- `HealthStatus` (health_checks.py)
+- `HealthStatus` (response_models.py)
+- `HomeostaticStateEvent` (event_schemas.py)
+- `HoneypotStatusEvent` (event_schemas.py)
+- `HTTPStatusCode` (response_models.py)
+- `ImmuneResponseEvent` (event_schemas.py)
+- `IncidentStatus` (enums.py)
+- `InsufficientDataError` (exceptions.py)
+- `IntegrationEvent` (event_schemas.py)
+- `InvalidInputError` (exceptions.py)
+- `InvalidOperationError` (exceptions.py)
+- `InvalidTokenError` (exceptions.py)
+- `IPVersion` (enums.py)
+- `ListResponse` (response_models.py)
+- `LocatorStrategy` (robust_element_locator.py)
+- `LogLevel` (enums.py)
+- `LogLevels` (constants.py)
+- `MABAChannel` (websocket_routes.py)
+- `MABAConnectionManager` (websocket_routes.py)
+- `MABAMessageType` (websocket_routes.py)
+- `MABAService` (models.py)
+- `MABAWebSocketMessage` (websocket_routes.py)
+- `MalwareDetectedError` (exceptions.py)
+- `MalwareFamily` (enums.py)
+- `MalwareTypes` (constants.py)
+- `MaximusIntegrationMixin` (maximus_integration.py)
+- `MessageType` (websocket_gateway.py)
+- `MetricsExporter` (metrics_exporter.py)
+- `MetricType` (enums.py)
+- `MissingFieldError` (exceptions.py)
+- `ModelNotFoundError` (exceptions.py)
+- `NavigationRequest` (models.py)
+- `NetworkProtocols` (constants.py)
+- `OSINTSource` (enums.py)
+- `PageAnalysisRequest` (models.py)
+- `PageAnalysisResponse` (models.py)
+- `PaginationMeta` (response_models.py)
+- `Permission` (enums.py)
+- `PriorityLevel` (apv.py)
+- `ProtocolType` (enums.py)
+- `QueuePriority` (enums.py)
+- `QuotaExceededError` (exceptions.py)
+- `RateLimitConfig` (rate_limiter.py)
+- `RateLimitConfig` (rate_limiter.py)
+- `RateLimiter` (rate_limiter.py)
+- `RateLimiter` (rate_limiter.py)
+- `RateLimitExceeded` (exceptions.py)
+- `RateLimitExceeded` (rate_limiter.py)
+- `RateLimitStrategy` (rate_limiter.py)
+- `RecordNotFoundError` (exceptions.py)
+- `RegexPatterns` (constants.py)
+- `RegistryClient` (vertice_registry_client.py)
+- `RemediationComplexity` (apv.py)
+- `RemediationStrategy` (apv.py)
+- `ReputationScore` (enums.py)
+- `ResourceConflictError` (exceptions.py)
+- `ResourceException` (exceptions.py)
+- `ResourceExhaustedError` (exceptions.py)
+- `ResourceNotFoundError` (exceptions.py)
+- `ResponseCodes` (constants.py)
+- `ResponseStatus` (enums.py)
+- `RiskLevel` (maximus_integration.py)
+- `RobustElementLocator` (robust_element_locator.py)
+- `ScanFailedError` (exceptions.py)
+- `ScanResult` (vulnerability_scanner.py)
+- `ScanStatus` (enums.py)
+- `SchemaValidationError` (exceptions.py)
+- `ScreenshotRequest` (models.py)
+- `SecurityException` (exceptions.py)
+- `SecurityPolicy` (security_policy.py)
+- `SecurityViolationError` (exceptions.py)
+- `ServiceConfigurationError` (exceptions.py)
+- `ServiceException` (exceptions.py)
+- `ServiceHealthStatus` (subordinate_service.py)
+- `ServicePorts` (constants.py)
+- `ServiceStatus` (constants.py)
+- `ServiceStatus` (enums.py)
+- `ServiceTimeoutError` (exceptions.py)
+- `ServiceUnavailableError` (exceptions.py)
+- `ServiceVersion` (vertice_canary.py)
+- `SessionManager` (session_manager.py)
+- `SeverityLevel` (event_schemas.py)
+- `StateTransitionError` (exceptions.py)
+- `SubordinateServiceBase` (subordinate_service.py)
+- `SuccessResponse` (response_models.py)
+- `SystemHealthEvent` (event_schemas.py)
+- `SystemLimits` (constants.py)
+- `ThalamusClient` (thalamus_client.py)
+- `ThreatDetectionEvent` (event_schemas.py)
+- `ThreatException` (exceptions.py)
+- `ThreatLevel` (enums.py)
+- `ThreatLevels` (constants.py)
+- `ThreatSummary` (apv_legacy.py)
+- `ThreatType` (enums.py)
+- `TimeConstants` (constants.py)
+- `TokenBucket` (rate_limiter.py)
+- `ToolBase` (tool_protocol.py)
+- `ToolCategory` (maximus_integration.py)
+- `ToolInvocationRequest` (tool_protocol.py)
+- `ToolInvocationResponse` (tool_protocol.py)
+- `ToolParameter` (tool_protocol.py)
+- `ToolParameterType` (tool_protocol.py)
+- `ToolStatus` (tool_protocol.py)
+- `TopicConfig` (topics.py)
+- `TracedOperation` (vertice_tracing.py)
+- `TypeRequest` (models.py)
+- `UnauthorizedError` (exceptions.py)
+- `UnifiedKafkaClient` (kafka_client.py)
+- `UpdatedResponse` (response_models.py)
+- `UserRole` (enums.py)
+- `UserRoles` (constants.py)
+- `ValidationError` (exceptions.py)
+- `ValidationErrorResponse` (response_models.py)
+- `VaultClient` (vault_client.py)
+- `VaultConfig` (vault_client.py)
+- `VerticeException` (exceptions.py)
+- `VulnerabilityRecord` (vulnerability_scanner.py)
+- `VulnerabilityScanner` (vulnerability_scanner.py)
+- `VulnerabilitySeverity` (vulnerability_scanner.py)
+- `WebSocketMessage` (websocket_gateway.py)
+- `WorkflowException` (exceptions.py)
+
+### nis
+
+- `AffectedPackage` (apv.py)
+- `AlertPriority` (enums.py)
+- `AnalysisEngine` (enums.py)
+- `AnalysisException` (exceptions.py)
+- `AnalysisStatus` (enums.py)
+- `AnalysisTimeoutError` (exceptions.py)
+- `APIEndpoints` (constants.py)
+- `APIQuotaExceededError` (exceptions.py)
+- `APV` (apv.py)
+- `APVBase` (apv_legacy.py)
+- `APVCreate` (apv_legacy.py)
+- `APVDispatchMessage` (apv_legacy.py)
+- `APVModel` (apv_legacy.py)
+- `APVResponse` (apv_legacy.py)
+- `APVStatusUpdate` (apv_legacy.py)
+- `APVUpdate` (apv_legacy.py)
+- `AssetType` (enums.py)
+- `ASTGrepPattern` (apv.py)
+- `AsyncTracedOperation` (vertice_tracing.py)
+- `AttackTactic` (enums.py)
+- `AttackTactics` (constants.py)
+- `AttackTechnique` (enums.py)
+- `AuditConfig` (audit_logger.py)
+- `AuditLogger` (audit_logger.py)
+- `AutomationAction` (enums.py)
+- `BaseResponse` (response_models.py)
+- `BaseServiceConfig` (base_config.py)
+- `BiblicalArticleProcessor` (constitutional_logging.py)
+- `BusinessLogicException` (exceptions.py)
+- `CanaryDeploymentManager` (vertice_canary.py)
+- `Channel` (websocket_gateway.py)
+- `ClonalExpansionEvent` (event_schemas.py)
+- `ClusterHealth` (container_health.py)
+- `ComplianceFramework` (enums.py)
+- `ConfidenceLevel` (enums.py)
+- `ConnectionManager` (websocket_gateway.py)
+- `ConstitutionalHealthCheck` (health_checks.py)
+- `ConstitutionalLogProcessor` (constitutional_logging.py)
+- `ConstitutionalTracer` (constitutional_tracing.py)
+- `ContainerHealthMonitor` (container_health.py)
+- `ContainerInfo` (container_health.py)
+- `ContainerMetrics` (container_health.py)
+- `ContainerStatus` (container_health.py)
+- `CostTracker` (cost_tracker.py)
+- `CreatedResponse` (response_models.py)
+- `CVSSScore` (apv.py)
+- `DatabaseConnectionError` (exceptions.py)
+- `DatabaseException` (exceptions.py)
+- `DatabaseNames` (constants.py)
+- `DatabaseQueryError` (exceptions.py)
+- `DataClassification` (enums.py)
+- `DeletedResponse` (response_models.py)
+- `DependencySummary` (apv_legacy.py)
+- `DeploymentStage` (vertice_canary.py)
+- `DetectionMethod` (enums.py)
+- `DuplicateRecordError` (exceptions.py)
+- `Environment` (base_config.py)
+- `Environments` (constants.py)
+- `ErrorDetail` (response_models.py)
+- `ErrorResponse` (response_models.py)
+- `EventBase` (event_schemas.py)
+- `EventPriority` (event_schemas.py)
+- `EventRouter` (event_router.py)
+- `EventSource` (event_schemas.py)
+- `EventTopic` (topics.py)
+- `EvidenceType` (enums.py)
+- `ExternalAPIError` (exceptions.py)
+- `ExternalAPIException` (exceptions.py)
+- `ExternalAPITimeoutError` (exceptions.py)
+- `FileExtensions` (constants.py)
+- `ForbiddenError` (exceptions.py)
+- `GenerateNarrativeRequest` (routes.py)
+- `HealthResponse` (response_models.py)
+- `HealthStatus` (container_health.py)
+- `HealthStatus` (health_checks.py)
+- `HealthStatus` (response_models.py)
+- `HomeostaticStateEvent` (event_schemas.py)
+- `HoneypotStatusEvent` (event_schemas.py)
+- `HTTPStatusCode` (response_models.py)
+- `ImmuneResponseEvent` (event_schemas.py)
+- `IncidentStatus` (enums.py)
+- `InsufficientDataError` (exceptions.py)
+- `IntegrationEvent` (event_schemas.py)
+- `InvalidInputError` (exceptions.py)
+- `InvalidOperationError` (exceptions.py)
+- `InvalidTokenError` (exceptions.py)
+- `IPVersion` (enums.py)
+- `ListResponse` (response_models.py)
+- `LogLevel` (enums.py)
+- `LogLevels` (constants.py)
+- `MalwareDetectedError` (exceptions.py)
+- `MalwareFamily` (enums.py)
+- `MalwareTypes` (constants.py)
+- `MaximusIntegrationMixin` (maximus_integration.py)
+- `MessageType` (websocket_gateway.py)
+- `MetricsExporter` (metrics_exporter.py)
+- `MetricsQueryRequest` (routes.py)
+- `MetricType` (enums.py)
+- `MissingFieldError` (exceptions.py)
+- `ModelNotFoundError` (exceptions.py)
+- `MVPChannel` (websocket_routes.py)
+- `MVPConnectionManager` (websocket_routes.py)
+- `MVPMessageType` (websocket_routes.py)
+- `MVPService` (models.py)
+- `MVPWebSocketMessage` (websocket_routes.py)
+- `NarrativeCache` (narrative_cache.py)
+- `NarrativeEngine` (narrative_engine.py)
+- `NarrativeRateLimiter` (rate_limiter.py)
+- `NarrativeRequest` (models.py)
+- `NarrativeResponse` (models.py)
+- `NarrativeType` (models.py)
+- `NetworkProtocols` (constants.py)
+- `OSINTSource` (enums.py)
+- `PaginationMeta` (response_models.py)
+- `Permission` (enums.py)
+- `PriorityLevel` (apv.py)
+- `ProtocolType` (enums.py)
+- `QueuePriority` (enums.py)
+- `QuotaExceededError` (exceptions.py)
+- `RateLimitConfig` (rate_limiter.py)
+- `RateLimitConfig` (rate_limiter.py)
+- `RateLimiter` (rate_limiter.py)
+- `RateLimiter` (rate_limiter.py)
+- `RateLimitExceeded` (exceptions.py)
+- `RateLimitExceeded` (rate_limiter.py)
+- `RateLimitStrategy` (rate_limiter.py)
+- `RecordNotFoundError` (exceptions.py)
+- `RegexPatterns` (constants.py)
+- `RegistryClient` (vertice_registry_client.py)
+- `RemediationComplexity` (apv.py)
+- `RemediationStrategy` (apv.py)
+- `ReputationScore` (enums.py)
+- `ResourceConflictError` (exceptions.py)
+- `ResourceException` (exceptions.py)
+- `ResourceExhaustedError` (exceptions.py)
+- `ResourceNotFoundError` (exceptions.py)
+- `ResponseCodes` (constants.py)
+- `ResponseStatus` (enums.py)
+- `RiskLevel` (maximus_integration.py)
+- `ScanFailedError` (exceptions.py)
+- `ScanResult` (vulnerability_scanner.py)
+- `ScanStatus` (enums.py)
+- `SchemaValidationError` (exceptions.py)
+- `SecurityException` (exceptions.py)
+- `SecurityViolationError` (exceptions.py)
+- `ServiceConfigurationError` (exceptions.py)
+- `ServiceException` (exceptions.py)
+- `ServiceHealthStatus` (subordinate_service.py)
+- `ServicePorts` (constants.py)
+- `ServiceStatus` (constants.py)
+- `ServiceStatus` (enums.py)
+- `ServiceTimeoutError` (exceptions.py)
+- `ServiceUnavailableError` (exceptions.py)
+- `ServiceVersion` (vertice_canary.py)
+- `SeverityLevel` (event_schemas.py)
+- `StateTransitionError` (exceptions.py)
+- `StatisticalAnomalyDetector` (anomaly_detector.py)
+- `SubordinateServiceBase` (subordinate_service.py)
+- `SuccessResponse` (response_models.py)
+- `SystemHealthEvent` (event_schemas.py)
+- `SystemLimits` (constants.py)
+- `SystemObserver` (system_observer.py)
+- `ThalamusClient` (thalamus_client.py)
+- `ThreatDetectionEvent` (event_schemas.py)
+- `ThreatException` (exceptions.py)
+- `ThreatLevel` (enums.py)
+- `ThreatLevels` (constants.py)
+- `ThreatSummary` (apv_legacy.py)
+- `ThreatType` (enums.py)
+- `TimeConstants` (constants.py)
+- `TokenBucket` (rate_limiter.py)
+- `ToolBase` (tool_protocol.py)
+- `ToolCategory` (maximus_integration.py)
+- `ToolInvocationRequest` (tool_protocol.py)
+- `ToolInvocationResponse` (tool_protocol.py)
+- `ToolParameter` (tool_protocol.py)
+- `ToolParameterType` (tool_protocol.py)
+- `ToolStatus` (tool_protocol.py)
+- `TopicConfig` (topics.py)
+- `TracedOperation` (vertice_tracing.py)
+- `UnauthorizedError` (exceptions.py)
+- `UnifiedKafkaClient` (kafka_client.py)
+- `UpdatedResponse` (response_models.py)
+- `UserRole` (enums.py)
+- `UserRoles` (constants.py)
+- `ValidationError` (exceptions.py)
+- `ValidationErrorResponse` (response_models.py)
+- `VaultClient` (vault_client.py)
+- `VaultConfig` (vault_client.py)
+- `VerticeException` (exceptions.py)
+- `VulnerabilityRecord` (vulnerability_scanner.py)
+- `VulnerabilityScanner` (vulnerability_scanner.py)
+- `VulnerabilitySeverity` (vulnerability_scanner.py)
+- `WebSocketMessage` (websocket_gateway.py)
+- `WorkflowException` (exceptions.py)
+
+### oraculo
+
+- `AffectedPackage` (apv.py)
+- `APV` (apv.py)
+- `APVPublisher` (apv_publisher.py)
+- `APVStreamManager` (apv_stream_manager.py)
+- `ASTGrepPattern` (apv.py)
+- `AutoImplementer` (auto_implementer.py)
+- `BaseFeedClient` (base_feed.py)
+- `BiblicalArticleProcessor` (constitutional_logging.py)
+- `CodeAnalysisRequest` (api.py)
+- `CodeGenerationResult` (openai_client.py)
+- `CodeScanner` (code_scanner.py)
+- `ConstitutionalHealthCheck` (health_checks.py)
+- `ConstitutionalLogProcessor` (constitutional_logging.py)
+- `ConstitutionalTracer` (constitutional_tracing.py)
+- `CVSSScore` (apv.py)
+- `DependencyGraphBuilder` (dependency_graph.py)
+- `FeedUnavailableError` (base_feed.py)
+- `HealthStatus` (health_checks.py)
+- `ImplementationRequest` (api.py)
+- `InMemoryAPVQueue` (memory_queue.py)
+- `MetricsExporter` (metrics_exporter.py)
+- `OpenAICodeGenerator` (openai_client.py)
+- `OraculoConfig` (config.py)
+- `OraculoEngine` (oraculo_engine.py)
+- `OraculoEngine` (oraculo.py)
+- `OSVClient` (osv_client.py)
+- `PackageDependency` (dependency_graph.py)
+- `PredictionRequest` (api.py)
+- `PriorityLevel` (apv.py)
+- `RateLimitError` (base_feed.py)
+- `RelevanceFilter` (relevance_filter.py)
+- `RelevanceMatch` (relevance_filter.py)
+- `RemediationComplexity` (apv.py)
+- `RemediationStrategy` (apv.py)
+- `ServiceDependencies` (dependency_graph.py)
+- `StreamMessage` (apv_stream_manager.py)
+- `SuggestionGenerator` (suggestion_generator.py)
+- `ThreatFeedError` (base_feed.py)
+- `WebSocketConnection` (apv_stream_manager.py)
+
+### orchestrator
+
+- `BiblicalArticleProcessor` (constitutional_logging.py)
+- `ConstitutionalHealthCheck` (health_checks.py)
+- `ConstitutionalLogProcessor` (constitutional_logging.py)
+- `ConstitutionalTracer` (constitutional_tracing.py)
+- `HealthStatus` (health_checks.py)
+- `MetricsExporter` (metrics_exporter.py)
+- `OrchestrationRequest` (main.py)
+- `WorkflowStatus` (main.py)
+
+### penelope
+
+- `AffectedPackage` (apv.py)
+- `AlertPriority` (enums.py)
+- `AnalysisEngine` (enums.py)
+- `AnalysisException` (exceptions.py)
+- `AnalysisStatus` (enums.py)
+- `AnalysisTimeoutError` (exceptions.py)
+- `Anomaly` (models.py)
+- `APIEndpoints` (constants.py)
+- `APIQuotaExceededError` (exceptions.py)
+- `ApprovalRequest` (human_approval.py)
+- `ApprovalStatus` (human_approval.py)
+- `APV` (apv.py)
+- `APVBase` (apv_legacy.py)
+- `APVCreate` (apv_legacy.py)
+- `APVDispatchMessage` (apv_legacy.py)
+- `APVModel` (apv_legacy.py)
+- `APVResponse` (apv_legacy.py)
+- `APVStatusUpdate` (apv_legacy.py)
+- `APVUpdate` (apv_legacy.py)
+- `AssetType` (enums.py)
+- `ASTGrepPattern` (apv.py)
+- `AsyncTracedOperation` (vertice_tracing.py)
+- `AttackTactic` (enums.py)
+- `AttackTactics` (constants.py)
+- `AttackTechnique` (enums.py)
+- `AuditConfig` (audit_logger.py)
+- `AuditLogger` (audit_logger.py)
+- `AutomationAction` (enums.py)
+- `BaseResponse` (response_models.py)
+- `BaseServiceConfig` (base_config.py)
+- `BiblicalArticleProcessor` (constitutional_logging.py)
+- `BusinessLogicException` (exceptions.py)
+- `CanaryConfig` (canary_deployment.py)
+- `CanaryDecision` (canary_deployment.py)
+- `CanaryDeployment` (canary_deployment.py)
+- `CanaryDeploymentManager` (vertice_canary.py)
+- `CanaryManager` (canary_deployment.py)
+- `CanaryStatus` (canary_deployment.py)
+- `CausalChainStep` (models.py)
+- `Channel` (websocket_gateway.py)
+- `ClonalExpansionEvent` (event_schemas.py)
+- `ClusterHealth` (container_health.py)
+- `CodePatch` (models.py)
+- `CompetenceLevel` (models.py)
+- `ComplianceFramework` (enums.py)
+- `ConfidenceLevel` (enums.py)
+- `ConnectionManager` (websocket_gateway.py)
+- `ConstitutionalHealthCheck` (health_checks.py)
+- `ConstitutionalLogProcessor` (constitutional_logging.py)
+- `ConstitutionalTracer` (constitutional_tracing.py)
+- `ContainerHealthMonitor` (container_health.py)
+- `ContainerInfo` (container_health.py)
+- `ContainerMetrics` (container_health.py)
+- `ContainerStatus` (container_health.py)
+- `CreatedResponse` (response_models.py)
+- `CVSSScore` (apv.py)
+- `DatabaseConnectionError` (exceptions.py)
+- `DatabaseException` (exceptions.py)
+- `DatabaseNames` (constants.py)
+- `DatabaseQueryError` (exceptions.py)
+- `DataClassification` (enums.py)
+- `DecisionAuditLogger` (decision_audit_logger.py)
+- `DeletedResponse` (response_models.py)
+- `DependencySummary` (apv_legacy.py)
+- `DeploymentResponse` (models.py)
+- `DeploymentStage` (vertice_canary.py)
+- `DeployPatchRequest` (models.py)
+- `DetectionMethod` (enums.py)
+- `DiagnoseRequest` (models.py)
+- `Diagnosis` (models.py)
+- `DiagnosisResponse` (models.py)
+- `DigitalTwinEnvironment` (digital_twin.py)
+- `DuplicateRecordError` (exceptions.py)
+- `Environment` (base_config.py)
+- `Environments` (constants.py)
+- `ErrorDetail` (response_models.py)
+- `ErrorResponse` (response_models.py)
+- `EventBase` (event_schemas.py)
+- `EventPriority` (event_schemas.py)
+- `EventRouter` (event_router.py)
+- `EventSource` (event_schemas.py)
+- `EventTopic` (topics.py)
+- `EvidenceType` (enums.py)
+- `ExternalAPIError` (exceptions.py)
+- `ExternalAPIException` (exceptions.py)
+- `ExternalAPITimeoutError` (exceptions.py)
+- `FileExtensions` (constants.py)
+- `ForbiddenError` (exceptions.py)
+- `GeneratePatchRequest` (models.py)
+- `HealingCircuitBreaker` (circuit_breaker.py)
+- `HealthCheckResponse` (models.py)
+- `HealthResponse` (response_models.py)
+- `HealthStatus` (container_health.py)
+- `HealthStatus` (health_checks.py)
+- `HealthStatus` (response_models.py)
+- `HomeostaticStateEvent` (event_schemas.py)
+- `HoneypotStatusEvent` (event_schemas.py)
+- `HTTPStatusCode` (response_models.py)
+- `HumanApprovalWorkflow` (human_approval.py)
+- `ImmuneResponseEvent` (event_schemas.py)
+- `IncidentStatus` (enums.py)
+- `InsufficientDataError` (exceptions.py)
+- `IntegrationEvent` (event_schemas.py)
+- `InterventionDecision` (models.py)
+- `InterventionLevel` (models.py)
+- `InvalidInputError` (exceptions.py)
+- `InvalidOperationError` (exceptions.py)
+- `InvalidTokenError` (exceptions.py)
+- `IPVersion` (enums.py)
+- `ListResponse` (response_models.py)
+- `LogLevel` (enums.py)
+- `LogLevels` (constants.py)
+- `MalwareDetectedError` (exceptions.py)
+- `MalwareFamily` (enums.py)
+- `MalwareTypes` (constants.py)
+- `MaximusIntegrationMixin` (maximus_integration.py)
+- `MessageType` (websocket_gateway.py)
+- `MetricComparison` (canary_deployment.py)
+- `MetricsExporter` (metrics_exporter.py)
+- `MetricType` (enums.py)
+- `MissingFieldError` (exceptions.py)
+- `ModelNotFoundError` (exceptions.py)
+- `NetworkProtocols` (constants.py)
+- `ObservabilityClient` (observability_client.py)
+- `OSINTSource` (enums.py)
+- `PaginationMeta` (response_models.py)
+- `PatchHistory` (patch_history.py)
+- `PatchMetrics` (models.py)
+- `PatchResponse` (models.py)
+- `PenelopeChannel` (websocket_routes.py)
+- `PenelopeConnectionManager` (websocket_routes.py)
+- `PenelopeMessageType` (websocket_routes.py)
+- `PenelopeWebSocketMessage` (websocket_routes.py)
+- `Permission` (enums.py)
+- `PraotesValidator` (praotes_validator.py)
+- `Precedent` (models.py)
+- `PriorityLevel` (apv.py)
+- `ProtocolType` (enums.py)
+- `QueuePriority` (enums.py)
+- `QuotaExceededError` (exceptions.py)
+- `RateLimitConfig` (rate_limiter.py)
+- `RateLimitConfig` (rate_limiter.py)
+- `RateLimiter` (rate_limiter.py)
+- `RateLimiter` (rate_limiter.py)
+- `RateLimitExceeded` (exceptions.py)
+- `RateLimitExceeded` (rate_limiter.py)
+- `RateLimitStrategy` (rate_limiter.py)
+- `RecordNotFoundError` (exceptions.py)
+- `RegexPatterns` (constants.py)
+- `RegistryClient` (vertice_registry_client.py)
+- `RemediationComplexity` (apv.py)
+- `RemediationStrategy` (apv.py)
+- `Report` (models.py)
+- `ReputationScore` (enums.py)
+- `ResourceConflictError` (exceptions.py)
+- `ResourceException` (exceptions.py)
+- `ResourceExhaustedError` (exceptions.py)
+- `ResourceNotFoundError` (exceptions.py)
+- `ResponseCodes` (constants.py)
+- `ResponseStatus` (enums.py)
+- `RiskLevel` (maximus_integration.py)
+- `ScanFailedError` (exceptions.py)
+- `ScanResult` (vulnerability_scanner.py)
+- `ScanStatus` (enums.py)
+- `SchemaValidationError` (exceptions.py)
+- `SecurityException` (exceptions.py)
+- `SecurityViolationError` (exceptions.py)
+- `ServiceConfigurationError` (exceptions.py)
+- `ServiceException` (exceptions.py)
+- `ServiceHealthStatus` (subordinate_service.py)
+- `ServiceInfo` (models.py)
+- `ServicePorts` (constants.py)
+- `ServiceStatus` (constants.py)
+- `ServiceStatus` (enums.py)
+- `ServiceTimeoutError` (exceptions.py)
+- `ServiceUnavailableError` (exceptions.py)
+- `ServiceVersion` (vertice_canary.py)
+- `SeverityLevel` (event_schemas.py)
+- `Severity` (models.py)
+- `SophiaEngine` (sophia_engine.py)
+- `StateTransitionError` (exceptions.py)
+- `SubordinateServiceBase` (subordinate_service.py)
+- `SuccessResponse` (response_models.py)
+- `SystemHealthEvent` (event_schemas.py)
+- `SystemLimits` (constants.py)
+- `TapeinophrosyneMonitor` (tapeinophrosyne_monitor.py)
+- `ThalamusClient` (thalamus_client.py)
+- `ThreatDetectionEvent` (event_schemas.py)
+- `ThreatException` (exceptions.py)
+- `ThreatLevel` (enums.py)
+- `ThreatLevels` (constants.py)
+- `ThreatSummary` (apv_legacy.py)
+- `ThreatType` (enums.py)
+- `TimeConstants` (constants.py)
+- `TokenBucket` (rate_limiter.py)
+- `ToolBase` (tool_protocol.py)
+- `ToolCategory` (maximus_integration.py)
+- `ToolInvocationRequest` (tool_protocol.py)
+- `ToolInvocationResponse` (tool_protocol.py)
+- `ToolParameter` (tool_protocol.py)
+- `ToolParameterType` (tool_protocol.py)
+- `ToolStatus` (tool_protocol.py)
+- `TopicConfig` (topics.py)
+- `TracedOperation` (vertice_tracing.py)
+- `UnauthorizedError` (exceptions.py)
+- `UnifiedKafkaClient` (kafka_client.py)
+- `UpdatedResponse` (response_models.py)
+- `UserRole` (enums.py)
+- `UserRoles` (constants.py)
+- `ValidatePatchRequest` (models.py)
+- `ValidationError` (exceptions.py)
+- `ValidationErrorResponse` (response_models.py)
+- `ValidationResponse` (models.py)
+- `ValidationResult` (models.py)
+- `ValidationTestResult` (models.py)
+- `VaultClient` (vault_client.py)
+- `VaultConfig` (vault_client.py)
+- `VerticeException` (exceptions.py)
+- `VulnerabilityRecord` (vulnerability_scanner.py)
+- `VulnerabilityScanner` (vulnerability_scanner.py)
+- `VulnerabilitySeverity` (vulnerability_scanner.py)
+- `WebSocketMessage` (websocket_gateway.py)
+- `WisdomBaseClient` (wisdom_base_client.py)
+- `WisdomPrecedent` (models.py)
+- `WisdomQueryRequest` (models.py)
+- `WisdomQueryResponse` (models.py)
+- `WorkflowException` (exceptions.py)
+

@@ -1,0 +1,163 @@
+═══════════════════════════════════════════════════════════════
+FASE 0.2 - BUSCA POR VIOLAÇÕES DA DOUTRINA
+Data: $(date)
+Critério de falha: TODO > 5 OU mock > 0 OU placeholder > 0
+═══════════════════════════════════════════════════════════════
+
+=== PROCURANDO TODO/FIXME/HACK/XXX/PLACEHOLDER ===
+./sdk/base_agent.py:115:    TODOS os agentes herdam desta classe e implementam:
+./sdk/base_agent.py:119:    TODOS os agentes têm acesso a:
+./agents/code_agent.py:311:    TODO: Implement {task.description}
+./agents/code_agent.py:316:    raise NotImplementedError("TODO: Implement this function")
+./agents/code_agent.py:322:            return f"// {task.description}\n// TODO: Implement this in {language}"
+./agents/test_agent.py:271:    # TODO: Implement test
+./agents/test_agent.py:276:    # TODO: Implement test
+./agents/test_agent.py:281:    # TODO: Implement test
+./agents/test_agent.py:286:    # TODO: Implement test
+./cli/repl_enhanced.py:124:        Carregar TODOS comandos disponíveis.
+./tests/test_guardian_system_comprehensive.py:612:    # TODO: implement this
+./tests/test_guardian_system_comprehensive.py:1059:    # TODO: implement calculation
+./tests/test_guardian_system_comprehensive.py:1063:    # TODO: add processing logic
+./tests/test_guardian_system_comprehensive.py:1072:        "Contains TODO placeholders",
+./tests/test_guardian_system_comprehensive.py:1073:        "Remove TODOs",
+./tests/test_guardian_system_comprehensive.py:1085:    # Should detect TODOs - quality should not be excellent
+./tests/test_explore_agent.py:78:    # TODO: Add error handling
+./tests/test_explore_agent.py:119:- TODO: Add more features
+./tests/test_explore_agent.py:321:    """Test searching for TODO comments"""
+./tests/test_explore_agent.py:324:        description="Find all TODO comments",
+./tests/test_explore_agent.py:327:            "search_pattern": "TODO",
+./tests/test_explore_agent.py:336:    assert len(matches) >= 2  # We added 2 TODO comments
+./tests/test_explore_agent.py:337:    print(f"✅ Test 12: Found {len(matches)} TODO comments")
+./tests/test_file_tools.py:82:# TODO: Add more functions
+./tests/test_file_tools.py:83:# FIXME: Fix the bug
+./tests/test_file_tools.py:814:        assert result.total_matches >= 2  # TODO and FIXME
+./examples/guardian_auto_protection_demo.py:56:    # ==================== TESTE 1: CÓDIGO COM PLACEHOLDER (VIOLAÇÃO P1) ====================
+./examples/guardian_auto_protection_demo.py:58:    print("TEST 1: Code with TODO placeholder (P1 VIOLATION)")
+./examples/guardian_auto_protection_demo.py:66:    # TODO: implement this function
+./examples/guardian_auto_protection_demo.py:276:✅ Bloqueiam código com placeholders/TODOs (P1)
+./examples/hooks_example.py:245:            "pattern": "TODO",
+./core/streaming/agent.py:147:        TODO: Implement real Anthropic API streaming.
+./core/context/strategies.py:358:        # TODO: Implement LLM summarization
+./core/context/strategies.py:387:        """Create placeholder summary (TODO: replace with real LLM summary)"""
+./core/context/monitor.py:324:        # TODO: Implement user prompt
+./core/context/compactor.py:120:        messages_summarized = 0  # TODO: Track from strategy
+./core/deter_agent/state/sub_agent_isolation.py:8:- Sub-agent NÃO deve ter acesso a TODO contexto do parent
+./core/deter_agent/guardian.py:355:        cot_quality = 0.8  # TODO: Implementar análise real
+./core/deter_agent/guardian.py:358:        consistency_score = 0.85  # TODO: Implementar análise real
+./core/deter_agent/guardian.py:361:        critic_score = 0.75  # TODO: Implementar análise real
+./core/deter_agent/guardian.py:417:        # TODO: Implementar tracking real de performance
+./core/deter_agent/incentive/feedback_loop.py:51:                suggested_action="Review code for TODOs, placeholders, and NotImplementedError",
+./core/tools/grep_tool.py:68:        GrepTool().grep("TODO", output_mode="files")  - Files with TODOs
+./core/tools/grep_tool.py:120:            >>> result = tool.grep("TODO", path="src/", output_mode="content")
+./core/tools/grep_tool.py:325:        """Find TODO comments in code"""
+./core/tools/grep_tool.py:327:            pattern=r"(TODO|FIXME|XXX|HACK|NOTE):",
+./core/tools/grep_tool.py:370:        >>> files = grep_files("TODO", path="src/")
+./core/tools/grep_tool.py:392:    # Test 1: Find TODOs
+./core/tools/grep_tool.py:394:    logger.info("TEST 1: Find TODO comments in code")
+./core/tools/grep_tool.py:400:        logger.info(f"✓ Found {result.total_matches} TODOs in {len(result.files_with_matches)} files")
+
+TOTAL TODO/FIXME/HACK/XXX: 69
+
+=== PROCURANDO MOCKS ===
+./integration/penelope_client.py:12:- GET  /api/v1/penelope/patches             # Lista de patches
+./integration/penelope_client.py:81:    patch_applied: Optional[str]
+./integration/penelope_client.py:110:    patch_applied: str
+./integration/penelope_client.py:138:    """Healing patch metadata."""
+./integration/penelope_client.py:139:    patch_id: str
+./integration/penelope_client.py:142:    patch_size_lines: int
+./integration/penelope_client.py:153:    """GET /api/v1/penelope/patches response."""
+./integration/penelope_client.py:154:    patches: List[Patch]
+./integration/penelope_client.py:165:    patch_applied: str
+./integration/penelope_client.py:304:        def get_patches(
+./integration/penelope_client.py:310:            Get list of generated healing patches.
+./integration/penelope_client.py:314:                limit: Maximum number of patches (1-100)
+./integration/penelope_client.py:317:                PatchesResponse with patch metadata
+./integration/penelope_client.py:323:            response = self.get(f"{self.api_prefix}/patches", params=params)
+./agents/architect_agent.py:452:        Fallback: Tree of Thoughts mock if Claude unavailable
+./agents/architect_agent.py:469:        # Fallback to ToT mock
+./agents/architect_agent.py:470:        logger.info("   🔄 Using Tree of Thoughts fallback (mock)")
+./agents/architect_agent.py:602:        Fallback: Use Tree of Thoughts mock (original implementation)
+./agents/test_agent.py:190:- Mock external dependencies
+./core/streaming/agent.py:80:                # Mock streaming for demo/testing
+./core/streaming/agent.py:81:                async for chunk in self._mock_stream(prompt):
+./core/streaming/agent.py:153:            "Real LLM streaming not implemented. Use mock streaming for now."
+./core/streaming/agent.py:156:    async def _mock_stream(self, prompt: str) -> AsyncIterator[StreamChunk]:
+./core/streaming/agent.py:158:        Mock streaming for demo/testing.
+./core/streaming/agent.py:184:        response_text = self._generate_mock_response(prompt)
+./core/streaming/agent.py:220:    def _generate_mock_response(self, prompt: str) -> str:
+./core/streaming/agent.py:221:        """Generate mock response based on prompt"""
+./core/streaming/agent.py:222:        # Simple mock response
+./core/deter_agent/incentive_old.py:1:"""Incentive Layer - Minimal stub"""
+./core/deter_agent/deliberation/adversarial_critic.py:268:        # Placeholder: retornar critiques mock
+TOTAL MOCKS (fora de tests/): 81
+
+=== PROCURANDO PLACEHOLDERS ===
+./integration/orchestrator_client.py:34:    workflow_name: str = Field(..., description="Workflow to execute")
+./integration/oraculo_client.py:36:    data: Dict[str, Any] = Field(..., description="Data to analyze for predictions")
+./integration/oraculo_client.py:37:    prediction_type: str = Field(..., description="Type of prediction (e.g., 'threat_level', 'resource_demand')")
+./integration/oraculo_client.py:38:    time_horizon: str = Field(..., description="Time horizon for prediction (e.g., '24h', '7d')")
+./integration/oraculo_client.py:43:    code: str = Field(..., description="Code snippet to analyze")
+./integration/oraculo_client.py:44:    language: str = Field(..., description="Programming language")
+./integration/oraculo_client.py:45:    analysis_type: str = Field(..., description="Type of analysis (e.g., 'vulnerability', 'performance', 'refactoring')")
+./integration/oraculo_client.py:50:    task_description: str = Field(..., description="Description of coding task")
+./integration/oraculo_client.py:52:    target_language: str = Field(..., description="Target programming language")
+./integration/maximus_client.py:48:    novelty: float = Field(..., ge=0.0, le=1.0)
+./integration/maximus_client.py:49:    relevance: float = Field(..., ge=0.0, le=1.0)
+./integration/maximus_client.py:50:    urgency: float = Field(..., ge=0.0, le=1.0)
+./integration/maximus_client.py:68:    delta: float = Field(..., ge=-0.5, le=0.5)
+./integration/base_client.py:82:                        logger.warning(f"{method} {endpoint} failed (attempt {attempt + 1}): {e}. Retrying in {backoff}s...")
+./integration/penelope_client.py:98:    anomaly_id: str = Field(..., description="Unique anomaly identifier")
+./integration/penelope_client.py:99:    anomaly_type: str = Field(..., description="Type of anomaly (e.g., latency_spike)")
+./integration/penelope_client.py:100:    affected_service: str = Field(..., description="Service experiencing anomaly")
+./sdk/base_agent.py:216:        print(f"   Description: {task.description[:80]}...")
+./sdk/agent_orchestrator.py:48:        print(f"🎭 Orchestrator: Starting task '{task_description[:50]}...'")
+./agents/plan_agent.py:128:                f"Generated plan {i+1}: {thought.description[:60]}...",
+./agents/fix_agent.py:79:            logger.info("   🛡️ Phase 0: Guardian constitutional check...", extra={"task_id": task.id})
+./agents/fix_agent.py:105:        logger.info("   🔧 Phase 1: Analyzing bug...", extra={"task_id": task.id})
+./agents/fix_agent.py:111:            fixed_code = f"# Quick fix placeholder\n{broken_code}"
+./agents/fix_agent.py:117:                    logger.info("   🏥 Phase 2: PENELOPE root cause analysis...", extra={"task_id": task.id})
+./agents/fix_agent.py:125:                        f"      └─ Root cause: {healing.root_cause.primary_cause[:60]}...",
+./agents/docs_agent.py:93:            logger.info("   🛡️ Phase 0: Guardian constitutional check...", extra={"task_id": task.id})
+./agents/docs_agent.py:118:        logger.info("   📝 Phase 1: Generating comprehensive docs...", extra={"task_id": task.id})
+./agents/docs_agent.py:130:                    logger.info("   📖 Phase 2: NIS narrative generation...", extra={"task_id": task.id})
+./agents/validation_schemas.py:77:        ...,  # Required
+./agents/validation_schemas.py:112:        ...,  # Required
+./agents/validation_schemas.py:149:        ...,  # Required
+./agents/validation_schemas.py:155:        ...,  # Required
+./agents/validation_schemas.py:179:    file_path: str = Field(..., min_length=1)
+./agents/validation_schemas.py:180:    change_type: str = Field(..., pattern="^(added|modified|deleted|renamed)$")
+./agents/validation_schemas.py:181:    description: str = Field(..., min_length=1)
+./agents/validation_schemas.py:235:        ...,  # Required
+./agents/validation_schemas.py:269:        ...,  # Required
+./agents/review_agent.py:100:            logger.info("   🛡️ Phase 0: Guardian constitutional check...", extra={"task_id": task.id})
+./agents/review_agent.py:129:            logger.info("   🔍 Phase 1: Deep technical review...", extra={"task_id": task.id})
+./agents/review_agent.py:133:        logger.info("   🏛️ Phase 2: Constitutional review (P1-P6)...", extra={"task_id": task.id})
+./agents/review_agent.py:140:                    logger.info("   ⚖️ Phase 3: MAXIMUS ethical review (4 frameworks)...", extra={"task_id": task.id})
+./agents/review_agent.py:160:        logger.info("   🔀 Phase 4: Fusion...", extra={"task_id": task.id})
+./agents/architect_agent.py:544:    "description": "Detailed description...",
+./agents/architect_agent.py:545:    "steps": ["Step 1", "Step 2", ...],
+./agents/architect_agent.py:551:  ...
+./agents/architect_agent.py:555:        logger.info("   🤖 Consulting Claude LLM for architectural options...")
+./agents/code_agent.py:96:            logger.info("   🛡️ Phase 0: Guardian pre-check...", extra={"task_id": task.id})
+./agents/code_agent.py:130:        logger.info("   💻 Phase 1: Generating code...", extra={"task_id": task.id})
+./agents/code_agent.py:140:            logger.info("   🛡️ Phase 1.5: Guardian post-check...", extra={"task_id": task.id})
+./agents/code_agent.py:175:                    logger.info("   🔒 Phase 2: MAXIMUS security analysis...", extra={"task_id": task.id})
+
+TOTAL PLACEHOLDERS/NotImplementedError: 10
+
+=== SUMÁRIO DE VIOLAÇÕES ===
+TODO/FIXME/HACK/XXX: 69
+MOCKS (fora de tests/): 81
+PLACEHOLDERS/NotImplementedError: 10
+
+═══════════════════════════════════════════════════════════════
+VEREDICTO FASE 0.2:
+❌ FALHA CRÍTICA - Violações da doutrina detectadas!
+
+Critérios:
+- TODO > 5: ❌ FAIL (69 encontrados, limite era 5)
+- MOCK > 0 (fora tests/): ❌ FAIL (81 encontrados, limite era 0)  
+- PLACEHOLDER > 0: ❌ FAIL (10 encontrados, limite era 0)
+
+CONCLUSÃO: Código não está em conformidade com os padrões da doutrina.
+═══════════════════════════════════════════════════════════════

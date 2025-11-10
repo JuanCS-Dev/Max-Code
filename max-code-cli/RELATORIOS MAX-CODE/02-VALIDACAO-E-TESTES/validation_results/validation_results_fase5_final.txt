@@ -1,0 +1,66 @@
+2025-11-08 17:04:43,581 - core.tools.registry - INFO - ToolRegistry initialized
+2025-11-08 17:04:43,581 - core.tools.registry - INFO - Tool 'file_reader' registered successfully (version 1.0.0)
+2025-11-08 17:04:43,582 - core.tools.registry - INFO - Tool 'file_writer' registered successfully (version 1.0.0)
+2025-11-08 17:04:43,583 - core.tools.registry - INFO - Tool 'file_editor' registered successfully (version 1.0.0)
+2025-11-08 17:04:43,584 - core.tools.registry - INFO - Tool 'glob_tool' registered successfully (version 1.0.0)
+2025-11-08 17:04:43,585 - core.tools.registry - INFO - Tool 'grep_tool' registered successfully (version 1.0.0)
+2025-11-08 17:04:43,589 - core.tools.enhanced_registry - INFO - EnhancedToolRegistry initialized
+2025-11-08 17:04:43,589 - core.tools.enhanced_registry - INFO - Enhanced 5 existing tools
+2025-11-08 17:04:43,590 - core.tool_integration - INFO - ToolIntegration initialized
+2025-11-08 17:04:43,590 - core.execution_engine - INFO - ExecutionEngine initialized
+2025-11-08 17:04:43,590 - core.execution_engine - INFO - Executing 1 tasks sequentially
+2025-11-08 17:04:49,477 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-11-08 17:04:49,487 - core.execution_engine - INFO - Thinking task llm_test completed
+2025-11-08 17:04:49,487 - core.execution_engine - INFO - Task llm_test completed successfully
+2025-11-08 17:04:49,488 - core.execution_engine - INFO - Plan execution completed: 1/1 tasks
+================================================================================
+FASE 5: VALIDAÇÃO END-TO-END - COM API KEY VÁLIDA
+================================================================================
+API Key configurada: ...x9K6lGMK0Pw-_eQ_cgAA
+
+
+================================================================================
+CASO 1: Task Models Básicos
+================================================================================
+✅ Task models working
+   Time: 0.000s
+
+================================================================================
+CASO 2: Task Graph com Dependências
+================================================================================
+✅ Task graph working
+   Tasks: 3, Batches: 2
+   Time: 0.000s
+
+================================================================================
+CASO 3: Tool Registry
+================================================================================
+✅ Tool registry working
+   Tools registered: 5
+   Time: 0.000s
+
+================================================================================
+CASO 4: Tool Selector
+================================================================================
+✅ Tool selector working
+   Tools: 5
+   Time: 0.000s
+
+================================================================================
+CASO 5: Execution Engine COM LLM
+================================================================================
+✅ Execution engine working
+   Success: True
+   Completed: 1/1
+   Time: 5.90s
+
+================================================================================
+SUMMARY - FASE 5
+================================================================================
+Total cases:  5
+Passed:       5
+Failed:       0
+
+================================================================================
+✅ FASE 5 PASSED: All end-to-end tests passed!
+================================================================================

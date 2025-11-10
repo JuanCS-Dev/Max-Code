@@ -37,7 +37,7 @@ from aiokafka.errors import KafkaError
 from pydantic import ValidationError
 
 # Import APV from Oráculo
-from backend.shared.models.apv import APV
+from shared.models.apv import APV
 
 # Import Eureka models
 

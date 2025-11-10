@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from eureka_models.patch import Patch, PatchStatus, RemediationResult
 
 # Import APV from Oráculo
-from backend.shared.models.apv import RemediationStrategy
+from shared.models.apv import RemediationStrategy
 
 
 # ===================== PATCH TESTS =====================

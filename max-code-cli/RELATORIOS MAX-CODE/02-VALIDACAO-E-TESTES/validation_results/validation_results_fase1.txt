@@ -1,0 +1,42 @@
+================================================================================
+FASE 1: VALIDAÇÃO DE EXISTÊNCIA DE ARQUIVOS
+================================================================================
+
+=== FASE 1: Quick Wins ===
+[0;32m✓[0m ui/streaming.py
+[0;32m✓[0m core/risk_classifier.py
+[0;32m✓[0m ui/confirmation.py
+[0;32m✓[0m core/plan_visualizer.py
+
+=== FASE 2: Core Gap ===
+[0;32m✓[0m core/task_models.py
+[0;32m✓[0m core/task_graph.py
+[0;32m✓[0m core/task_decomposer.py
+[0;32m✓[0m core/dependency_resolver.py
+[0;32m✓[0m prompts/decomposition_prompts.py
+[0;32m✓[0m core/tools/tool_metadata.py
+[0;32m✓[0m core/tools/enhanced_registry.py
+[0;32m✓[0m core/tools/tool_selector.py
+[0;32m✓[0m core/tools/decorator.py
+[0;32m✓[0m core/tool_integration.py
+[0;32m✓[0m core/execution_engine.py
+[0;32m✓[0m ui/execution_display.py
+
+=== Error Recovery (integrated in execution_engine.py) ===
+[0;32m✓[0m Error recovery exists in execution_engine.py (RetryStrategy)
+
+=== Testes ===
+[0;32m✓[0m tests/test_streaming_thinking.py
+[0;32m✓[0m tests/test_confirmation.py
+[0;32m✓[0m tests/test_task_decomposition.py
+[0;32m✓[0m tests/test_tool_selection_system.py
+[0;32m✓[0m tests/test_execution_engine.py
+
+================================================================================
+SUMMARY - FASE 1
+================================================================================
+Total files expected: 22
+[0;32mFiles found: 22[0m
+[0;31mFiles missing: 0[0m
+
+[0;32m✓ FASE 1 PASSED: All files exist[0m

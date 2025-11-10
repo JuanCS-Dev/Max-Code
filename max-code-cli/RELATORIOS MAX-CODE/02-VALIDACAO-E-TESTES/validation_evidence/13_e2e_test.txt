@@ -1,0 +1,69 @@
+Warning: Input is not a terminal (fd=0).
+2025-11-07 18:49:00,575 - ui.command_palette - INFO - CommandPalette initialized
+2025-11-07 18:49:00,625 - core.tools.registry - INFO - ToolRegistry initialized
+2025-11-07 18:49:00,779 - ui.themes - INFO - Initialized 7 built-in themes
+2025-11-07 18:49:00,779 - ui.themes - INFO - Theme changed: ThemeName.NEON
+2025-11-07 18:49:00,779 - ui.themes - INFO - ThemeManager initialized (default: ThemeName.NEON)
+2025-11-07 18:49:00,779 - ui.dashboard - INFO - MaxCodeDashboard initialized
+2025-11-07 18:49:00,847 - core.auth.oauth_handler - INFO -    🔄 OAuth token detected, converting to API key...
+2025-11-07 18:49:00,847 - core.auth.token_converter - INFO - 🔄 Converting OAuth token to API key...
+2025-11-07 18:49:01,248 - core.auth.token_converter - ERROR - ❌ Insufficient permissions
+2025-11-07 18:49:01,248 - core.auth.token_converter - INFO -    OAuth token lacks 'org:create_api_key' scope
+2025-11-07 18:49:01,249 - core.auth.oauth_handler - WARNING -    ⚠️ OAuth → API Key conversion failed
+2025-11-07 18:49:01,249 - core.auth.oauth_handler - INFO -    🔑 Using OAuth token directly (Claude Max)
+2025-11-07 18:49:01,277 - ui.themes - INFO - Theme changed: ThemeName.NEON
+2025-11-07 18:49:01,277 - ui.themes - INFO - ThemeManager initialized (default: ThemeName.NEON)
+2025-11-07 18:49:01,277 - ui.dashboard - INFO - MaxCodeDashboard initialized
+2025-11-07 18:49:01,283 - core.auth.oauth_handler - INFO -    🔄 OAuth token detected, converting to API key...
+2025-11-07 18:49:01,284 - core.auth.token_converter - INFO - 🔄 Converting OAuth token to API key...
+2025-11-07 18:49:01,731 - core.auth.token_converter - ERROR - ❌ Insufficient permissions
+2025-11-07 18:49:01,731 - core.auth.token_converter - INFO -    OAuth token lacks 'org:create_api_key' scope
+2025-11-07 18:49:01,732 - core.auth.oauth_handler - WARNING -    ⚠️ OAuth → API Key conversion failed
+2025-11-07 18:49:01,732 - core.auth.oauth_handler - INFO -    🔑 Using OAuth token directly (Claude Max)
+2025-11-07 18:49:01,760 - ui.themes - INFO - Theme changed: ThemeName.NEON
+2025-11-07 18:49:01,760 - ui.themes - INFO - ThemeManager initialized (default: ThemeName.NEON)
+2025-11-07 18:49:01,760 - ui.dashboard - INFO - MaxCodeDashboard initialized
+2025-11-07 18:49:01,767 - core.auth.oauth_handler - INFO -    🔄 OAuth token detected, converting to API key...
+2025-11-07 18:49:01,767 - core.auth.token_converter - INFO - 🔄 Converting OAuth token to API key...
+2025-11-07 18:49:02,072 - core.auth.token_converter - ERROR - ❌ Insufficient permissions
+2025-11-07 18:49:02,072 - core.auth.token_converter - INFO -    OAuth token lacks 'org:create_api_key' scope
+2025-11-07 18:49:02,073 - core.auth.oauth_handler - WARNING -    ⚠️ OAuth → API Key conversion failed
+2025-11-07 18:49:02,073 - core.auth.oauth_handler - INFO -    🔑 Using OAuth token directly (Claude Max)
+2025-11-07 18:49:02,107 - ui.command_palette - INFO - CommandPalette initialized
+═══════════════════════════════════════════════════════════════
+FASE 1.5 - TESTE END-TO-END
+═══════════════════════════════════════════════════════════════
+
+Test 1: REPL object creation
+  ✅ REPL object created successfully
+     - Type: EnhancedREPL
+
+Test 2: REPL required methods
+  ✅ REPL has all required methods
+     - run() method: present
+     - _invoke_agent() method: present
+     - _display_response() method: present
+     - status_bar attribute: present
+
+Test 3: Status bar integration
+  ✅ Status bar fully integrated
+     - Status bar object: present
+     - Update method: functional
+     - Render method: functional
+
+Test 4: Command palette integration
+  ✅ Command palette available
+     - CommandPalette imported
+     - Object created successfully
+
+Test 5: Agents system
+  ✅ Agents system complete
+     - 8 agents imported successfully
+     - All agent classes available
+
+════════════════════════════════════════════════════════════
+RESULTADO E2E:
+  Passed: 5/5
+  Failed: 0/5
+  Taxa de sucesso: 100%
+════════════════════════════════════════════════════════════

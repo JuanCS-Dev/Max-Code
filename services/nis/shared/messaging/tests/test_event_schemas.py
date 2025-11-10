@@ -12,7 +12,7 @@ from datetime import datetime
 import pytest
 from pydantic import ValidationError
 
-from backend.shared.messaging.event_schemas import (
+from shared.messaging.event_schemas import (
     EventBase,
     EventPriority,
     EventSource,

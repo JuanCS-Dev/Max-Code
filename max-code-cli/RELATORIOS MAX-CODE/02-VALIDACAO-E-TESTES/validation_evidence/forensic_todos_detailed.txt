@@ -1,0 +1,52 @@
+═══════════════════════════════════════════════════════════════
+INVESTIGAÇÃO FORENSE - TODOs Detalhados
+═══════════════════════════════════════════════════════════════
+
+Excluindo falsos positivos (palavra "TODOS" em português)
+Procurando TODO real (código incompleto)
+
+═══════════════════════════════════════════════════════════════
+./agents/code_agent.py:311:    TODO: Implement {task.description}
+./agents/code_agent.py:316:    raise NotImplementedError("TODO: Implement this function")
+./agents/code_agent.py:322:            return f"// {task.description}\n// TODO: Implement this in {language}"
+./agents/test_agent.py:271:    # TODO: Implement test
+./agents/test_agent.py:276:    # TODO: Implement test
+./agents/test_agent.py:281:    # TODO: Implement test
+./agents/test_agent.py:286:    # TODO: Implement test
+./tests/test_guardian_system_comprehensive.py:612:    # TODO: implement this
+./tests/test_guardian_system_comprehensive.py:1059:    # TODO: implement calculation
+./tests/test_guardian_system_comprehensive.py:1063:    # TODO: add processing logic
+./tests/test_explore_agent.py:78:    # TODO: Add error handling
+./tests/test_explore_agent.py:119:- TODO: Add more features
+./tests/test_file_tools.py:82:# TODO: Add more functions
+./tests/test_file_tools.py:814:        assert result.total_matches >= 2  # TODO and FIXME
+./examples/guardian_auto_protection_demo.py:66:    # TODO: implement this function
+./core/streaming/agent.py:147:        TODO: Implement real Anthropic API streaming.
+./core/context/strategies.py:358:        # TODO: Implement LLM summarization
+./core/context/strategies.py:387:        """Create placeholder summary (TODO: replace with real LLM summary)"""
+./core/context/monitor.py:324:        # TODO: Implement user prompt
+./core/context/compactor.py:120:        messages_summarized = 0  # TODO: Track from strategy
+./core/deter_agent/guardian.py:355:        cot_quality = 0.8  # TODO: Implementar análise real
+./core/deter_agent/guardian.py:358:        consistency_score = 0.85  # TODO: Implementar análise real
+./core/deter_agent/guardian.py:361:        critic_score = 0.75  # TODO: Implementar análise real
+./core/deter_agent/guardian.py:417:        # TODO: Implementar tracking real de performance
+./core/task_planner.py:380:                    parameters={'file_path': 'main.cpp', 'content': '// TODO'},
+./core/constitutional/guardians/auto_protection.py:295:            fixed_code = re.sub(r'#\s*TODO:.*', '', fixed_code)
+./core/constitutional/guardians/auto_protection.py:296:            fixed_code = re.sub(r'//\s*TODO:.*', '', fixed_code)
+
+═══════════════════════════════════════════════════════════════
+DISTRIBUIÇÃO POR ARQUIVO:
+═══════════════════════════════════════════════════════════════
+      4 ./core/deter_agent/guardian.py
+      4 ./agents/test_agent.py
+      3 ./tests/test_guardian_system_comprehensive.py
+      3 ./agents/code_agent.py
+      2 ./tests/test_file_tools.py
+      2 ./tests/test_explore_agent.py
+      2 ./core/context/strategies.py
+      2 ./core/constitutional/guardians/auto_protection.py
+      1 ./examples/guardian_auto_protection_demo.py
+      1 ./core/task_planner.py
+      1 ./core/streaming/agent.py
+      1 ./core/context/monitor.py
+      1 ./core/context/compactor.py

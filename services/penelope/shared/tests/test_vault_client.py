@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from backend.shared.vault_client import (
+from shared.vault_client import (
     VaultClient,
     VaultConfig,
     get_api_key,

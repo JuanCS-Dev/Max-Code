@@ -1,0 +1,82 @@
+2025-11-08 16:54:58,095 - core.tools.registry - INFO - ToolRegistry initialized
+2025-11-08 16:54:58,095 - core.tools.registry - INFO - Tool 'file_reader' registered successfully (version 1.0.0)
+2025-11-08 16:54:58,096 - core.tools.registry - INFO - Tool 'file_writer' registered successfully (version 1.0.0)
+2025-11-08 16:54:58,097 - core.tools.registry - INFO - Tool 'file_editor' registered successfully (version 1.0.0)
+2025-11-08 16:54:58,098 - core.tools.registry - INFO - Tool 'glob_tool' registered successfully (version 1.0.0)
+2025-11-08 16:54:58,099 - core.tools.registry - INFO - Tool 'grep_tool' registered successfully (version 1.0.0)
+2025-11-08 16:54:58,102 - core.tools.enhanced_registry - INFO - EnhancedToolRegistry initialized
+2025-11-08 16:54:58,102 - core.tools.enhanced_registry - INFO - Enhanced 5 existing tools
+Traceback (most recent call last):
+  File "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli/validate_e2e.py", line 183, in test_case_4_tool_selector
+    selected_tool, reasoning = selector.select_for_task(task)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli/core/tools/tool_selector.py", line 231, in select_for_task
+    requirements = self.infer_requirements(task_description)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli/core/tools/tool_selector.py", line 126, in infer_requirements
+    text = task_description.lower()
+           ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Task' object has no attribute 'lower'
+2025-11-08 16:54:58,104 - core.tool_integration - INFO - ToolIntegration initialized
+2025-11-08 16:54:58,104 - core.execution_engine - INFO - ExecutionEngine initialized
+2025-11-08 16:54:58,104 - core.execution_engine - INFO - Executing 2 tasks sequentially
+2025-11-08 16:54:58,261 - core.execution_engine - ERROR - Thinking task e1 failed: "Could not resolve authentication method. Expected either api_key or auth_token to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted"
+2025-11-08 16:54:58,261 - core.execution_engine - WARNING - Task e1 failed (attempt 1/3), retrying in 1.0s
+2025-11-08 16:54:59,305 - core.execution_engine - ERROR - Thinking task e1 failed: "Could not resolve authentication method. Expected either api_key or auth_token to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted"
+2025-11-08 16:54:59,305 - core.execution_engine - WARNING - Task e1 failed (attempt 2/3), retrying in 2.1s
+2025-11-08 16:55:01,445 - core.execution_engine - ERROR - Thinking task e1 failed: "Could not resolve authentication method. Expected either api_key or auth_token to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted"
+2025-11-08 16:55:01,445 - core.execution_engine - ERROR - Task e1 failed permanently after 3 attempts: "Could not resolve authentication method. Expected either api_key or auth_token to be set. Or for one of the `X-Api-Key` or `Authorization` headers to be explicitly omitted"
+2025-11-08 16:55:01,445 - core.execution_engine - WARNING - Task e1 failed, stopping sequential execution
+2025-11-08 16:55:01,445 - core.execution_engine - INFO - Plan execution completed: 0/2 tasks
+================================================================================
+FASE 5: VALIDAÇÃO END-TO-END - CASOS REAIS
+================================================================================
+
+================================================================================
+CASO 1: Task Models Básicos
+================================================================================
+✅ Task models working
+   Task created: test1
+   Plan created: 1 tasks
+   Time: 0.000s
+
+================================================================================
+CASO 2: Task Graph com Dependências
+================================================================================
+✅ Task graph working
+   Tasks: 4
+   Valid DAG: True
+   Batches: 3
+   Time: 0.000s
+
+================================================================================
+CASO 3: Tool Metadata e Registry
+================================================================================
+✅ Tool registry working
+   Tools registered: 5
+   file_reader found: True
+   Time: 0.000s
+
+================================================================================
+CASO 4: Tool Selector
+================================================================================
+❌ Failed: 'Task' object has no attribute 'lower'
+
+================================================================================
+CASO 5: Execution Engine Básico
+================================================================================
+✅ Execution engine working
+   Total tasks: 2
+   Success: False
+   Time: 3.341s
+
+================================================================================
+SUMMARY - FASE 5
+================================================================================
+Total cases:  5
+Passed:       4
+Failed:       1
+
+================================================================================
+❌ FASE 5 FAILED: 1 test cases failed
+================================================================================

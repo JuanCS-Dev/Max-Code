@@ -6,7 +6,7 @@ Tests all 41 exception classes with 99%+ coverage.
 
 import pytest
 
-from backend.shared.exceptions import (  # Base; Validation; Security; Service; Database; External API; Business Logic; Resource; Analysis; Threat
+from shared.exceptions import (  # Base; Validation; Security; Service; Database; External API; Business Logic; Resource; Analysis; Threat
     AnalysisException,
     AnalysisTimeoutError,
     APIQuotaExceededError,

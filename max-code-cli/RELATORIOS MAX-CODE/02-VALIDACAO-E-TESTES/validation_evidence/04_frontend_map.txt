@@ -1,0 +1,64 @@
+═══════════════════════════════════════════════════════════════
+FASE 0.4 - MAPA DO FRONTEND (max-code-cli FILHO)
+═══════════════════════════════════════════════════════════════
+
+=== UI COMPONENTS ===
+ui/agents.py: 468 linhas
+ui/banner.py: 432 linhas
+ui/banner_vcli_style.py: 180 linhas
+ui/base.py: 311 linhas
+ui/colors.py: 361 linhas
+ui/command_palette.py: 435 linhas
+ui/constants.py: 371 linhas
+ui/dashboard.py: 365 linhas
+ui/demo.py: 292 linhas
+ui/effects.py: 200 linhas
+ui/exceptions.py: 76 linhas
+ui/fast_import.py: 59 linhas
+ui/formatter.py: 505 linhas
+ui/__init__.py: 111 linhas
+ui/keybindings.py: 458 linhas
+ui/menus.py: 544 linhas
+ui/output_block.py: 387 linhas
+ui/progress.py: 564 linhas
+ui/showcase.py: 327 linhas
+ui/smart_errors.py: 583 linhas
+ui/spinners.py: 380 linhas
+ui/status_bar.py: 491 linhas
+ui/streaming.py: 672 linhas
+ui/themes.py: 592 linhas
+ui/tree_of_thoughts.py: 818 linhas
+ui/tui_mode.py: 361 linhas
+ui/types.py: 173 linhas
+ui/utils.py: 334 linhas
+ui/validation.py: 216 linhas
+
+=== CLI/REPL ===
+cli/auth_command.py: 303 linhas
+cli/health_command.py: 145 linhas
+cli/__init__.py: 19 linhas
+cli/learn_command.py: 377 linhas
+cli/main.py: 581 linhas
+cli/predict_command.py: 224 linhas
+cli/repl_enhanced.py: 688 linhas
+cli/sabbath_command.py: 259 linhas
+cli/task_command.py: 563 linhas
+
+=== AGENTS ===
+agents/sleep_agent.py
+agents/plan_agent.py
+agents/fix_agent.py
+agents/docs_agent.py
+agents/validation_schemas.py
+agents/review_agent.py
+agents/architect_agent.py
+agents/code_agent.py
+agents/test_agent.py
+agents/__init__.py
+agents/explore_agent.py
+
+=== ARQUIVOS V3.0 ESPECÍFICOS ===
+✅ ui/colors.py: 361 linhas
+✅ ui/status_bar.py: 491 linhas
+✅ ui/banner.py: 432 linhas
+✅ cli/repl_enhanced.py: 688 linhas

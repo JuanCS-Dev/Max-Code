@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 from pydantic import Field, ValidationError
 
-from backend.shared.base_config import (
+from shared.base_config import (
     BaseServiceConfig,
     Environment,
     generate_env_example,
@@ -181,7 +181,7 @@ class TestBaseServiceConfig:
 
     def test_cors_origins_csv_parsing(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Test CORS origins CSV string parsing in validator."""
-        from backend.shared.base_config import BaseServiceConfig
+        from shared.base_config import BaseServiceConfig
 
         result = BaseServiceConfig.parse_cors_origins(
             "http://a.com,http://b.com, http://c.com "

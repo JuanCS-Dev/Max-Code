@@ -45,6 +45,7 @@ Personality:
 """
 
 import sys
+from core.tree_of_thoughts import TreeOfThoughts
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 

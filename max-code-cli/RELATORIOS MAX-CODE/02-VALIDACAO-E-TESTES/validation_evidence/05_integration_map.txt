@@ -1,0 +1,187 @@
+═══════════════════════════════════════════════════════════════
+FASE 0.5 - MAPA DE INTEGRAÇÃO Backend ↔ Frontend
+═══════════════════════════════════════════════════════════════
+
+=== IMPORTS DO PAI (services/) ===
+./integration/orchestrator_client.py:5:Based on real API endpoints from services/orchestrator/main.py
+./integration/oraculo_client.py:5:Based on real API endpoints from services/oraculo/api.py
+./integration/maximus_client.py:5:Based on real API endpoints from services/core/consciousness/api.py
+./integration/penelope_client.py:5:Based on real API endpoints from services/penelope/api/routes.py
+
+=== SYS.PATH APPEND AO PAI ===
+
+=== CLIENTS DE INTEGRAÇÃO ===
+./integration/orchestrator_client.py
+./integration/oraculo_client.py
+./integration/simple_clients.py
+./integration/atlas_client.py
+./integration/maximus_client.py
+./integration/base_client.py
+./integration/penelope_client.py
+./maximus_services_reference/maximus_oraculo/.venv/lib/python3.11/site-packages/starlette/testclient.py
+./maximus_services_reference/maximus_oraculo/.venv/lib/python3.11/site-packages/fastapi/testclient.py
+./maximus_services_reference/maximus_orchestrator_service/.venv/lib/python3.11/site-packages/starlette/testclient.py
+./maximus_services_reference/maximus_orchestrator_service/.venv/lib/python3.11/site-packages/fastapi/testclient.py
+./maximus_services_reference/maximus_orchestrator_service/.venv/lib/python3.11/site-packages/httpx/_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api/client_pb2.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/operations_v1/operations_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/operations_v1/operations_async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/operations_v1/operations_client_config.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/operations_v1/abstract_operations_base_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/operations_v1/abstract_operations_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/operations_v1/operations_rest_client_async.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/gapic_v1/client_info.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/client_info.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/client_options.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/api_core/client_logging.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/auth/_oauth2client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/auth/transport/_http_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/oauth2/_client_async.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/oauth2/_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/generativeai/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/generativeai/notebook/gspread_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/retriever_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/retriever_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/cache_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/cache_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/permission_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/permission_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/model_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/model_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/file_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/file_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/text_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/text_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/discuss_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/discuss_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/prediction_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/prediction_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta2/services/model_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta2/services/model_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta2/services/text_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta2/services/text_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta2/services/discuss_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta2/services/discuss_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/retriever_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/retriever_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/cache_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/cache_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/permission_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/permission_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/model_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/model_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/file_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/file_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/text_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/text_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/discuss_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/discuss_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/prediction_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/prediction_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/generative_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1alpha/services/generative_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1/services/model_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1/services/model_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1/services/generative_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1/services/generative_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta3/services/permission_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta3/services/permission_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta3/services/model_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta3/services/model_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta3/services/text_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta3/services/text_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta3/services/discuss_service/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta3/services/discuss_service/async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/oauthlib/oauth2/rfc6749/grant_types/client_credentials.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/realtime/realtime_session_client_secret.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/realtime/client_secret_create_response.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/realtime/realtime_client_event_param.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/realtime/realtime_client_event.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/realtime/client_secret_create_params.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/fine_tuning/fine_tuning_job_integration.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/fine_tuning/fine_tuning_job_wandb_integration.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/fine_tuning/fine_tuning_job_wandb_integration_object.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/beta/realtime/realtime_client_event_param.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/types/beta/realtime/realtime_client_event.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/_base_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/_module_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/openai/resources/realtime/client_secrets.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/websockets/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/websockets/sync/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/websockets/legacy/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/huggingface_hub/inference/_generated/_async_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/huggingface_hub/inference/_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/huggingface_hub/inference/_mcp/mcp_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/transformers/integrations/integration_utils.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kafka/client_async.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kafka/admin/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/starlette/testclient.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/grpc/beta/_client_adaptations.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/aiohttp/client_ws.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/aiohttp/client_reqrep.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/aiohttp/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/aiohttp/client_proto.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/aiohttp/client_exceptions.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/aiohttp/client_middlewares.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/aiohttp/client_middleware_digest_auth.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/anthropic/lib/vertex/_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/anthropic/lib/bedrock/_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/anthropic/_base_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/anthropic/_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/fastapi/testclient.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/pkg_resources/tests/test_integration_zope_interface.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kubernetes/dynamic/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kubernetes/dynamic/test_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kubernetes/client/api_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kubernetes/client/models/apiextensions_v1_webhook_client_config.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kubernetes/client/models/v1_server_address_by_client_cidr.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kubernetes/client/models/v1_client_ip_config.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kubernetes/client/models/admissionregistration_v1_webhook_client_config.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kubernetes/stream/ws_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/kubernetes/stream/ws_client_test.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/redis/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/redis/asyncio/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/httpx/_client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/docker/client.py
+./maximus_services_reference/maximus_core_service/.venv/lib/python3.11/site-packages/docker/api/client.py
+./maximus_services_reference/atlas_service/.venv/lib/python3.11/site-packages/starlette/testclient.py
+./maximus_services_reference/atlas_service/.venv/lib/python3.11/site-packages/fastapi/testclient.py
+./tests/integration/test_base_client.py
+./tests/test_maximus_integration_comprehensive.py
+./tests/test_epl_integration.py
+./tests/test_file_tools_integration.py
+./tests/test_maximus_client.py
+./tests/test_self_correction_integration.py
+./core/maximus_integration/client.py
+./core/maximus_integration/maba_client.py
+./core/maximus_integration/nis_client.py
+./core/maximus_integration/penelope_client.py
+./core/integration_manager.py
+./core/streaming/client.py
+./core/chat_integration.py
+./core/mcp/client.py
+./core/llm/client.py
+
+=== SYMLINKS ===
+ 16407390      0 lrwxrwxrwx   1 juan     juan            3 Nov  4 21:04 ./maximus_services_reference/maximus_oraculo/.venv/lib64 -> lib
+ 16406890      0 lrwxrwxrwx   1 juan     juan            6 Nov  4 21:04 ./maximus_services_reference/maximus_oraculo/.venv/bin/python3.11 -> python
+ 16406888      0 lrwxrwxrwx   1 juan     juan           46 Nov  4 21:04 ./maximus_services_reference/maximus_oraculo/.venv/bin/python -> /home/juan/.pyenv/versions/3.11.13/bin/python3
+ 16406889      0 lrwxrwxrwx   1 juan     juan            6 Nov  4 21:04 ./maximus_services_reference/maximus_oraculo/.venv/bin/python3 -> python
+ 16406807      0 lrwxrwxrwx   1 juan     juan            3 Nov  4 21:04 ./maximus_services_reference/maximus_orchestrator_service/.venv/lib64 -> lib
+ 16406191      0 lrwxrwxrwx   1 juan     juan            6 Nov  4 21:04 ./maximus_services_reference/maximus_orchestrator_service/.venv/bin/python3.11 -> python
+ 16406189      0 lrwxrwxrwx   1 juan     juan           46 Nov  4 21:04 ./maximus_services_reference/maximus_orchestrator_service/.venv/bin/python -> /home/juan/.pyenv/versions/3.11.13/bin/python3
+ 16406190      0 lrwxrwxrwx   1 juan     juan            6 Nov  4 21:04 ./maximus_services_reference/maximus_orchestrator_service/.venv/bin/python3 -> python
+ 16290575      0 lrwxrwxrwx   1 juan     juan            3 Nov  4 21:04 ./maximus_services_reference/maximus_core_service/.venv/lib64 -> lib
+ 16269430      0 lrwxrwxrwx   1 juan     juan            6 Nov  4 21:03 ./maximus_services_reference/maximus_core_service/.venv/bin/python3.11 -> python
+ 16269428      0 lrwxrwxrwx   1 juan     juan           46 Nov  4 21:03 ./maximus_services_reference/maximus_core_service/.venv/bin/python -> /home/juan/.pyenv/versions/3.11.13/bin/python3
+ 16269429      0 lrwxrwxrwx   1 juan     juan            6 Nov  4 21:03 ./maximus_services_reference/maximus_core_service/.venv/bin/python3 -> python
+ 16407520      0 lrwxrwxrwx   1 juan     juan           25 Nov  4 21:04 ./maximus_services_reference/penelope_service/.env -> .env.vertice-subordinates
+ 16405627      0 lrwxrwxrwx   1 juan     juan            3 Nov  4 21:04 ./maximus_services_reference/atlas_service/.venv/lib64 -> lib
+ 16405632      0 lrwxrwxrwx   1 juan     juan            6 Nov  4 21:04 ./maximus_services_reference/atlas_service/.venv/bin/python3.11 -> python
+ 16405630      0 lrwxrwxrwx   1 juan     juan           46 Nov  4 21:04 ./maximus_services_reference/atlas_service/.venv/bin/python -> /home/juan/.pyenv/versions/3.11.13/bin/python3
+ 16405631      0 lrwxrwxrwx   1 juan     juan            6 Nov  4 21:04 ./maximus_services_reference/atlas_service/.venv/bin/python3 -> python
+ 16400065      0 lrwxrwxrwx   1 juan     juan           27 Nov  7 08:30 ./core/auth/oauth.py -> ../../../core/auth/oauth.py
+ 16400055      0 lrwxrwxrwx   1 juan     juan           28 Nov  7 08:30 ./core/auth/config.py -> ../../../core/auth/config.py
