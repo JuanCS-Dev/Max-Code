@@ -239,6 +239,16 @@ class TestEndToEndIntegration:
         from core.audit import get_auditor
         from core.audit.independent_auditor import Task, AgentResult
 
+        # Get auditor and RESET vitals to healthy baseline (avoid state contamination)
+        auditor = get_auditor()
+        auditor.vital_monitor.state.protecao = 100.0
+        auditor.vital_monitor.state.crescimento = 100.0
+        auditor.vital_monitor.state.nutricao = 100.0
+        auditor.vital_monitor.state.cura = 100.0
+        auditor.vital_monitor.state.trabalho = 100.0
+        auditor.vital_monitor.state.sobrevivencia = 100.0
+        auditor.vital_monitor.state.ritmo = 100.0
+
         # Build inputs (simulate CLI)
         task = Task(
             prompt="Create hello.py",
@@ -254,7 +264,6 @@ class TestEndToEndIntegration:
         )
 
         # Run audit (core functionality)
-        auditor = get_auditor()
         report = await auditor.audit_execution(task, agent_result)
 
         # Verify report structure

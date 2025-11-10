@@ -32,11 +32,23 @@ from core.wisdom_base_client import WisdomBaseClient
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_client import start_http_server
-from libs.constitutional.metrics import MetricsExporter, auto_update_sabbath_status
-from libs.constitutional.tracing import create_constitutional_tracer
 
-# Shared library imports (work when in ~/vertice-dev/backend/services/)
-from libs.registry.client import RegistryClient, auto_register_service
+# Constitutional v3.0 imports (optional)
+try:
+    from libs.constitutional.metrics import MetricsExporter, auto_update_sabbath_status
+    from libs.constitutional.tracing import create_constitutional_tracer
+    CONSTITUTIONAL_AVAILABLE = True
+except ImportError:
+    CONSTITUTIONAL_AVAILABLE = False
+    print("⚠️  Constitutional v3.0 modules not available - running without")
+
+# Shared library imports (optional)
+try:
+    from libs.registry.client import RegistryClient, auto_register_service
+    REGISTRY_AVAILABLE = True
+except ImportError:
+    REGISTRY_AVAILABLE = False
+    print("⚠️  Service Registry not available - running standalone")
 
 # Configure logging
 logging.basicConfig(
@@ -51,7 +63,7 @@ observability_client: ObservabilityClient | None = None
 sophia_engine: SophiaEngine | None = None
 praotes_validator: PraotesValidator | None = None
 tapeinophrosyne_monitor: TapeinophrosyneMonitor | None = None
-metrics_exporter: MetricsExporter | None = None
+metrics_exporter: Any = None  # MetricsExporter (optional)
 _heartbeat_task: asyncio.Task | None = None
 
 
@@ -107,25 +119,29 @@ async def lifespan(app: FastAPI):
     logger.info("🚀 Starting PENELOPE Service...")
 
     try:
-        # Initialize Metrics Exporter (Constitution v3.0 compliance)
+        # Initialize Metrics Exporter (Constitution v3.0 compliance) - Optional
         service_version = os.getenv("SERVICE_VERSION", "1.0.0")
-        metrics_exporter = MetricsExporter(
-            service_name="penelope", version=service_version
-        )
-        logger.info("✅ Constitutional Metrics Exporter initialized")
-        logger.info("   📊 Tracking: CRS, LEI, FPC, 7 Articles, 9 Fruits")
 
-        # Auto-update Sabbath status in metrics
-        auto_update_sabbath_status("penelope")
+        if CONSTITUTIONAL_AVAILABLE:
+            metrics_exporter = MetricsExporter(
+                service_name="penelope", version=service_version
+            )
+            logger.info("✅ Constitutional Metrics Exporter initialized")
+            logger.info("   📊 Tracking: CRS, LEI, FPC, 7 Articles, 9 Fruits")
 
-        # Initialize Constitutional Tracer (OpenTelemetry)
-        constitutional_tracer = create_constitutional_tracer(
-            service_name="penelope", version=service_version
-        )
-        # Instrument FastAPI app with tracing
-        constitutional_tracer.instrument_fastapi(app)
-        logger.info("✅ Constitutional Tracer (OpenTelemetry) initialized")
-        logger.info("   🔍 Tracing: 7 Articles, DETER-AGENT layers, biblical decisions")
+            # Auto-update Sabbath status in metrics
+            auto_update_sabbath_status("penelope")
+
+            # Initialize Constitutional Tracer (OpenTelemetry)
+            constitutional_tracer = create_constitutional_tracer(
+                service_name="penelope", version=service_version
+            )
+            # Instrument FastAPI app with tracing
+            constitutional_tracer.instrument_fastapi(app)
+            logger.info("✅ Constitutional Tracer (OpenTelemetry) initialized")
+            logger.info("   🔍 Tracing: 7 Articles, DETER-AGENT layers, biblical decisions")
+        else:
+            logger.warning("⚠️  Constitutional v3.0 unavailable - skipping metrics/tracing")
 
         # Initialize Wisdom Base
         wisdom_base = WisdomBaseClient()
@@ -155,24 +171,27 @@ async def lifespan(app: FastAPI):
         else:
             logger.info("✅ Regular operation mode (weekday)")
 
-        # Register with Service Registry
-        try:
-            _heartbeat_task = await auto_register_service(
-                service_name="penelope",
-                port=int(os.getenv("SERVICE_PORT", 8154)),
-                health_endpoint="/health",
-                metadata={
-                    "category": "maximus_subordinate",
-                    "type": "autonomous_healing",
-                    "version": os.getenv("SERVICE_VERSION", "1.0.0"),
-                    "governance": "7_biblical_articles",
-                    "sabbath_mode": is_sabbath(),
-                },
-            )
-            logger.info("✅ Registered with Vértice Service Registry")
-        except Exception as e:
-            logger.warning(f"⚠️ Failed to register with service registry: {e}")
-            logger.warning("   Continuing without registry (standalone mode)")
+        # Register with Service Registry (optional)
+        if REGISTRY_AVAILABLE:
+            try:
+                _heartbeat_task = await auto_register_service(
+                    service_name="penelope",
+                    port=int(os.getenv("SERVICE_PORT", 8154)),
+                    health_endpoint="/health",
+                    metadata={
+                        "category": "maximus_subordinate",
+                        "type": "autonomous_healing",
+                        "version": os.getenv("SERVICE_VERSION", "1.0.0"),
+                        "governance": "7_biblical_articles",
+                        "sabbath_mode": is_sabbath(),
+                    },
+                )
+                logger.info("✅ Registered with Vértice Service Registry")
+            except Exception as e:
+                logger.warning(f"⚠️ Failed to register with service registry: {e}")
+                logger.warning("   Continuing without registry (standalone mode)")
+        else:
+            logger.warning("⚠️  Service Registry not available - running standalone")
 
         logger.info("✅ PENELOPE Service started successfully")
         logger.info("   Governed by: 7 Biblical Articles of Christian Governance")

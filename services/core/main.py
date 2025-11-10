@@ -9,6 +9,8 @@ and manages the lifecycle of the Maximus AI, ensuring it can receive requests,
 process them, and return intelligent responses.
 """
 
+import logging
+import os
 from typing import Any
 
 import uvicorn
@@ -36,6 +38,21 @@ try:
 except ImportError:
     REGISTRY_AVAILABLE = False
     print("⚠️  Service Registry client not available - running standalone")
+
+# Import Constitutional v3.0 modules (optional)
+try:
+    from libs.constitutional.logging import configure_constitutional_logging
+    from libs.constitutional.metrics import MetricsExporter, auto_update_sabbath_status
+    from libs.constitutional.tracing import create_constitutional_tracer
+    from libs.common.health import ConstitutionalHealthCheck
+    CONSTITUTIONAL_AVAILABLE = True
+except ImportError:
+    CONSTITUTIONAL_AVAILABLE = False
+    print("⚠️  Constitutional v3.0 modules not available - running without")
+
+# Setup basic logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Maximus Core Service", version="1.0.0")
 
@@ -81,49 +98,52 @@ class QueryRequest(BaseModel):
 async def startup_event():
     """Initializes the Maximus AI system and starts its autonomic core on application startup."""
 
-    # Constitutional v3.0 Initialization
+    # Constitutional v3.0 Initialization (optional)
     global metrics_exporter, constitutional_tracer, health_checker
     service_version = os.getenv("SERVICE_VERSION", "1.0.0")
 
-    try:
-        # Logging
-        configure_constitutional_logging(
-            service_name="maximus_core_service",
-            log_level=os.getenv("LOG_LEVEL", "INFO"),
-            json_logs=True
-        )
+    if CONSTITUTIONAL_AVAILABLE:
+        try:
+            # Logging
+            configure_constitutional_logging(
+                service_name="maximus_core_service",
+                log_level=os.getenv("LOG_LEVEL", "INFO"),
+                json_logs=True
+            )
 
-        # Metrics
-        metrics_exporter = MetricsExporter(
-            service_name="maximus_core_service",
-            version=service_version
-        )
-        auto_update_sabbath_status("maximus_core_service")
-        logger.info("✅ Constitutional Metrics initialized")
+            # Metrics
+            metrics_exporter = MetricsExporter(
+                service_name="maximus_core_service",
+                version=service_version
+            )
+            auto_update_sabbath_status("maximus_core_service")
+            logger.info("✅ Constitutional Metrics initialized")
 
-        # Tracing
-        constitutional_tracer = create_constitutional_tracer(
-            service_name="maximus_core_service",
-            version=service_version
-        )
-        constitutional_tracer.instrument_fastapi(app)
-        logger.info("✅ Constitutional Tracing initialized")
+            # Tracing
+            constitutional_tracer = create_constitutional_tracer(
+                service_name="maximus_core_service",
+                version=service_version
+            )
+            constitutional_tracer.instrument_fastapi(app)
+            logger.info("✅ Constitutional Tracing initialized")
 
-        # Health
-        health_checker = ConstitutionalHealthCheck(service_name="maximus_core_service")
-        logger.info("✅ Constitutional Health Checker initialized")
+            # Health
+            health_checker = ConstitutionalHealthCheck(service_name="maximus_core_service")
+            logger.info("✅ Constitutional Health Checker initialized")
 
-        # Routes
-        if metrics_exporter:
-            app.include_router(metrics_exporter.create_router())
-            logger.info("✅ Constitutional metrics routes added")
+            # Routes
+            if metrics_exporter:
+                app.include_router(metrics_exporter.create_router())
+                logger.info("✅ Constitutional metrics routes added")
 
-    except Exception as e:
-        logger.error(f"❌ Constitutional initialization failed: {e}", exc_info=True)
+        except Exception as e:
+            logger.error(f"❌ Constitutional initialization failed: {e}", exc_info=True)
 
-    # Mark startup complete
-    if health_checker:
-        health_checker.mark_startup_complete()
+        # Mark startup complete
+        if health_checker:
+            health_checker.mark_startup_complete()
+    else:
+        logger.warning("⚠️ Constitutional v3.0 not available - skipping")
 
     global maximus_ai, decision_queue, operator_interface, decision_framework, consciousness_system, _heartbeat_task
 
@@ -414,12 +434,6 @@ if __name__ == "__main__":
 
     # Start Prometheus metrics server
     from prometheus_client import start_http_server
-
-# Constitutional v3.0 imports
-from libs.constitutional.metrics import MetricsExporter, auto_update_sabbath_status
-from libs.constitutional.tracing import create_constitutional_tracer
-from libs.constitutional.logging import configure_constitutional_logging
-from libs.common.health import ConstitutionalHealthCheck
 
     start_http_server(8001)
     print("📈 Prometheus metrics server started on port 8001")
