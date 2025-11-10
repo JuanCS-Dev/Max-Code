@@ -1,98 +1,89 @@
-# MAX-CODE-CLI - Quick Start Guide
+# Quick Start - Truth Engine + Vital System
 
-**Get up and running in 5 minutes**
+Guia rápido para começar a usar o sistema de verificação objetiva e consequências metabólicas.
 
----
-
-## Installation
+## Instalação
 
 ```bash
-cd "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli"
+# Clone o repositório
+git clone https://github.com/JuanCS-Dev/Max-Code.git
+cd max-code-cli
 
-# Install dependencies
+# Instale dependências
 pip install -r requirements.txt
 
-# Verify installation
-python -m cli --version
+# (Opcional) Instale tree-sitter para análise AST completa
+pip install tree-sitter tree-sitter-python
 ```
 
-## First Run
+## Uso Básico
 
-### Interactive REPL (Recommended)
+### 1. Truth Engine - Verificação Objetiva
+
+```python
+from core.truth_engine import TruthEngine
+
+# Inicializar
+engine = TruthEngine(project_root="/path/to/project")
+
+# Verificar implementação
+result = engine.verify(
+    prompt="""Create a calculator with:
+    - add(a, b) - Addition
+    - subtract(a, b) - Subtraction
+    - multiply(a, b) - Multiplication
+    """,
+    run_tests=True
+)
+
+# Ver métricas objetivas
+print(f"Completeness: {result.metrics.completeness:.1%}")
+print(f"Quality Score: {result.metrics.quality_score:.1f}/100")
+print(f"LEI: {result.metrics.lei:.2f}")
+```
+
+### 2. Vital System - Consequências Metabólicas
+
+```python
+from core.vital_system import VitalSystemMonitor
+
+# Inicializar
+monitor = VitalSystemMonitor()
+
+# Aplicar metabolismo
+delta = monitor.metabolize_truth({
+    'completeness': 0.9,
+    'honest_report': True
+})
+
+# Ver dashboard
+print(monitor.render_dashboard(compact=False))
+```
+
+### 3. Independent Auditor - Pipeline Completo
+
+```python
+from core.audit import get_auditor, Task, AgentResult
+
+auditor = get_auditor()
+
+task = Task(prompt="Implement feature X")
+result = AgentResult(success=True, output="Done", files_changed=["x.py"])
+
+report = await auditor.audit_execution(task, result)
+print(report.honest_report)
+```
+
+## Rodando o Demo
 
 ```bash
-# Start the REPL
-python -m cli repl
-
-# You'll see the neon gradient interface:
-maximus ⚡ › 
+python3 examples/demo_truth_system.py
 ```
 
-### Available Slash Commands
-
-- `/code` - Generate code
-- `/review` - Review code
-- `/test` - Generate tests
-- `/fix` - Fix bugs
-- `/docs` - Generate documentation
-- `/plan` - Create implementation plan
-- `/explore` - Explore codebase
-- `/help` - Show all commands
-
-### Example Session
-
-```
-maximus ⚡ › /code Create a fibonacci function in Python
-
-[Agent executes and generates code...]
-
-maximus ⚡ › /test Generate tests for the fibonacci function
-
-[Test agent generates comprehensive tests...]
-
-maximus ⚡ › /review Review the fibonacci implementation
-
-[Review agent provides feedback...]
-```
-
-## Key Features
-
-### 1. Neon Gradient UI
-- Tri-color gradient (#00FF41 → #FFFF00 → #00D4FF)
-- Constitutional status bar (P1-P6 principles)
-- Real-time agent status
-
-### 2. Agent System
-- **9 Specialized Agents** for different tasks
-- Constitutional AI validation
-- MAXIMUS backend integration
-
-### 3. Backend Integration
-- PENELOPE: Biblical governance
-- MAXIMUS: AI consciousness
-- ORACULO: Self-improvement
-- 8 microservices connected
-
-## Configuration
-
-Edit `.env` file:
+## Rodando os Testes
 
 ```bash
-# LLM Configuration
-ANTHROPIC_API_KEY=your-key-here
-
-# Backend Services (optional)
-MAXIMUS_CORE_URL=http://localhost:8150
-PENELOPE_URL=http://localhost:8153
-
-# Feature Flags
-ENABLE_CONSTITUTIONAL_AI=true
-ENABLE_STREAMING=true
+pytest tests/test_*_scientific.py -v
 ```
 
-## Next Steps
-
-1. Explore [Agent Documentation](../agents/00_AGENTS_INDEX.md)
-2. Read [CLI Reference](../cli/CLI_REFERENCE.md)
-3. Check [Development Guide](DEVELOPMENT_GUIDE.md)
-
+Soli Deo Gloria 🙏
