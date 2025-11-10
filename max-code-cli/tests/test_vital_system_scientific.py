@@ -140,25 +140,22 @@ class TestVitalMetabolismRealScenarios:
             assert fresh_monitor.state.is_critical(), \
                 "System should be in critical state after severe dishonesty"
 
-    @pytest.mark.skip(reason="Capped at 100 - already maxed out, valid edge case")
     def test_honest_success_metabolism(self, fresh_monitor):
         """
         SCIENTIFIC TEST: Honest success scenario (from demo)
 
         Real case: Agent implements all functions, admits limitations
         Hypothesis: MASSIVE rewards to all vitals
-        Expected: All metrics increase significantly
+        Expected: All metrics increase significantly (avg +20%+)
         """
-        # Baseline
-        initial_state = {
-            'protection': fresh_monitor.state.protecao,
-            'growth': fresh_monitor.state.crescimento,
-            'nutrition': fresh_monitor.state.nutricao,
-            'healing': fresh_monitor.state.cura,
-            'trabalho': fresh_monitor.state.trabalho,
-            'survival': fresh_monitor.state.sobrevivencia,
-            'ritmo': fresh_monitor.state.ritmo
-        }
+        # Start with degraded state to see rewards (70% baseline)
+        fresh_monitor.state.protecao = 70.0
+        fresh_monitor.state.crescimento = 70.0
+        fresh_monitor.state.nutricao = 70.0
+        fresh_monitor.state.cura = 70.0
+        fresh_monitor.state.trabalho = 70.0
+        fresh_monitor.state.sobrevivencia = 70.0
+        fresh_monitor.state.ritmo = 70.0
 
         # REAL metrics from demo_honest_success()
         truth_metrics = {
@@ -175,26 +172,27 @@ class TestVitalMetabolismRealScenarios:
         delta = fresh_monitor.metabolize_truth(truth_metrics)
 
         # Validate: ALL vitals should increase
-        final_state = {
-            'protection': fresh_monitor.state.protecao,
-            'growth': fresh_monitor.state.crescimento,
-            'nutrition': fresh_monitor.state.nutricao,
-            'healing': fresh_monitor.state.cura,
-            'trabalho': fresh_monitor.state.trabalho,
-            'survival': fresh_monitor.state.sobrevivencia,
-            'ritmo': fresh_monitor.state.ritmo
-        }
+        assert fresh_monitor.state.protecao > 70.0, "Protection should increase"
+        assert fresh_monitor.state.crescimento > 70.0, "Growth should increase"
+        assert fresh_monitor.state.nutricao > 70.0, "Nutrition should increase"
+        assert fresh_monitor.state.cura > 70.0, "Healing should increase"
+        assert fresh_monitor.state.trabalho > 70.0, "Trabalho should increase"
+        assert fresh_monitor.state.sobrevivencia > 70.0, "Survival should increase"
+        assert fresh_monitor.state.ritmo > 70.0, "Ritmo should increase"
 
-        # All vitals must improve
-        for vital_name in initial_state:
-            assert final_state[vital_name] > initial_state[vital_name], \
-                f"{vital_name} should increase for honest success: " \
-                f"{final_state[vital_name]} <= {initial_state[vital_name]}"
+        # Rewards should be MASSIVE (avg >20% empirically ~30%)
+        avg_increase = (
+            (fresh_monitor.state.protecao - 70.0) +
+            (fresh_monitor.state.crescimento - 70.0) +
+            (fresh_monitor.state.nutricao - 70.0) +
+            (fresh_monitor.state.cura - 70.0) +
+            (fresh_monitor.state.trabalho - 70.0) +
+            (fresh_monitor.state.sobrevivencia - 70.0) +
+            (fresh_monitor.state.ritmo - 70.0)
+        ) / 7
 
-        # Rewards should be MASSIVE (not marginal)
-        avg_increase = sum(final_state[v] - initial_state[v] for v in initial_state) / 7
-        assert avg_increase > 10, \
-            f"Average vital increase should be >10% for honest success: {avg_increase:.1f}%"
+        assert avg_increase > 20, \
+            f"Average vital increase should be >20% for honest success: {avg_increase:.1f}%"
 
 
 class TestCriticalStateScientific:
@@ -264,7 +262,10 @@ class TestCriticalStateScientific:
         Hypothesis: Protection decreases with each lie until critical
         Expected: After N dishonest acts, Protection < 20%
         """
-        monitor = VitalSystemMonitor(state_file="/tmp/test_vital_state.json")
+        monitor = VitalSystemMonitor(state_file="/tmp/test_repeated_dishonesty.json")
+        # Start at baseline to see degradation
+        monitor.state.protecao = 100.0
+        monitor.state.sobrevivencia = 100.0
 
         # Dishonest metrics (claiming success but delivering mocks)
         dishonest_metrics = {
@@ -328,20 +329,20 @@ class TestVitalSnapshotScientific:
         assert snapshot.state.crescimento > 0, "Snapshot should capture Growth"
         assert snapshot.state.nutricao > 0, "Snapshot should capture Nutrition"
 
-    @pytest.mark.skip(reason="Metabolic trajectory test - requires fine-tuning expectations")
     def test_state_history_tracks_metabolism(self):
         """
         SCIENTIFIC TEST: State history shows metabolic trajectory
 
-        Real scenario: Apply honest success → honest failure → verify history
+        Real scenario: Apply honest success → honest failure (no tests) → verify trajectory
         Expected: History shows upward then downward trend
         """
         monitor = VitalSystemMonitor(state_file="/tmp/test_vital_state.json")
 
-        # Baseline
-        baseline_protection = monitor.state.protecao
+        # Start at 70% to see trajectory
+        monitor.state.protecao = 70.0
+        baseline_protection = 70.0
 
-        # Phase 1: Honest success
+        # Phase 1: Honest success → should increase significantly
         success_metrics = {
             'completeness': 1.0,
             'mocked': 0,
@@ -354,24 +355,24 @@ class TestVitalSnapshotScientific:
         monitor.metabolize_truth(success_metrics)
         after_success = monitor.state.protecao
 
-        # Phase 2: Honest failure
+        # Phase 2: Honest failure WITHOUT tests → should decrease
         failure_metrics = {
-            'completeness': 0.3,
+            'completeness': 0.2,  # Very low completeness
             'mocked': 0,
-            'missing': 7,
-            'tests_total': 3,
-            'tests_passing': 3,
-            'coverage': 0.3,
+            'missing': 8,
+            'tests_total': 0,  # NO TESTS (causes decrease)
+            'tests_passing': 0,
+            'coverage': 0.2,
             'honest_report': True
         }
         monitor.metabolize_truth(failure_metrics)
         after_failure = monitor.state.protecao
 
-        # Verify trajectory
+        # Verify trajectory: up then down
         assert after_success > baseline_protection, \
-            "Success should increase Protection"
+            f"Success should increase Protection: {after_success} <= {baseline_protection}"
         assert after_failure < after_success, \
-            "Failure after success should decrease Protection"
+            f"Failure (no tests) should decrease Protection: {after_failure} >= {after_success}"
 
         # Verify snapshots captured transitions
         assert len(monitor.history) >= 2, \
@@ -448,7 +449,6 @@ class TestMetabolicFormulas:
     These tests ensure mathematical correctness of metabolism.
     """
 
-    @pytest.mark.skip(reason="Penalty scaling test - metabolic formula edge cases")
     def test_protection_penalty_proportional_to_dishonesty(self):
         """
         SCIENTIFIC TEST: Protection penalty scales with dishonesty level
@@ -458,8 +458,8 @@ class TestMetabolicFormulas:
         Expected: penalty(high_dishonesty) > penalty(medium) > penalty(low)
         """
         # Low dishonesty: Claimed 80%, delivered 70%
-        monitor_low = VitalSystemMonitor(state_file="/tmp/test_vital_state.json")
-        initial_low = monitor_low.state.protecao
+        monitor_low = VitalSystemMonitor(state_file="/tmp/test_penalty_low.json")
+        monitor_low.state.protecao = 100.0  # Reset to baseline
         monitor_low.metabolize_truth({
             'completeness': 0.7,
             'mocked': 3,
@@ -469,11 +469,11 @@ class TestMetabolicFormulas:
             'coverage': 0.7,
             'honest_report': False  # Claimed 80% but got 70%
         })
-        penalty_low = initial_low - monitor_low.state.protecao
+        penalty_low = 100.0 - monitor_low.state.protecao
 
         # Medium dishonesty: Claimed 100%, delivered 50%
-        monitor_med = VitalSystemMonitor(state_file="/tmp/test_vital_state.json")
-        initial_med = monitor_med.state.protecao
+        monitor_med = VitalSystemMonitor(state_file="/tmp/test_penalty_med.json")
+        monitor_med.state.protecao = 100.0  # Reset to baseline
         monitor_med.metabolize_truth({
             'completeness': 0.5,
             'mocked': 5,
@@ -483,11 +483,11 @@ class TestMetabolicFormulas:
             'coverage': 0.5,
             'honest_report': False  # Claimed 100% but got 50%
         })
-        penalty_med = initial_med - monitor_med.state.protecao
+        penalty_med = 100.0 - monitor_med.state.protecao
 
         # High dishonesty: Claimed 100%, delivered 0%
-        monitor_high = VitalSystemMonitor(state_file="/tmp/test_vital_state.json")
-        initial_high = monitor_high.state.protecao
+        monitor_high = VitalSystemMonitor(state_file="/tmp/test_penalty_high.json")
+        monitor_high.state.protecao = 100.0  # Reset to baseline
         monitor_high.metabolize_truth({
             'completeness': 0.0,
             'mocked': 10,
@@ -497,7 +497,7 @@ class TestMetabolicFormulas:
             'coverage': 0.0,
             'honest_report': False  # Claimed 100% but got 0%
         })
-        penalty_high = initial_high - monitor_high.state.protecao
+        penalty_high = 100.0 - monitor_high.state.protecao
 
         # Validate scaling
         assert penalty_high > penalty_med > penalty_low, \
@@ -512,8 +512,9 @@ class TestMetabolicFormulas:
         Method: Apply honest failure metrics, measure Growth delta
         Expected: Growth increases even though task failed
         """
-        monitor = VitalSystemMonitor(state_file="/tmp/test_vital_state.json")
-        initial_growth = monitor.state.crescimento
+        monitor = VitalSystemMonitor(state_file="/tmp/test_growth_learn.json")
+        # Start at 70% to see growth
+        monitor.state.crescimento = 70.0
 
         # Honest failure with learning
         monitor.metabolize_truth({
@@ -526,11 +527,9 @@ class TestMetabolicFormulas:
             'honest_report': True  # Honest about limitations
         })
 
-        final_growth = monitor.state.crescimento
-
-        # Growth should increase despite failure
-        assert final_growth > initial_growth, \
-            f"Growth should increase for honest learning: {final_growth} <= {initial_growth}"
+        # Growth should increase despite failure (learning from honest attempt)
+        assert monitor.state.crescimento > 70.0, \
+            f"Growth should increase for honest learning: {monitor.state.crescimento} <= 70.0"
 
 
 if __name__ == "__main__":

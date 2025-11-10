@@ -328,7 +328,6 @@ class TestAuditorIntegration:
             "get_auditor() should return singleton instance"
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="State contamination issue with shared auditor instance")
     async def test_audit_history_accumulates(self, tmp_path):
         """
         SCIENTIFIC TEST: Audit history tracks all audits
@@ -336,13 +335,18 @@ class TestAuditorIntegration:
         Method: Run 3 audits, verify history has 3 entries
         Expected: len(audit_history) == 3
         """
-        auditor = IndependentAuditor(project_root=tmp_path)
-        # Reset vital state to baseline
+        auditor = IndependentAuditor(
+            project_root=tmp_path,
+            enable_truth_verification=False  # Use fallback metrics for this test
+        )
+        # Reset ALL vitals to baseline (prevent contamination)
         auditor.vital_monitor.state.protecao = 100.0
+        auditor.vital_monitor.state.crescimento = 100.0
+        auditor.vital_monitor.state.nutricao = 100.0
+        auditor.vital_monitor.state.cura = 100.0
+        auditor.vital_monitor.state.trabalho = 100.0
         auditor.vital_monitor.state.sobrevivencia = 100.0
-        # Reset vital state to baseline
-        auditor.vital_monitor.state.protecao = 100.0
-        auditor.vital_monitor.state.sobrevivencia = 100.0
+        auditor.vital_monitor.state.ritmo = 100.0
 
         # Simple task
         task = Task(prompt="Create hello_world() function")
@@ -432,7 +436,6 @@ class TestAuditReportGeneration:
         assert "AUDIT" in report.honest_report.upper()
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="State contamination issue")
     async def test_epl_summary_compression(self, tmp_path):
         """
         SCIENTIFIC TEST: EPL summary is compressed vs verbose report
@@ -442,9 +445,14 @@ class TestAuditReportGeneration:
         Expected: epl_summary << honest_report
         """
         auditor = IndependentAuditor(project_root=tmp_path)
-        # Reset vital state to baseline
+        # Reset ALL vitals to baseline
         auditor.vital_monitor.state.protecao = 100.0
+        auditor.vital_monitor.state.crescimento = 100.0
+        auditor.vital_monitor.state.nutricao = 100.0
+        auditor.vital_monitor.state.cura = 100.0
+        auditor.vital_monitor.state.trabalho = 100.0
         auditor.vital_monitor.state.sobrevivencia = 100.0
+        auditor.vital_monitor.state.ritmo = 100.0
 
         task = Task(prompt="Create function")
         result = AgentResult(success=True, output="Done", files_changed=["f.py"])
@@ -461,7 +469,6 @@ class TestAuditReportGeneration:
             f"EPL compression should be >10x: ratio={compression_ratio:.1f}x"
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="State contamination issue")
     async def test_tokens_saved_metric(self, tmp_path):
         """
         SCIENTIFIC TEST: tokens_saved is calculated correctly
@@ -470,9 +477,14 @@ class TestAuditReportGeneration:
         Expected: Matches formula
         """
         auditor = IndependentAuditor(project_root=tmp_path)
-        # Reset vital state to baseline
+        # Reset ALL vitals to baseline
         auditor.vital_monitor.state.protecao = 100.0
+        auditor.vital_monitor.state.crescimento = 100.0
+        auditor.vital_monitor.state.nutricao = 100.0
+        auditor.vital_monitor.state.cura = 100.0
+        auditor.vital_monitor.state.trabalho = 100.0
         auditor.vital_monitor.state.sobrevivencia = 100.0
+        auditor.vital_monitor.state.ritmo = 100.0
 
         task = Task(prompt="Test")
         result = AgentResult(success=True, output="Ok", files_changed=["x.py"])
