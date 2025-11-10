@@ -262,10 +262,19 @@ class TestCriticalStateScientific:
         Hypothesis: Protection decreases with each lie until critical
         Expected: After N dishonest acts, Protection < 20%
         """
-        monitor = VitalSystemMonitor(state_file="/tmp/test_repeated_dishonesty.json")
+        # Use unique file name with timestamp to avoid state contamination
+        import time
+        state_file = f"/tmp/test_repeated_dishonesty_{int(time.time()*1000)}.json"
+        monitor = VitalSystemMonitor(state_file=state_file)
+
         # Start at baseline to see degradation
         monitor.state.protecao = 100.0
         monitor.state.sobrevivencia = 100.0
+        monitor.state.crescimento = 100.0
+        monitor.state.nutricao = 100.0
+        monitor.state.cura = 100.0
+        monitor.state.trabalho = 100.0
+        monitor.state.ritmo = 100.0
 
         # Dishonest metrics (claiming success but delivering mocks)
         dishonest_metrics = {
