@@ -400,6 +400,170 @@ EMOJI_VOCABULARY: Dict[str, EmojiDefinition] = {
         examples=["⚖️✓", "decision→⚖️"],
         token_equivalent=3,  # "Ethical Review 4 frameworks"
     ),
+
+    # ========================================================================
+    # TRUTH ENGINE & VITAL SYSTEM (Audit Vocabulary Extension)
+    # ========================================================================
+
+    "🔎": EmojiDefinition(
+        emoji="🔎",
+        primary_meaning="Independent Auditor / Truth Verification",
+        category=EmojiCategory.AGENT,
+        aliases=["auditor", "truth", "verify", "inspect"],
+        context_meanings={
+            "with_code": "Audit code implementation",
+            "with_report": "Verify claims in report",
+        },
+        examples=["🔎→report", "code→🔎✓"],
+        token_equivalent=4,  # "Independent Auditor Verification"
+    ),
+
+    "📋": EmojiDefinition(
+        emoji="📋",
+        primary_meaning="Requirements / Audit Report",
+        category=EmojiCategory.CONCEPT,
+        aliases=["requirements", "report", "evidence", "audit"],
+        context_meanings={
+            "with_check": "Requirements validated",
+            "with_count": "Requirement count",
+        },
+        examples=["📋7→✅2🎭3❌2", "📋✓"],
+        token_equivalent=2,  # "Audit Report"
+    ),
+
+    "🎚️": EmojiDefinition(
+        emoji="🎚️",
+        primary_meaning="Vital Signs / System Health",
+        category=EmojiCategory.CONCEPT,
+        aliases=["vitals", "health", "metrics", "status"],
+        context_meanings={
+            "with_emoji": "Vital system dashboard",
+            "with_percent": "Health percentage",
+        },
+        examples=["🎚️💎100%", "🎚️🔴30%"],
+        token_equivalent=3,  # "Vital System Health"
+    ),
+
+    "🔬": EmojiDefinition(
+        emoji="🔬",
+        primary_meaning="Deep Analysis / Truth Test",
+        category=EmojiCategory.ACTION,
+        aliases=["analyze", "inspect", "test", "examine"],
+        context_meanings={
+            "with_code": "Deep code analysis",
+            "with_claim": "Verify claim truth",
+        },
+        examples=["code→🔬→📊", "🔬✓"],
+        token_equivalent=3,  # "Deep Truth Analysis"
+    ),
+
+    "⚗️": EmojiDefinition(
+        emoji="⚗️",
+        primary_meaning="Truth Synthesis / Verification Process",
+        category=EmojiCategory.ACTION,
+        aliases=["synthesis", "process", "transform", "verify"],
+        context_meanings={
+            "with_data": "Process and verify data",
+            "with_result": "Synthesized truth",
+        },
+        examples=["data→⚗️→truth", "⚗️✓"],
+        token_equivalent=3,  # "Truth Synthesis Process"
+    ),
+
+    # 7 VITAL PILLARS
+
+    "🌱": EmojiDefinition(
+        emoji="🌱",
+        primary_meaning="Growth / Learning (Vital Pilar 1)",
+        category=EmojiCategory.STATE,
+        aliases=["growth", "crescimento", "learning", "develop"],
+        context_meanings={
+            "with_percent": "Growth level",
+            "with_up": "Learning increased",
+        },
+        examples=["🌱💎100%", "🌱🟢80%", "🌱↑"],
+        token_equivalent=2,  # "Growth Level"
+    ),
+
+    "🍎": EmojiDefinition(
+        emoji="🍎",
+        primary_meaning="Nutrition / Energy (Vital Pilar 2)",
+        category=EmojiCategory.STATE,
+        aliases=["nutrition", "nutricao", "energy", "context"],
+        context_meanings={
+            "with_percent": "Energy level",
+            "with_food": "Context feeding",
+        },
+        examples=["🍎💎100%", "🍎🟡50%"],
+        token_equivalent=2,  # "Nutrition Level"
+    ),
+
+    "💚": EmojiDefinition(
+        emoji="💚",
+        primary_meaning="Healing / Recovery (Vital Pilar 3)",
+        category=EmojiCategory.STATE,
+        aliases=["healing", "cura", "recovery", "repair"],
+        context_meanings={
+            "with_percent": "Healing capacity",
+            "with_error": "Error recovery",
+        },
+        examples=["💚💎100%", "💚🟢70%", "error→💚"],
+        token_equivalent=2,  # "Healing Level"
+    ),
+
+    "🛡️": EmojiDefinition(
+        emoji="🛡️",
+        primary_meaning="Protection / Trust (Vital Pilar 4)",
+        category=EmojiCategory.STATE,
+        aliases=["protection", "protecao", "trust", "confidence"],
+        context_meanings={
+            "with_percent": "Trust level",
+            "with_down": "Trust degraded",
+        },
+        examples=["🛡️💎100%", "🛡️🔴20%", "lie→🛡️↓"],
+        token_equivalent=2,  # "Protection Level"
+    ),
+
+    "💪": EmojiDefinition(
+        emoji="💪",
+        primary_meaning="Survival / Existence (Vital Pilar 6)",
+        category=EmojiCategory.STATE,
+        aliases=["survival", "sobrevivencia", "strength", "vitality"],
+        context_meanings={
+            "with_percent": "Survival capacity",
+            "with_critical": "Critical survival",
+        },
+        examples=["💪💎100%", "💪🔴15%"],
+        token_equivalent=2,  # "Survival Level"
+    ),
+
+    # LEVEL INDICATORS (already partially covered, adding missing ones)
+
+    "💎": EmojiDefinition(
+        emoji="💎",
+        primary_meaning="Excellent Level (90-100%)",
+        category=EmojiCategory.STATE,
+        aliases=["excellent", "perfect", "premium", "optimal"],
+        context_meanings={
+            "with_vital": "Vital at excellent level",
+            "with_quality": "Excellent quality",
+        },
+        examples=["🌱💎", "quality💎"],
+        token_equivalent=1,  # "Excellent"
+    ),
+
+    "🎭": EmojiDefinition(
+        emoji="🎭",
+        primary_meaning="Mock / Stub / Fake Implementation",
+        category=EmojiCategory.STATE,
+        aliases=["mock", "stub", "fake", "placeholder"],
+        context_meanings={
+            "with_code": "Mock implementation",
+            "with_count": "Number of mocks",
+        },
+        examples=["🎭3", "func→🎭"],
+        token_equivalent=2,  # "Mock Implementation"
+    ),
 }
 
 
