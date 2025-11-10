@@ -7,6 +7,7 @@ User provides natural language task, agent chooses tools and executes.
 
 import click
 import asyncio
+from typing import Any, Dict, Optional
 from rich.console import Console
 from rich.live import Live
 from rich.panel import Panel
@@ -132,7 +133,7 @@ async def execute_autonomous_task(
     # STEP 3: Execute plan with streaming UI
     console.print("[cyan]Executing plan...[/cyan]\n")
 
-    success = await _execute_plan(
+    success, execution_details = await _execute_plan(
         plan=plan,
         executor=executor,
         stream=stream,
@@ -143,6 +144,27 @@ async def execute_autonomous_task(
         console.print("\n[green]✅ Task completed successfully![/green]")
     else:
         console.print("\n[red]❌ Task execution failed[/red]")
+
+    # === AUDIT INJECTION (FASE 3) ===
+    # Run Independent Auditor on execution result (plan-level, always-on)
+    execution_result = {
+        "success": success,
+        "completed_tasks": execution_details.get("completed", 0),
+        "failed_tasks": execution_details.get("failed", 0),
+        "total_tasks": len(plan.steps),
+        "tasks": execution_details.get("steps", [])
+    }
+
+    audit_report = await _run_audit(
+        plan=plan,
+        task_text=task_text,
+        execution_result=execution_result,
+        show_details=show_tools
+    )
+
+    if audit_report:
+        _display_audit_report(audit_report, console)
+    # === END AUDIT INJECTION ===
 
 
 def _display_plan(plan, show_details: bool = False):
@@ -202,7 +224,7 @@ def _display_plan(plan, show_details: bool = False):
         console.print(table)
 
 
-async def _execute_plan(plan, executor, stream: bool = True, show_tools: bool = False) -> bool:
+async def _execute_plan(plan, executor, stream: bool = True, show_tools: bool = False) -> tuple[bool, dict]:
     """
     Execute plan step-by-step with streaming UI
 
@@ -213,7 +235,12 @@ async def _execute_plan(plan, executor, stream: bool = True, show_tools: bool = 
     - Audit trail
 
     Returns:
-        True if all steps succeeded, False otherwise
+        (success, execution_details): Tuple of success bool and details dict
+            execution_details = {
+                "completed": int,
+                "failed": int,
+                "steps": [step_info, ...]
+            }
     """
     from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
     from rich.live import Live
@@ -296,8 +323,170 @@ async def _execute_plan(plan, executor, stream: bool = True, show_tools: bool = 
     console.print(f"  Completed: [green]{completed_steps}/{total_steps}[/green]")
     console.print(f"  Failed: [red]{failed_steps}[/red]")
 
-    # Return success if all steps completed
-    return failed_steps == 0 and completed_steps == total_steps
+    # Build execution details for audit
+    execution_details = {
+        "completed": completed_steps,
+        "failed": failed_steps,
+        "steps": [
+            {
+                "step_number": step.step_number,
+                "description": step.description,
+                "tool_name": step.tool_name,
+                "executed": step.executed,
+                "success": step.executed and not hasattr(step, 'error'),
+                "error": getattr(step, 'error', None)
+            }
+            for step in plan.steps
+        ]
+    }
+
+    # Return success and details
+    success = failed_steps == 0 and completed_steps == total_steps
+    return success, execution_details
+
+
+# ============================================================================
+# AUDIT INTEGRATION (Truth Engine + Vital System)
+# ============================================================================
+
+async def _run_audit(
+    plan: Any,
+    task_text: str,
+    execution_result: Dict[str, Any],
+    show_details: bool = False
+) -> Optional[Any]:
+    """
+    Run Independent Auditor on execution result
+
+    Args:
+        plan: ExecutionPlan from TaskPlanner
+        task_text: Original user task request
+        execution_result: Execution result dict
+        show_details: Show audit duration/metrics
+
+    Returns:
+        AuditReport or None if audit disabled/failed
+    """
+    from core.audit import get_auditor
+    from core.audit.independent_auditor import Task, AgentResult
+    from config.settings import get_settings
+
+    settings = get_settings()
+
+    # Check if audit enabled (default: True)
+    if not settings.enable_truth_audit:
+        return None
+
+    # Build audit inputs (adapt ExecutionEngine types to Auditor types)
+    task = Task(
+        prompt=task_text,
+        context={
+            'plan': plan.to_dict() if hasattr(plan, 'to_dict') else {},
+            'execution': execution_result
+        },
+        metadata={
+            'completed_tasks': execution_result.get('completed_tasks', 0),
+            'failed_tasks': execution_result.get('failed_tasks', 0),
+            'total_tasks': execution_result.get('total_tasks', 0)
+        }
+    )
+
+    agent_result = AgentResult(
+        success=execution_result.get("success", False),
+        output=str(execution_result.get("tasks", [])),
+        files_changed=[],  # TODO: Extract from tool results
+        tests_run=False,   # TODO: Check if pytest was executed
+        error=execution_result.get("error"),
+        metadata=execution_result
+    )
+
+    # Execute audit
+    try:
+        auditor = get_auditor()
+        report = await auditor.audit_execution(task, agent_result)
+
+        if show_details:
+            console.print(f"\n[dim]⚡ Audit duration: {report.audit_duration_ms:.1f}ms[/dim]")
+            console.print(f"[dim]💾 Tokens saved (EPL): ~{report.tokens_saved}[/dim]")
+
+        return report
+
+    except Exception as e:
+        # Graceful degradation - audit failure doesn't break execution
+        console.print(f"[yellow]⚠️  Audit verification failed: {e}[/yellow]")
+        return None
+
+
+def _display_audit_report(report: Any, console: Console):
+    """
+    Display audit report using max-code UI/UX patterns
+
+    Matches existing Rich panel style with cyan borders and clean formatting.
+
+    Args:
+        report: AuditReport from IndependentAuditor
+        console: Rich Console instance
+    """
+    from rich.panel import Panel
+    from rich.markdown import Markdown
+    from rich.text import Text
+
+    # Separator (match max-code style)
+    console.print()
+    console.print("[cyan]" + "=" * 60 + "[/cyan]")
+    console.print()
+
+    # === VITAL DASHBOARD ===
+    console.print(Panel(
+        report.vital_dashboard,
+        border_style="cyan",
+        title="[bold]🧬 Vital System Status[/bold]",
+        padding=(1, 2)
+    ))
+
+    console.print()
+
+    # === TRUTH METRICS ===
+    metrics = report.truth_metrics
+
+    def _completeness_color(comp: float) -> str:
+        """Color based on completeness level"""
+        if comp >= 0.9:
+            return "green"
+        elif comp >= 0.5:
+            return "yellow"
+        else:
+            return "red"
+
+    def _border_color(comp: float) -> str:
+        """Border color for audit panel"""
+        return "green" if comp >= 0.9 else "yellow"
+
+    console.print(f"[bold cyan]🔍 Truth Verification:[/bold cyan]")
+    console.print(
+        f"  Completeness: [{_completeness_color(metrics.completeness)}]"
+        f"{metrics.completeness:.1%}[/]"
+    )
+    console.print(f"  Implemented:  [green]{metrics.implemented}/{metrics.total_reqs}[/]")
+    console.print(f"  Mocked:       [yellow]{metrics.mocked}[/]")
+    console.print(f"  Missing:      [red]{metrics.missing}[/]")
+    console.print(f"  Quality:      {metrics.quality_score:.1f}/100")
+
+    console.print()
+
+    # === HONEST REPORT ===
+    console.print(Panel(
+        Markdown(report.honest_report),
+        border_style=_border_color(metrics.completeness),
+        title="[bold]📋 Independent Audit Report[/bold]",
+        padding=(1, 2)
+    ))
+
+    console.print()
+
+    # === EPL SUMMARY ===
+    console.print(f"[dim]EPL Summary: {report.epl_summary}[/dim]")
+    console.print()
 
 
 # Keep old implementation as fallback (will be removed in FASE 4)

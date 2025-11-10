@@ -317,6 +317,19 @@ class Settings(BaseSettings):
         description="Enable Tree of Thoughts visualization"
     )
 
+    # Truth Engine + Vital System (Always-On by default)
+    enable_truth_audit: bool = Field(
+        default=True,
+        env="MAX_CODE_ENABLE_AUDIT",
+        description="Enable Truth Engine + Vital System verification (always-on)"
+    )
+
+    audit_plan_level: bool = Field(
+        default=True,
+        env="MAX_CODE_AUDIT_PLAN_LEVEL",
+        description="Audit at plan level (final outcome) vs per-task"
+    )
+
     @validator('config_dir')
     def create_config_dir(cls, v):
         """Ensure config directory exists."""

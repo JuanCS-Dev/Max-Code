@@ -178,13 +178,53 @@ class ExecutionEngine:
             }
             
             self.state = ExecutionState.COMPLETED if final_result["success"] else ExecutionState.FAILED
-            
+
             logger.info(f"Plan execution completed: {final_result['completed_tasks']}/{final_result['total_tasks']} tasks")
-            
+
+            # === AUDIT HOOK (FASE 4) ===
+            # Optional audit callback for programmatic API usage
+            if hasattr(self, 'on_plan_audit') and self.on_plan_audit:
+                try:
+                    from config.settings import get_settings
+                    from core.audit import get_auditor
+                    from core.audit.independent_auditor import Task, AgentResult
+
+                    settings = get_settings()
+
+                    if settings.enable_truth_audit:
+                        # Build audit inputs
+                        task = Task(
+                            prompt=plan.goal,
+                            context={},
+                            metadata=final_result
+                        )
+
+                        agent_result = AgentResult(
+                            success=final_result["success"],
+                            output=str(final_result),
+                            files_changed=[],
+                            tests_run=False,
+                            metadata=final_result
+                        )
+
+                        # Run audit
+                        auditor = get_auditor()
+                        audit_report = await auditor.audit_execution(task, agent_result)
+
+                        # Call callback
+                        self.on_plan_audit(audit_report)
+
+                        # Add audit to result
+                        final_result["audit_report"] = audit_report.to_dict()
+
+                except Exception as e:
+                    logger.error(f"Audit failed: {e}")
+            # === END AUDIT HOOK ===
+
             # Callback
             if self.on_plan_complete:
                 self.on_plan_complete(final_result)
-            
+
             return final_result
         
         except Exception as e:
