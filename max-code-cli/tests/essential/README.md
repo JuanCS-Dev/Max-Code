@@ -11,7 +11,10 @@ Estes testes garantem que **MAX-CODE funciona para uso REAL**, não cobrem 100% 
 ## 🚀 Quick Start
 
 ```bash
-# Smoke test (< 1s) - Garante que sistema funciona
+# Todos os testes essenciais (< 2s) - 100% pass rate
+pytest tests/essential/ -v
+
+# Apenas smoke tests rápidos (< 1s)
 pytest tests/essential/test_smoke.py -v
 
 # Se todos passam = MAX-CODE está funcional ✅
@@ -21,27 +24,68 @@ pytest tests/essential/test_smoke.py -v
 
 ## ✅ O que estes testes garantem
 
-### 1. **Sistema Carrega** (4 testes)
-- ✅ CLI imports work
-- ✅ Agents import
-- ✅ MAXIMUS integration imports
-- ✅ Constitutional AI imports
+### **60 Testes Críticos - 100% Pass Rate** em < 2s
 
-### 2. **Agents Funcionam** (2 testes)
-- ✅ CodeAgent inicializa
-- ✅ FixAgent inicializa
+#### CATEGORIA 1: Todos os Agents (9 testes)
+- ✅ PlanAgent, ExploreAgent, CodeAgent, TestAgent inicializam
+- ✅ ReviewAgent, FixAgent, DocsAgent, ArchitectAgent inicializam
+- ✅ Todos os agents importam corretamente
 
-### 3. **Config Funciona** (2 testes)
-- ✅ Settings load from env
-- ✅ API key authentication configured
+#### CATEGORIA 2: Constitutional AI (10 testes)
+- ✅ Guardian bloqueia file deletion, system commands
+- ✅ Guardian detecta padrões suspeitos em código
+- ✅ Guardian permite código seguro
+- ✅ Guardian modes: STRICT, BALANCED, PERMISSIVE, SABBATH
+- ✅ Constitutional Engine com validators
+- ✅ Guardian funciona offline (sem MAXIMUS)
+- ✅ DETER-AGENT framework ativo
 
-### 4. **Segurança Funciona** (1 teste)
+#### CATEGORIA 3: MAXIMUS Integration (8 testes)
+- ✅ MaximusClient, PENELOPEClient inicializam
+- ✅ Health check graceful degradation
+- ✅ 8 service clients existem
+- ✅ Circuit breaker implementado
+- ✅ Fallback para modo standalone
+- ✅ MAXIMUS integration opcional
+- ✅ Service ports configurados (8150-8157)
+
+#### CATEGORIA 4: Config & Settings (6 testes)
+- ✅ Settings singleton
+- ✅ Claude config com API key
+- ✅ API key from environment
+- ✅ Todas as configs necessárias
+- ✅ .env support
+- ✅ Config validation
+
+#### CATEGORIA 5: CLI Commands (8 testes)
+- ✅ CLI main imports
+- ✅ Click CLI configurado
+- ✅ Health command existe
+- ✅ CLI tem comandos registrados
+- ✅ Rich console para output bonito
+- ✅ Rich table formatting
+- ✅ CLI error handling
+- ✅ CLI help disponível
+
+#### CATEGORIA 6: Core Modules (9 testes)
+- ✅ Tree of Thoughts imports
+- ✅ ToT gera candidatos
+- ✅ Truth Engine existe
+- ✅ Context Retention tracking
+- ✅ Lazy Execution prevention
+- ✅ First-Pass Correctness target (80%+)
+- ✅ DETER framework (5 camadas)
+- ✅ Sabbath mode
+- ✅ Extended Thinking support
+
+#### CATEGORIA 7: Smoke Tests (10 testes)
+- ✅ CLI, agents, MAXIMUS, Constitutional AI imports
+- ✅ CodeAgent, FixAgent inicializam
+- ✅ Settings load, API key config
 - ✅ Guardian blocks dangerous code
+- ✅ Health check graceful
 
-### 5. **MAXIMUS Integration Graceful** (1 teste)
-- ✅ Health check works OR fails gracefully
-
-**Total: 10 testes críticos em < 1s**
+**Total: 60 testes críticos em < 2s**
 
 ---
 
