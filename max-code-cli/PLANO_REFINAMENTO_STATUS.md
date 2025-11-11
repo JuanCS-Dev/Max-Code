@@ -370,6 +370,69 @@ def test_auth_login_interactive(self):
 
 ---
 
+### COMPLETE OAUTH REMOVAL 🗑️ (Final Session)
+
+**Decisão do Usuário:**
+- Após tentativas de OAuth, usuário solicitou: **"remova esse oauth, eu n vou utiliza-lo. antes de seguirmos , remova todas as meções a esse autenticador, DELETA. Vamos usar apenas API da claud"**
+- OAuth não funcionava de forma confiável
+- Causava browser popups indesejados
+- Preferência por autenticação simples via ANTHROPIC_API_KEY
+
+**Ação Tomada: REMOÇÃO COMPLETA**
+
+#### Arquivos Deletados (8 files, 1964 lines removed):
+```bash
+rm -rf core/auth/
+rm cli/auth_command.py
+rm tests/cli/test_auth_command.py
+```
+
+**Detalhes:**
+- `core/auth/` - Todo diretório OAuth
+  - `__init__.py`
+  - `oauth_handler.py` + `.backup`
+  - `max_code_config.py`
+  - `token_converter.py`
+  - `config.py`, `oauth.py` (symlinks)
+- `cli/auth_command.py` - Comando CLI OAuth
+- `tests/cli/test_auth_command.py` - Testes que causavam browser trigger
+
+#### Arquivos Modificados (3 files):
+1. **cli/main.py:**
+   - `setup()` command simplificado (linhas 99-146)
+   - Removido import/registro do comando `auth` (linhas 539-544)
+   - Foco em API key workflow apenas
+
+2. **config/settings.py:**
+   - Classe `ClaudeConfig` simplificada (linhas 108-143)
+   - Removido field `oauth_token`
+   - Removido method `get_auth_token()`
+   - Apenas `api_key` (ANTHROPIC_API_KEY)
+
+3. **config/profiles.py:**
+   - Sem alterações (já usa apenas ANTHROPIC_API_KEY)
+
+#### Verificações Realizadas:
+✅ Python imports OK (`cli.main`, `config.settings` carregam sem erros)
+✅ Pytest collection OK (1279 testes coletados)
+✅ Nenhum import quebrado
+✅ Nenhuma referência OAuth remanescente
+
+#### Autenticação Agora:
+**Apenas ANTHROPIC_API_KEY:**
+1. Via environment: `export ANTHROPIC_API_KEY="sk-ant-api..."`
+2. Via .env: Adicionar `ANTHROPIC_API_KEY=sk-ant-api...`
+3. Comando setup guia para configuração de API key
+
+**Resultado:**
+- ✅ Commit: `b9dcef9` - feat(auth): REMOVE OAuth system completely - API-key only
+- ✅ Pushed to GitHub
+- ✅ Sistema 100% limpo de OAuth
+- ✅ Nenhum browser popup mais
+- ✅ Autenticação simplificada e confiável
+
+---
+
 ## 🔄 ÚLTIMA ATUALIZAÇÃO
 
 **Data:** 2025-11-11 18:00 BRT
@@ -413,6 +476,7 @@ def test_auth_login_interactive(self):
 ## 📊 HISTÓRICO DE COMMITS (Sessão 2025-11-11)
 
 ```
+b9dcef9 - feat(auth): REMOVE OAuth system completely - API-key only 🗑️
 0d2f364 - feat(cost): Switch all models to Haiku 4.5 💰
 e636935 - fix(tests): DISABLE auth login tests - OAuth trigger ⚠️
 3196b49 - docs: Update PLANO with 100% CLI coverage 🏆
@@ -432,7 +496,7 @@ e09c009 - docs: Add comprehensive progress tracking
 c4511e8 - fix(tests): Correct 2 failing tests
 ```
 
-**Total: 17 commits pushed**
+**Total: 18 commits pushed**
 
 ---
 
