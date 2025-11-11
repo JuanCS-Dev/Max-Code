@@ -1,3 +1,4 @@
+from agents.utils import get_anthropic_client
 """
 Fix Agent - ENHANCED with MAXIMUS + DETER-AGENT Guardian
 Port: 8165
@@ -17,7 +18,6 @@ import asyncio
 from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import PENELOPEClient
-from core.auth import get_anthropic_client
 from core.deter_agent import Guardian, GuardianMode
 from agents.validation_schemas import FixAgentParameters, validate_task_parameters
 from config.logging_config import get_logger

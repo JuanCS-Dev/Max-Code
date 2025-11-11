@@ -1,3 +1,4 @@
+from agents.utils import get_anthropic_client
 """
 Explore Agent - Port 8161 + DETER-AGENT Guardian
 Capability: EXPLORATION
@@ -21,7 +22,6 @@ import asyncio
 from pathlib import Path
 from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
-from core.auth import get_anthropic_client
 from core.deter_agent import Guardian, GuardianMode
 from agents.validation_schemas import ExploreAgentParameters, validate_task_parameters
 from config.logging_config import get_logger

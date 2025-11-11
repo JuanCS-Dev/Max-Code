@@ -1,3 +1,4 @@
+from agents.utils import get_anthropic_client
 """
 Sophia - A Arquiteta (Strategic Co-Architect with Systemic Vision)
 

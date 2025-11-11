@@ -1,3 +1,4 @@
+from agents.utils import get_anthropic_client
 """
 Review Agent - ENHANCED with MAXIMUS + DETER-AGENT Guardian
 Port: 8164
@@ -22,7 +23,6 @@ import asyncio
 from pydantic import ValidationError
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient, DecisionFusion, MaximusCache
-from core.auth import get_anthropic_client
 from core.deter_agent import Guardian, GuardianMode
 from agents.validation_schemas import ReviewAgentParameters, validate_task_parameters
 from config.logging_config import get_logger

@@ -1,3 +1,4 @@
+from agents.utils import get_anthropic_client
 """
 Code Agent - ENHANCED with MAXIMUS + DETER-AGENT Guardian
 Port: 8162
@@ -21,7 +22,6 @@ from pydantic import ValidationError
 from anthropic import Anthropic
 from sdk.base_agent import BaseAgent, AgentCapability, AgentTask, AgentResult
 from core.maximus_integration import MaximusClient
-from core.auth import get_anthropic_client
 from core.deter_agent import Guardian, GuardianMode
 from core.streaming import (
     ClaudeAgentIntegration,
