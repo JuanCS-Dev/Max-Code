@@ -29,7 +29,7 @@ class ClaudeClient:
         Initialize Claude client.
 
         Args:
-            model: Claude model to use (default: claude-sonnet-4)
+            model: Claude model to use (default: claude-3-5-haiku-20241022)
             max_tokens: Maximum tokens in response (default: 4096)
             temperature: Sampling temperature (default: 1.0)
         """
