@@ -238,15 +238,25 @@ def test_maximus_ethical_review_called_when_available(code_agent, simple_task):
 
 def test_maximus_security_issues_detected(code_agent, security_critical_task, mock_ethical_verdict_rejected):
     """Test 10: Security issues are detected by MAXIMUS"""
-    with patch.object(code_agent.maximus_client, 'health_check', new_callable=AsyncMock) as mock_health:
-        with patch.object(code_agent.maximus_client, 'ethical_review', new_callable=AsyncMock) as mock_review:
-            mock_health.return_value = True
-            mock_review.return_value = mock_ethical_verdict_rejected
+    # Need to disable Guardian to allow code to reach MAXIMUS security analysis
+    with patch.object(code_agent, 'guardian') as mock_guardian:
+        # Mock Guardian to allow code generation
+        mock_guardian_decision = Mock()
+        mock_guardian_decision.allowed = True
+        mock_guardian_decision.reasoning = "Test allowed"
+        mock_guardian.evaluate_action.return_value = mock_guardian_decision
 
-            result = code_agent.execute(security_critical_task)
+        with patch.object(code_agent.maximus_client, 'health_check', new_callable=AsyncMock) as mock_health:
+            with patch.object(code_agent.maximus_client, 'ethical_review', new_callable=AsyncMock) as mock_review:
+                mock_health.return_value = True
+                mock_review.return_value = mock_ethical_verdict_rejected
 
-            assert len(result.output['security_issues']) > 0
-            assert "SQL injection" in result.output['security_issues'][0]
+                result = code_agent.execute(security_critical_task)
+
+                # When Guardian allows but MAXIMUS detects issues, security_issues should exist
+                assert 'security_issues' in result.output
+                assert len(result.output['security_issues']) > 0
+                assert "SQL injection" in result.output['security_issues'][0]
 
 
 def test_maximus_offline_graceful_degradation(code_agent, simple_task):
