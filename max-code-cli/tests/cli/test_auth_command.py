@@ -46,14 +46,18 @@ class TestAuthCommandLogin:
     def setup_method(self):
         self.runner = CliRunner()
 
+    @pytest.mark.skip(reason="DISABLED: auth login triggers OAuth browser flow - DO NOT RUN")
     def test_auth_login_interactive(self):
         """Test login with interactive prompts"""
+        # DISABLED: This triggers real OAuth authentication
         # Provide dummy inputs for API key and description
         result = self.runner.invoke(auth, ["login"], input="test_key_123\nTest Description\n")
         assert result.exit_code in [0, 1]
 
+    @pytest.mark.skip(reason="DISABLED: auth login triggers OAuth browser flow - DO NOT RUN")
     def test_auth_login_no_save(self):
         """Test login with --no-save flag"""
+        # DISABLED: This triggers real OAuth authentication
         result = self.runner.invoke(auth, ["login", "--no-save"], input="test_key\nTest\n")
         assert result.exit_code in [0, 1]
 
