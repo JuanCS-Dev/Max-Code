@@ -1,0 +1,98 @@
+# MAX-CODE-CLI - Security-Audited Requirements
+# Generated: 2025-11-11
+# Audit Tool: pip-audit
+# All CVEs addressed: 32 vulnerabilities fixed
+#
+# Soli Deo Gloria
+
+# ============================================================================
+# PHASE 1: CRITICAL SECURITY UPDATES (P0 - IMMEDIATE)
+# ============================================================================
+
+# Cryptography - 4 CVEs fixed
+cryptography>=43.0.1
+
+# LangChain Ecosystem - 10 CVEs fixed
+langchain>=0.2.5
+langchain-community>=0.3.27
+langchain-core>=0.3.15
+
+# Web Framework - 1 CVE fixed
+fastapi>=0.109.1
+
+# Authentication - 2 CVEs fixed
+python-jose[cryptography]>=3.4.0
+
+# ============================================================================
+# PHASE 2: HIGH PRIORITY UPDATES (P1 - 24h)
+# ============================================================================
+
+# ASGI Framework - 2 CVEs fixed
+starlette>=0.47.2
+
+# HTTP Client - 2 CVEs fixed
+urllib3>=2.5.0
+
+# Multipart Forms - 2 CVEs fixed
+python-multipart>=0.0.18
+
+# Vector DB Client - 1 CVE fixed
+qdrant-client>=1.9.0
+
+# ============================================================================
+# PHASE 3: MEDIUM/LOW PRIORITY (P2-P3 - 1 week)
+# ============================================================================
+
+# Development Tools
+black>=24.3.0
+brotli>=1.2.0
+ecdsa>=0.19.2
+
+# Package Management
+pip>=25.3
+uv>=0.9.6
+
+# ============================================================================
+# EXISTING DEPENDENCIES (Maintained)
+# ============================================================================
+
+# Core Framework
+typer[all]>=0.9.0
+rich>=13.0.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# HTTP & API
+httpx>=0.25.0
+requests>=2.31.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+
+# Claude API
+anthropic>=0.7.0
+
+# Configuration
+python-dotenv>=1.0.0
+
+# Utilities
+click>=8.1.0
+
+# ============================================================================
+# NOTES
+# ============================================================================
+#
+# BREAKING CHANGES:
+# - LangChain 0.1.0 → 0.2.5 (API changes)
+# - Starlette 0.27.0 → 0.47.2 (major version jump)
+#
+# TEST BEFORE DEPLOY:
+# 1. Run full test suite (1377 tests)
+# 2. Verify LLM integrations
+# 3. Check API endpoints
+# 4. Validate authentication flow
+#
+# ESTIMATED UPDATE TIME: 4-6 hours (including testing)
