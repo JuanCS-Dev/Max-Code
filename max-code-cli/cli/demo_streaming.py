@@ -20,7 +20,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-from sdk.agent_task import AgentTask
+from sdk.base_agent import AgentTask
 from agents.code_agent import CodeAgent
 from agents.test_agent import TestAgent
 from agents.fix_agent import FixAgent

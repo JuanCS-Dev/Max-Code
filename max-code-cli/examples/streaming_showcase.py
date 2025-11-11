@@ -25,7 +25,7 @@ from core.streaming import (
     ThinkingDisplayConfig,
 )
 from agents.code_agent import CodeAgent
-from sdk.agent_task import AgentTask
+from sdk.base_agent import AgentTask
 
 
 console = Console()
