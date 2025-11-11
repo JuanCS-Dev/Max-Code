@@ -1,0 +1,35 @@
+# Peer Authentication (mTLS)
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: maximus
+spec:
+  mtls:
+    mode: STRICT  # Enforce mTLS for all traffic
+---
+# Authorization Policy (RBAC)
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: maximus-authz
+  namespace: maximus
+spec:
+  selector:
+    matchLabels:
+      app: maximus-core
+  action: ALLOW
+  rules:
+    # Allow authenticated requests
+    - from:
+        - source:
+            principals: ["cluster.local/ns/maximus/sa/*"]
+      to:
+        - operation:
+            methods: ["GET", "POST"]
+            paths: ["/api/*", "/query"]
+    # Allow health checks from anyone
+    - to:
+        - operation:
+            methods: ["GET"]
+            paths: ["/health", "/metrics"]

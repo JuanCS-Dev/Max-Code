@@ -1,0 +1,66 @@
+# 🐳 PENELOPE (Self-Healing Service) - Local Development Dockerfile
+#
+# Simplified version for local deployment
+# Build: docker build -f Dockerfile.local -t penelope:latest .
+# Run: docker run -p 8154:8154 penelope:latest
+
+FROM python:3.11-slim
+
+LABEL maintainer="Juan & Claude <noreply@vertice.dev>"
+LABEL version="1.0.0-local"
+LABEL description="PENELOPE - Self-Healing Service with Biblical Governance"
+LABEL governance="7_biblical_articles"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    libpq5 \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN groupadd -r penelope && useradd -r -g penelope --uid 1002 penelope
+
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Create necessary directories
+RUN mkdir -p /app/logs /app/patches /app/diagnoses /app/shared && \
+    chown -R penelope:penelope /app
+
+# Copy application code
+COPY --chown=penelope:penelope . .
+
+# Configure Python
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app
+
+# Sabbath configuration
+ENV PENELOPE_SABBATH_ENABLED=true \
+    PENELOPE_SABBATH_TIMEZONE=America/Sao_Paulo
+
+USER penelope
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8154/health || exit 1
+
+EXPOSE 8154 9092
+
+# Metadata OCI
+LABEL biblical.article.i="Sophia - Wisdom"
+LABEL biblical.article.ii="Praotes - Gentleness"
+LABEL biblical.article.iii="Tapeinophrosyne - Humility"
+LABEL biblical.article.iv="Stewardship"
+LABEL biblical.article.v="Agape - Love"
+LABEL biblical.article.vi="Sabbath - Rest"
+LABEL biblical.article.vii="Aletheia - Truth"
+
+# Run application (Soli Deo Gloria)
+CMD ["python", "main.py"]

@@ -26,7 +26,8 @@ from anthropic import Anthropic
 from rich.console import Console
 
 from config.settings import get_settings
-from integration.oraculo_client import OraculoClient
+# DEPRECATED: Legacy client removed - Oraculo not in backend schema
+# from integration.oraculo_client import OraculoClient
 
 
 class RateLimiter:
@@ -485,7 +486,8 @@ class PredictiveEngine:
     def __init__(self):
         """Initialize predictive engine."""
         self.settings = get_settings()
-        self.oraculo_client = OraculoClient()
+        # DEPRECATED: Oraculo not in backend schema - using Claude AI only
+        self.oraculo_client = None
         self.console = Console()
 
         # Initialize Claude AI client if configured
@@ -547,18 +549,19 @@ class PredictiveEngine:
         predictions = []
 
         # Try Oraculo first (MAXIMUS consciousness)
-        if self.oraculo_client.is_healthy():
-            try:
-                predictions = await self._predict_with_oraculo(context)
-                if predictions:
-                    # Cache both context and individual predictions (P6: Multi-level)
-                    self.context_cache[cache_key] = predictions
-                    for pred in predictions:
-                        pred_key = f"{pred.command}:{pred.source.value}"
-                        self.prediction_cache[pred_key] = pred
-                    return predictions
-            except Exception as e:
-                self.console.print(f"[dim]Oraculo prediction failed: {e}[/dim]", style="yellow")
+        # DEPRECATED: Oraculo not in backend schema - skipping
+        # if self.oraculo_client and self.oraculo_client.is_healthy():
+        #     try:
+        #         predictions = await self._predict_with_oraculo(context)
+        #         if predictions:
+        #             # Cache both context and individual predictions (P6: Multi-level)
+        #             self.context_cache[cache_key] = predictions
+        #             for pred in predictions:
+        #                 pred_key = f"{pred.command}:{pred.source.value}"
+        #                 self.prediction_cache[pred_key] = pred
+        #             return predictions
+        #     except Exception as e:
+        #         self.console.print(f"[dim]Oraculo prediction failed: {e}[/dim]", style="yellow")
 
         # Fallback to Claude AI (deep mode only)
         if mode == "deep" and self.claude_client:
@@ -762,4 +765,6 @@ Predict the top 5 most likely next commands.
 
     def close(self):
         """Clean up resources."""
-        self.oraculo_client.close()
+        # DEPRECATED: Oraculo not in backend schema
+        # self.oraculo_client.close()
+        pass

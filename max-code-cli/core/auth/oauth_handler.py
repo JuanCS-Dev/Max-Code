@@ -100,12 +100,7 @@ def get_anthropic_client(verify_health: bool = False) -> Optional[Anthropic]:
     """
     Get authenticated Anthropic client with optional health check.
 
-    Tries authentication methods in order:
-    1. Claude Code credentials file (~/.claude/.credentials.json)
-       - Try apiKey (if exists - PRIORITY 1A)
-       - Convert OAuth → API Key (auto - PRIORITY 1B)
-    2. CLAUDE_CODE_OAUTH_TOKEN (OAuth token from environment)
-    3. ANTHROPIC_API_KEY (Traditional API key)
+    Uses ANTHROPIC_API_KEY from environment (SIMPLIFIED - NO OAUTH).
 
     Args:
         verify_health: If True, verify client works with minimal API call
@@ -118,106 +113,7 @@ def get_anthropic_client(verify_health: bool = False) -> Optional[Anthropic]:
         >>> if client:
         ...     message = client.messages.create(...)
     """
-    from core.auth.token_converter import TokenConverter
-
-    # Try Claude Code credentials file first (PRIORITY 1)
-    claude_creds = load_claude_credentials()
-    if claude_creds:
-        # PRIORITY 1A: Try API key (if already converted)
-        api_key = claude_creds.get("apiKey")
-        if api_key and TokenConverter.is_api_key(api_key):
-            logger.info("   🔑 Using converted API key from credentials")
-            try:
-                client = Anthropic(api_key=api_key)
-
-                if verify_health:
-                    if _validate_token_health(api_key):
-                        logger.info("   ✅ API key validated")
-                        return client
-                    else:
-                        logger.warning("   ⚠️ API key failed health check")
-                else:
-                    return client
-            except Exception as e:
-                logger.warning(f"   ⚠️ API key error: {type(e).__name__}")
-
-        # PRIORITY 1B: Convert OAuth → API Key (automatic)
-        access_token = claude_creds.get("accessToken")
-        if access_token and TokenConverter.is_oauth_token(access_token):
-            logger.info("   🔄 OAuth token detected, converting to API key...")
-
-            # Convert OAuth → API Key
-            api_key = TokenConverter.convert_oauth_to_api_key(access_token)
-
-            if api_key:
-                # Save API key to credentials file
-                _save_api_key_to_credentials(api_key)
-
-                # Use converted API key
-                try:
-                    client = Anthropic(api_key=api_key)
-
-                    if verify_health:
-                        if _validate_token_health(api_key):
-                            logger.info("   ✅ Converted API key validated")
-                            return client
-                    else:
-                        logger.info("   ✅ Using converted API key")
-                        return client
-                except Exception as e:
-                    logger.warning(f"   ⚠️ Converted API key error: {type(e).__name__}")
-            else:
-                logger.warning("   ⚠️ OAuth → API Key conversion failed")
-
-        # PRIORITY 1C: Use OAuth token directly (if conversion failed)
-        if access_token and TokenConverter.is_oauth_token(access_token):
-            logger.info("   🔑 Using OAuth token directly (Claude Max)")
-            try:
-                client = Anthropic(auth_token=access_token)
-
-                if verify_health:
-                    if _validate_token_health(access_token):
-                        logger.info("   ✅ OAuth token validated")
-                        return client
-                    else:
-                        logger.warning("   ⚠️ OAuth token failed health check")
-                else:
-                    return client
-            except Exception as e:
-                logger.warning(f"   ⚠️ OAuth token error: {type(e).__name__}")
-
-    # Try OAuth token from environment (PRIORITY 2)
-    oauth_token = os.getenv("CLAUDE_CODE_OAUTH_TOKEN")
-    if oauth_token:
-        cred_type = get_credential_type(oauth_token)
-        if cred_type == CredentialType.OAUTH_TOKEN:
-            try:
-                client = Anthropic(auth_token=oauth_token)
-
-                # Optional health check
-                if verify_health:
-                    if not _validate_token_health(oauth_token):
-                        logger.warning("   ⚠️ OAuth token failed health check")
-                        # Continue to try API key
-                    else:
-                        logger.info(
-                            "   🔑 Authenticated with OAuth token (Claude Max) ✓",
-                            extra={"auth_type": "oauth", "health_check": "passed"}
-                        )
-                        return client
-                else:
-                    logger.info(
-                        "   🔑 Authenticated with OAuth token (Claude Max)",
-                        extra={"auth_type": "oauth"}
-                    )
-                    return client
-            except Exception as e:
-                logger.warning(
-                    f"   ⚠️ OAuth token invalid: {type(e).__name__}",
-                    extra={"error_type": type(e).__name__}
-                )
-
-    # Try traditional API key
+    # Use ANTHROPIC_API_KEY from environment
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if api_key:
         cred_type = get_credential_type(api_key)
@@ -249,11 +145,10 @@ def get_anthropic_client(verify_health: bool = False) -> Optional[Anthropic]:
     # No valid credentials
     logger.warning(
         "   ⚠️ No valid Anthropic credentials found",
-        extra={"checked": ["CLAUDE_CODE_OAUTH_TOKEN", "ANTHROPIC_API_KEY"]}
+        extra={"checked": ["ANTHROPIC_API_KEY"]}
     )
     logger.info("   💡 To authenticate:")
-    logger.info("      1. OAuth (Max): Run 'max-code auth login'")
-    logger.info("      2. API Key: Set ANTHROPIC_API_KEY=sk-ant-api...")
+    logger.info("      Set ANTHROPIC_API_KEY=sk-ant-api...")
 
     return None
 
@@ -270,16 +165,7 @@ def validate_credentials() -> Tuple[bool, CredentialType, str]:
         >>> if valid:
         ...     print(f"Authenticated with {cred_type.value}")
     """
-    # Check OAuth token
-    oauth_token = os.getenv("CLAUDE_CODE_OAUTH_TOKEN")
-    if oauth_token:
-        cred_type = get_credential_type(oauth_token)
-        if cred_type == CredentialType.OAUTH_TOKEN:
-            return (True, CredentialType.OAUTH_TOKEN, "OAuth token found (Claude Max)")
-        else:
-            return (False, CredentialType.NONE, f"Invalid OAuth token format: {oauth_token[:20]}...")
-
-    # Check API key
+    # Check API key (SIMPLIFIED - NO OAUTH)
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if api_key:
         cred_type = get_credential_type(api_key)

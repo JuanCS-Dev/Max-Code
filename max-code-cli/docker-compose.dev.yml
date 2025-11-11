@@ -1,0 +1,253 @@
+# 🐳 MAXIMUS AI - Development Docker Compose (Volume Mounting)
+#
+# Simpler approach for local development - no image building needed!
+# Uses volume mounting so code changes are instantly reflected.
+#
+# Usage:
+#   docker-compose -f docker-compose.dev.yml up -d
+#   docker-compose -f docker-compose.dev.yml logs -f maximus-core
+#   docker-compose -f docker-compose.dev.yml down
+
+version: '3.8'
+
+services:
+  # ============================================================================
+  # CORE SERVICES (with live code reload)
+  # ============================================================================
+
+  maximus-core:
+    image: python:3.11-slim
+    container_name: maximus-core
+    working_dir: /app
+    command: >
+      bash -c "
+      apt-get update && apt-get install -y --no-install-recommends curl libpq5 &&
+      pip install --no-cache-dir -r requirements.txt &&
+      uvicorn main:app --host 0.0.0.0 --port 8150 --reload
+      "
+    ports:
+      - "8150:8150"
+      - "9090:9090"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=maximus
+      - POSTGRES_USER=maximus
+      - POSTGRES_PASSWORD=maximus2024
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app:/app/_demonstration
+    volumes:
+      - "/media/juan/DATA2/projects/MAXIMUS AI/services/core:/app"
+    depends_on:
+      - postgres
+      - redis
+      - jaeger
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8150/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 180s
+
+  penelope:
+    image: python:3.11-slim
+    container_name: penelope
+    working_dir: /app
+    command: >
+      bash -c "
+      apt-get update && apt-get install -y --no-install-recommends curl libpq5 &&
+      pip install --no-cache-dir -r requirements.txt &&
+      python main.py
+      "
+    ports:
+      - "8154:8154"
+      - "9092:9092"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=maximus
+      - POSTGRES_USER=maximus
+      - POSTGRES_PASSWORD=maximus2024
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PENELOPE_SABBATH_ENABLED=true
+      - PENELOPE_SABBATH_TIMEZONE=America/Sao_Paulo
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    volumes:
+      - "/media/juan/DATA2/projects/MAXIMUS AI/services/penelope:/app"
+    depends_on:
+      - postgres
+      - redis
+      - jaeger
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8154/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================================
+  # PERSISTENCE LAYER
+  # ============================================================================
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: maximus-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=maximus
+      - POSTGRES_USER=maximus
+      - POSTGRES_PASSWORD=maximus2024
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U maximus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: maximus-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass maximus2024
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "maximus2024", "--no-auth-warning", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # ============================================================================
+  # OBSERVABILITY STACK
+  # ============================================================================
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: maximus-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+    networks:
+      - maximus
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: maximus-grafana
+    ports:
+      - "3002:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=maximus2024
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:3002
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - maximus
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: maximus-jaeger
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+      - "9411:9411"
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - COLLECTOR_OTLP_ENABLED=true
+    restart: unless-stopped
+    networks:
+      - maximus
+
+# ============================================================================
+# VOLUMES
+# ============================================================================
+
+volumes:
+  postgres-data:
+  redis-data:
+  prometheus-data:
+  grafana-data:
+
+# ============================================================================
+# NETWORKS
+# ============================================================================
+
+networks:
+  maximus:
+    driver: bridge
+
+# ============================================================================
+# QUICK START GUIDE
+# ============================================================================
+
+# 1. Start all services:
+#    docker-compose -f docker-compose.dev.yml up -d
+#
+# 2. Check status:
+#    docker-compose -f docker-compose.dev.yml ps
+#
+# 3. View logs:
+#    docker-compose -f docker-compose.dev.yml logs -f maximus-core
+#    docker-compose -f docker-compose.dev.yml logs -f penelope
+#
+# 4. Stop all:
+#    docker-compose -f docker-compose.dev.yml down
+#
+# 5. Rebuild after requirements.txt changes:
+#    docker-compose -f docker-compose.dev.yml restart maximus-core penelope
+#
+# Service URLs:
+# - MAXIMUS Core:  http://localhost:8150
+# - PENELOPE:      http://localhost:8154
+# - PostgreSQL:    localhost:5432
+# - Redis:         localhost:6379
+# - Prometheus:    http://localhost:9091
+# - Grafana:       http://localhost:3002 (admin/maximus2024)
+# - Jaeger UI:     http://localhost:16686
+#
+# Notes:
+# - Code changes are instantly reflected (--reload for uvicorn)
+# - No image building needed - uses official python:3.11-slim
+# - Dependencies installed on container startup
+# - First startup takes ~2 minutes (pip install)
+# - Subsequent restarts are instant
+#
+# Soli Deo Gloria 🙏

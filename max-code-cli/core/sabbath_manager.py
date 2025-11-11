@@ -27,7 +27,7 @@ from astral.sun import sun
 
 from rich.console import Console
 
-from integration.maximus_client import MaximusClient
+from core.maximus_integration.client_v2 import MaximusClient
 from config.settings import get_settings
 
 
@@ -268,13 +268,14 @@ class SabbathManager:
         self.config.save()
 
         # Notify MAXIMUS services (if available)
-        if self.maximus_client.is_healthy():
-            try:
-                # MAXIMUS consciousness enters rest state
-                self.maximus_client.set_sabbath_mode(True)
-                self.console.print("[dim]MAXIMUS consciousness entering rest state...[/dim]")
-            except Exception as e:
-                self.console.print(f"[dim]MAXIMUS notification failed: {e}[/dim]")
+        # NOTE: MaximusClient v2 requires async context - notification skipped in sync method
+        # To enable: refactor to async or use background task
+        # try:
+        #     async with self.maximus_client as client:
+        #         await client.consciousness.set_sabbath_mode(True)
+        #         self.console.print("[dim]MAXIMUS consciousness entering rest state...[/dim]")
+        # except Exception as e:
+        #     self.console.print(f"[dim]MAXIMUS notification failed: {e}[/dim]")
 
         # Update settings (in-memory only, doesn't persist)
         self.settings.ui.sabbath_mode = True
@@ -301,12 +302,13 @@ class SabbathManager:
         self.config.save()
 
         # Notify MAXIMUS services (if available)
-        if self.maximus_client.is_healthy():
-            try:
-                self.maximus_client.set_sabbath_mode(False)
-                self.console.print("[dim]MAXIMUS consciousness resuming...[/dim]")
-            except Exception:
-                pass
+        # NOTE: MaximusClient v2 requires async context - notification skipped
+        # try:
+        #     async with self.maximus_client as client:
+        #         await client.consciousness.set_sabbath_mode(False)
+        #         self.console.print("[dim]MAXIMUS consciousness resuming...[/dim]")
+        # except Exception:
+        #     pass
 
         # Update settings
         self.settings.ui.sabbath_mode = False

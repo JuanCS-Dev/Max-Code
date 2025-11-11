@@ -1,0 +1,268 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "maximus-services",
+    "title": "MAXIMUS Services Overview",
+    "tags": ["maximus", "services", "monitoring"],
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+        "type": "graph",
+        "title": "Request Rate (req/s)",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"maximus\"}[5m])",
+            "legendFormat": "{{service}} - {{method}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "label": "requests/sec",
+            "show": true
+          },
+          {
+            "show": true
+          }
+        ],
+        "xaxis": {
+          "show": true,
+          "mode": "time"
+        }
+      },
+      {
+        "id": 2,
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+        "type": "graph",
+        "title": "Response Time (P95)",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"maximus\"}[5m]))",
+            "legendFormat": "{{service}} P95",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{job=\"maximus\"}[5m]))",
+            "legendFormat": "{{service}} P99",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {
+            "label": "seconds",
+            "show": true,
+            "format": "s"
+          },
+          {
+            "show": true
+          }
+        ],
+        "xaxis": {
+          "show": true,
+          "mode": "time"
+        }
+      },
+      {
+        "id": 3,
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 8 },
+        "type": "stat",
+        "title": "Total Requests",
+        "targets": [
+          {
+            "expr": "sum(http_requests_total{job=\"maximus\"})",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "colorMode": "value",
+          "justifyMode": "auto",
+          "textMode": "value_and_name"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 8 },
+        "type": "stat",
+        "title": "Error Rate",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{job=\"maximus\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{job=\"maximus\"}[5m])) * 100",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "colorMode": "value",
+          "justifyMode": "auto",
+          "textMode": "value_and_name"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": null, "color": "green" },
+                { "value": 1, "color": "yellow" },
+                { "value": 5, "color": "red" }
+              ]
+            },
+            "color": {
+              "mode": "thresholds"
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 8 },
+        "type": "stat",
+        "title": "Active Services",
+        "targets": [
+          {
+            "expr": "count(up{job=\"maximus\"} == 1)",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "none",
+          "colorMode": "value",
+          "justifyMode": "auto",
+          "textMode": "value_and_name"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": null, "color": "red" },
+                { "value": 1, "color": "yellow" },
+                { "value": 2, "color": "green" }
+              ]
+            },
+            "color": {
+              "mode": "thresholds"
+            }
+          }
+        }
+      },
+      {
+        "id": 6,
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 8 },
+        "type": "stat",
+        "title": "Avg Response Time",
+        "targets": [
+          {
+            "expr": "avg(rate(http_request_duration_seconds_sum{job=\"maximus\"}[5m]) / rate(http_request_duration_seconds_count{job=\"maximus\"}[5m]))",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "colorMode": "value",
+          "justifyMode": "auto",
+          "textMode": "value_and_name"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "decimals": 3,
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+        "type": "table",
+        "title": "Service Health Status",
+        "targets": [
+          {
+            "expr": "up{job=\"maximus\"}",
+            "format": "table",
+            "instant": true,
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showHeader": true,
+          "sortBy": [{ "displayName": "service", "desc": false }]
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": { "text": "DOWN", "color": "red" },
+                  "1": { "text": "UP", "color": "green" }
+                },
+                "type": "value"
+              }
+            ]
+          },
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "Value" },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Status"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                }
+              ]
+            }
+          ]
+        },
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "__name__": true,
+                "job": true
+              },
+              "indexByName": {
+                "service": 0,
+                "instance": 1,
+                "Value": 2
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m"]
+    }
+  },
+  "overwrite": true
+}

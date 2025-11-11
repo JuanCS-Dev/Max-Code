@@ -1,0 +1,74 @@
+# Istio Gateway (Ingress)
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: maximus-gateway
+  namespace: maximus
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "maximus.local"
+        - "api.maximus.local"
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: maximus-tls-secret
+      hosts:
+        - "maximus.local"
+        - "api.maximus.local"
+---
+# Virtual Service (Routing)
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: maximus-routes
+  namespace: maximus
+spec:
+  hosts:
+    - "maximus.local"
+    - "api.maximus.local"
+  gateways:
+    - maximus-gateway
+  http:
+    # Core API routes
+    - match:
+        - uri:
+            prefix: "/api/consciousness"
+        - uri:
+            prefix: "/api/v1/governance"
+        - uri:
+            prefix: "/query"
+      route:
+        - destination:
+            host: maximus-core
+            port:
+              number: 8100
+    # PENELOPE routes
+    - match:
+        - uri:
+            prefix: "/api/v1/healing"
+        - uri:
+            prefix: "/api/v1/penelope"
+      route:
+        - destination:
+            host: penelope
+            port:
+              number: 8154
+    # Health check
+    - match:
+        - uri:
+            exact: "/health"
+      route:
+        - destination:
+            host: maximus-core
+            port:
+              number: 8100

@@ -1,0 +1,37 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # MAXIMUS Core (8100)
+  - job_name: 'maximus-core'
+    static_configs:
+      - targets: ['localhost:8100']
+    metrics_path: '/metrics'
+
+  # PENELOPE (8154)
+  - job_name: 'penelope'
+    static_configs:
+      - targets: ['localhost:8154']
+    metrics_path: '/metrics'
+
+  # MABA (8152)
+  - job_name: 'maba'
+    static_configs:
+      - targets: ['localhost:8152']
+    metrics_path: '/metrics'
+
+  # NIS (8153)
+  - job_name: 'nis'
+    static_configs:
+      - targets: ['localhost:8153']
+    metrics_path: '/metrics'
+
+  # Additional services
+  - job_name: 'maximus-services'
+    static_configs:
+      - targets:
+        - 'localhost:8150'  # TIG Fabric
+        - 'localhost:8151'  # Reactive Orchestrator
+        - 'localhost:8155'  # Safety Monitor
+        - 'localhost:8156'  # HITL Dashboard

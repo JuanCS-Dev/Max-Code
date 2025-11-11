@@ -1,0 +1,227 @@
+#!/bin/bash
+# MAXIMUS Services Manager
+# Interactive dashboard for service management
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+# Service definitions
+declare -A ESSENTIAL_SERVICES=(
+    ["maximus-redis"]="Redis Cache|6379|redis-cli -a maximus2024 --no-auth-warning ping"
+    ["maximus-postgres"]="PostgreSQL|5432|pg_isready -U maximus"
+)
+
+declare -A ALL_SERVICES=(
+    ["maximus-redis"]="Redis Cache|6379|redis-cli -a maximus2024 --no-auth-warning ping"
+    ["maximus-postgres"]="PostgreSQL|5432|pg_isready -U maximus"
+    ["maximus-prometheus"]="Prometheus|9091|curl -sf http://localhost:9091/-/healthy"
+    ["maximus-grafana"]="Grafana|3002|curl -sf http://localhost:3002/api/health"
+    ["maximus-maba"]="MABA Agent|8152|curl -sf http://localhost:8152/health"
+    ["maximus-nis"]="NIS Service|8153|curl -sf http://localhost:8153/health"
+)
+
+# Functions
+print_header() {
+    clear
+    echo -e "${CYAN}${BOLD}"
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║            MAXIMUS Services Manager v1.0                     ║"
+    echo "║                 Max-Code CLI Operations                      ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo -e "${NC}"
+}
+
+check_service_health() {
+    local container=$1
+    local service_info="${ALL_SERVICES[$container]}"
+    
+    if [ -z "$service_info" ]; then
+        service_info="${ESSENTIAL_SERVICES[$container]}"
+    fi
+    
+    IFS='|' read -r name port check_cmd <<< "$service_info"
+    
+    # Check if container exists and is running
+    if ! docker ps --format '{{.Names}}' | grep -q "^${container}$"; then
+        echo -e "${RED}●${NC} ${BOLD}${name}${NC} (${port}) ${RED}DOWN${NC}"
+        return 1
+    fi
+    
+    # Check health
+    if docker exec "$container" sh -c "$check_cmd" > /dev/null 2>&1; then
+        echo -e "${GREEN}●${NC} ${BOLD}${name}${NC} (${port}) ${GREEN}UP${NC}"
+        return 0
+    else
+        echo -e "${YELLOW}●${NC} ${BOLD}${name}${NC} (${port}) ${YELLOW}STARTING${NC}"
+        return 2
+    fi
+}
+
+show_dashboard() {
+    echo -e "\n${BOLD}${BLUE}═══ Service Status ═══${NC}\n"
+    
+    local total=0
+    local healthy=0
+    
+    for container in "${!ALL_SERVICES[@]}"; do
+        ((total++))
+        if check_service_health "$container"; then
+            ((healthy++))
+        fi
+    done
+    
+    echo -e "\n${BOLD}${BLUE}═══════════════════════${NC}"
+    echo -e "${BOLD}Summary:${NC} ${GREEN}${healthy}${NC}/${total} services healthy"
+    
+    if [ "$healthy" -eq "$total" ]; then
+        echo -e "${GREEN}${BOLD}✓ All systems operational${NC}"
+    elif [ "$healthy" -eq 0 ]; then
+        echo -e "${RED}${BOLD}✗ All systems down${NC}"
+    else
+        echo -e "${YELLOW}${BOLD}⚠ Partial availability${NC}"
+    fi
+    echo ""
+}
+
+start_essential_services() {
+    echo -e "\n${CYAN}${BOLD}Starting essential services...${NC}\n"
+    
+    cd "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli"
+    
+    # Start PostgreSQL + Redis
+    echo -e "${BLUE}→${NC} Starting PostgreSQL and Redis..."
+    docker-compose -f persistence/docker-compose.yml up -d
+    
+    echo -e "\n${BLUE}→${NC} Waiting for services to be ready..."
+    sleep 3
+    
+    # Verify
+    local all_healthy=true
+    for container in "${!ESSENTIAL_SERVICES[@]}"; do
+        if ! check_service_health "$container"; then
+            all_healthy=false
+        fi
+    done
+    
+    echo ""
+    if [ "$all_healthy" = true ]; then
+        echo -e "${GREEN}${BOLD}✓ Essential services started successfully${NC}"
+    else
+        echo -e "${YELLOW}${BOLD}⚠ Some services may still be starting...${NC}"
+    fi
+}
+
+start_all_services() {
+    echo -e "\n${CYAN}${BOLD}Starting all services...${NC}\n"
+    
+    cd "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli"
+    
+    # Start PostgreSQL + Redis
+    echo -e "${BLUE}→${NC} Starting persistence layer (PostgreSQL + Redis)..."
+    docker-compose -f persistence/docker-compose.yml up -d
+    sleep 2
+    
+    # Start Prometheus + Grafana
+    echo -e "${BLUE}→${NC} Starting observability stack (Prometheus + Grafana)..."
+    docker-compose -f observability/docker-compose.yml up -d
+    sleep 2
+    
+    # Start MABA
+    if docker ps -a --format '{{.Names}}' | grep -q "^maximus-maba$"; then
+        echo -e "${BLUE}→${NC} Starting MABA agent..."
+        docker start maximus-maba > /dev/null 2>&1 || true
+    fi
+    
+    # Start NIS
+    if docker ps -a --format '{{.Names}}' | grep -q "^maximus-nis$"; then
+        echo -e "${BLUE}→${NC} Starting NIS service..."
+        docker start maximus-nis > /dev/null 2>&1 || true
+    fi
+    
+    echo -e "\n${BLUE}→${NC} Waiting for all services to be ready..."
+    sleep 5
+    
+    echo -e "\n${GREEN}${BOLD}✓ All services started${NC}"
+}
+
+stop_all_services() {
+    echo -e "\n${CYAN}${BOLD}Stopping all services...${NC}\n"
+    
+    cd "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli"
+    
+    # Stop MABA and NIS
+    echo -e "${BLUE}→${NC} Stopping application services..."
+    docker stop maximus-maba maximus-nis > /dev/null 2>&1 || true
+    
+    # Stop observability
+    echo -e "${BLUE}→${NC} Stopping observability stack..."
+    docker-compose -f observability/docker-compose.yml down > /dev/null 2>&1 || true
+    
+    # Stop persistence
+    echo -e "${BLUE}→${NC} Stopping persistence layer..."
+    docker-compose -f persistence/docker-compose.yml down > /dev/null 2>&1 || true
+    
+    echo -e "\n${GREEN}${BOLD}✓ All services stopped${NC}"
+}
+
+show_menu() {
+    echo -e "${BOLD}${BLUE}═══ Menu ═══${NC}\n"
+    echo -e "  ${BOLD}1${NC}) Start Essential Services ${CYAN}(Redis + PostgreSQL)${NC}"
+    echo -e "  ${BOLD}2${NC}) Start All Services ${CYAN}(Full Stack)${NC}"
+    echo -e "  ${BOLD}3${NC}) Stop All Services"
+    echo -e "  ${BOLD}4${NC}) Refresh Dashboard"
+    echo -e "  ${BOLD}5${NC}) Exit"
+    echo -e ""
+    echo -n "Select option [1-5]: "
+}
+
+# Main loop
+main() {
+    while true; do
+        print_header
+        show_dashboard
+        show_menu
+        
+        read -r choice
+        
+        case $choice in
+            1)
+                start_essential_services
+                echo -e "\n${CYAN}Press Enter to continue...${NC}"
+                read -r
+                ;;
+            2)
+                start_all_services
+                echo -e "\n${CYAN}Press Enter to continue...${NC}"
+                read -r
+                ;;
+            3)
+                stop_all_services
+                echo -e "\n${CYAN}Press Enter to continue...${NC}"
+                read -r
+                ;;
+            4)
+                # Just refresh (loop will redraw)
+                ;;
+            5)
+                echo -e "\n${GREEN}${BOLD}Goodbye! Soli Deo Gloria 🙏${NC}\n"
+                exit 0
+                ;;
+            *)
+                echo -e "\n${RED}Invalid option. Please select 1-5.${NC}"
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+# Run
+main

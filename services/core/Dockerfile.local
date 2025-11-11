@@ -1,0 +1,52 @@
+# 🐳 MAXIMUS Core Service - Local Development Dockerfile
+#
+# Simplified version using standard Python base image
+# Build: docker build -f Dockerfile.local -t maximus-core:latest .
+# Run: docker run -p 8150:8150 maximus-core:latest
+
+FROM python:3.11-slim
+
+LABEL maintainer="Juan & Claude <noreply@vertice.dev>"
+LABEL version="2.0.0-local"
+LABEL description="MAXIMUS Core Service - Ethical AI for Cybersecurity"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    libpq5 \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN groupadd -r maximus && useradd -r -g maximus --uid 1000 maximus
+
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Create necessary directories
+RUN mkdir -p /app/models /app/logs /app/snapshots && \
+    chown -R maximus:maximus /app
+
+# Copy application code
+COPY --chown=maximus:maximus . .
+
+# Configure Python
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app:/app/_demonstration
+
+USER maximus
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=180s --retries=5 \
+    CMD curl -f http://localhost:8150/health || exit 1
+
+EXPOSE 8150 9090
+
+# Run application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8150", "--workers", "1", "--timeout-keep-alive", "75"]

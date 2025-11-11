@@ -15,12 +15,11 @@ from enum import Enum
 import logging
 
 from config.settings import get_settings
-from integration import (
-    MaximusClient,
-    PenelopeClient,
-    OrchestratorClient,
-    OraculoClient,
-)
+from core.maximus_integration.client_v2 import MaximusClient
+from core.maximus_integration.penelope_client_v2 import PENELOPEClient
+
+# DEPRECATED: OrchestratorClient and OraculoClient not in backend schema
+# Using only MaximusClient and PENELOPEClient (v2)
 
 # Service Health Enum
 class ServiceHealth(str, Enum):
@@ -54,11 +53,12 @@ class IntegrationManager:
         self.logger = logging.getLogger(__name__)
         self.settings = get_settings()
 
-        # Initialize clients
+        # Initialize clients (v2 - async only)
         self.maximus: Optional[MaximusClient] = None
-        self.penelope: Optional[PenelopeClient] = None
-        self.orchestrator: Optional[OrchestratorClient] = None
-        self.oraculo: Optional[OraculoClient] = None
+        self.penelope: Optional[PENELOPEClient] = None
+        # DEPRECATED: orchestrator and oraculo not in backend schema
+        self.orchestrator: Optional[Any] = None
+        self.oraculo: Optional[Any] = None
 
         # Service availability
         self.service_health: Dict[str, ServiceHealth] = {}
@@ -70,45 +70,23 @@ class IntegrationManager:
 
     def _initialize_clients(self):
         """Initialize service clients."""
-        try:
-            self.maximus = MaximusClient(
-                self.settings.maximus.core_url,
-                timeout=self.settings.maximus.timeout_seconds,
-                max_retries=self.settings.maximus.max_retries
-            )
-            self.logger.debug("MaximusClient initialized")
-        except Exception as e:
-            self.logger.warning(f"Failed to initialize MaximusClient: {e}")
+        # NOTE: v2 clients are async-only - cannot initialize synchronously
+        # This manager needs refactoring to support async operations
+        self.logger.warning("Client v2 requires async context - sync initialization skipped")
+        self.logger.warning("IntegrationManager needs async refactor for v2 clients")
 
-        try:
-            self.penelope = PenelopeClient(
-                self.settings.maximus.penelope_url,
-                timeout=self.settings.maximus.timeout_seconds,
-                max_retries=self.settings.maximus.max_retries
-            )
-            self.logger.debug("PenelopeClient initialized")
-        except Exception as e:
-            self.logger.warning(f"Failed to initialize PenelopeClient: {e}")
+        # For now, clients remain None - STANDALONE mode only
+        # try:
+        #     self.maximus = MaximusClient(
+        #         base_url=self.settings.maximus.core_url,
+        #         timeout=self.settings.maximus.timeout_seconds,
+        #     )
+        #     self.logger.debug("MaximusClient initialized")
+        # except Exception as e:
+        #     self.logger.warning(f"Failed to initialize MaximusClient: {e}")
 
-        try:
-            self.orchestrator = OrchestratorClient(
-                self.settings.maximus.orchestrator_url,
-                timeout=self.settings.maximus.timeout_seconds,
-                max_retries=self.settings.maximus.max_retries
-            )
-            self.logger.debug("OrchestratorClient initialized")
-        except Exception as e:
-            self.logger.warning(f"Failed to initialize OrchestratorClient: {e}")
-
-        try:
-            self.oraculo = OraculoClient(
-                self.settings.maximus.oraculo_url,
-                timeout=self.settings.maximus.timeout_seconds,
-                max_retries=self.settings.maximus.max_retries
-            )
-            self.logger.debug("OraculoClient initialized")
-        except Exception as e:
-            self.logger.warning(f"Failed to initialize OraculoClient: {e}")
+        # DEPRECATED: Orchestrator and Oraculo not in backend schema
+        pass
 
 
     def _check_service_health(self):

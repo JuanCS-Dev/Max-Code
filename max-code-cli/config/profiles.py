@@ -39,8 +39,8 @@ PROFILES: Dict[Profile, ProfileConfig] = {
             "MAX_CODE_ENV": "development",
 
             # MAXIMUS Services (localhost)
-            "MAXIMUS_CORE_URL": "http://localhost:8150",
-            "MAXIMUS_PENELOPE_URL": "http://localhost:8154",
+            "MAXIMUS_CORE_URL": "http://localhost:8100",  # FIXED: Was 8150, actual backend is 8100
+            "MAXIMUS_PENELOPE_URL": "http://localhost:8154",  # Correct
             "MAXIMUS_ORCHESTRATOR_URL": "http://localhost:8027",
             "MAXIMUS_ORACULO_URL": "http://localhost:8026",
             "MAXIMUS_ATLAS_URL": "http://localhost:8007",

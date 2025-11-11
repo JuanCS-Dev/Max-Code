@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: maximus
+  labels:
+    istio-injection: enabled
+---
+# MAXIMUS Core Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: maximus-core
+  namespace: maximus
+  labels:
+    app: maximus-core
+    version: v1
+spec:
+  ports:
+    - port: 8100
+      name: http
+      targetPort: 8100
+    - port: 9090
+      name: metrics
+      targetPort: 9090
+  selector:
+    app: maximus-core
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maximus-core
+  namespace: maximus
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: maximus-core
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: maximus-core
+        version: v1
+    spec:
+      containers:
+        - name: maximus-core
+          image: maximus/core:latest
+          ports:
+            - containerPort: 8100
+            - containerPort: 9090
+          env:
+            - name: PORT
+              value: "8100"
+            - name: POSTGRES_HOST
+              value: "maximus-postgres.maximus.svc.cluster.local"
+            - name: REDIS_HOST
+              value: "maximus-redis.maximus.svc.cluster.local"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+# PENELOPE Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: penelope
+  namespace: maximus
+  labels:
+    app: penelope
+    version: v1
+spec:
+  ports:
+    - port: 8154
+      name: http
+      targetPort: 8154
+  selector:
+    app: penelope
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: penelope
+  namespace: maximus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: penelope
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: penelope
+        version: v1
+    spec:
+      containers:
+        - name: penelope
+          image: maximus/penelope:latest
+          ports:
+            - containerPort: 8154
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

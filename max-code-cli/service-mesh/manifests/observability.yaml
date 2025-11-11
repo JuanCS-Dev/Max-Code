@@ -1,0 +1,29 @@
+# Prometheus ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: maximus-services
+  namespace: maximus
+spec:
+  selector:
+    matchLabels:
+      app: maximus-core
+  endpoints:
+    - port: metrics
+      interval: 15s
+---
+# Kiali Dashboard (Service Mesh Visualization)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiali
+  namespace: istio-system
+data:
+  config.yaml: |
+    auth:
+      strategy: anonymous
+    deployment:
+      accessible_namespaces:
+        - "**"
+    server:
+      web_root: /kiali

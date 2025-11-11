@@ -1,0 +1,225 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: maximus
+  labels:
+    istio-injection: enabled
+---
+# MAXIMUS Core
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maximus-core
+  namespace: maximus
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: maximus-core
+  template:
+    metadata:
+      labels:
+        app: maximus-core
+        version: v1
+    spec:
+      containers:
+        - name: maximus-core
+          image: maximus/core:latest
+          ports:
+            - containerPort: 8100
+          env:
+            - name: PORT
+              value: "8100"
+            - name: POSTGRES_HOST
+              value: "postgres.maximus.svc.cluster.local"
+            - name: REDIS_HOST
+              value: "redis.maximus.svc.cluster.local"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+# PENELOPE
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: penelope
+  namespace: maximus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: penelope
+  template:
+    metadata:
+      labels:
+        app: penelope
+        version: v1
+    spec:
+      containers:
+        - name: penelope
+          image: maximus/penelope:latest
+          ports:
+            - containerPort: 8154
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+# MABA
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maba
+  namespace: maximus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: maba
+  template:
+    metadata:
+      labels:
+        app: maba
+        version: v1
+    spec:
+      containers:
+        - name: maba
+          image: maximus/maba:latest
+          ports:
+            - containerPort: 8152
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+---
+# NIS
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nis
+  namespace: maximus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nis
+  template:
+    metadata:
+      labels:
+        app: nis
+        version: v1
+    spec:
+      containers:
+        - name: nis
+          image: maximus/nis:latest
+          ports:
+            - containerPort: 8153
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+# TIG Fabric
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tig-fabric
+  namespace: maximus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tig-fabric
+  template:
+    metadata:
+      labels:
+        app: tig-fabric
+        version: v1
+    spec:
+      containers:
+        - name: tig-fabric
+          image: maximus/tig-fabric:latest
+          ports:
+            - containerPort: 8150
+---
+# Reactive Orchestrator
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reactive-orchestrator
+  namespace: maximus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: reactive-orchestrator
+  template:
+    metadata:
+      labels:
+        app: reactive-orchestrator
+        version: v1
+    spec:
+      containers:
+        - name: reactive-orchestrator
+          image: maximus/reactive-orchestrator:latest
+          ports:
+            - containerPort: 8151
+---
+# Safety Monitor
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: safety-monitor
+  namespace: maximus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: safety-monitor
+  template:
+    metadata:
+      labels:
+        app: safety-monitor
+        version: v1
+    spec:
+      containers:
+        - name: safety-monitor
+          image: maximus/safety-monitor:latest
+          ports:
+            - containerPort: 8155
+---
+# HITL Dashboard
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hitl-dashboard
+  namespace: maximus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hitl-dashboard
+  template:
+    metadata:
+      labels:
+        app: hitl-dashboard
+        version: v1
+    spec:
+      containers:
+        - name: hitl-dashboard
+          image: maximus/hitl-dashboard:latest
+          ports:
+            - containerPort: 8156

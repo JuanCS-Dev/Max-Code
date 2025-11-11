@@ -1,0 +1,327 @@
+# 🐳 MAXIMUS AI - Complete Stack Docker Compose
+#
+# Includes ALL 8 services + observability stack
+# Usage:
+#   docker-compose -f docker-compose.full.yml up -d
+#   docker-compose -f docker-compose.full.yml down
+#
+# Services:
+# - MAXIMUS Core (8150) - Ethical AI for Cybersecurity
+# - PENELOPE (8154) - Self-Healing with Biblical Governance
+# - MABA (8152) - Browser Automation Agent
+# - NIS (8153) - Network Intelligence Service
+# - PostgreSQL (5432) - Persistence layer
+# - Redis (6379) - Caching layer
+# - Prometheus (9091) - Metrics collection
+# - Grafana (3002) - Dashboards
+# - Jaeger (16686) - Distributed tracing
+
+version: '3.8'
+
+services:
+  # ============================================================================
+  # CORE SERVICES
+  # ============================================================================
+
+  maximus-core:
+    image: maximus-core:latest
+    container_name: maximus-core
+    ports:
+      - "8150:8150"  # API
+      - "9090:9090"  # Metrics
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=maximus
+      - POSTGRES_USER=maximus
+      - POSTGRES_PASSWORD=maximus2024
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - maximus-models:/app/models
+      - maximus-logs:/app/logs
+      - maximus-snapshots:/app/snapshots
+    depends_on:
+      - postgres
+      - redis
+      - jaeger
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8150/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 180s
+
+  penelope:
+    image: penelope:latest
+    container_name: penelope
+    ports:
+      - "8154:8154"  # API
+      - "9092:9092"  # Metrics
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=maximus
+      - POSTGRES_USER=maximus
+      - POSTGRES_PASSWORD=maximus2024
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PENELOPE_SABBATH_ENABLED=true
+      - PENELOPE_SABBATH_TIMEZONE=America/Sao_Paulo
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - penelope-logs:/app/logs
+      - penelope-patches:/app/patches
+      - penelope-diagnoses:/app/diagnoses
+    depends_on:
+      - postgres
+      - redis
+      - jaeger
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8154/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================================
+  # AUXILIARY SERVICES
+  # ============================================================================
+
+  maba:
+    image: maba:latest
+    container_name: maximus-maba
+    ports:
+      - "8152:8152"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8152/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  nis:
+    image: nis:latest
+    container_name: maximus-nis
+    ports:
+      - "8153:8153"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8153/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ============================================================================
+  # PERSISTENCE LAYER
+  # ============================================================================
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: maximus-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=maximus
+      - POSTGRES_USER=maximus
+      - POSTGRES_PASSWORD=maximus2024
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./persistence/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U maximus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: maximus-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass maximus2024
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "maximus2024", "--no-auth-warning", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # ============================================================================
+  # OBSERVABILITY STACK
+  # ============================================================================
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: maximus-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: maximus-grafana
+    ports:
+      - "3002:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=maximus2024
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:3002
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: maximus-jaeger
+    ports:
+      - "5775:5775/udp"   # accept zipkin.thrift over compact thrift protocol
+      - "6831:6831/udp"   # accept jaeger.thrift over compact thrift protocol
+      - "6832:6832/udp"   # accept jaeger.thrift over binary thrift protocol
+      - "5778:5778"       # serve configs
+      - "16686:16686"     # serve frontend
+      - "14268:14268"     # accept jaeger.thrift directly from clients
+      - "14250:14250"     # accept model.proto
+      - "9411:9411"       # Zipkin compatible endpoint
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - COLLECTOR_OTLP_ENABLED=true
+    restart: unless-stopped
+    networks:
+      - maximus
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:14269"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+# ============================================================================
+# VOLUMES
+# ============================================================================
+
+volumes:
+  # Core services
+  maximus-models:
+  maximus-logs:
+  maximus-snapshots:
+
+  # PENELOPE
+  penelope-logs:
+  penelope-patches:
+  penelope-diagnoses:
+
+  # Persistence
+  postgres-data:
+  redis-data:
+
+  # Observability
+  prometheus-data:
+  grafana-data:
+
+# ============================================================================
+# NETWORKS
+# ============================================================================
+
+networks:
+  maximus:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+# ============================================================================
+# METADATA
+# ============================================================================
+
+# Service URLs (for reference):
+# - MAXIMUS Core:    http://localhost:8150
+# - PENELOPE:        http://localhost:8154
+# - MABA:            http://localhost:8152
+# - NIS:             http://localhost:8153
+# - PostgreSQL:      localhost:5432
+# - Redis:           localhost:6379
+# - Prometheus:      http://localhost:9091
+# - Grafana:         http://localhost:3002 (admin/maximus2024)
+# - Jaeger UI:       http://localhost:16686
+#
+# Health checks:
+# - curl http://localhost:8150/health  # MAXIMUS Core
+# - curl http://localhost:8154/health  # PENELOPE
+# - curl http://localhost:8152/health  # MABA
+# - curl http://localhost:8153/health  # NIS
+#
+# Quick start:
+# 1. Build images:
+#    cd services/core && docker build -f Dockerfile.local -t maximus-core:latest .
+#    cd services/penelope && docker build -f Dockerfile.local -t penelope:latest .
+#
+# 2. Start all services:
+#    docker-compose -f docker-compose.full.yml up -d
+#
+# 3. Check status:
+#    docker-compose -f docker-compose.full.yml ps
+#
+# 4. View logs:
+#    docker-compose -f docker-compose.full.yml logs -f maximus-core
+#
+# 5. Stop all:
+#    docker-compose -f docker-compose.full.yml down
+#
+# Soli Deo Gloria 🙏

@@ -1,0 +1,58 @@
+# Destination Rules (Load Balancing, Circuit Breaker)
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: maximus-core
+  namespace: maximus
+spec:
+  host: maximus-core
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 200
+      http:
+        http1MaxPendingRequests: 100
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 2
+    loadBalancer:
+      simple: LEAST_REQUEST
+    outlierDetection:
+      consecutiveErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
+---
+# Canary Deployment (10% traffic to v2)
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: maximus-core-canary
+  namespace: maximus
+spec:
+  hosts:
+    - maximus-core
+  http:
+    - match:
+        - headers:
+            x-canary:
+              exact: "true"
+      route:
+        - destination:
+            host: maximus-core
+            subset: v2
+    - route:
+        - destination:
+            host: maximus-core
+            subset: v1
+          weight: 90
+        - destination:
+            host: maximus-core
+            subset: v2
+          weight: 10

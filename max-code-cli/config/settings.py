@@ -18,14 +18,14 @@ class MaximusServiceConfig(BaseSettings):
 
     # MAXIMUS Core Service (consciousness, predictive coding, neuromodulation)
     core_url: str = Field(
-        default="http://localhost:8153",
+        default="http://localhost:8100",  # FIXED: Was 8153, actual backend is 8100
         env="MAXIMUS_CORE_URL",
         description="MAXIMUS Core Service URL"
     )
 
     # Penelope Service (NLP, healing, 7 Biblical Articles)
     penelope_url: str = Field(
-        default="http://localhost:8150",
+        default="http://localhost:8154",  # FIXED: Was 8150, actual backend is 8154
         env="MAXIMUS_PENELOPE_URL",
         description="Penelope NLP Service URL"
     )

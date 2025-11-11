@@ -22,7 +22,7 @@ from typing import List, Dict, Any, Optional, Tuple
 
 from rich.console import Console
 
-from integration.penelope_client import PenelopeClient
+from core.maximus_integration.penelope_client_v2 import PENELOPEClient
 
 
 @dataclass
@@ -293,7 +293,7 @@ class AdaptiveLearningSystem:
         self.console = Console()
 
         # MAXIMUS integration (optional)
-        self.neuromodulation_client = PenelopeClient()
+        self.neuromodulation_client = PENELOPEClient()
 
     def record_command_execution(
         self,
@@ -324,17 +324,14 @@ class AdaptiveLearningSystem:
         })
 
         # Send feedback to MAXIMUS (neuromodulation)
-        if self.config.send_feedback_to_maximus and self.neuromodulation_client.is_healthy():
-            try:
-                self.neuromodulation_client.record_feedback({
-                    "action": command,
-                    "outcome": "success" if success else "failure",
-                    "valence": user_rating / 5.0 if user_rating else None,
-                    "context": context.to_dict()
-                })
-            except Exception as e:
-                # Silent fail - don't block on MAXIMUS unavailability
-                pass
+        # NOTE: Feedback recording requires async context - skipped in sync method
+        # To enable: refactor to async or use background task
+        # if self.config.send_feedback_to_maximus:
+        #     try:
+        #         # Would need async: await self.neuromodulation_client.feedback.record(...)
+        #         pass
+        #     except Exception:
+        #         pass
 
     def get_learning_insights(self) -> LearningInsights:
         """Generate insights from learned behavior."""

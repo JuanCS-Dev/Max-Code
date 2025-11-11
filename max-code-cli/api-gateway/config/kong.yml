@@ -1,0 +1,58 @@
+_format_version: "3.0"
+
+services:
+  - name: maximus-core
+    url: http://host.docker.internal:8100
+    routes:
+      - name: maximus-core-route
+        paths:
+          - /api/consciousness
+          - /api/v1/governance
+          - /query
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
+      - name: key-auth
+        config:
+          key_names:
+            - X-API-Key
+      - name: cors
+        config:
+          origins:
+            - "*"
+          methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+          headers:
+            - Accept
+            - Content-Type
+            - X-API-Key
+          max_age: 3600
+
+  - name: penelope
+    url: http://host.docker.internal:8154
+    routes:
+      - name: penelope-route
+        paths:
+          - /api/v1/healing
+          - /api/v1/penelope
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+      - name: key-auth
+        config:
+          key_names:
+            - X-API-Key
+
+consumers:
+  - username: maximus-cli
+    keyauth_credentials:
+      - key: maximus_production_key_2024
+
+plugins:
+  - name: prometheus
