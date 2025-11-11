@@ -146,7 +146,145 @@ class ClaudeConfig(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
         extra = "ignore"  # Allow other env vars in .env
-        extra = "ignore"  # Allow other env vars in .env
+
+
+class GeminiConfig(BaseSettings):
+    """
+    Google Gemini API configuration for P.P.B.P.R research.
+
+    Uses GEMINI_API_KEY for authentication.
+    """
+
+    api_key: Optional[str] = Field(
+        default=None,
+        env="GEMINI_API_KEY",
+        description="Google Gemini API key"
+    )
+
+    model: str = Field(
+        default="gemini-2.5-flash",  # Cost-effective and latest
+        env="GEMINI_MODEL",
+        description="Gemini model (2.5-flash/2.5-pro/2.0-flash)"
+    )
+
+    model_pro: str = Field(
+        default="gemini-2.5-pro",  # For deep research
+        env="GEMINI_MODEL_PRO",
+        description="Gemini Pro model for comprehensive research"
+    )
+
+    enable_grounding: bool = Field(
+        default=True,
+        env="GEMINI_ENABLE_GROUNDING",
+        description="Enable Google Search grounding"
+    )
+
+    temperature: float = Field(
+        default=0.7,
+        env="GEMINI_TEMPERATURE",
+        description="Sampling temperature (0-1)"
+    )
+
+    max_tokens: int = Field(
+        default=10_000,
+        env="GEMINI_MAX_TOKENS",
+        description="Maximum tokens per response"
+    )
+
+    @validator('temperature')
+    def validate_temperature(cls, v):
+        if not 0 <= v <= 1:
+            raise ValueError("Temperature must be between 0 and 1")
+        return v
+
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+        extra = "ignore"
+
+
+class PPBPRConfig(BaseSettings):
+    """
+    P.P.B.P.R Methodology configuration.
+
+    Prompt → Paper → Blueprint → Plan → Refine
+    """
+
+    # Quality gates
+    enable_quality_gates: bool = Field(
+        default=True,
+        env="PPBPR_ENABLE_QUALITY_GATES",
+        description="Enable quality validation at each step (QG1-QG5)"
+    )
+
+    enable_constitutional_validation: bool = Field(
+        default=True,
+        env="PPBPR_ENABLE_CONSTITUTIONAL",
+        description="Enable Constitutional AI validation (P1-P6)"
+    )
+
+    # Retry configuration
+    retry_on_failure: bool = Field(
+        default=True,
+        env="PPBPR_RETRY_ON_FAILURE",
+        description="Retry failed steps"
+    )
+
+    max_retries: int = Field(
+        default=2,
+        env="PPBPR_MAX_RETRIES",
+        description="Maximum retry attempts per step"
+    )
+
+    # Research configuration
+    research_depth: Literal['basic', 'moderate', 'comprehensive'] = Field(
+        default='comprehensive',
+        env="PPBPR_RESEARCH_DEPTH",
+        description="Research depth level"
+    )
+
+    # Output configuration
+    output_format: Literal['markdown', 'json', 'html'] = Field(
+        default='markdown',
+        env="PPBPR_OUTPUT_FORMAT",
+        description="Deliverable output format"
+    )
+
+    output_dir: Path = Field(
+        default_factory=lambda: Path("./outputs/ppbpr"),
+        env="PPBPR_OUTPUT_DIR",
+        description="Output directory for deliverables"
+    )
+
+    # Quality thresholds
+    min_research_words: int = Field(
+        default=500,
+        env="PPBPR_MIN_RESEARCH_WORDS",
+        description="Minimum words for research quality gate"
+    )
+
+    min_research_sources: int = Field(
+        default=3,
+        env="PPBPR_MIN_RESEARCH_SOURCES",
+        description="Minimum sources for research quality gate"
+    )
+
+    min_quality_score: float = Field(
+        default=0.5,
+        env="PPBPR_MIN_QUALITY_SCORE",
+        description="Minimum overall quality score (0-1)"
+    )
+
+    @validator('output_dir')
+    def create_output_dir(cls, v):
+        """Ensure output directory exists."""
+        v.mkdir(parents=True, exist_ok=True)
+        return v
+
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+        extra = "ignore"
 
 
 class UIConfig(BaseSettings):
@@ -187,6 +325,12 @@ class UIConfig(BaseSettings):
         default=True,
         env="MAX_CODE_SHOW_PROGRESS",
         description="Show progress indicators"
+    )
+
+    # Sabbath mode (runtime state, not persisted)
+    sabbath_mode: bool = Field(
+        default=False,
+        description="Sabbath mode active (runtime state)"
     )
 
     # Agent display
@@ -262,6 +406,8 @@ class Settings(BaseSettings):
     # Configuration sections
     maximus: MaximusServiceConfig = Field(default_factory=MaximusServiceConfig)
     claude: ClaudeConfig = Field(default_factory=ClaudeConfig)
+    gemini: GeminiConfig = Field(default_factory=GeminiConfig)
+    ppbpr: PPBPRConfig = Field(default_factory=PPBPRConfig)
     ui: UIConfig = Field(default_factory=UIConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
 
@@ -323,10 +469,15 @@ class Settings(BaseSettings):
             (is_valid, errors): Tuple of validation status and error list
         """
         errors = []
+        warnings = []
 
         # Check Claude API key if multi-agent enabled
         if self.enable_multi_agent and not self.claude.api_key:
             errors.append("Claude API key required for multi-agent system (set ANTHROPIC_API_KEY)")
+
+        # Check Gemini API key (warning, not error - P.P.B.P.R is optional)
+        if not self.gemini.api_key:
+            warnings.append("Gemini API key not set - P.P.B.P.R research will be unavailable (set GEMINI_API_KEY)")
 
         # Check MAXIMUS services accessibility (could add health checks here)
         # For now, just validate URLs are set
@@ -341,6 +492,13 @@ class Settings(BaseSettings):
 
         if not self.maximus.maba_url:
             errors.append("MABA URL not configured")
+
+        # Log warnings if any
+        if warnings:
+            from config.logging_config import get_logger
+            logger = get_logger(__name__)
+            for warning in warnings:
+                logger.warning(f"⚠️  {warning}")
 
         return (len(errors) == 0, errors)
 

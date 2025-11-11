@@ -530,6 +530,16 @@ try:
 except ImportError as e:
     console.print(f"[yellow]Warning: Streaming demo commands not available: {e}[/yellow]")
 
+# Import and register P.P.B.P.R command (FASE 11 - Methodology Automation)
+try:
+    from cli.ppbpr_command import app as ppbpr_app
+    # Convert Typer app to Click command
+    import typer
+    ppbpr_click = typer.main.get_command(ppbpr_app)
+    cli.add_command(ppbpr_click, name='ppbpr')
+except ImportError as e:
+    console.print(f"[yellow]Warning: P.P.B.P.R command not available: {e}[/yellow]")
+
 
 @cli.command()
 def repl():
