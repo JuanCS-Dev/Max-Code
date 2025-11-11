@@ -101,63 +101,49 @@ def setup():
     """
     One-time setup for Max-Code CLI.
 
-    Creates configuration directory (~/.claude/) and guides through OAuth authentication.
+    Creates configuration directory and guides through API key setup.
 
     This command:
-    1. Creates ~/.claude/ directory
-    2. Checks for existing authentication
-    3. Guides through OAuth login if needed
-    4. Verifies authentication works
+    1. Creates configuration directory
+    2. Checks for existing API key
+    3. Guides through API key setup
 
     Example:
       max-code setup
     """
-    from core.auth.max_code_config import ensure_config_dir, get_config_dir, get_credentials_file_path
-    from core.auth.oauth_handler import get_anthropic_client
-
     console.print("\n[bold cyan]═══════════════════════════════════════════════════════[/bold cyan]")
     console.print("[bold cyan]       MAX-CODE CLI - FIRST TIME SETUP               [/bold cyan]")
     console.print("[bold cyan]═══════════════════════════════════════════════════════[/bold cyan]\n")
 
-    # Step 1: Create config directory
-    console.print("[bold yellow]Step 1:[/bold yellow] Creating configuration directory...")
-    ensure_config_dir()
-    config_dir = get_config_dir()
-    console.print(f"[green]✓[/green] Directory created: [white]{config_dir}[/white]\n")
+    settings = get_settings()
 
-    # Step 2: Check existing authentication
-    console.print("[bold yellow]Step 2:[/bold yellow] Checking existing authentication...")
-    client = get_anthropic_client()
+    # Check existing API key
+    console.print("[bold yellow]Step 1:[/bold yellow] Checking API key...")
 
-    if client:
-        console.print("[green]✓[/green] Authentication already configured!")
-        console.print(f"   Credentials: [white]{get_credentials_file_path()}[/white]\n")
-
+    if settings.claude.api_key:
+        console.print("[green]✓[/green] API key configured!\n")
         console.print("[bold green]Setup complete! You're ready to use max-code.[/bold green]\n")
 
         console.print("[bold yellow]Try these commands:[/bold yellow]")
         console.print("  [cyan]max-code shell[/cyan]        # Enhanced REPL")
         console.print("  [cyan]max-code chat[/cyan]         # Chat with Claude")
-        console.print("  [cyan]max-code auth status[/cyan]  # Check authentication\n")
+        console.print("  [cyan]max-code health[/cyan]       # Check services\n")
 
     else:
-        console.print("[yellow]⚠[/yellow]  No authentication found.\n")
+        console.print("[yellow]⚠[/yellow]  No API key found.\n")
 
-        console.print("[bold yellow]Step 3:[/bold yellow] Setting up OAuth authentication...")
-        console.print("\nTo authenticate with Claude, you have two options:\n")
+        console.print("[bold yellow]Step 2:[/bold yellow] Set your Claude API key...")
+        console.print("\nTo use Max-Code, set your Anthropic API key:\n")
 
-        console.print("[bold]Option 1 (RECOMMENDED):[/bold] OAuth Browser Login")
-        console.print("  [cyan]max-code auth login[/cyan]")
-        console.print("  - Opens browser for Claude.ai login")
-        console.print("  - Uses your Claude Pro/Max subscription")
-        console.print("  - Tokens auto-refresh automatically\n")
-
-        console.print("[bold]Option 2:[/bold] API Key (consumes credits)")
-        console.print("  Set environment variable:")
+        console.print("[bold]Option 1:[/bold] Environment Variable")
         console.print("  [white]export ANTHROPIC_API_KEY=\"sk-ant-api...\"[/white]\n")
 
-        console.print("[bold yellow]Next step:[/bold yellow]")
-        console.print("  Run: [cyan]max-code auth login[/cyan]\n")
+        console.print("[bold]Option 2:[/bold] Add to .env file")
+        console.print(f"  Edit: [white]{settings.config_dir}/.env[/white]")
+        console.print("  Add: [white]ANTHROPIC_API_KEY=sk-ant-api...[/white]\n")
+
+        console.print("[bold yellow]Get your API key:[/bold yellow]")
+        console.print("  https://console.anthropic.com/settings/keys\n")
 
 
 @cli.command()
@@ -535,13 +521,6 @@ try:
     cli.add_command(task, name='task')
 except ImportError as e:
     console.print(f"[yellow]Warning: Task command not available: {e}[/yellow]")
-
-# Import and register auth command (FASE 12 - OAuth Integration)
-try:
-    from cli.auth_command import auth
-    cli.add_command(auth, name='auth')
-except ImportError as e:
-    console.print(f"[yellow]Warning: Auth command not available: {e}[/yellow]")
 
 # Import and register streaming demo commands (Enhanced Thinking Display)
 try:
