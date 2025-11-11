@@ -511,22 +511,139 @@ class ToolExecutor:
         return output
 
     def _execute_api_call(self, parameters: Dict[str, Any]) -> Any:
-        """Chama API externa"""
-        # Placeholder: em produção, usar requests library
-        url = parameters['url']
-        method = parameters.get('method', 'GET')
+        """
+        Chama API externa usando requests.
 
-        logger.info(f"   [Placeholder] API call: {method} {url}")
-        return {'status': 'placeholder'}
+        Parameters:
+            url (str): URL to call
+            method (str): HTTP method (GET, POST, PUT, DELETE, etc.)
+            headers (dict, optional): HTTP headers
+            data (dict, optional): Request body (for POST/PUT)
+            timeout (int, optional): Request timeout in seconds (default: 30)
+
+        Returns:
+            dict: Response with status_code, headers, and body
+        """
+        try:
+            import requests
+        except ImportError:
+            logger.error("❌ requests library not installed. Install: pip install requests")
+            return {
+                'error': 'requests library not available',
+                'status_code': None
+            }
+
+        url = parameters['url']
+        method = parameters.get('method', 'GET').upper()
+        headers = parameters.get('headers', {})
+        data = parameters.get('data')
+        timeout = parameters.get('timeout', 30)
+
+        logger.info(f"   🌐 API call: {method} {url}")
+
+        try:
+            response = requests.request(
+                method=method,
+                url=url,
+                headers=headers,
+                json=data if data else None,
+                timeout=timeout
+            )
+
+            # Try to parse JSON, fallback to text
+            try:
+                body = response.json()
+            except ValueError:
+                body = response.text
+
+            result = {
+                'status_code': response.status_code,
+                'headers': dict(response.headers),
+                'body': body,
+                'ok': response.ok,
+                'url': response.url,
+            }
+
+            logger.info(f"   ✅ Response: {response.status_code}")
+            return result
+
+        except requests.exceptions.Timeout:
+            logger.error(f"   ⏱️  Timeout after {timeout}s")
+            return {'error': 'timeout', 'status_code': None}
+        except requests.exceptions.ConnectionError as e:
+            logger.error(f"   🔌 Connection error: {e}")
+            return {'error': f'connection_error: {e}', 'status_code': None}
+        except Exception as e:
+            logger.error(f"   ❌ Error: {e}")
+            return {'error': str(e), 'status_code': None}
 
     def _execute_search(self, parameters: Dict[str, Any]) -> List[str]:
-        """Executa busca (grep, find)"""
-        # Placeholder: em produção, usar grep/rg
+        """
+        Executa busca usando grep/subprocess.
+
+        Parameters:
+            pattern (str): Pattern to search for
+            path (str, optional): Path to search in (default: '.')
+            case_sensitive (bool, optional): Case sensitive search (default: True)
+            include_line_numbers (bool, optional): Include line numbers (default: True)
+            file_pattern (str, optional): Filter files (e.g., "*.py")
+
+        Returns:
+            List[str]: List of matches in format "file:line:content" or ["file"] depending on options
+        """
+        import subprocess
+
         pattern = parameters['pattern']
         path = parameters.get('path', '.')
+        case_sensitive = parameters.get('case_sensitive', True)
+        include_line_numbers = parameters.get('include_line_numbers', True)
+        file_pattern = parameters.get('file_pattern')
 
-        logger.info(f"   [Placeholder] Search: {pattern} in {path}")
-        return []
+        logger.info(f"   🔍 Search: '{pattern}' in {path}")
+
+        # Build grep command
+        cmd = ['grep', '-r']  # Recursive by default
+
+        if not case_sensitive:
+            cmd.append('-i')
+
+        if include_line_numbers:
+            cmd.append('-n')
+
+        if file_pattern:
+            cmd.extend(['--include', file_pattern])
+
+        cmd.extend([pattern, path])
+
+        try:
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=60  # 1 minute timeout
+            )
+
+            # grep returns 0 if matches found, 1 if no matches, 2+ for errors
+            if result.returncode == 0:
+                matches = [line for line in result.stdout.split('\n') if line]
+                logger.info(f"   ✅ Found {len(matches)} match(es)")
+                return matches
+            elif result.returncode == 1:
+                logger.info(f"   ℹ️  No matches found")
+                return []
+            else:
+                logger.error(f"   ❌ Grep error: {result.stderr}")
+                return []
+
+        except subprocess.TimeoutExpired:
+            logger.error(f"   ⏱️  Search timeout after 60s")
+            return []
+        except FileNotFoundError:
+            logger.error(f"   ❌ grep command not found")
+            return []
+        except Exception as e:
+            logger.error(f"   ❌ Search error: {e}")
+            return []
 
     def get_execution_history(self, limit: int = 10) -> List[ToolResult]:
         """Retorna histórico de execuções (P4 - rastreabilidade)"""
