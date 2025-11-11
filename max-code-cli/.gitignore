@@ -1,2 +1,86 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+.hypothesis/
+*.log
+
+# Secrets & Credentials (CRITICAL!)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+*_secret*
+*_token*
+*_password*
+credentials.json
+secrets.yaml
+config.local.*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.cache
+.cache/
+
+# MAX-CODE specific
+.max-code-history
+/tmp/
+*.backup.*
+
+# Reports
 *.xml
 coverage.xml
+CLAUDE_CODE_PARITY_REPORT.md
+
+# Documentation builds
+docs/_build/
+site/
+
+# OS
+.DS_Store
+Thumbs.db
