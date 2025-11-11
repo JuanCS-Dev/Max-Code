@@ -11,10 +11,17 @@ PRODUCTION IMPLEMENTATION
 """
 
 from typing import Dict, Any, Optional, List
-from integration.base_client import BaseServiceClient, ServiceResponse
+from integration.base_client import BaseHTTPClient
 
 
-class AtlasClient(BaseServiceClient):
+class ServiceResponse:
+    """Simple service response wrapper"""
+    def __init__(self, data: Any, status: int = 200):
+        self.data = data
+        self.status = status
+
+
+class AtlasClient(BaseHTTPClient):
     """
     Client for MAXIMUS Atlas Service.
 

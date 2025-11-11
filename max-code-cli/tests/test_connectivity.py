@@ -11,17 +11,12 @@ Tests connectivity to all MAXIMUS backend services:
 This test validates that all service clients can reach their endpoints.
 """
 
-import sys
-sys.path.insert(0, '/media/juan/DATA1/projects/MAXIMUS AI/max-code-cli')
-
 from config.settings import get_settings
-from integration import (
-    MaximusClient,
-    PenelopeClient,
-    OrchestratorClient,
-    OraculoClient,
-    AtlasClient
-)
+from core.maximus_integration.client_v2 import MaximusClient
+from core.maximus_integration.penelope_client_v2 import PENELOPEClient as PenelopeClient
+from integration.orchestrator_client import OrchestratorClient
+from integration.oraculo_client import OraculoClient
+from integration.atlas_client import AtlasClient
 
 
 def test_maximus_core():

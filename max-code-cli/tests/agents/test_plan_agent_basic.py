@@ -5,7 +5,7 @@ NO MOCK, NO PLACEHOLDER, NO TODO
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from agents.plan_agent import PlanAgent
-from core.validation_schemas import ValidationResult
+from src.validation.validation_engine import ValidationResult
 
 
 @pytest.fixture
