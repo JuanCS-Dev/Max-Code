@@ -204,12 +204,12 @@ class MaximusClient:
         self.max_retries = max_retries if max_retries is not None else settings.maximus.max_retries
         self.backoff_factor = backoff_factor
 
-        # Auth token (OAuth from Claude)
+        # Auth token (API key only - OAuth removed)
         if auth_token:
             self.auth_token = auth_token
         else:
             # Try to get from settings (which reads from env)
-            self.auth_token = settings.claude.get_auth_token()
+            self.auth_token = settings.claude.api_key
 
         # TRINITY service URLs (from settings)
         self.penelope_url = settings.maximus.penelope_url.rstrip("/")
