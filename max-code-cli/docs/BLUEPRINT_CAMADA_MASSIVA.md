@@ -199,7 +199,7 @@ result = await core.execute_task(
 - ✅ Neuromodulation (dopamine, etc)
 - ✅ Skill learning (hybrid RL)
 
-#### PENELOPE (Port 8151) ⏳
+#### PENELOPE (Port 8154) ⏳
 **Status**: TODO
 **Full Name**: Christian Autonomous Healing Service
 **Role**: Self-healing with Biblical governance

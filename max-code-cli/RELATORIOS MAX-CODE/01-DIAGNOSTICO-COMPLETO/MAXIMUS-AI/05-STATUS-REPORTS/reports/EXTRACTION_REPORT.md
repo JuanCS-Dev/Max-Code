@@ -33,7 +33,7 @@
    - Tests: 44/44 passing
    - Coverage: ~97%
 
-2. **PENELOPE** (Port 8151) - TRINITY Member
+2. **PENELOPE** (Port 8154) - TRINITY Member
    - Christian autonomous healing
    - 7 Biblical articles of governance
    - Tests: 262/262 passing (100%)

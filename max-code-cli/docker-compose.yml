@@ -27,7 +27,7 @@ services:
     networks:
       - maximus-net
 
-  # Penelope - 7 Fruits & Healing (Port 8151)
+  # Penelope - 7 Fruits & Healing (Port 8154)
   penelope:
     image: maximus-ai/penelope:latest
     container_name: penelope

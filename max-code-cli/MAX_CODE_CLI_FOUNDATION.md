@@ -1053,7 +1053,7 @@ LOG_FORMAT=json
 **Required for FULL mode:**
 - Claude API (Anthropic) - Language model
 - MAXIMUS Core (port 8150) - Consciousness
-- MAXIMUS Penelope (port 8151) - Ethics
+- MAXIMUS Penelope (port 8154) - Ethics
 
 **Optional for PARTIAL mode:**
 - MABA (port 8152) - Browser automation

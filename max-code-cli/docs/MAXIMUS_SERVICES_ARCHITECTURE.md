@@ -78,7 +78,7 @@ class ArousalAdjustment(BaseModel):
 
 ---
 
-## 🍇 Penelope API (Port 8151)
+## 🍇 Penelope API (Port 8154)
 
 ### 7 Fruits of the Spirit
 
@@ -232,9 +232,9 @@ All services use:
 
 ### 2. Service Clients
 - MaximusClient → maximus-core:8150
-- PenelopeClient → penelope:8151
+- PenelopeClient → penelope:8154
 - OraculoClient → oraculo:8156
-- OrchestratorClient → orchestrator:8154
+- OrchestratorClient → orchestrator:8151
 - MABAClient → maba:8152
 - NISClient → nis:8153
 - EurekaClient → eureka:8155

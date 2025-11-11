@@ -98,7 +98,7 @@ MAXIMUS AI is a **bio-inspired autonomous cybersecurity system** built on cuttin
 
 ---
 
-#### 2. PENELOPE (Port 8151)
+#### 2. PENELOPE (Port 8154)
 **Purpose:** 7 Fruits & Healing - Christian Autonomous Healing Service
 
 **Core Identity:**

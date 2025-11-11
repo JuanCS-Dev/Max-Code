@@ -314,7 +314,7 @@ This paper makes the following contributions:
 ### C3: TRINITY Multi-Agent Architecture (Section 20)
 
 **Novel three-subordinate architecture** coordinated by Maximus Core:
-- **PENELOPE (Port 8151):** Self-healing with Biblical governance (7 articles), Wisdom Base learning, Sabbath observance
+- **PENELOPE (Port 8154):** Self-healing with Biblical governance (7 articles), Wisdom Base learning, Sabbath observance
 - **MABA (Port 8152):** Browser automation with Neo4j cognitive mapping, Playwright integration, intelligent navigation
 - **NIS (Port 8153):** Narrative intelligence with Claude API, anomaly detection (3-sigma), cost tracking, 60-80% cache savings
 
@@ -1844,7 +1844,7 @@ Current systems don't learn from past errors. Each session starts fresh.
 Stateless LLMs with no persistent memory.
 
 **Max-Code Solution:**
-**PENELOPE service** (Port 8151) with Wisdom Base
+**PENELOPE service** (Port 8154) with Wisdom Base
 
 **Features:**
 - **Wisdom Base (PostgreSQL):** Historical fixes indexed by error signature
@@ -5176,7 +5176,7 @@ result = await core.execute_task(
 
 ---
 
-### 20.2 PENELOPE (Port 8151)
+### 20.2 PENELOPE (Port 8154)
 
 **Full Name:** PENELOPE - Christian Autonomous Healing Service
 
