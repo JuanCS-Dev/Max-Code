@@ -93,8 +93,8 @@ show_dashboard() {
 
 start_essential_services() {
     echo -e "\n${CYAN}${BOLD}Starting essential services...${NC}\n"
-    
-    cd "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli"
+
+    cd "/media/juan/DATA3/projects/MAXIMUS AI/max-code-cli"
     
     # Start PostgreSQL + Redis
     echo -e "${BLUE}→${NC} Starting PostgreSQL and Redis..."
@@ -121,8 +121,8 @@ start_essential_services() {
 
 start_all_services() {
     echo -e "\n${CYAN}${BOLD}Starting all services...${NC}\n"
-    
-    cd "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli"
+
+    cd "/media/juan/DATA3/projects/MAXIMUS AI/max-code-cli"
     
     # Start PostgreSQL + Redis
     echo -e "${BLUE}→${NC} Starting persistence layer (PostgreSQL + Redis)..."
@@ -154,8 +154,8 @@ start_all_services() {
 
 stop_all_services() {
     echo -e "\n${CYAN}${BOLD}Stopping all services...${NC}\n"
-    
-    cd "/media/juan/DATA2/projects/MAXIMUS AI/max-code-cli"
+
+    cd "/media/juan/DATA3/projects/MAXIMUS AI/max-code-cli"
     
     # Stop MABA and NIS
     echo -e "${BLUE}→${NC} Stopping application services..."

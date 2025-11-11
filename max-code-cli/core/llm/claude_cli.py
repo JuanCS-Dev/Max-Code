@@ -143,7 +143,7 @@ def chat_with_claude(
             "response": str,
             "auth_type": "pro_max",
             "billing": "subscription",
-            "model": "claude-sonnet-4-5",
+            "model": "claude-3-5-haiku-20241022",
         }
 
     Example:
@@ -159,7 +159,7 @@ def chat_with_claude(
         "response": response,
         "auth_type": "pro_max",
         "billing": "subscription",
-        "model": "claude-sonnet-4-5",
+        "model": "claude-3-5-haiku-20241022",
         "success": True,
     }
 

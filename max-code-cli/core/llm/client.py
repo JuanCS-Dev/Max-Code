@@ -16,7 +16,7 @@ class ClaudeClient:
     Handles authentication, streaming, and response formatting automatically.
     """
 
-    DEFAULT_MODEL = "claude-sonnet-4"
+    DEFAULT_MODEL = "claude-3-5-haiku-20241022"
     DEFAULT_MAX_TOKENS = 4096
 
     def __init__(

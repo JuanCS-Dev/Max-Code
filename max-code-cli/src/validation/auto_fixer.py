@@ -66,7 +66,7 @@ class AutoFixer:
         self,
         max_attempts: int = 3,
         backoff_base: float = 2.0,
-        model: str = "claude-3-7-sonnet-20250219"
+        model: str = "claude-3-5-haiku-20241022"
     ):
         """
         Initialize auto-fixer

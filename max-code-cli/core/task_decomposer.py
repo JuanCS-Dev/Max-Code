@@ -210,7 +210,7 @@ class TaskDecomposer:
         
         try:
             response = await self.async_client.messages.create(
-                model="claude-sonnet-4-20250514",
+                model="claude-3-5-haiku-20241022",
                 max_tokens=8192,
                 system=system,
                 messages=messages,
@@ -494,7 +494,7 @@ class TaskDecomposer:
         # Call Claude
         try:
             response = await self.async_client.messages.create(
-                model="claude-sonnet-4-20250514",
+                model="claude-3-5-haiku-20241022",
                 max_tokens=8192,
                 system=self.system_prompt,
                 messages=messages,
@@ -562,7 +562,7 @@ Keep it concise and practical. Use emojis for readability.
         
         try:
             response = await self.async_client.messages.create(
-                model="claude-sonnet-4-20250514",
+                model="claude-3-5-haiku-20241022",
                 max_tokens=2048,
                 messages=messages
             )

@@ -25,7 +25,7 @@ Example:
     >>> from core.streaming import StreamingAgent, StreamConfig
     >>>
     >>> # Create streaming agent
-    >>> agent = StreamingAgent(StreamConfig(model="claude-sonnet-4-5-20250929"))
+    >>> agent = StreamingAgent(StreamConfig(model="claude-3-5-haiku-20241022"))
     >>>
     >>> # Stream response
     >>> async for chunk in agent.execute_streaming("Hello!"):

@@ -207,7 +207,7 @@ class TestClaudeStreamAdapter:
         """Test adapter initialization"""
         adapter = ClaudeStreamAdapter(api_key="test-key")
         
-        assert adapter.model == "claude-sonnet-4-20250514"
+        assert adapter.model == "claude-3-5-haiku-20241022"
         assert adapter.max_tokens == 4096
     
     def test_is_thinking_content(self):

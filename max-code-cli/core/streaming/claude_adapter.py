@@ -62,7 +62,7 @@ class ClaudeStreamAdapter:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "claude-sonnet-4-20250514",
+        model: str = "claude-3-5-haiku-20241022",
         max_tokens: int = 4096,
     ):
         """

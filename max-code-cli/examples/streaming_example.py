@@ -271,7 +271,7 @@ async def example_custom_config():
     print("=" * 70)
 
     config = StreamConfig(
-        model="claude-sonnet-4-5-20250929",
+        model="claude-3-5-haiku-20241022",
         max_tokens=2048,
         temperature=0.7,
         show_progress=True,

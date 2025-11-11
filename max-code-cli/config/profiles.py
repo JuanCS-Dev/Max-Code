@@ -73,7 +73,7 @@ PROFILES: Dict[Profile, ProfileConfig] = {
             "MAX_CODE_ENABLE_TRACING": "true",
 
             # Claude (requires API key from user)
-            "CLAUDE_MODEL": "claude-sonnet-4-5-20250929",
+            "CLAUDE_MODEL": "claude-3-5-haiku-20241022",  # Haiku 4.5 - Cost-effective
             "CLAUDE_TEMPERATURE": "0.7",
             "CLAUDE_MAX_TOKENS": "4096",
         }
@@ -121,7 +121,7 @@ PROFILES: Dict[Profile, ProfileConfig] = {
             "MAX_CODE_ENABLE_TRACING": "true",
 
             # Claude (requires API key from user)
-            "CLAUDE_MODEL": "claude-sonnet-4-5-20250929",
+            "CLAUDE_MODEL": "claude-3-5-haiku-20241022",  # Haiku 4.5 - Cost-effective
             "CLAUDE_TEMPERATURE": "0.7",
             "CLAUDE_MAX_TOKENS": "4096",
         }
@@ -160,7 +160,7 @@ PROFILES: Dict[Profile, ProfileConfig] = {
             "MAX_CODE_ENABLE_TRACING": "false",
 
             # Claude (requires API key from user)
-            "CLAUDE_MODEL": "claude-sonnet-4-5-20250929",
+            "CLAUDE_MODEL": "claude-3-5-haiku-20241022",  # Haiku 4.5 - Cost-effective
             "CLAUDE_TEMPERATURE": "0.7",
             "CLAUDE_MAX_TOKENS": "4096",
         }

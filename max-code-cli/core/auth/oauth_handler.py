@@ -399,7 +399,7 @@ def _validate_token_health(token: str) -> bool:
 
         # Make minimal request (count tokens - cheapest operation)
         response = client.messages.count_tokens(
-            model="claude-sonnet-4-5-20250929",
+            model="claude-3-5-haiku-20241022",
             messages=[{"role": "user", "content": "test"}]
         )
 

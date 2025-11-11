@@ -501,7 +501,7 @@ if __name__ == "__main__":
     config_menu = ConfigMenu(console)
 
     config = {
-        "model": "claude-sonnet-4.5",
+        "model": "claude-3-5-haiku-20241022",
         "temperature": 0.7,
         "max_tokens": 4096,
         "debug_mode": False,

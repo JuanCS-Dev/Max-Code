@@ -161,7 +161,7 @@ class StreamConfig:
     Controls streaming behavior and UI updates.
     """
     # Model settings
-    model: str = "claude-sonnet-4-5-20250929"
+    model: str = "claude-3-5-haiku-20241022"
     max_tokens: int = 4096
     temperature: float = 1.0
 

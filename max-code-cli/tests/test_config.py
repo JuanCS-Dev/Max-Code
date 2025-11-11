@@ -47,7 +47,7 @@ def test_claude_config():
 
     config = ClaudeConfig()
 
-    assert config.model == "claude-sonnet-4-5-20250929"
+    assert config.model == "claude-3-5-haiku-20241022"
     assert 0 <= config.temperature <= 1
     assert config.max_tokens > 0
 

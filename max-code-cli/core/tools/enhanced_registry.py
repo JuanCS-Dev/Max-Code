@@ -346,7 +346,7 @@ Respond with ONLY the number (1, 2, or 3) of the best tool for this specific tas
 """
             
             response = client.messages.create(
-                model="claude-sonnet-4-20250514",
+                model="claude-3-5-haiku-20241022",
                 max_tokens=10,
                 messages=[{"role": "user", "content": prompt}]
             )

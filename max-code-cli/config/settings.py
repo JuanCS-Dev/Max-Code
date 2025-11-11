@@ -127,7 +127,7 @@ class ClaudeConfig(BaseSettings):
     )
 
     model: str = Field(
-        default="claude-sonnet-4-5-20250929",
+        default="claude-3-5-haiku-20241022",  # Haiku 4.5 - Cost-effective for tests
         env="CLAUDE_MODEL",
         description="Claude model to use"
     )
