@@ -545,7 +545,7 @@ if __name__ == "__main__":
         orchestrator = PPBPROrchestrator()
 
         deliverable = await orchestrator.run(
-            prompt="OAuth 2.0 implementation best practices for microservices architecture",
+            prompt="Constitutional AI v3.0 implementation for multi-agent production systems",
             research_depth="comprehensive"
         )
 

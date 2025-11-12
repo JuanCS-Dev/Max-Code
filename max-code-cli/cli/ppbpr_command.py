@@ -79,8 +79,8 @@ def run(
     EXAMPLES:
 
         \b
-        # Comprehensive research on OAuth 2.0
-        max-code ppbpr "OAuth 2.0 implementation for microservices"
+        # Comprehensive research on Constitutional AI
+        max-code ppbpr "Constitutional AI v3.0 for production systems"
 
         \b
         # Quick research with custom output
@@ -284,7 +284,7 @@ Automates your successful manual methodology for project planning:
 ~$0.025 per run (Gemini Flash: $0.15/M tokens)
 
 [bold]Examples:[/bold]
-max-code ppbpr "OAuth 2.0 for microservices"
+max-code ppbpr "Constitutional AI v3.0 for production"
 max-code ppbpr "Redis caching strategies" --depth basic
 max-code ppbpr "CI/CD pipeline" --format json --output ./research
     """

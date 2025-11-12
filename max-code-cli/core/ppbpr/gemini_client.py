@@ -474,7 +474,7 @@ if __name__ == "__main__":
         tool = GeminiResearchTool()
 
         result = await tool.research_topic(
-            topic="OAuth 2.0 implementation best practices for microservices",
+            topic="Constitutional AI v3.0 implementation for multi-agent systems",
             depth="comprehensive"
         )
 

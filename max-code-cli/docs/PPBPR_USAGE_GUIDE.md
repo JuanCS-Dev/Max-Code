@@ -22,7 +22,7 @@ GEMINI_API_KEY=your-key-here
 ### 2. Run Basic Research
 
 ```bash
-max-code ppbpr run "OAuth 2.0 best practices for microservices"
+max-code ppbpr run "Constitutional AI v3.0 principles for production systems"
 ```
 
 ### 3. Check Output
@@ -201,7 +201,7 @@ max-code ppbpr run "Microservices architecture patterns, service mesh, API gatew
 max-code ppbpr run "NoSQL vs SQL databases, CAP theorem, consistency models, sharding strategies, replication patterns, query optimization for high-scale applications"
 
 # Security
-max-code ppbpr run "Zero-trust security architecture, OAuth 2.0 + OIDC, JWT tokens, API security best practices, threat modeling, secure coding patterns"
+max-code ppbpr run "Zero-trust security architecture, Constitutional AI governance, cryptographic verification, threat modeling, secure coding patterns, defense in depth"
 ```
 
 ### AI/ML Projects
@@ -469,21 +469,21 @@ Check which principles passed:
 
 ## Examples from Real Usage
 
-### Example 1: OAuth 2.0 Research
+### Example 1: Constitutional AI Research
 
 ```bash
-max-code ppbpr run "OAuth 2.0 implementation for microservices" \
+max-code ppbpr run "Constitutional AI v3.0 implementation for multi-agent systems" \
   --depth comprehensive \
-  --output ./research/oauth2
+  --output ./research/constitutional-ai
 ```
 
 **Output:**
 - 8,500 word research paper
-- OAuth 2.0 flows analysis
-- Security best practices
-- Implementation examples
-- Common pitfalls
-- Testing strategies
+- P1-P6 principles analysis
+- Multi-agent orchestration patterns
+- Quality gates implementation
+- Validation strategies
+- Production deployment guide
 
 ### Example 2: Medical Diagnostic AI (Current Test)
 

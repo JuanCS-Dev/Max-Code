@@ -540,6 +540,16 @@ try:
 except ImportError as e:
     console.print(f"[yellow]Warning: P.P.B.P.R command not available: {e}[/yellow]")
 
+# Import and register B.P.R command (FASE 11 - B.P.R Variant)
+try:
+    from cli.bpr_command import app as bpr_app
+    # Convert Typer app to Click command
+    import typer
+    bpr_click = typer.main.get_command(bpr_app)
+    cli.add_command(bpr_click, name='bpr')
+except ImportError as e:
+    console.print(f"[yellow]Warning: B.P.R command not available: {e}[/yellow]")
+
 
 @cli.command()
 def repl():

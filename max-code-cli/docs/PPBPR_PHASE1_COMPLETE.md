@@ -286,7 +286,7 @@ Pending - requires integration with existing agents (Sophia, PlanAgent).
 export GEMINI_API_KEY="your-key-here"
 
 # Run basic research
-max-code ppbpr run "OAuth 2.0 best practices" --depth basic
+max-code ppbpr run "Constitutional AI v3.0 principles" --depth basic
 
 # Output: paper_*.md in ./outputs/ppbpr/
 ```
