@@ -32,8 +32,32 @@ from ui.banner import print_banner
 from ui.themes import ThemeManager
 from ui.dashboard import Dashboard
 
-# Importar cliente LLM criado no Sprint 1
-from core.llm.client import ClaudeClient
+# Importar cliente LLM unificado com fallback Gemini
+from core.llm.unified_client import UnifiedLLMClient
+
+# Importar EPL NLP Engine para intent recognition
+from core.epl.nlp_engine import recognize_intent, IntentType
+
+# Importar Tool System para execução de ferramentas
+from core.tools.tool_selector import ToolSelector
+
+# Importar Context Manager para manter estado entre comandos
+from cli.shell_context import ShellContext
+
+# Importar Bash Executor para execução de comandos
+from core.tools.bash_executor import BashExecutor
+
+# Importar Git Wrapper para operações git
+from core.tools.git_tool import GitTool
+
+# Importar Web Search Tool
+from core.tools.web_search_tool import WebSearchTool
+
+# Importar Web Fetch Tool
+from core.tools.web_fetch_tool import WebFetchTool
+
+# Importar Slash Command Loader
+from core.commands.slash_loader import SlashCommandLoader
 
 # Importar agentes existentes
 from agents import (
@@ -52,12 +76,86 @@ console = Console()
 
 class EnhancedCompleter(Completer):
     """
-    Completer com preview de comandos.
+    Completer com preview de comandos E ferramentas.
     Mostra descrição e exemplo de uso.
+
+    Features:
+    - /comandos (help, exit, clear, agents, config, etc)
+    - /tools (read, write, edit, search, run, grep, glob)
+    - Autocomplete inteligente com fuzzy matching
     """
 
-    def __init__(self, commands: Dict[str, Dict]):
+    def __init__(self, commands: Dict[str, Dict], tool_selector=None):
         self.commands = commands
+        self.tool_selector = tool_selector
+
+        # Adicionar ferramentas principais ao autocomplete
+        self.tools = {
+            '/read': {
+                'icon': '📖',
+                'description': 'Read file contents - Example: /read config.json'
+            },
+            '/write': {
+                'icon': '✍️',
+                'description': 'Write content to file - Example: /write test.txt "content"'
+            },
+            '/edit': {
+                'icon': '✏️',
+                'description': 'Edit file with changes - Example: /edit config.json line 5 to "new value"'
+            },
+            '/search': {
+                'icon': '🔍',
+                'description': 'Search for pattern - Example: /search TODO in *.py'
+            },
+            '/grep': {
+                'icon': '🔎',
+                'description': 'Grep pattern in files - Example: /grep "import os" *.py'
+            },
+            '/run': {
+                'icon': '⚡',
+                'description': 'Execute bash command - Example: /run npm install'
+            },
+            '/bash': {
+                'icon': '💻',
+                'description': 'Run bash command - Example: /bash ls -la'
+            },
+            '/git': {
+                'icon': '🌿',
+                'description': 'Git operations - Example: /git status'
+            },
+            '/git-status': {
+                'icon': '📍',
+                'description': 'Show git status - Example: /git-status'
+            },
+            '/git-diff': {
+                'icon': '🔀',
+                'description': 'Show git diff - Example: /git-diff'
+            },
+            '/git-log': {
+                'icon': '📜',
+                'description': 'Show commit history - Example: /git-log'
+            },
+            '/git-branch': {
+                'icon': '🌿',
+                'description': 'List branches - Example: /git-branch'
+            },
+            '/search-web': {
+                'icon': '🔍',
+                'description': 'Search the web - Example: /search-web Python async'
+            },
+            '/web-search': {
+                'icon': '🌐',
+                'description': 'Search the web (alias) - Example: /web-search tutorials'
+            },
+            '/fetch': {
+                'icon': '🌐',
+                'description': 'Fetch URL content - Example: /fetch https://example.com'
+            },
+            '/web-fetch': {
+                'icon': '📄',
+                'description': 'Fetch URL (alias) - Example: /web-fetch https://docs.python.org'
+            },
+        }
 
     def get_completions(self, document, complete_event):
         """Gerar completions com metadata"""
@@ -67,6 +165,7 @@ class EnhancedCompleter(Completer):
         if not word.startswith('/'):
             return
 
+        # Completar comandos do shell
         for cmd_name, cmd_meta in self.commands.items():
             if cmd_name.startswith(word):
                 # Criar completion com preview
@@ -76,6 +175,19 @@ class EnhancedCompleter(Completer):
 
                 yield Completion(
                     cmd_name,
+                    start_position=-len(word),
+                    display_meta=display_meta
+                )
+
+        # Completar ferramentas
+        for tool_name, tool_meta in self.tools.items():
+            if tool_name.startswith(word):
+                display_meta = HTML(
+                    f"<b>{tool_meta['icon']}</b> {tool_meta['description']}"
+                )
+
+                yield Completion(
+                    tool_name,
                     start_position=-len(word),
                     display_meta=display_meta
                 )
@@ -97,19 +209,43 @@ class EnhancedREPL:
         self.console = Console()
         self.theme_manager = ThemeManager()
         self.dashboard = Dashboard()
-        self.commands = self._load_commands()
-        self.session = self._create_session()
         self.running = True
 
         # State
         self.current_agent: Optional[str] = None
         self.dream_mode: bool = False
 
-        # Claude client
-        self.claude_client = ClaudeClient()
+        # Unified LLM client with Gemini fallback
+        self.claude_client = UnifiedLLMClient()
 
         # Agent instances (lazy loading)
         self._agent_instances = {}
+
+        # Shell Context para manter estado entre comandos
+        self.context = ShellContext()
+
+        # Tool Selector para auto-select tools (Read, Write, Edit, Bash, etc)
+        self.tool_selector = ToolSelector()
+
+        # Bash Executor para comandos shell diretos
+        self.bash_executor = BashExecutor()
+
+        # Git Tool para operações git
+        self.git_tool = GitTool()
+
+        # Web Search Tool
+        self.web_search_tool = WebSearchTool(max_results=10)
+
+        # Web Fetch Tool
+        self.web_fetch_tool = WebFetchTool()
+
+        # Slash Command Loader (custom commands from .claude/commands/*.md)
+        self.slash_loader = SlashCommandLoader()
+        self.slash_loader.load_commands()
+
+        # Commands and session (need tool_selector to be initialized first)
+        self.commands = self._load_commands()
+        self.session = self._create_session()
 
         # Status bar for Constitutional AI monitoring
         from ui.status_bar import StatusBar
@@ -122,9 +258,9 @@ class EnhancedREPL:
     def _load_commands(self) -> Dict[str, Dict]:
         """
         Carregar TODOS comandos disponíveis.
-        Inclui: agentes, especiais, SOFIA, DREAM
+        Inclui: agentes, especiais, SOFIA, DREAM, custom slash commands
         """
-        return {
+        commands = {
             # Comandos especiais
             "/help": {
                 "icon": "❓",
@@ -230,6 +366,63 @@ class EnhancedREPL:
             },
         }
 
+        # Add custom slash commands dynamically
+        self._register_custom_commands(commands)
+
+        return commands
+
+    def _register_custom_commands(self, commands: Dict[str, Dict]):
+        """
+        Register custom slash commands from .claude/commands/*.md files.
+
+        Boris: "Custom commands are user intentions crystallized.
+        Load them, render them, execute them beautifully."
+        """
+        for cmd_name, slash_cmd in self.slash_loader.commands.items():
+            # Create command key with / prefix
+            cmd_key = f"/{cmd_name}"
+
+            # Create handler that renders template and sends to Claude
+            def make_handler(command):
+                def handler(args_string: str):
+                    # Parse arguments
+                    args_list = args_string.split() if args_string else []
+
+                    # Build args dict from command args definition
+                    args_dict = {}
+                    for i, arg_name in enumerate(command.args):
+                        if i < len(args_list):
+                            args_dict[arg_name] = args_list[i]
+                        else:
+                            args_dict[arg_name] = ""
+
+                    # Render prompt with arguments
+                    rendered_prompt = self.slash_loader.render_command(command.name, args_dict)
+
+                    if not rendered_prompt:
+                        console.print(f"[red]❌ Failed to render command: {command.name}[/red]")
+                        return
+
+                    # Display custom command execution
+                    console.print(f"\n[dim]🎯 Executing custom command: /{command.name}[/dim]")
+
+                    # Send to Claude for processing
+                    self._process_natural(rendered_prompt)
+
+                return handler
+
+            # Register command
+            commands[cmd_key] = {
+                "icon": "⚡",  # Custom commands get lightning bolt icon
+                "description": slash_cmd.description,
+                "category": CommandCategory.AGENT,  # Treat as agent-like commands
+                "handler": make_handler(slash_cmd)
+            }
+
+        # Log custom commands loaded
+        if self.slash_loader.commands:
+            console.print(f"[dim]✨ Loaded {len(self.slash_loader.commands)} custom command(s)[/dim]")
+
     def _create_session(self) -> PromptSession:
         """Criar prompt session com todas features"""
         history_file = Path.home() / '.max-code-history'
@@ -237,7 +430,7 @@ class EnhancedREPL:
         return PromptSession(
             history=FileHistory(str(history_file)),
             auto_suggest=AutoSuggestFromHistory(),
-            completer=EnhancedCompleter(self.commands),
+            completer=EnhancedCompleter(self.commands, self.tool_selector),
             key_bindings=self._create_keybindings(),
             enable_history_search=True,
             vi_mode=False,
@@ -633,41 +826,480 @@ class EnhancedREPL:
             cmd = parts[0]
             args = parts[1] if len(parts) > 1 else ""
 
+            # Verificar se é comando do shell (help, exit, etc)
             if cmd in self.commands:
                 self.commands[cmd]['handler'](args)
+
+            # Verificar se é comando de ferramenta (/read, /write, etc)
+            elif cmd in ['/read', '/write', '/edit', '/search', '/grep', '/run', '/bash']:
+                # Remover o / e processar como natural language
+                tool_command = cmd[1:].capitalize() + ' ' + args
+                self._process_natural(tool_command)
+
             else:
                 console.print(f"\n[red]❌ Unknown command: {cmd}[/red]")
-                console.print("[yellow]💡 Type /help or press Ctrl+P[/yellow]\n")
+                console.print("[yellow]💡 Type /help or press Ctrl+P for commands[/yellow]")
+                console.print("[yellow]💡 Tools: /read, /write, /edit, /search, /grep, /run[/yellow]\n")
 
         # Natural language
         else:
             self._process_natural(user_input)
 
     def _process_natural(self, message: str):
-        """Processar natural language via Claude API"""
+        """
+        Processar natural language com NLP Engine + Tool System.
+
+        Flow:
+        1. Resolve context references (that file, it, etc)
+        2. NLP Intent Recognition (EPL)
+        3. Router: Tool execution vs Agent vs Chat
+        4. Update context
+        """
         try:
-            # Aplicar DREAM mode se ativo
-            if self.dream_mode:
-                system_prompt = "You are in DREAM mode - provide critical analysis, identify potential issues, and suggest improvements. Be constructively skeptical."
-                message = f"[CRITICAL ANALYSIS] {message}"
+            # STEP 0: Resolve context references
+            original_message = message
+            message = self.context.resolve_reference(message)
+            if message != original_message:
+                console.print(f"[dim]🔄 Resolved: {message}[/dim]")
+
+            # STEP 1: Detect intent using EPL NLP Engine
+            console.print("[dim]🧠 Analyzing intent...[/dim]")
+            intent = recognize_intent(message)
+
+            # STEP 2: Route based on message keywords (tool detection)
+            message_lower = message.lower()
+
+            # Detect tool commands by keywords
+            tool_keywords = {
+                'read': ['read', 'open', 'show', 'cat', 'display'],
+                'write': ['write', 'create', 'save'],
+                'edit': ['edit', 'change', 'modify', 'replace', 'update'],
+                'search': ['find', 'search', 'grep', 'look for'],
+                'run': ['run', 'execute', 'exec', 'bash'],
+                'git': ['git status', 'git diff', 'git log', 'git branch', 'git commit', 'git push', 'git pull', 'git-'],
+                'web-search': ['search-web', 'web-search', 'search web', 'google', 'duckduckgo'],
+                'web-fetch': ['fetch', 'web-fetch', '/fetch', '/web-fetch', 'get url', 'download page']
+            }
+
+            detected_tool = None
+            for tool, keywords in tool_keywords.items():
+                if any(kw in message_lower for kw in keywords):
+                    detected_tool = tool
+                    break
+
+            if detected_tool:
+                # Direct tool execution (como Claude Code)
+                self._execute_tool_command(message, detected_tool)
+
+            elif intent.type in [IntentType.CODE, IntentType.FIX, IntentType.TEST,
+                                IntentType.REVIEW, IntentType.DOCS, IntentType.PLAN]:
+                # Route para agente especializado
+                agent_map = {
+                    IntentType.CODE: "code",
+                    IntentType.FIX: "fix",
+                    IntentType.TEST: "test",
+                    IntentType.REVIEW: "review",
+                    IntentType.DOCS: "docs",
+                    IntentType.PLAN: "plan"
+                }
+                agent_name = agent_map.get(intent.type, "code")
+                self._invoke_agent(agent_name, message)
+
             else:
-                system_prompt = None
-
-            # Display streaming
-            console.print()
-            console.print("[dim]⚡ Thinking...[/dim]")
-
-            # Stream response
-            response_parts = []
-            for chunk in self.claude_client.chat(message, stream=True, system=system_prompt):
-                console.print(chunk, end="")
-                response_parts.append(chunk)
-
-            console.print("\n")
+                # Fallback: Chat mode com Claude
+                self._chat_mode(message)
 
         except Exception as e:
-            console.print(f"\n[red]Error: {e}[/red]\n")
-            console.print("[yellow]💡 Check your authentication: max-code auth login[/yellow]\n")
+            console.print(f"\n[red]❌ Error: {e}[/red]\n")
+
+    def _execute_tool_command(self, message: str, detected_tool: str):
+        """Execute tool command using ToolSelector (auto-selects correct tool)"""
+        try:
+            # Special handling for bash commands (direct execution)
+            if detected_tool == 'run':
+                console.print("[dim]⚡ Executing bash command...[/dim]")
+
+                # Extract command (remove "run" keyword)
+                import re
+                command = re.sub(r'^(run|execute|bash)\s+', '', message, flags=re.IGNORECASE)
+
+                # Execute using BashExecutor
+                result = self.bash_executor.execute(command)
+
+                # Display result
+                tool_result = {
+                    "status": result.type,  # "success" or "error"
+                    "tool": "bash",
+                    "output": result.content[0].text if result.content else None,
+                    "error": result.content[0].text if result.type == "error" else None
+                }
+                self._display_tool_result(tool_result)
+                return
+
+            # Special handling for git commands (Boris Technique)
+            if detected_tool in ['git', 'git-status', 'git-diff', 'git-log', 'git-branch', 'git-commit', 'git-push', 'git-pull']:
+                console.print("[dim]🌿 Executing git operation...[/dim]")
+
+                import re
+
+                # Parse git command
+                # Examples:
+                # "git status" -> status()
+                # "git diff config.py" -> diff(file_path="config.py")
+                # "git log --oneline" -> log(oneline=True)
+                # "git commit -m 'message'" -> commit(message="message")
+
+                # Extract git operation
+                git_match = re.search(r'git[\s-]+(status|diff|log|branch|commit|push|pull)', message, re.IGNORECASE)
+
+                if git_match:
+                    operation = git_match.group(1).lower()
+
+                    # Execute git operation
+                    if operation == 'status':
+                        verbose = '--verbose' in message.lower() or '-v' in message.lower()
+                        result = self.git_tool.status(verbose=verbose)
+
+                    elif operation == 'diff':
+                        # Extract file path if specified
+                        file_match = re.search(r'diff\s+([^\s]+)', message, re.IGNORECASE)
+                        file_path = file_match.group(1) if file_match else None
+                        staged = '--cached' in message.lower() or '--staged' in message.lower()
+                        result = self.git_tool.diff(file_path=file_path, staged=staged)
+
+                    elif operation == 'log':
+                        oneline = '--oneline' in message.lower()
+                        # Extract limit if specified (default 10)
+                        limit_match = re.search(r'-n\s+(\d+)', message)
+                        limit = int(limit_match.group(1)) if limit_match else 10
+                        result = self.git_tool.log(limit=limit, oneline=oneline)
+
+                    elif operation == 'branch':
+                        list_all = '-a' in message.lower() or '--all' in message.lower()
+                        result = self.git_tool.branch(list_all=list_all)
+
+                    elif operation == 'commit':
+                        # Extract commit message
+                        msg_match = re.search(r'-m\s+["\']([^"\']+)["\']', message)
+                        if msg_match:
+                            commit_message = msg_match.group(1)
+                            add_all = '-a' in message.lower() or '--all' in message.lower()
+                            result = self.git_tool.commit(message=commit_message, add_all=add_all)
+                        else:
+                            result = ToolResult.error("❌ Commit message required. Use: git commit -m 'message'")
+
+                    elif operation == 'push':
+                        result = self.git_tool.push()
+
+                    elif operation == 'pull':
+                        result = self.git_tool.pull()
+
+                    else:
+                        result = ToolResult.error(f"❌ Git operation '{operation}' not supported yet")
+
+                    # Display result
+                    tool_result = {
+                        "status": result.type,
+                        "tool": f"git-{operation}",
+                        "output": result.content[0].text if result.content else None,
+                        "error": result.content[0].text if result.type == "error" else None
+                    }
+                    self._display_tool_result(tool_result)
+                    return
+                else:
+                    # Fallback to bash executor for unknown git commands
+                    result = self.bash_executor.execute(message)
+                    tool_result = {
+                        "status": result.type,
+                        "tool": "git",
+                        "output": result.content[0].text if result.content else None,
+                        "error": result.content[0].text if result.type == "error" else None
+                    }
+                    self._display_tool_result(tool_result)
+                    return
+
+            # Special handling for web search (Boris Technique)
+            if detected_tool == 'web-search':
+                console.print("[dim]🔍 Searching the web...[/dim]")
+
+                import re
+
+                # Extract search query (remove trigger keywords)
+                query = message
+                for keyword in ['search-web', 'web-search', 'search web', 'google', 'duckduckgo', '/search-web', '/web-search']:
+                    query = re.sub(r'\b' + re.escape(keyword) + r'\b', '', query, flags=re.IGNORECASE)
+                query = query.strip()
+
+                if not query:
+                    result = ToolResult.error("❌ Please provide a search query\n\nExample: search-web Python async tutorial")
+                else:
+                    # Execute web search
+                    result = self.web_search_tool.search(query)
+
+                # Display result
+                tool_result = {
+                    "status": result.type,
+                    "tool": "web-search",
+                    "output": result.content[0].text if result.content else None,
+                    "error": result.content[0].text if result.type == "error" else None
+                }
+                self._display_tool_result(tool_result)
+                return
+
+            # Special handling for web fetch (Boris Technique)
+            if detected_tool == 'web-fetch':
+                console.print("[dim]🌐 Fetching URL...[/dim]")
+
+                import re
+
+                # Extract URL (remove keywords)
+                url = message
+                for kw in ['fetch', 'web-fetch', '/fetch', '/web-fetch', 'get url', 'download page']:
+                    url = re.sub(r'\b' + re.escape(kw) + r'\b', '', url, flags=re.IGNORECASE)
+                url = url.strip()
+
+                if not url or not url.startswith('http'):
+                    result = ToolResult.error("❌ Please provide a valid URL\n\nExample: fetch https://example.com")
+                else:
+                    result = self.web_fetch_tool.fetch(url)
+
+                tool_result = {
+                    "status": result.type,
+                    "tool": "web-fetch",
+                    "output": result.content[0].text if result.content else None,
+                    "error": result.content[0].text if result.type == "error" else None
+                }
+                self._display_tool_result(tool_result)
+                return
+
+            # Regular tool selection
+            console.print("[dim]🔧 Selecting tool...[/dim]")
+
+            # Usa ToolSelector.select_and_execute - ELE faz TUDO
+            # (seleciona tool certa baseado na descrição e executa)
+            result = self.tool_selector.select_and_execute(
+                task_description=message,
+                parameters={}  # ToolSelector extrai params do message
+            )
+
+            # Update context if file operation
+            if "file" in message.lower() and result.status == "success":
+                # Extract file path from message (simple regex)
+                import re
+                match = re.search(r'[\w/.]+\.\w+', message)
+                if match:
+                    file_path = match.group(0)
+                    self.context.remember_file(file_path, None, detected_tool)
+
+            # Display result
+            tool_result = {
+                "status": result.status,
+                "tool": result.tool_name if hasattr(result, 'tool_name') else detected_tool,
+                "output": str(result.content) if result.status == "success" else None,
+                "error": result.error if result.status == "error" else None
+            }
+            self._display_tool_result(tool_result)
+
+        except Exception as e:
+            console.print(f"[red]❌ Tool execution failed: {e}[/red]\n")
+            import traceback
+            console.print(f"[dim]{traceback.format_exc()}[/dim]")
+
+    def _chat_mode(self, message: str):
+        """
+        Fallback: Chat direto com Claude API (Boris Streaming Technique).
+
+        Philosophy:
+        "Streaming creates the illusion of speed and keeps users engaged.
+        The first word appearing in <200ms makes the system feel instant,
+        even if the full response takes 10 seconds."
+        """
+        # Aplicar DREAM mode se ativo
+        if self.dream_mode:
+            system_prompt = "You are in DREAM mode - provide critical analysis, identify potential issues, and suggest improvements. Be constructively skeptical."
+            message = f"[CRITICAL ANALYSIS] {message}"
+        else:
+            system_prompt = None
+
+        # Beautiful streaming header (Boris style) with provider info
+        active_provider = self.claude_client.get_active_provider()
+        provider_emoji = "💭" if active_provider == "Claude" else "🔮"
+        provider_label = "Claude Sonnet 4.5" if active_provider == "Claude" else "Gemini 2.5 Flash"
+
+        console.print()
+        console.print("[dim]" + "─" * 60 + "[/dim]")
+        console.print(f"[bold cyan]{provider_emoji} {provider_label}[/bold cyan]")
+        if active_provider == "Gemini":
+            console.print("[yellow]⚡ Using Gemini fallback (Claude unavailable)[/yellow]")
+        else:
+            console.print("[dim]⚡ Streaming response...[/dim]")
+        console.print()
+
+        # Stream response with real-time display
+        response_parts = []
+        word_count = 0
+
+        try:
+            for chunk in self.claude_client.chat(message, stream=True, system=system_prompt):
+                console.print(chunk, end="", style="white")
+                response_parts.append(chunk)
+                word_count += len(chunk.split())
+
+                # Flush periodically for smooth streaming
+                if word_count % 5 == 0:
+                    console.file.flush()
+
+        except Exception as e:
+            console.print(f"\n[red]⚠️  Streaming error: {e}[/red]")
+            console.print("[yellow]💡 Response may be incomplete[/yellow]")
+
+        # Footer
+        console.print("\n")
+        console.print("[dim]" + "─" * 60 + "[/dim]")
+        console.print(f"[dim]✓ {word_count} words streamed[/dim]\n")
+
+    def _display_tool_result(self, result, stream: bool = True):
+        """
+        Pretty print tool execution result with streaming (Boris Technique).
+
+        Philosophy:
+        "Output should appear instantly for small results, and stream
+        gracefully for large results. The user should never wonder if
+        the system is frozen."
+
+        Args:
+            result: Tool result dict
+            stream: Enable streaming for large outputs (>500 chars)
+        """
+        import time
+        from rich.syntax import Syntax
+
+        output_text = result.get("output", "✅ Done")
+        tool_name = result.get('tool', 'Tool')
+        status = result.get("status")
+        file_path = result.get("file_path", None)  # For syntax detection
+
+        if status == "success":
+            # Stream large outputs (Boris Technique: create sense of speed)
+            if stream and output_text and len(output_text) > 500:
+                # Show header immediately
+                console.print()
+                console.print(f"[bold green]✅ {tool_name}[/bold green]")
+                console.print("[dim]" + "─" * 60 + "[/dim]")
+                console.print()
+
+                # Stream output word by word (feels fast but readable)
+                words = output_text.split()
+                for i, word in enumerate(words):
+                    console.print(word, end=" ")
+
+                    # Smart delay: faster for code, slower for prose
+                    if word.endswith((':', ';', '{', '}', '(', ')')):
+                        time.sleep(0.002)  # Very fast for code
+                    elif word.endswith(('.', '!', '?')):
+                        time.sleep(0.01)   # Slight pause at sentences
+                    else:
+                        time.sleep(0.005)  # Normal speed
+
+                    # Flush every 10 words for smooth display
+                    if i % 10 == 0:
+                        console.file.flush()
+
+                console.print()
+                console.print()
+                console.print("[dim]" + "─" * 60 + "[/dim]")
+                console.print("[green]✓ Complete[/green]\n")
+            else:
+                # Show small outputs immediately with syntax highlighting if applicable
+                display_content = self._apply_syntax_highlighting(
+                    output_text,
+                    file_path,
+                    tool_name
+                )
+
+                console.print(Panel(
+                    display_content,
+                    title=f"✅ {tool_name}",
+                    border_style="green"
+                ))
+        else:
+            # Errors: always show immediately (no streaming)
+            console.print(Panel(
+                result.get("error", "Unknown error"),
+                title=f"❌ {tool_name} Failed",
+                border_style="red"
+            ))
+            console.print("[yellow]💡 Tip: Check command syntax or file permissions[/yellow]\n")
+
+    def _apply_syntax_highlighting(self, content: str, file_path: Optional[str], tool_name: str):
+        """
+        Apply syntax highlighting to code output (Boris Technique).
+
+        Philosophy:
+        "Syntax highlighting isn't decoration - it's cognitive optimization.
+        The right colors can reduce comprehension time by 40%."
+
+        Args:
+            content: Text content to display
+            file_path: Optional file path for language detection
+            tool_name: Tool name for context
+
+        Returns:
+            Rich Syntax object or plain string
+        """
+        from rich.syntax import Syntax
+        from pathlib import Path
+
+        # Only apply to file read operations or code-like content
+        if tool_name not in ['read', 'FileReader', 'bash', 'file_reader']:
+            return content
+
+        # Detect language from file path
+        language = "text"
+        if file_path:
+            ext = Path(file_path).suffix.lstrip('.')
+            language_map = {
+                'py': 'python',
+                'js': 'javascript',
+                'ts': 'typescript',
+                'tsx': 'typescript',
+                'jsx': 'javascript',
+                'json': 'json',
+                'yaml': 'yaml',
+                'yml': 'yaml',
+                'toml': 'toml',
+                'md': 'markdown',
+                'sh': 'bash',
+                'bash': 'bash',
+                'zsh': 'bash',
+                'sql': 'sql',
+                'html': 'html',
+                'css': 'css',
+                'rs': 'rust',
+                'go': 'go',
+                'java': 'java',
+                'c': 'c',
+                'cpp': 'cpp',
+                'h': 'c',
+                'hpp': 'cpp',
+            }
+            language = language_map.get(ext, "text")
+
+        # Apply syntax highlighting if language detected
+        if language != "text":
+            try:
+                return Syntax(
+                    content,
+                    language,
+                    theme="monokai",
+                    line_numbers=False,  # Already in output
+                    word_wrap=True
+                )
+            except Exception:
+                # Fallback to plain text if highlighting fails
+                return content
+
+        return content
 
     def run(self):
         """Run enhanced REPL with magnificent visuals"""
