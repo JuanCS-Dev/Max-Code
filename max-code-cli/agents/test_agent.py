@@ -26,7 +26,7 @@ from config.settings import settings
 logger = get_logger(__name__)
 
 
-class TestAgent(BaseAgent):
+class TestExecutorAgent(BaseAgent):
     """
     TDD enforcement + Edge case prediction
 
@@ -35,6 +35,8 @@ class TestAgent(BaseAgent):
     - Comprehensive test coverage
     - Edge case generation
     - MAXIMUS edge case prediction integration
+
+    Note: Renamed from TestAgent to TestExecutorAgent to avoid pytest collection warnings
     """
 
     def __init__(
@@ -293,3 +295,8 @@ def test_{func_name}_error_invalid():
         # Find all test functions (def test_*)
         test_functions = re.findall(r'def\s+(test_\w+)', test_code)
         return test_functions
+
+
+# Backward compatibility alias (avoid pytest collection warning)
+TestAgent = TestExecutorAgent
+
