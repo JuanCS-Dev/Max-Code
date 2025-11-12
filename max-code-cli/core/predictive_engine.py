@@ -491,7 +491,7 @@ class PredictiveEngine:
         self.console = Console()
 
         # Initialize Claude AI client if configured
-        api_key = self.settings.claude.api_key or self.settings.claude.oauth_token
+        api_key = self.settings.claude.api_key
         self.claude_client = Anthropic(api_key=api_key) if api_key else None
 
         # Multi-level caching for P6 (Token Efficiency)

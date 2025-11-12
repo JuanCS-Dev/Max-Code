@@ -66,19 +66,15 @@ class ChatIntegration:
         self.settings = get_settings()
         self.manager = get_integration_manager()
 
-        # Claude API with OAuth support (priority: OAuth > API Key)
+        # Claude API with API key authentication
         if ANTHROPIC_AVAILABLE:
-            if self.settings.claude.oauth_token:
-                # OAuth authentication (Max subscription)
-                self.claude = Anthropic(api_key=self.settings.claude.oauth_token)
-                logger.info("Using Claude OAuth authentication")
-            elif self.settings.claude.api_key:
-                # Traditional API key authentication
+            if self.settings.claude.api_key:
+                # API key authentication
                 self.claude = Anthropic(api_key=self.settings.claude.api_key)
                 logger.info("Using Claude API key authentication")
             else:
                 self.claude = None
-                logger.warning("Claude API not available - set CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY")
+                logger.warning("Claude API not available - set ANTHROPIC_API_KEY")
         else:
             self.claude = None
             logger.warning("anthropic package not installed - run: pip install anthropic")

@@ -6,7 +6,7 @@ Provides high-level interface for Claude interactions with streaming support.
 
 from typing import Optional, Iterator, Dict, Any
 from anthropic import Anthropic
-from core.auth.oauth_handler import get_anthropic_client, CredentialType, validate_credentials
+from agents.utils import get_anthropic_client
 
 
 class ClaudeClient:
@@ -37,10 +37,7 @@ class ClaudeClient:
         self.model = model or self.DEFAULT_MODEL
         self.max_tokens = max_tokens or self.DEFAULT_MAX_TOKENS
         self.temperature = temperature
-
-        # Verificar tipo de credencial usando validate_credentials()
-        _, cred_type, _ = validate_credentials()
-        self.credential_type = cred_type
+        self.credential_type = "api_key"  # Simplified after OAuth removal
 
     def chat(
         self,
@@ -195,7 +192,7 @@ class ClaudeClient:
             "model": self.model,
             "max_tokens": self.max_tokens,
             "temperature": self.temperature,
-            "credential_type": self.credential_type.value if self.credential_type else "none",
+            "credential_type": self.credential_type,
         }
 
     def health_check(self) -> bool:

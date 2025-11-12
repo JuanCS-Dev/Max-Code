@@ -193,7 +193,8 @@ class TestRateLimiter:
 class TestPredictiveEngine:
     """Test predictive engine."""
 
-    def test_predict_next_command(self, predictive_engine):
+    @pytest.mark.asyncio
+    async def test_predict_next_command(self, predictive_engine):
         """Test prediction (may fail if services down, that's OK)."""
         context = {
             "recent_history": ["git status", "git add ."],
@@ -203,7 +204,7 @@ class TestPredictiveEngine:
         }
 
         try:
-            predictions = predictive_engine.predict_next_command(context, mode="fast")
+            predictions = await predictive_engine.predict_next_command(context, mode="fast")
             # If it works, validate structure
             assert isinstance(predictions, list)
         except Exception:

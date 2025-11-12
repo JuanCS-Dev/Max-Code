@@ -1,0 +1,372 @@
+{
+  "timestamp": "2025-11-12T09:11:28.894941",
+  "total": 33,
+  "passed": 33,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "warnings": 0,
+  "duration": 23.031151294708252,
+  "results": [
+    {
+      "name": "1.1 REPL Instantiation",
+      "category": "Core Init",
+      "status": "\u2705 PASS",
+      "duration": 1.1454856395721436,
+      "error": null,
+      "severity": "\ud83d\udd34 CRITICAL",
+      "details": "REPL instantiated with all core components"
+    },
+    {
+      "name": "1.2 Essential Commands",
+      "category": "Core Init",
+      "status": "\u2705 PASS",
+      "duration": 0.03338909149169922,
+      "error": null,
+      "severity": "\ud83d\udd34 CRITICAL",
+      "details": "16 essential commands loaded"
+    },
+    {
+      "name": "1.3 LLM Client Init",
+      "category": "Core Init",
+      "status": "\u2705 PASS",
+      "duration": 0.0349271297454834,
+      "error": null,
+      "severity": "\ud83d\udd34 CRITICAL",
+      "details": "UnifiedLLMClient with fallback ready"
+    },
+    {
+      "name": "1.4 Tool System Init",
+      "category": "Core Init",
+      "status": "\u2705 PASS",
+      "duration": 0.03292489051818848,
+      "error": null,
+      "severity": "\ud83d\udfe0 HIGH",
+      "details": "5 core tools initialized"
+    },
+    {
+      "name": "1.5 Configuration",
+      "category": "Core Init",
+      "status": "\u2705 PASS",
+      "duration": 9.965896606445312e-05,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "Config: Max-Code CLI v1.0.0 (valid: API keys missing)"
+    },
+    {
+      "name": "2.1 Command Parsing",
+      "category": "Commands",
+      "status": "\u2705 PASS",
+      "duration": 0.03768014907836914,
+      "error": null,
+      "severity": "\ud83d\udfe0 HIGH",
+      "details": "Tested 3 command formats"
+    },
+    {
+      "name": "2.2 Slash Command List",
+      "category": "Commands",
+      "status": "\u2705 PASS",
+      "duration": 0.03373527526855469,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "/ triggers command list"
+    },
+    {
+      "name": "2.3 Unknown Command Handling",
+      "category": "Commands",
+      "status": "\u2705 PASS",
+      "duration": 0.03611278533935547,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "Unknown commands show error"
+    },
+    {
+      "name": "2.4 Empty Input",
+      "category": "Commands",
+      "status": "\u2705 PASS",
+      "duration": 0.03283858299255371,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "Empty input handled safely"
+    },
+    {
+      "name": "3.1 Agent Instantiation",
+      "category": "Agents",
+      "status": "\u2705 PASS",
+      "duration": 0.18520355224609375,
+      "error": null,
+      "severity": "\ud83d\udfe0 HIGH",
+      "details": "8 agents instantiated successfully"
+    },
+    {
+      "name": "3.2 Agent Lazy Loading",
+      "category": "Agents",
+      "status": "\u2705 PASS",
+      "duration": 0.03569149971008301,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "Agent lazy loading + caching works"
+    },
+    {
+      "name": "3.3 Invalid Agent Handling",
+      "category": "Agents",
+      "status": "\u2705 PASS",
+      "duration": 0.032349348068237305,
+      "error": null,
+      "severity": "\ud83d\udfe2 LOW",
+      "details": "Invalid agent raises ValueError"
+    },
+    {
+      "name": "4.1 Prompt Generation",
+      "category": "UI",
+      "status": "\u2705 PASS",
+      "duration": 0.03322291374206543,
+      "error": null,
+      "severity": "\ud83d\udfe0 HIGH",
+      "details": "Prompt type: FormattedText"
+    },
+    {
+      "name": "4.2 Prompt Modes",
+      "category": "UI",
+      "status": "\u2705 PASS",
+      "duration": 0.03239893913269043,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "DREAM + agent indicators work"
+    },
+    {
+      "name": "4.3 Command Palette",
+      "category": "UI",
+      "status": "\u2705 PASS",
+      "duration": 0.04126381874084473,
+      "error": null,
+      "severity": "\ud83d\udfe2 LOW",
+      "details": "Command palette renders"
+    },
+    {
+      "name": "5.1 Slash Completion",
+      "category": "Autocomplete",
+      "status": "\u2705 PASS",
+      "duration": 0.03235912322998047,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "1 completions for /h"
+    },
+    {
+      "name": "5.2 Completer Edge Cases",
+      "category": "Autocomplete",
+      "status": "\u2705 PASS",
+      "duration": 0.03512763977050781,
+      "error": null,
+      "severity": "\ud83d\udfe2 LOW",
+      "details": "Invalid input handled"
+    },
+    {
+      "name": "6.1 Keybinding Creation",
+      "category": "Keybindings",
+      "status": "\u2705 PASS",
+      "duration": 0.03292560577392578,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "5 keybindings created"
+    },
+    {
+      "name": "6.2 No Ctrl+H (Backspace Fix)",
+      "category": "Keybindings",
+      "status": "\u2705 PASS",
+      "duration": 0.03429293632507324,
+      "error": null,
+      "severity": "\ud83d\udd34 CRITICAL",
+      "details": "Ctrl+H correctly unbound"
+    },
+    {
+      "name": "6.3 Essential Bindings",
+      "category": "Keybindings",
+      "status": "\u2705 PASS",
+      "duration": 0.03330564498901367,
+      "error": null,
+      "severity": "\ud83d\udfe0 HIGH",
+      "details": "All 5 essential bindings present"
+    },
+    {
+      "name": "7.1 LLM Fallback System",
+      "category": "LLM",
+      "status": "\u2705 PASS",
+      "duration": 0.025344371795654297,
+      "error": null,
+      "severity": "\ud83d\udd34 CRITICAL",
+      "details": "Active provider: Claude"
+    },
+    {
+      "name": "7.2 Provider Order",
+      "category": "LLM",
+      "status": "\u2705 PASS",
+      "duration": 0.024709701538085938,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "2 providers in order"
+    },
+    {
+      "name": "7.3 LLM Health Check",
+      "category": "LLM",
+      "status": "\u2705 PASS",
+      "duration": 1.8195929527282715,
+      "error": null,
+      "severity": "\ud83d\udfe2 LOW",
+      "details": "Health: Claude=False, Gemini=True"
+    },
+    {
+      "name": "8.1 Tool Selector",
+      "category": "Tools",
+      "status": "\u2705 PASS",
+      "duration": 0.035826921463012695,
+      "error": null,
+      "severity": "\ud83d\udfe0 HIGH",
+      "details": "ToolSelector ready"
+    },
+    {
+      "name": "8.2 Bash Executor",
+      "category": "Tools",
+      "status": "\u2705 PASS",
+      "duration": 0.09222245216369629,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "BashExecutor ready"
+    },
+    {
+      "name": "8.3 Git Tool",
+      "category": "Tools",
+      "status": "\u2705 PASS",
+      "duration": 0.03344130516052246,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "GitTool ready"
+    },
+    {
+      "name": "8.4 Web Tools",
+      "category": "Tools",
+      "status": "\u2705 PASS",
+      "duration": 0.03506159782409668,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "Web tools ready"
+    },
+    {
+      "name": "9.1 Very Long Input",
+      "category": "Edge Cases",
+      "status": "\u2705 PASS",
+      "duration": 18.864190340042114,
+      "error": null,
+      "severity": "\ud83d\udfe2 LOW",
+      "details": "100k character input handled"
+    },
+    {
+      "name": "9.2 Unicode & Special Chars",
+      "category": "Edge Cases",
+      "status": "\u2705 PASS",
+      "duration": 0.07498884201049805,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "7 special inputs handled"
+    },
+    {
+      "name": "9.3 Null Handling",
+      "category": "Edge Cases",
+      "status": "\u2705 PASS",
+      "duration": 0.034769535064697266,
+      "error": null,
+      "severity": "\ud83d\udfe0 HIGH",
+      "details": "Null/empty handled safely"
+    },
+    {
+      "name": "10.1 Settings Integration",
+      "category": "Integration",
+      "status": "\u2705 PASS",
+      "duration": 7.891654968261719e-05,
+      "error": null,
+      "severity": "\ud83d\udfe1 MEDIUM",
+      "details": "Config valid: False"
+    },
+    {
+      "name": "10.2 Context Manager",
+      "category": "Integration",
+      "status": "\u2705 PASS",
+      "duration": 0.0338897705078125,
+      "error": null,
+      "severity": "\ud83d\udfe2 LOW",
+      "details": "Context manager integrated"
+    },
+    {
+      "name": "10.3 Status Bar",
+      "category": "Integration",
+      "status": "\u2705 PASS",
+      "duration": 0.03497672080993652,
+      "error": null,
+      "severity": "\ud83d\udfe2 LOW",
+      "details": "Status bar integrated"
+    }
+  ],
+  "bugs": [],
+  "summary": {
+    "pass_rate": "100.0%",
+    "severity_breakdown": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "category_stats": {
+      "Core Init": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5
+      },
+      "Commands": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
+      "Agents": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "UI": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "Autocomplete": {
+        "passed": 2,
+        "failed": 0,
+        "total": 2
+      },
+      "Keybindings": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "LLM": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "Tools": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
+      "Edge Cases": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "Integration": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      }
+    },
+    "production_ready": true
+  }
+}

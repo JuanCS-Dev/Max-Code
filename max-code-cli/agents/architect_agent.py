@@ -453,7 +453,7 @@ class ArchitectAgent(BaseAgent):
         ✅ NEW: Uses Claude LLM to generate real architectural options
         Fallback: Tree of Thoughts mock if Claude unavailable
         """
-        from core.auth import get_anthropic_client
+        from agents.utils import get_anthropic_client
         from config.settings import get_settings
         import json
 

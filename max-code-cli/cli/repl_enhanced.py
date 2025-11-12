@@ -159,7 +159,15 @@ class EnhancedCompleter(Completer):
 
     def get_completions(self, document, complete_event):
         """Gerar completions com metadata"""
-        word = document.get_word_before_cursor()
+        # 🔥 BORIS FIX: Use text_before_cursor and split to get current word
+        text = document.text_before_cursor
+        words = text.split()
+
+        # Get the word being typed
+        if not words:
+            return
+
+        word = words[-1]
 
         # Se não começar com /, não autocomplete
         if not word.startswith('/'):
@@ -473,52 +481,65 @@ class EnhancedREPL:
             except (KeyboardInterrupt, EOFError):
                 console.print("\n[dim]Cancelled[/dim]\n")
 
-        @bindings.add("c-h")
+        @bindings.add("c-q")
         def show_quick_help(event):
-            """Quick Help (Ctrl+H)"""
-            event.app.exit()  # Exit prompt temporarily
-            console.print("\n[bold cyan]⚡ Quick Help - Keyboard Shortcuts[/bold cyan]")
-            console.print()
-            console.print("  [bold]Ctrl+P[/bold]  Command Palette")
-            console.print("  [bold]Ctrl+S[/bold]  SOFIA Plan Mode")
-            console.print("  [bold]Ctrl+D[/bold]  Toggle DREAM Mode (critical analysis)")
-            console.print("  [bold]Ctrl+A[/bold]  Agent Dashboard")
-            console.print("  [bold]Ctrl+H[/bold]  This help")
-            console.print()
-            console.print("  Type [bold]/help[/bold] for full command list\n")
+            """Quick Help (Ctrl+Q)"""
+            # 🔥 BORIS FIX: Changed from Ctrl+H to Ctrl+Q
+            # Reason: Backspace sends Ctrl+H in many terminals!
+            from prompt_toolkit import print_formatted_text
+            from prompt_toolkit.formatted_text import HTML
+
+            print_formatted_text()
+            print_formatted_text(HTML('<cyan><b>⚡ Quick Help - Keyboard Shortcuts</b></cyan>'))
+            print_formatted_text()
+            print_formatted_text(HTML('  <b>Ctrl+P</b>  Command Palette'))
+            print_formatted_text(HTML('  <b>Ctrl+S</b>  SOFIA Plan Mode'))
+            print_formatted_text(HTML('  <b>Ctrl+D</b>  Toggle DREAM Mode (critical analysis)'))
+            print_formatted_text(HTML('  <b>Ctrl+A</b>  Agent Dashboard'))
+            print_formatted_text(HTML('  <b>Ctrl+Q</b>  Quick Help (this help)'))
+            print_formatted_text()
+            print_formatted_text(HTML('  Type <b>/help</b> for full command list'))
+            print_formatted_text()
 
         return bindings
 
     def _show_command_palette(self):
         """
-        Mostrar command palette usando UI EXISTENTE.
-        NÃO REIMPLEMENTAR - ui/command_palette.py JÁ ESTÁ COMPLETO!
+        Show command list (simplified - no palette UI conflicts with event loop).
+
+        🔥 BORIS FIX: Simplified to avoid asyncio conflicts
+        Original CommandPalette has event loop issues when called from keybindings.
         """
-        palette = CommandPalette()
+        from rich.table import Table
 
-        # Registrar todos comandos
+        console.print("\n[bold cyan]📋 Available Commands[/bold cyan]\n")
+
+        # Group commands by category
+        by_category = {}
         for cmd_name, cmd_meta in self.commands.items():
-            palette.register_command(Command(
-                name=cmd_name.lstrip('/'),
-                title=cmd_meta['description'],
-                description=f"Category: {cmd_meta['category'].value}",
-                category=cmd_meta['category'],
-                icon=cmd_meta['icon'],
-                handler=cmd_meta['handler']
-            ))
+            cat = cmd_meta['category'].value
+            if cat not in by_category:
+                by_category[cat] = []
+            by_category[cat].append((cmd_name, cmd_meta))
 
-        # Mostrar palette e executar comando selecionado
-        try:
-            selected_command = palette.show()
-            if selected_command:
-                # Executar handler do comando
-                handler = self.commands.get(f"/{selected_command}", {}).get('handler')
-                if handler:
-                    # Pedir input adicional se necessário
-                    additional_input = input(f"\n{selected_command} › ").strip()
-                    handler(additional_input)
-        except Exception as e:
-            console.print(f"\n[red]Error in command palette: {e}[/red]\n")
+        # Display by category
+        for category, cmds in sorted(by_category.items()):
+            table = Table(title=f"{category.upper()}", show_header=False, border_style="dim")
+            table.add_column("Command", style="cyan")
+            table.add_column("Icon")
+            table.add_column("Description", style="white")
+
+            for cmd_name, cmd_meta in sorted(cmds):
+                table.add_row(
+                    cmd_name,
+                    cmd_meta['icon'],
+                    cmd_meta['description']
+                )
+
+            console.print(table)
+            console.print()
+
+        console.print("[dim]Type any command to use it, or /help for more info[/dim]\n")
 
     def _get_agent_instance(self, agent_name: str):
         """
@@ -781,69 +802,109 @@ class EnhancedREPL:
             pass
         return None
 
-    def _get_prompt(self) -> HTML:
+    def _get_prompt(self):
         """
         Generate beautiful prompt with MAXIMUS neon colors.
-        Uses green → yellow → cyan gradient for "maximus ⚡ ›"
-        """
-        # Indicadores de modo
-        mode_indicator = ""
-        if self.dream_mode:
-            mode_indicator = "<cyan>💭</cyan> "
-        if self.current_agent:
-            mode_indicator += f"<yellow>{self.current_agent}</yellow> "
 
-        # Apply neon gradient to prompt using hex colors
-        # MAXIMUS neon: #00FF41 (green) → #FFFF00 (yellow) → #00D4FF (cyan)
-        prompt_parts = [
-            mode_indicator,
-            '<style fg="#00FF41">m</style>',
-            '<style fg="#33FF33">a</style>',
-            '<style fg="#66FF26">x</style>',
-            '<style fg="#99FF1A">i</style>',
-            '<style fg="#CCFF0D">m</style>',
-            '<style fg="#FFFF00">u</style>',
-            '<style fg="#CCEE11">s</style>',
-            ' ',
-            '<style fg="#00D4FF">⚡</style>',
-            ' ',
-            '<style fg="#00FF88">›</style>',
-            ' '
+        🔥 BORIS FIX: Simplified to use basic ANSI colors (no hex)
+        Fixes prompt_toolkit backspace bug and None returns.
+        """
+        from prompt_toolkit.formatted_text import FormattedText
+
+        # Mode indicators
+        prefix_parts = []
+        if self.dream_mode:
+            prefix_parts.append(('ansimagenta', '💭 '))
+        if self.current_agent:
+            prefix_parts.append(('ansiyellow', f'{self.current_agent} '))
+
+        # Main prompt with ANSI colors (more stable than hex)
+        # Green → Yellow gradient using ANSI
+        prompt_parts = prefix_parts + [
+            ('ansibrightgreen', 'm'),
+            ('ansibrightgreen', 'a'),
+            ('ansigreen', 'x'),
+            ('ansiyellow', 'i'),
+            ('ansiyellow', 'm'),
+            ('ansibrightyellow', 'u'),
+            ('ansiyellow', 's'),
+            ('', ' '),
+            ('ansicyan', '⚡'),
+            ('', ' '),
+            ('ansibrightgreen', '›'),
+            ('', ' '),
         ]
 
-        return HTML(''.join(prompt_parts))
+        return FormattedText(prompt_parts)
 
     def _process_command(self, user_input: str):
         """Processar comando ou natural language"""
-        user_input = user_input.strip()
+        # 🔥 PHASE 0.1 FIX: Recursion limit protection (Steve Jobs Suite 1.3)
+        # Anthropic Pattern: Rule-based validation at entry point
+        if not hasattr(self, '_recursion_depth'):
+            self._recursion_depth = 0
 
-        if not user_input:
+        self._recursion_depth += 1
+
+        # Max 50 recursive calls (prevents stack overflow)
+        if self._recursion_depth > 50:
+            console.print("\n[red]❌ Recursion limit reached (50 calls)[/red]")
+            console.print("[yellow]⚠️  Possible infinite loop detected[/yellow]\n")
+            self._recursion_depth = 0
             return
 
-        # Comando especial
-        if user_input.startswith('/'):
-            parts = user_input.split(maxsplit=1)
-            cmd = parts[0]
-            args = parts[1] if len(parts) > 1 else ""
+        try:
+            user_input = user_input.strip()
 
-            # Verificar se é comando do shell (help, exit, etc)
-            if cmd in self.commands:
-                self.commands[cmd]['handler'](args)
+            if not user_input:
+                return
 
-            # Verificar se é comando de ferramenta (/read, /write, etc)
-            elif cmd in ['/read', '/write', '/edit', '/search', '/grep', '/run', '/bash']:
-                # Remover o / e processar como natural language
-                tool_command = cmd[1:].capitalize() + ' ' + args
-                self._process_natural(tool_command)
+            # Comando especial
+            if user_input.startswith('/'):
+                parts = user_input.split(maxsplit=1)
+                cmd = parts[0]
+                args = parts[1] if len(parts) > 1 else ""
 
+                # ✨ BORIS FIX: `/` alone triggers Command Palette (like Claude Code)
+                if cmd == '/' or cmd == '':
+                    self._show_command_palette()
+                    return
+
+                # Verificar se é comando do shell (help, exit, etc)
+                if cmd in self.commands:
+                    # 🔥 BRUTAL FIX: Handle exceptions in command handlers
+                    try:
+                        handler = self.commands[cmd].get('handler')
+                        if handler is None:
+                            console.print(f"\n[red]❌ Command {cmd} has no handler[/red]\n")
+                            return
+
+                        handler(args)
+
+                    except Exception as e:
+                        console.print(f"\n[red]❌ Error executing {cmd}: {e}[/red]\n")
+                        import traceback
+                        if hasattr(self, 'debug') and self.debug:
+                            console.print(f"[dim]{traceback.format_exc()}[/dim]")
+
+                # Verificar se é comando de ferramenta (/read, /write, etc)
+                elif cmd in ['/read', '/write', '/edit', '/search', '/grep', '/run', '/bash']:
+                    # Remover o / e processar como natural language
+                    tool_command = cmd[1:].capitalize() + ' ' + args
+                    self._process_natural(tool_command)
+
+                else:
+                    console.print(f"\n[red]❌ Unknown command: {cmd}[/red]")
+                    console.print("[yellow]💡 Type /help or press Ctrl+P for commands[/yellow]")
+                    console.print("[yellow]💡 Tools: /read, /write, /edit, /search, /grep, /run[/yellow]\n")
+
+            # Natural language
             else:
-                console.print(f"\n[red]❌ Unknown command: {cmd}[/red]")
-                console.print("[yellow]💡 Type /help or press Ctrl+P for commands[/yellow]")
-                console.print("[yellow]💡 Tools: /read, /write, /edit, /search, /grep, /run[/yellow]\n")
+                self._process_natural(user_input)
 
-        # Natural language
-        else:
-            self._process_natural(user_input)
+        finally:
+            # 🔥 PHASE 0.1 FIX: Always decrement recursion counter
+            self._recursion_depth -= 1
 
     def _process_natural(self, message: str):
         """
@@ -1139,19 +1200,16 @@ class EnhancedREPL:
         response_parts = []
         word_count = 0
 
-        try:
-            for chunk in self.claude_client.chat(message, stream=True, system=system_prompt):
-                console.print(chunk, end="", style="white")
-                response_parts.append(chunk)
-                word_count += len(chunk.split())
+        # 🔥 BORIS FIX: No try/except needed - UnifiedLLMClient handles fallback internally
+        # Errors only surface if ALL providers fail (logged silently in unified_client)
+        for chunk in self.claude_client.chat(message, stream=True, system=system_prompt):
+            console.print(chunk, end="", style="white")
+            response_parts.append(chunk)
+            word_count += len(chunk.split())
 
-                # Flush periodically for smooth streaming
-                if word_count % 5 == 0:
-                    console.file.flush()
-
-        except Exception as e:
-            console.print(f"\n[red]⚠️  Streaming error: {e}[/red]")
-            console.print("[yellow]💡 Response may be incomplete[/yellow]")
+            # Flush periodically for smooth streaming
+            if word_count % 5 == 0:
+                console.file.flush()
 
         # Footer
         console.print("\n")
@@ -1306,7 +1364,7 @@ class EnhancedREPL:
         # Welcome banner
         print_banner()
 
-        console.print("[dim]✨ Shortcuts: Ctrl+P (palette) | Ctrl+S (SOFIA plan) | Ctrl+D (DREAM) | Ctrl+H (help)[/dim]")
+        console.print("[dim]✨ Shortcuts: Ctrl+P (palette) | Ctrl+S (SOFIA plan) | Ctrl+D (DREAM) | Ctrl+Q (help)[/dim]")
         console.print()
 
         # Display initial status bar
@@ -1319,8 +1377,13 @@ class EnhancedREPL:
             try:
                 user_input = self.session.prompt(
                     self._get_prompt()
-                ).strip()
+                )
 
+                # 🔥 BORIS FIX: Protect against None from prompt_toolkit
+                if user_input is None:
+                    continue
+
+                user_input = user_input.strip()
                 self._process_command(user_input)
 
             except KeyboardInterrupt:

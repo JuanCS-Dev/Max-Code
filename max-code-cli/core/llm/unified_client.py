@@ -107,12 +107,17 @@ class UnifiedLLMClient:
         Returns:
             Response string (or iterator if streaming)
         """
+        # 🔥 BORIS FIX: Streaming requires resilient generator wrapper
+        if stream:
+            return self._resilient_stream(message, system=system, **kwargs)
+
+        # Non-streaming: original logic (works fine)
         providers = self._get_provider_order()
 
         for provider_name, provider_func in providers:
             try:
                 logger.info(f"🔄 Trying {provider_name}...")
-                result = provider_func(message, stream=stream, system=system, **kwargs)
+                result = provider_func(message, stream=False, system=system, **kwargs)
                 logger.info(f"✅ {provider_name} succeeded")
                 return result
             except Exception as e:
@@ -149,6 +154,53 @@ class UnifiedLLMClient:
                 providers.append(("Claude", self._chat_claude))
 
         return providers
+
+    def _resilient_stream(
+        self,
+        message: str,
+        system: Optional[str] = None,
+        **kwargs
+    ) -> Iterator[str]:
+        """
+        🔥 BORIS FIX: Resilient streaming with mid-stream fallback
+
+        The problem: Generators fail DURING iteration, not at creation.
+        The solution: Wrap iteration, catch errors, seamlessly switch providers.
+
+        Philosophy: "Users should never see provider failures. That's our job."
+        """
+        providers = self._get_provider_order()
+
+        for provider_name, provider_func in providers:
+            try:
+                logger.debug(f"🔄 Streaming from {provider_name}...")
+
+                # Get the generator
+                stream_gen = provider_func(message, stream=True, system=system, **kwargs)
+
+                # Iterate and yield - this is where Claude may fail
+                for chunk in stream_gen:
+                    yield chunk
+
+                # Success! No need to try other providers
+                logger.debug(f"✅ {provider_name} streaming completed")
+                return
+
+            except Exception as e:
+                # Log silently (as Boris intended - no user-facing errors!)
+                error_str = str(e).lower()
+
+                if "credit" in error_str or "balance" in error_str:
+                    logger.info(f"💳 {provider_name} credits exhausted, trying fallback...")
+                else:
+                    logger.debug(f"⚠️  {provider_name} stream failed: {e}")
+
+                # Try next provider
+                continue
+
+        # All providers failed - now we must tell the user
+        logger.error("❌ All streaming providers failed")
+        yield "\n\n[System: All LLM providers are currently unavailable. Please try again later.]"
 
     def _chat_claude(
         self,

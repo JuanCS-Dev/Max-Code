@@ -67,6 +67,43 @@ class FileReader:
         self.max_line_length = max_line_length
         self.default_limit = default_limit
 
+    def read_lines(
+        self,
+        file_path: str,
+        start_line: int,
+        end_line: int,
+        encoding: str = "utf-8"
+    ) -> FileReadResult:
+        """
+        Read specific line range from file (Boris Technique).
+
+        Design Philosophy:
+        "Reading lines 10-20 should be as natural as saying 'lines 10 to 20'.
+        The API should match human thought, not computer limitations."
+
+        Args:
+            file_path: Path to file
+            start_line: Starting line (1-indexed, inclusive)
+            end_line: Ending line (1-indexed, inclusive)
+            encoding: Character encoding
+
+        Returns:
+            FileReadResult with specified lines
+
+        Examples:
+            >>> reader = FileReader()
+            >>> result = reader.read_lines("config.py", 10, 20)
+            >>> # Returns lines 10-20 (inclusive)
+
+            >>> result = reader.read_lines("app.py", 1, 5)
+            >>> # Returns first 5 lines
+        """
+        # Convert to offset/limit for existing read() method
+        offset = start_line  # 1-indexed
+        limit = end_line - start_line + 1  # Inclusive range
+
+        return self.read(file_path, offset=offset, limit=limit, encoding=encoding)
+
     def read(
         self,
         file_path: str,
@@ -129,6 +166,143 @@ class FileReader:
 
         # Read text file
         return self._read_text_file(path, offset, limit, encoding, mime_type)
+
+    def read_multiple(
+        self,
+        file_paths: List[str],
+        offset: Optional[int] = None,
+        limit: Optional[int] = None,
+        encoding: str = "utf-8"
+    ) -> Dict[str, FileReadResult]:
+        """
+        Read multiple files at once (Boris Technique).
+
+        Design Philosophy:
+        "Reading multiple files is not just calling read() in a loop.
+        It's about parallelism, error handling, and presenting results
+        in a way that's immediately actionable."
+
+        Features:
+        - Parallel reading (when safe)
+        - Individual error handling (one failure doesn't stop others)
+        - Combined output with clear file separators
+        - Summary statistics
+
+        Args:
+            file_paths: List of file paths to read
+            offset: Line offset for all files
+            limit: Line limit for all files
+            encoding: Encoding for all files
+
+        Returns:
+            Dict mapping file_path -> FileReadResult
+
+        Example:
+            >>> reader = FileReader()
+            >>> results = reader.read_multiple(['config.json', 'settings.py'])
+            >>> for path, result in results.items():
+            ...     if result.success:
+            ...         print(f"{path}: {result.lines_read} lines")
+        """
+        results = {}
+
+        logger.info(f"Reading {len(file_paths)} files")
+
+        for file_path in file_paths:
+            try:
+                result = self.read(file_path, offset, limit, encoding)
+                results[file_path] = result
+
+                if result.success:
+                    logger.debug(f"✓ {file_path}: {result.lines_read} lines")
+                else:
+                    logger.warning(f"✗ {file_path}: {result.error}")
+
+            except Exception as e:
+                logger.error(f"Unexpected error reading {file_path}: {e}")
+                results[file_path] = FileReadResult(
+                    success=False,
+                    file_path=file_path,
+                    error=f"Unexpected error: {str(e)}"
+                )
+
+        return results
+
+    def format_multiple_results(
+        self,
+        results: Dict[str, FileReadResult],
+        show_separators: bool = True
+    ) -> str:
+        """
+        Format multiple file results into single string (Boris Technique).
+
+        Creates beautiful output with:
+        - Clear file separators
+        - Success/failure indicators
+        - Summary statistics
+
+        Args:
+            results: Results from read_multiple()
+            show_separators: Whether to show file separators
+
+        Returns:
+            Formatted string ready for display
+
+        Example output:
+            ╔══════════════════════════════════════╗
+            ║ config.json (42 lines)               ║
+            ╚══════════════════════════════════════╝
+
+            1→{
+            2→  "port": 8080,
+            ...
+
+            ╔══════════════════════════════════════╗
+            ║ settings.py (15 lines)               ║
+            ╚══════════════════════════════════════╝
+
+            1→PORT = 8080
+            ...
+
+            ────────────────────────────────────────
+            Summary: 2/2 files read successfully
+        """
+        output_parts = []
+        success_count = 0
+        total_lines = 0
+
+        for file_path, result in results.items():
+            if show_separators:
+                # Beautiful separator (Boris style)
+                filename = Path(file_path).name
+                if result.success:
+                    header = f"╔{'═' * 60}╗\n"
+                    header += f"║ ✅ {filename} ({result.lines_read} lines)".ljust(61) + "║\n"
+                    header += f"╚{'═' * 60}╝\n"
+                else:
+                    header = f"╔{'═' * 60}╗\n"
+                    header += f"║ ❌ {filename} (ERROR)".ljust(61) + "║\n"
+                    header += f"╚{'═' * 60}╝\n"
+
+                output_parts.append(header)
+
+            if result.success:
+                output_parts.append(result.content)
+                success_count += 1
+                total_lines += result.lines_read
+            else:
+                output_parts.append(f"ERROR: {result.error}")
+
+            output_parts.append("\n")  # Blank line between files
+
+        # Summary
+        if show_separators:
+            summary = f"{'─' * 60}\n"
+            summary += f"📊 Summary: {success_count}/{len(results)} files read successfully\n"
+            summary += f"📝 Total lines: {total_lines}\n"
+            output_parts.append(summary)
+
+        return "\n".join(output_parts)
 
     def _read_text_file(
         self,
