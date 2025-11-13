@@ -2,14 +2,14 @@
 Health Check System - MAXIMUS Services Monitoring
 
 Verifica saúde e conectividade dos 8 serviços MAXIMUS:
-1. Maximus Core (8150) - Consciousness & Safety
-2. PENELOPE (8151) - 7 Fruits & Healing
+1. Maximus Core (8100) - Consciousness & Safety
+2. PENELOPE (8154) - 7 Fruits & Healing
 3. MABA (8152) - Browser Agent
 4. THOT (8153) - Decision Support
-5. THOTH (8154) - Memory System
-6. PENIEL (8155) - Vision & Image Analysis
-7. ANIMA (8156) - Context & Awareness
-8. PNEUMA (8157) - Creative Generation
+5. THOTH (8155) - Memory System
+6. PENIEL (8156) - Vision & Image Analysis
+7. ANIMA (8157) - Context & Awareness
+8. PNEUMA (8158) - Creative Generation
 
 Features:
 - Individual service health checks
@@ -59,13 +59,13 @@ class ServiceHealth:
 MAXIMUS_SERVICES = {
     "maximus_core": {
         "name": "Maximus Core",
-        "port": 8150,
+        "port": 8100,  # REAL port (not 8150)
         "description": "Consciousness & Safety",
         "critical": True,
     },
     "penelope": {
         "name": "PENELOPE",
-        "port": 8151,
+        "port": 8154,  # REAL port (not 8151)
         "description": "7 Fruits & Healing",
         "critical": True,
     },
@@ -83,25 +83,25 @@ MAXIMUS_SERVICES = {
     },
     "thoth": {
         "name": "THOTH",
-        "port": 8154,
+        "port": 8155,  # Moved from 8154 (conflict with Penelope)
         "description": "Memory System",
         "critical": False,
     },
     "peniel": {
         "name": "PENIEL",
-        "port": 8155,
+        "port": 8156,  # Moved from 8155
         "description": "Vision & Image Analysis",
         "critical": False,
     },
     "anima": {
         "name": "ANIMA",
-        "port": 8156,
+        "port": 8157,  # Moved from 8156
         "description": "Context & Awareness",
         "critical": False,
     },
     "pneuma": {
         "name": "PNEUMA",
-        "port": 8157,
+        "port": 8158,  # Moved from 8157
         "description": "Creative Generation",
         "critical": False,
     },

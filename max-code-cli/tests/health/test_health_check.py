@@ -101,7 +101,7 @@ class TestIndividualServiceHealthChecks:
 
             assert result.status == ServiceStatus.HEALTHY
             assert result.name == "Maximus Core"
-            assert result.port == 8150
+            assert result.port == 8100  # REAL port
             assert result.latency_ms is not None
             assert result.latency_ms >= 0
             assert result.version == "1.0.0"
@@ -343,9 +343,9 @@ class TestServiceConfiguration:
         assert len(ports) == len(set(ports))
 
     def test_service_ports_in_range(self):
-        """Test all service ports are in expected range (8150-8157)"""
+        """Test all service ports are in valid range (8100-8200)"""
         for config in MAXIMUS_SERVICES.values():
-            assert 8150 <= config["port"] <= 8157
+            assert 8100 <= config["port"] <= 8200  # Real services use different port ranges
 
     def test_service_has_required_fields(self):
         """Test each service has required configuration fields"""
