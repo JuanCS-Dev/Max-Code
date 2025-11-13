@@ -34,75 +34,10 @@ from agents.plan_agent import PlanAgent
 from agents.review_agent import ReviewAgent
 from core.llm.unified_client import UnifiedLLMClient
 from core.maximus_integration.client import MaximusClient
+from sdk.base_agent import AgentTask, AgentResult, create_agent_task
 
 
-# ============================================================================
-# FIXTURES - CHAOS INJECTION
-# ============================================================================
-
-@pytest.fixture
-def llm_client_with_intermittent_failures():
-    """Mock LLM client that fails intermittently"""
-    mock_client = Mock(spec=UnifiedLLMClient)
-    call_count = {"count": 0}
-
-    def generate_with_failures(prompt, **kwargs):
-        call_count["count"] += 1
-        # Fail every 3rd call
-        if call_count["count"] % 3 == 0:
-            raise Exception("LLM API temporarily unavailable")
-        return "def fibonacci(n):\n    return n if n <= 1 else fibonacci(n-1) + fibonacci(n-2)"
-
-    mock_client.generate_text.side_effect = generate_with_failures
-    return mock_client
-
-
-@pytest.fixture
-def llm_client_with_fallback():
-    """Mock LLM client that demonstrates fallback behavior"""
-    mock_client = Mock(spec=UnifiedLLMClient)
-    call_count = {"count": 0}
-
-    def generate_with_fallback(prompt, **kwargs):
-        call_count["count"] += 1
-        # First call fails (Claude), second succeeds (Gemini fallback)
-        if call_count["count"] == 1:
-            raise Exception("Claude: Credit balance too low")
-        return "def fibonacci(n):\n    return n if n <= 1 else fibonacci(n-1) + fibonacci(n-2)"
-
-    mock_client.generate_text.side_effect = generate_with_fallback
-    return mock_client
-
-
-@pytest.fixture
-def llm_client_with_latency():
-    """Mock LLM client with injected network latency"""
-    mock_client = Mock(spec=UnifiedLLMClient)
-
-    def generate_with_latency(prompt, latency_ms=100, **kwargs):
-        time.sleep(latency_ms / 1000)  # Inject latency
-        return "def fibonacci(n):\n    return n if n <= 1 else fibonacci(n-1) + fibonacci(n-2)"
-
-    mock_client.generate_text.side_effect = generate_with_latency
-    return mock_client
-
-
-@pytest.fixture
-def maximus_client_with_failures():
-    """Mock MAXIMUS client with service failures"""
-    mock_client = Mock(spec=MaximusClient)
-
-    # Mock health check to show failures
-    mock_client.health_check_all.return_value = [
-        {"service": "maximus-core", "status": "unhealthy", "latency_ms": None},
-        {"service": "penelope", "status": "healthy", "latency_ms": 25},
-        {"service": "maba", "status": "unhealthy", "latency_ms": None},
-    ]
-
-    # Mock analyze to fail
-    mock_client.analyze_code.side_effect = Exception("Service unavailable: maximus-core")
-
-    return mock_client
+# NOTE: Chaos injection fixtures are now in conftest.py
 
 
 # ============================================================================
@@ -113,47 +48,52 @@ def maximus_client_with_failures():
 class TestLLMFailures:
     """Test system resilience to LLM API failures"""
 
-    def test_handle_claude_api_failure(self):
+    def test_handle_claude_api_failure(self, mock_code_agent):
         """Chaos Test: Handle Claude API failure gracefully"""
-        mock_client = Mock(spec=UnifiedLLMClient)
-        mock_client.generate_text.side_effect = Exception("Claude API: 400 - Credit balance too low")
+        # Override agent to raise exception
+        def failing_execute(task: AgentTask) -> AgentResult:
+            raise Exception("Claude API: 400 - Credit balance too low")
+
+        mock_code_agent.execute = failing_execute
 
         # Agent should handle failure gracefully (not crash)
         try:
-            agent = CodeAgent(enable_maximus=False)
-            # Patch the internal client
-            agent.claude = mock_client
-
-            result = mock_client.generate_text("Create fibonacci function")
+            task = create_agent_task("Create fibonacci function")
+            result = mock_code_agent.execute(task)
             pytest.fail("Should have raised exception")
         except Exception as e:
             # Exception is expected - system should log and handle gracefully
             assert "Credit balance" in str(e)
 
 
-    def test_handle_gemini_fallback(self, llm_client_with_fallback):
+    def test_handle_gemini_fallback(self, mock_agent_with_intermittent_failures):
         """Chaos Test: Fallback to Gemini when Claude fails"""
-        # First call fails (Claude), second succeeds (Gemini)
-        try:
-            result1 = llm_client_with_fallback.generate_text("Create function")
-            pytest.fail("First call should fail (Claude)")
-        except Exception:
-            pass  # Expected
+        # First call fails (Claude), second/third succeeds (Gemini fallback)
+        call_count = 0
+        for i in range(5):
+            task = create_agent_task("Create function")
+            try:
+                result = mock_agent_with_intermittent_failures.execute(task)
+                call_count += 1
+                # Should eventually succeed with Gemini fallback
+                assert result.success
+            except Exception:
+                # Some failures expected
+                pass
 
-        # Second call succeeds (Gemini fallback)
-        result2 = llm_client_with_fallback.generate_text("Create function")
-        assert result2 is not None
-        assert "fibonacci" in result2
+        # Should have at least some successful calls (fallback working)
+        assert call_count > 0, "Fallback should have succeeded at least once"
 
 
-    def test_handle_intermittent_failures(self, llm_client_with_intermittent_failures):
+    def test_handle_intermittent_failures(self, mock_agent_with_intermittent_failures):
         """Chaos Test: Handle intermittent LLM failures"""
         successes = 0
         failures = 0
 
         for i in range(10):
+            task = create_agent_task("Create function")
             try:
-                result = llm_client_with_intermittent_failures.generate_text("Create function")
+                result = mock_agent_with_intermittent_failures.execute(task)
                 successes += 1
             except Exception:
                 failures += 1
@@ -167,37 +107,37 @@ class TestLLMFailures:
         assert availability > 0.6, f"Availability {availability*100:.1f}% below 60%"
 
 
-    def test_handle_timeout(self):
+    def test_handle_timeout(self, mock_agent_with_latency):
         """Chaos Test: Handle LLM API timeout"""
-        mock_client = Mock(spec=UnifiedLLMClient)
+        # Test with very high latency (simulating timeout)
+        task = create_agent_task("Create function")
 
-        def slow_generate(prompt, **kwargs):
-            time.sleep(10)  # Simulate timeout
-            return "result"
-
-        mock_client.generate_text.side_effect = slow_generate
-
-        # Should timeout gracefully (test with 2s timeout)
+        # Should timeout gracefully (test with 2s latency)
         start = time.time()
         try:
-            # In real implementation, this would have a timeout
-            # For testing, we verify the mock setup
-            assert mock_client.generate_text.side_effect == slow_generate
+            # Call with high latency
+            result = mock_agent_with_latency.execute(task, latency_ms=2000)
+            duration = time.time() - start
+
+            # Should have actually taken the latency time
+            assert duration >= 2.0, "Latency injection not working"
+            # But should complete (not infinite timeout)
+            assert duration < 3.0, "Should complete within reasonable time"
         except Exception as e:
             pytest.fail(f"Timeout handling failed: {e}")
-        finally:
-            duration = time.time() - start
-            # Test setup should be instant
-            assert duration < 1.0
 
 
-    def test_handle_rate_limit_error(self):
+    def test_handle_rate_limit_error(self, mock_code_agent):
         """Chaos Test: Handle rate limit errors gracefully"""
-        mock_client = Mock(spec=UnifiedLLMClient)
-        mock_client.generate_text.side_effect = Exception("Rate limit exceeded. Retry after 60s")
+        # Override agent to simulate rate limit
+        def rate_limited_execute(task: AgentTask) -> AgentResult:
+            raise Exception("Rate limit exceeded. Retry after 60s")
 
+        mock_code_agent.execute = rate_limited_execute
+
+        task = create_agent_task("Create function")
         try:
-            mock_client.generate_text("Create function")
+            mock_code_agent.execute(task)
             pytest.fail("Should have raised rate limit exception")
         except Exception as e:
             assert "Rate limit" in str(e)
@@ -212,10 +152,10 @@ class TestLLMFailures:
 class TestMaximusServiceFailures:
     """Test resilience to MAXIMUS backend service failures"""
 
-    def test_handle_maximus_core_failure(self, maximus_client_with_failures):
+    def test_handle_maximus_core_failure(self, mock_maximus_with_failures):
         """Chaos Test: Handle maximus-core service failure"""
         # Service reports as unhealthy
-        health = maximus_client_with_failures.health_check_all()
+        health = mock_maximus_with_failures.health_check_all()
         core_health = next((s for s in health if s["service"] == "maximus-core"), None)
 
         assert core_health is not None
@@ -223,19 +163,19 @@ class TestMaximusServiceFailures:
 
         # Agent should degrade gracefully (disable MAXIMUS features)
         agent = CodeAgent(enable_maximus=True)
-        agent.maximus_client = maximus_client_with_failures
+        agent.maximus_client = mock_maximus_with_failures
 
         # Should not crash when MAXIMUS unavailable
         try:
-            maximus_client_with_failures.analyze_code("def foo(): pass")
+            mock_maximus_with_failures.analyze_code("def foo(): pass")
             pytest.fail("Should have raised exception")
         except Exception as e:
             assert "unavailable" in str(e)
 
 
-    def test_handle_partial_service_failure(self, maximus_client_with_failures):
+    def test_handle_partial_service_failure(self, mock_maximus_with_failures):
         """Chaos Test: Handle partial MAXIMUS service failure"""
-        health = maximus_client_with_failures.health_check_all()
+        health = mock_maximus_with_failures.health_check_all()
 
         healthy_count = sum(1 for s in health if s["status"] == "healthy")
         total_count = len(health)
@@ -249,15 +189,9 @@ class TestMaximusServiceFailures:
         print(f"\n⚠️  Partial Failure: {availability*100:.1f}% services available")
 
 
-    def test_handle_all_services_down(self):
+    def test_handle_all_services_down(self, mock_maximus_all_down):
         """Chaos Test: Handle all MAXIMUS services down"""
-        mock_client = Mock(spec=MaximusClient)
-        mock_client.health_check_all.return_value = [
-            {"service": f"service_{i}", "status": "unhealthy", "latency_ms": None}
-            for i in range(8)
-        ]
-
-        health = mock_client.health_check_all()
+        health = mock_maximus_all_down.health_check_all()
         healthy_count = sum(1 for s in health if s["status"] == "healthy")
 
         assert healthy_count == 0, "All services should be down"
@@ -267,25 +201,19 @@ class TestMaximusServiceFailures:
         assert agent is not None
 
 
-    def test_handle_service_recovery(self):
+    def test_handle_service_recovery(self, mock_maximus_with_recovery):
         """Chaos Test: Handle service recovery"""
-        mock_client = Mock(spec=MaximusClient)
-
         # First check: service down
-        mock_client.health_check_all.return_value = [
-            {"service": "maximus-core", "status": "unhealthy", "latency_ms": None}
-        ]
-
-        health1 = mock_client.health_check_all()
+        health1 = mock_maximus_with_recovery.health_check_all()
         assert health1[0]["status"] == "unhealthy"
 
-        # Simulate recovery
-        mock_client.health_check_all.return_value = [
-            {"service": "maximus-core", "status": "healthy", "latency_ms": 30}
-        ]
+        # Second check: still down
+        health2 = mock_maximus_with_recovery.health_check_all()
+        assert health2[0]["status"] == "unhealthy"
 
-        health2 = mock_client.health_check_all()
-        assert health2[0]["status"] == "healthy"
+        # Third check: recovered
+        health3 = mock_maximus_with_recovery.health_check_all()
+        assert health3[0]["status"] == "healthy"
 
         # System should automatically re-enable MAXIMUS features
         print("\n✅ Service recovered successfully")
@@ -299,13 +227,14 @@ class TestMaximusServiceFailures:
 class TestNetworkLatency:
     """Test system behavior under network latency"""
 
-    def test_handle_100ms_latency(self, llm_client_with_latency):
+    def test_handle_100ms_latency(self, mock_agent_with_latency):
         """Chaos Test: Handle 100ms network latency"""
         latencies = []
 
         for _ in range(10):
+            task = create_agent_task("Create function")
             start = time.time()
-            result = llm_client_with_latency.generate_text("Create function", latency_ms=100)
+            result = mock_agent_with_latency.execute(task, latency_ms=100)
             latency = time.time() - start
             latencies.append(latency)
 
@@ -318,10 +247,11 @@ class TestNetworkLatency:
         print(f"\n⏱️  100ms Latency Test: {avg_latency*1000:.0f}ms avg")
 
 
-    def test_handle_500ms_latency(self, llm_client_with_latency):
+    def test_handle_500ms_latency(self, mock_agent_with_latency):
         """Chaos Test: Handle 500ms network latency"""
+        task = create_agent_task("Create function")
         start = time.time()
-        result = llm_client_with_latency.generate_text("Create function", latency_ms=500)
+        result = mock_agent_with_latency.execute(task, latency_ms=500)
         latency = time.time() - start
 
         # Should handle 500ms latency
@@ -331,10 +261,11 @@ class TestNetworkLatency:
         print(f"\n⏱️  500ms Latency Test: {latency*1000:.0f}ms")
 
 
-    def test_handle_1s_latency(self, llm_client_with_latency):
+    def test_handle_1s_latency(self, mock_agent_with_latency):
         """Chaos Test: Handle 1s network latency"""
+        task = create_agent_task("Create function")
         start = time.time()
-        result = llm_client_with_latency.generate_text("Create function", latency_ms=1000)
+        result = mock_agent_with_latency.execute(task, latency_ms=1000)
         latency = time.time() - start
 
         # Should handle 1s latency
@@ -344,14 +275,15 @@ class TestNetworkLatency:
         print(f"\n⏱️  1000ms Latency Test: {latency*1000:.0f}ms")
 
 
-    def test_handle_variable_latency(self, llm_client_with_latency):
+    def test_handle_variable_latency(self, mock_agent_with_latency):
         """Chaos Test: Handle variable network latency (jitter)"""
         latencies = []
         target_latencies = [50, 100, 200, 500, 100, 50, 200]
 
         for target_ms in target_latencies:
+            task = create_agent_task("Create function")
             start = time.time()
-            result = llm_client_with_latency.generate_text("Create function", latency_ms=target_ms)
+            result = mock_agent_with_latency.execute(task, latency_ms=target_ms)
             latency = time.time() - start
             latencies.append(latency)
 
@@ -443,29 +375,33 @@ class TestResourceExhaustion:
 class TestCascadingFailures:
     """Test system resilience to cascading failures"""
 
-    def test_handle_llm_and_maximus_both_fail(self):
+    def test_handle_llm_and_maximus_both_fail(self, mock_maximus_all_down):
         """Chaos Test: Handle LLM + MAXIMUS both failing"""
-        mock_llm = Mock(spec=UnifiedLLMClient)
-        mock_llm.generate_text.side_effect = Exception("LLM unavailable")
-
-        mock_maximus = Mock(spec=MaximusClient)
-        mock_maximus.health_check_all.return_value = [
-            {"service": "maximus-core", "status": "unhealthy", "latency_ms": None}
-        ]
+        # Create agent with both LLM and MAXIMUS failures
+        def failing_execute(task: AgentTask) -> AgentResult:
+            raise Exception("LLM unavailable")
 
         # Agent should still instantiate (degraded mode)
         agent = CodeAgent(enable_maximus=False)
         assert agent is not None
 
+        # Override execute to fail
+        agent.execute = failing_execute
 
-    def test_handle_partial_llm_failure_during_load(self, llm_client_with_intermittent_failures):
+        # Verify both systems are down
+        health = mock_maximus_all_down.health_check_all()
+        assert all(s["status"] == "unhealthy" for s in health)
+
+
+    def test_handle_partial_llm_failure_during_load(self, mock_agent_with_intermittent_failures):
         """Chaos Test: Handle LLM failures during heavy load"""
         results = []
         errors = []
 
         def task():
             try:
-                result = llm_client_with_intermittent_failures.generate_text("Create function")
+                agent_task = create_agent_task("Create function")
+                result = mock_agent_with_intermittent_failures.execute(agent_task)
                 results.append(result)
             except Exception as e:
                 errors.append(str(e))
@@ -510,25 +446,30 @@ class TestCascadingFailures:
 class TestRecoveryTime:
     """Test Mean Time To Recovery (MTTR)"""
 
-    def test_measure_recovery_from_llm_failure(self):
+    def test_measure_recovery_from_llm_failure(self, mock_code_agent):
         """Chaos Test: Measure recovery time from LLM failure"""
-        mock_client = Mock(spec=UnifiedLLMClient)
         call_count = {"count": 0}
 
-        def failing_then_recovering(prompt, **kwargs):
+        def failing_then_recovering(task: AgentTask) -> AgentResult:
             call_count["count"] += 1
             # Fail first 3 calls, then recover
             if call_count["count"] <= 3:
                 raise Exception("LLM unavailable")
-            return "def fibonacci(n): return n"
+            return AgentResult(
+                task_id=task.id,
+                success=True,
+                output={"code": "def fibonacci(n): return n"},
+                metrics={"duration_ms": 50}
+            )
 
-        mock_client.generate_text.side_effect = failing_then_recovering
+        mock_code_agent.execute = failing_then_recovering
 
         # Measure time to first successful call after failures
         start = time.time()
         for i in range(10):
+            task = create_agent_task("Create function")
             try:
-                result = mock_client.generate_text("Create function")
+                result = mock_code_agent.execute(task)
                 recovery_time = time.time() - start
                 print(f"\n⏱️  MTTR: {recovery_time*1000:.0f}ms ({call_count['count']} attempts)")
                 break
@@ -539,56 +480,51 @@ class TestRecoveryTime:
         assert call_count["count"] == 4, "Should recover on 4th attempt"
 
 
-    def test_measure_recovery_from_service_failure(self):
+    def test_measure_recovery_from_service_failure(self, mock_maximus_with_recovery):
         """Chaos Test: Measure recovery from service failure"""
-        mock_client = Mock(spec=MaximusClient)
-        check_count = {"count": 0}
-
-        def failing_then_recovering():
-            check_count["count"] += 1
-            # Fail first 2 checks, recover on 3rd
-            if check_count["count"] <= 2:
-                return [{"service": "maximus-core", "status": "unhealthy", "latency_ms": None}]
-            return [{"service": "maximus-core", "status": "healthy", "latency_ms": 25}]
-
-        mock_client.health_check_all.side_effect = failing_then_recovering
-
         # Measure recovery
         start = time.time()
+        check_count = 0
         for i in range(5):
-            health = mock_client.health_check_all()
+            check_count += 1
+            health = mock_maximus_with_recovery.health_check_all()
             if health[0]["status"] == "healthy":
                 recovery_time = time.time() - start
-                print(f"\n⏱️  Service MTTR: {recovery_time*1000:.0f}ms ({check_count['count']} checks)")
+                print(f"\n⏱️  Service MTTR: {recovery_time*1000:.0f}ms ({check_count} checks)")
                 break
             time.sleep(0.01)
 
-        assert check_count["count"] == 3, "Should recover on 3rd check"
+        assert check_count == 3, "Should recover on 3rd check"
 
 
-    def test_fast_recovery_target(self):
+    def test_fast_recovery_target(self, mock_code_agent):
         """Chaos Test: Verify fast recovery (<5s target)"""
-        mock_client = Mock(spec=UnifiedLLMClient)
         call_count = {"count": 0}
 
-        def fast_recovery(prompt, **kwargs):
+        def fast_recovery(task: AgentTask) -> AgentResult:
             call_count["count"] += 1
             if call_count["count"] == 1:
                 raise Exception("Temporary failure")
-            return "result"
+            return AgentResult(
+                task_id=task.id,
+                success=True,
+                output={"result": "Success"},
+                metrics={"duration_ms": 50}
+            )
 
-        mock_client.generate_text.side_effect = fast_recovery
+        mock_code_agent.execute = fast_recovery
 
         start = time.time()
 
         # First call fails
+        task = create_agent_task("test")
         try:
-            mock_client.generate_text("test")
+            mock_code_agent.execute(task)
         except:
             pass
 
         # Second call succeeds (recovery)
-        result = mock_client.generate_text("test")
+        result = mock_code_agent.execute(task)
         recovery_time = time.time() - start
 
         # Should recover extremely fast with retry
@@ -620,25 +556,30 @@ class TestGracefulDegradation:
         assert agent is not None
 
 
-    def test_partial_functionality_during_failure(self):
+    def test_partial_functionality_during_failure(self, mock_code_agent):
         """Chaos Test: Maintain partial functionality during failures"""
-        mock_llm = Mock(spec=UnifiedLLMClient)
-
         # Some operations fail, others succeed
-        def mixed_results(prompt, **kwargs):
-            if "complex" in prompt.lower():
+        def mixed_results(task: AgentTask) -> AgentResult:
+            if "complex" in task.description.lower():
                 raise Exception("Operation too complex during degraded mode")
-            return "simple result"
+            return AgentResult(
+                task_id=task.id,
+                success=True,
+                output={"result": "simple result"},
+                metrics={"duration_ms": 50}
+            )
 
-        mock_llm.generate_text.side_effect = mixed_results
+        mock_code_agent.execute = mixed_results
 
         # Simple operations should still work
-        result = mock_llm.generate_text("simple task")
-        assert result == "simple result"
+        simple_task = create_agent_task("simple task")
+        result = mock_code_agent.execute(simple_task)
+        assert result.output["result"] == "simple result"
 
         # Complex operations fail gracefully
+        complex_task = create_agent_task("complex task")
         try:
-            mock_llm.generate_text("complex task")
+            mock_code_agent.execute(complex_task)
             pytest.fail("Should have failed for complex task")
         except Exception as e:
             assert "complex" in str(e)

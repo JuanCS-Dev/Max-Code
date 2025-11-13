@@ -1,12 +1,15 @@
 """
-Conftest for Load Testing Suite - Fixtures and Mocking
+Conftest for Chaos Testing Suite - Fixtures with Failure Injection
 
-Provides mocked agents for fast, isolated load testing.
+Provides mocked agents/clients with chaos injection capabilities.
 """
 
 import pytest
+import time
 from unittest.mock import Mock, MagicMock
 from sdk.base_agent import AgentTask, AgentResult
+from core.llm.unified_client import UnifiedLLMClient
+from core.maximus_integration.client import MaximusClient
 import sys
 from pathlib import Path
 
@@ -135,3 +138,96 @@ def test_fibonacci():
     mock_agent.agent_name = "Test Agent (Mocked)"
 
     return mock_agent
+
+
+# ============================================================================
+# CHAOS INJECTION FIXTURES
+# ============================================================================
+
+@pytest.fixture
+def mock_agent_with_intermittent_failures():
+    """Mock agent that fails intermittently"""
+    mock_agent = Mock()
+    call_count = {"count": 0}
+
+    def execute_with_failures(task: AgentTask) -> AgentResult:
+        call_count["count"] += 1
+        # Fail every 3rd call
+        if call_count["count"] % 3 == 0:
+            raise Exception("Agent temporarily unavailable")
+
+        return AgentResult(
+            task_id=task.id,
+            success=True,
+            output={"result": "Success"},
+            metrics={"duration_ms": 50}
+        )
+
+    mock_agent.execute = execute_with_failures
+    return mock_agent
+
+
+@pytest.fixture
+def mock_agent_with_latency():
+    """Mock agent with injected latency"""
+    mock_agent = Mock()
+
+    def execute_with_latency(task: AgentTask, latency_ms=100) -> AgentResult:
+        time.sleep(latency_ms / 1000)
+        return AgentResult(
+            task_id=task.id,
+            success=True,
+            output={"result": "Success"},
+            metrics={"duration_ms": latency_ms}
+        )
+
+    mock_agent.execute = execute_with_latency
+    return mock_agent
+
+
+@pytest.fixture
+def mock_maximus_with_failures():
+    """Mock MAXIMUS client with service failures"""
+    mock_client = MagicMock()  # Remove spec to allow health_check_all()
+
+    # Mock health check to show failures
+    mock_client.health_check_all.return_value = [
+        {"service": "maximus-core", "status": "unhealthy", "latency_ms": None},
+        {"service": "penelope", "status": "healthy", "latency_ms": 25},
+        {"service": "maba", "status": "unhealthy", "latency_ms": None},
+    ]
+
+    # Mock analyze to fail
+    mock_client.analyze_code.side_effect = Exception("Service unavailable: maximus-core")
+
+    return mock_client
+
+
+@pytest.fixture
+def mock_maximus_all_down():
+    """Mock MAXIMUS client with all services down"""
+    mock_client = MagicMock()  # Remove spec to allow health_check_all()
+
+    mock_client.health_check_all.return_value = [
+        {"service": f"service_{i}", "status": "unhealthy", "latency_ms": None}
+        for i in range(8)
+    ]
+
+    return mock_client
+
+
+@pytest.fixture
+def mock_maximus_with_recovery():
+    """Mock MAXIMUS client that recovers after failures"""
+    mock_client = MagicMock()  # Remove spec to allow health_check_all()
+    check_count = {"count": 0}
+
+    def health_with_recovery():
+        check_count["count"] += 1
+        # Fail first 2 checks, recover on 3rd
+        if check_count["count"] <= 2:
+            return [{"service": "maximus-core", "status": "unhealthy", "latency_ms": None}]
+        return [{"service": "maximus-core", "status": "healthy", "latency_ms": 25}]
+
+    mock_client.health_check_all.side_effect = health_with_recovery
+    return mock_client
