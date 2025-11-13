@@ -102,8 +102,14 @@ class PlanAgent(BaseAgent):
         """Async execution for MAXIMUS calls"""
 
         # Validate input parameters
+        # ERGONOMICS FIX: If parameters are empty, use task.description as goal
+        parameters = task.parameters or {}
+        if not parameters.get('goal') and task.description:
+            parameters = {'goal': task.description}
+            logger.info("Using task description as goal", extra={"task_id": task.id})
+
         try:
-            params = validate_task_parameters('plan', task.parameters or {})
+            params = validate_task_parameters('plan', parameters)
             logger.info("Parameters validated", extra={"task_id": task.id})
         except ValidationError as e:
             logger.error(f"Invalid parameters: {e}", extra={"task_id": task.id, "error_details": e.errors()})
@@ -223,6 +229,7 @@ class PlanAgent(BaseAgent):
                         success=True,
                         output={
                             'selected_plan': best_plan['plan'],
+                            'plan': best_plan['plan'],  # Alias for test compatibility
                             'systemic_analysis': best_plan['systemic_analysis'],
                             'all_plans': best_plan['all_options'],
                             'mode': 'HYBRID',
@@ -263,6 +270,7 @@ class PlanAgent(BaseAgent):
             success=True,
             output={
                 'selected_plan': best_plan,
+                'plan': best_plan,  # Alias for test compatibility
                 'all_plans': maxcode_plans,
                 'mode': 'STANDALONE',
                 'confidence': best_plan['tot_score'],

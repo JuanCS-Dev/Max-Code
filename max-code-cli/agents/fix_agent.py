@@ -57,8 +57,18 @@ class FixAgent(BaseAgent):
 
     async def _execute_async(self, task: AgentTask) -> AgentResult:
         # Validate input parameters
+        # ERGONOMICS FIX: If 'error' is missing, use task.description or generic message
+        parameters = task.parameters or {}
+        if not parameters.get('error'):
+            if task.description:
+                parameters['error'] = task.description
+                logger.info("Using task description as error", extra={"task_id": task.id})
+            else:
+                parameters['error'] = "General code issue - please analyze and fix"
+                logger.info("Using generic error message", extra={"task_id": task.id})
+
         try:
-            params = validate_task_parameters('fix', task.parameters or {})
+            params = validate_task_parameters('fix', parameters)
             logger.info("   ✅ Parameters validated", extra={"task_id": task.id})
             broken_code = params.code
             error_trace = params.error
