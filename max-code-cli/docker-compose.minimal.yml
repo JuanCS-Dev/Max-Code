@@ -1,0 +1,209 @@
+# MAXIMUS AI - Minimal Production Stack
+# Only REAL services that actually exist (5 services + CLI)
+# Use: docker-compose -f docker-compose.minimal.yml up
+
+version: '3.8'
+
+services:
+  # ============================================
+  # MAX-CODE-CLI - Constitutional AI Assistant
+  # ============================================
+  max-code-cli:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: max-code-cli
+    environment:
+      - ENVIRONMENT=docker
+      - PYTHONUNBUFFERED=1
+      - MAX_CODE_HOME=/app
+      # Claude API Key (set via .env or export)
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    volumes:
+      - ./data/cli:/app/data
+      - ./logs:/app/logs
+    networks:
+      - maximus-net
+    depends_on:
+      - maximus-core
+      - penelope
+    command: ["health", "--detailed"]
+    restart: unless-stopped
+
+  # ============================================
+  # MAXIMUS Core - Consciousness & Safety
+  # Port: 8100 (REAL PORT)
+  # ============================================
+  maximus-core:
+    build:
+      context: ../backend/services/maximus_core
+      dockerfile: Dockerfile
+    container_name: maximus-core
+    ports:
+      - "8100:8100"
+    environment:
+      - ENVIRONMENT=docker
+      - LOG_LEVEL=INFO
+      - PORT=8100
+    volumes:
+      - ./data/maximus-core:/app/data
+      - ./logs/maximus-core:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # ============================================
+  # Penelope - 7 Fruits & Healing
+  # Port: 8154 (REAL PORT)
+  # ============================================
+  penelope:
+    build:
+      context: ../backend/services/penelope
+      dockerfile: Dockerfile
+    container_name: penelope
+    ports:
+      - "8154:8154"
+    environment:
+      - ENVIRONMENT=docker
+      - LOG_LEVEL=INFO
+      - PORT=8154
+    volumes:
+      - ./data/penelope:/app/data
+      - ./logs/penelope:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8154/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # ============================================
+  # MABA - Browser Agent
+  # Port: 8152
+  # WARNING: May fail due to opentelemetry dependency
+  # ============================================
+  maba:
+    build:
+      context: ../backend/services/maba
+      dockerfile: Dockerfile
+    container_name: maba
+    ports:
+      - "8152:8152"
+    environment:
+      - ENVIRONMENT=docker
+      - LOG_LEVEL=INFO
+      - PORT=8152
+    volumes:
+      - ./data/maba:/app/data
+      - ./logs/maba:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8152/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # ============================================
+  # NIS - Neural Integration Service
+  # Port: 8153
+  # WARNING: May fail due to opentelemetry dependency
+  # ============================================
+  nis:
+    build:
+      context: ../backend/services/nis
+      dockerfile: Dockerfile
+    container_name: nis
+    ports:
+      - "8153:8153"
+    environment:
+      - ENVIRONMENT=docker
+      - LOG_LEVEL=INFO
+      - PORT=8153
+    volumes:
+      - ./data/nis:/app/data
+      - ./logs/nis:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8153/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - maximus-net
+
+  # ============================================
+  # Orchestrator - Service Coordination
+  # Port: 8027
+  # WARNING: May fail due to opentelemetry dependency
+  # ============================================
+  orchestrator:
+    build:
+      context: ../backend/services/orchestrator
+      dockerfile: Dockerfile
+    container_name: orchestrator
+    ports:
+      - "8027:8027"
+    environment:
+      - ENVIRONMENT=docker
+      - LOG_LEVEL=INFO
+      - PORT=8027
+      - MAXIMUS_CORE_URL=http://maximus-core:8100
+      - PENELOPE_URL=http://penelope:8154
+    volumes:
+      - ./data/orchestrator:/app/data
+      - ./logs/orchestrator:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8027/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      - maximus-core
+      - penelope
+    networks:
+      - maximus-net
+
+  # ============================================
+  # Redis - Caching & Session Store
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    container_name: maximus-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - maximus-net
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  maximus-net:
+    driver: bridge
+    name: maximus-network
+

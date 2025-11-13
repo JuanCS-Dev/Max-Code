@@ -5,8 +5,8 @@
 FROM python:3.11-slim
 
 LABEL maintainer="Juan (Maximus) <maximus@vertice.ai>"
-LABEL version="1.0.0"
-LABEL description="MAX-CODE-CLI - AI-powered CLI with Constitutional AI v3.0"
+LABEL version="3.0.0"
+LABEL description="MAX-CODE-CLI - AI-powered CLI with Constitutional AI v3.0 + Health Monitoring"
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -18,12 +18,12 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Copy requirements first (for better caching)
-COPY requirements.txt .
+# Copy minimal requirements for Docker (avoids protobuf conflicts)
+COPY requirements_docker.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r requirements_docker.txt
 
 # Copy application code
 COPY . .
@@ -40,9 +40,17 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV MAX_CODE_HOME=/app
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "from cli.main import app; print('healthy')" || exit 1
+# Create max-code executable entrypoint
+RUN echo '#!/bin/bash\npython -m cli.main "$@"' > /usr/local/bin/max-code && \
+    chmod +x /usr/local/bin/max-code
 
-# Default command: Run MAX-CODE shell
-CMD ["python", "-m", "cli.main"]
+# Health check using integrated health command
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -m cli.main health --services maximus_core penelope || exit 1
+
+# Expose ports for services (if running locally)
+EXPOSE 8100 8154 8152 8153 8027
+
+# Default command: Show help
+ENTRYPOINT ["python", "-m", "cli.main"]
+CMD ["--help"]

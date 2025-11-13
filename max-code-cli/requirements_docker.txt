@@ -1,0 +1,32 @@
+# MAX-CODE-CLI - Docker Minimal Requirements
+# Minimal dependencies to avoid protobuf conflicts
+
+# Core CLI
+typer==0.12.5
+rich==14.2.0
+click==8.3.0
+pyfiglet==1.0.4
+
+# LLM Clients
+anthropic==0.69.0
+google-generativeai==0.8.5
+openai==2.2.0
+
+# Async HTTP
+aiohttp==3.13.0
+httpx==0.28.1
+asyncio==3.4.3
+
+# Testing
+pytest==8.4.2
+pytest-asyncio==0.21.1
+pytest-mock==3.12.0
+
+# Logging & Monitoring
+loguru==0.7.3
+structlog==25.4.0
+
+# Utilities
+python-dotenv==1.0.0
+pydantic==2.12.3
+PyYAML==6.0.1
