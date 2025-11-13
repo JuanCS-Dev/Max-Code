@@ -10,7 +10,11 @@ from typing import Optional, Iterator, Dict, Any
 from anthropic import Anthropic
 import google.generativeai as genai
 import os
+from dotenv import load_dotenv
 from config.logging_config import get_logger
+
+# Load environment variables
+load_dotenv()
 
 logger = get_logger(__name__)
 
