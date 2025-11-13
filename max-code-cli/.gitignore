@@ -48,6 +48,7 @@ coverage.xml
 
 # Test artifacts
 tests/fixtures/cassettes/
+tests/e2e/cassettes/
 tests/**/*.pyc
 tests/**/__pycache__/
 
