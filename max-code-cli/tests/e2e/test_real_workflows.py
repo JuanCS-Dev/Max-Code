@@ -161,6 +161,7 @@ class TestCompleteWorkflows:
     # TEST 1: Simple Function Implementation
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_fibonacci_function(self):
         """
         E2E: User asks for fibonacci → code generated → tests pass → commit
@@ -205,6 +206,7 @@ class TestCompleteWorkflows:
     # TEST 2: REST API Endpoint
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_rest_api_endpoint(self):
         """
         E2E: User asks for REST API → code with routing → validation
@@ -245,6 +247,7 @@ class TestCompleteWorkflows:
     # TEST 3: Database Model with ORM
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_database_model(self):
         """
         E2E: User asks for database model → ORM code generated
@@ -285,6 +288,7 @@ class TestCompleteWorkflows:
     # TEST 4: Authentication System
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_authentication(self):
         """
         E2E: User asks for auth → secure implementation with hashing
@@ -328,6 +332,7 @@ class TestCompleteWorkflows:
     # TEST 5: File Upload Handler
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_file_upload(self):
         """
         E2E: User asks for file upload → secure implementation
@@ -370,6 +375,7 @@ class TestCompleteWorkflows:
     # TEST 6: Async HTTP Client
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_async_http_client(self):
         """
         E2E: User asks for async HTTP client → proper async implementation
@@ -415,6 +421,7 @@ class TestCompleteWorkflows:
     # TEST 7: Data Validation
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_email_validator(self):
         """
         E2E: User asks for email validator → comprehensive validation
@@ -455,6 +462,7 @@ class TestCompleteWorkflows:
     # TEST 8: Configuration Parser
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_config_parser(self):
         """
         E2E: User asks for config parser → safe parsing implementation
@@ -496,6 +504,7 @@ class TestCompleteWorkflows:
     # TEST 9: Rate Limiter
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_rate_limiter(self):
         """
         E2E: User asks for rate limiter → throttling implementation
@@ -538,6 +547,7 @@ class TestCompleteWorkflows:
     # TEST 10: Logging Setup
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_logging_setup(self):
         """
         E2E: User asks for logging → proper logging configuration
@@ -587,6 +597,7 @@ class TestCompleteWorkflows:
     # TEST 11: Cache Decorator
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_cache_decorator(self):
         """
         E2E: User asks for caching → memoization decorator
@@ -631,6 +642,7 @@ class TestCompleteWorkflows:
     # TEST 12: Retry Logic
     # ========================================================================
 
+    @pytest.mark.vcr()
     def test_implement_retry_decorator(self):
         """
         E2E: User asks for retry logic → decorator with backoff
@@ -684,6 +696,7 @@ class TestComplexWorkflows:
         """Initialize LLM client"""
         cls.client = UnifiedLLMClient()
 
+    @pytest.mark.vcr()
     def test_implement_jwt_authentication(self):
         """
         E2E: Complex workflow - JWT auth with token generation and validation
@@ -725,6 +738,7 @@ class TestComplexWorkflows:
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_implement_database_connection_pool(self):
         """
         E2E: Complex workflow - Database connection pool with context manager
@@ -761,6 +775,7 @@ class TestComplexWorkflows:
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_implement_event_emitter(self):
         """
         E2E: Complex workflow - Event emitter pattern
@@ -796,6 +811,7 @@ class TestComplexWorkflows:
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_implement_json_api_serializer(self):
         """
         E2E: JSON API serializer with nested objects
@@ -831,6 +847,7 @@ class TestComplexWorkflows:
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_implement_pagination_helper(self):
         """
         E2E: Pagination helper for APIs
@@ -865,6 +882,7 @@ class TestComplexWorkflows:
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_implement_middleware_chain(self):
         """
         E2E: Middleware chain pattern
@@ -901,6 +919,7 @@ class TestComplexWorkflows:
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_implement_dependency_injection_container(self):
         """
         E2E: Simple DI container
@@ -940,6 +959,7 @@ class TestComplexWorkflows:
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_implement_command_pattern(self):
         """
         E2E: Command pattern implementation

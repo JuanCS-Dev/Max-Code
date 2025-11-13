@@ -71,6 +71,7 @@ class TestSyntaxErrorRecovery:
         """Initialize LLM client"""
         cls.client = UnifiedLLMClient()
 
+    @pytest.mark.vcr()
     def test_fix_missing_colon(self):
         """
         E2E: LLM fixes missing colon in function definition
@@ -113,6 +114,7 @@ Return only the corrected code."""
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_fix_indentation_error(self):
         """
         E2E: LLM fixes indentation error
@@ -156,6 +158,7 @@ Return only the corrected code."""
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_fix_unclosed_bracket(self):
         """
         E2E: LLM fixes unclosed bracket
@@ -214,6 +217,7 @@ class TestLogicErrorRecovery:
         """Initialize LLM client"""
         cls.client = UnifiedLLMClient()
 
+    @pytest.mark.vcr()
     def test_fix_off_by_one_error(self):
         """
         E2E: LLM fixes off-by-one error when given test failure
@@ -268,6 +272,7 @@ Fix the bug and return only the corrected code."""
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_fix_wrong_operator(self):
         """
         E2E: LLM fixes wrong operator when given test failure
@@ -322,6 +327,7 @@ Fix the bug and return only the corrected code."""
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_fix_wrong_return_value(self):
         """
         E2E: LLM fixes wrong return value
@@ -393,6 +399,7 @@ class TestTypeErrorRecovery:
         """Initialize LLM client"""
         cls.client = UnifiedLLMClient()
 
+    @pytest.mark.vcr()
     def test_fix_string_int_concatenation(self):
         """
         E2E: LLM fixes string + int type error
@@ -449,6 +456,7 @@ Return only the corrected code."""
                 pytest.skip("LLM providers unavailable")
             raise
 
+    @pytest.mark.vcr()
     def test_fix_list_index_type(self):
         """
         E2E: LLM fixes list index type error (float instead of int)
