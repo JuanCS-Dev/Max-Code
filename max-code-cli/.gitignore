@@ -38,12 +38,18 @@ env/
 # Testing
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
 .tox/
 coverage.xml
 *.cover
 .hypothesis/
 *.log
+
+# Test artifacts
+tests/fixtures/cassettes/
+tests/**/*.pyc
+tests/**/__pycache__/
 
 # Secrets & Credentials (CRITICAL!)
 .env
@@ -71,6 +77,15 @@ config.local.*
 .max-code-history
 /tmp/
 *.backup.*
+
+# Logs (development artifacts)
+docs/logs/*.log
+core.log
+penelope.log
+*.log
+
+# Docker artifacts
+.dockerignore.backup
 
 # Reports
 *.xml
