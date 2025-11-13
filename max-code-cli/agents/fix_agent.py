@@ -67,6 +67,11 @@ class FixAgent(BaseAgent):
                 parameters['error'] = "General code issue - please analyze and fix"
                 logger.info("Using generic error message", extra={"task_id": task.id})
 
+        # ERGONOMICS FIX: If 'code' is missing, use placeholder
+        if not parameters.get('code'):
+            parameters['code'] = "# No code provided - analyzing error trace only"
+            logger.info("No code provided, using placeholder", extra={"task_id": task.id})
+
         try:
             params = validate_task_parameters('fix', parameters)
             logger.info("   ✅ Parameters validated", extra={"task_id": task.id})
