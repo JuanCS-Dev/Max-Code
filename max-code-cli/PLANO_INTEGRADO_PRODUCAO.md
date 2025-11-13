@@ -204,6 +204,60 @@ Tempo: 28min 43s (1723s)
 
 ---
 
+## 🔮 SESSÃO FUTURA: VCR Replay Optimization
+
+**Objetivo:** Investigar por que VCR replay não está acelerando testes (<10s target)
+
+### Hipóteses a Investigar
+
+**1. Anthropic SDK Compatibility**
+- Problema: SDK pode usar HTTP client que VCR não intercepta
+- Solução: Verificar se SDK usa httpx/requests ou client customizado
+- Action: Patch SDK temporariamente para logging de HTTP calls
+
+**2. pytest-httpx Alternative**
+- Problema: VCR.py focado em requests/urllib3
+- Solução: pytest-httpx especializado em httpx client
+- Action: Testar se UnifiedLLMClient usa httpx internamente
+
+**3. Manual Mocking Strategy**
+- Problema: VCR pode ser overkill para nosso caso
+- Solução: Mock direto com `responses` ou `pytest-mock`
+- Action: Criar mock fixtures para LLM responses
+
+**4. Async/Await Issues**
+- Problema: VCR pode não lidar bem com async HTTP
+- Solução: Verificar se testes usam async client
+- Action: Adicionar suporte async ao VCR config
+
+### Abordagem Recomendada
+
+**Etapa 1: Diagnóstico (30 min)**
+```python
+# Adicionar logging no UnifiedLLMClient para ver HTTP lib usada
+import logging
+logging.basicConfig(level=logging.DEBUG)
+# Rodar 1 teste e capturar logs HTTP
+```
+
+**Etapa 2: Quick Win Test (30 min)**
+- Testar pytest-httpx se httpx detectado
+- Ou: Testar responses library para mock direto
+
+**Etapa 3: Implementation (1h)**
+- Implementar solução que funcione
+- Validar <10s execution time
+
+**Etapa 4: Documentation (30 min)**
+- Documentar findings
+- Atualizar conftest.py se necessário
+
+**Tempo Total Estimado:** 2-3h
+**Prioridade:** Medium (current tests work, just slow)
+**Benefício:** 30min → 10s per E2E run (CI/CD win)
+
+---
+
 ## 📋 PLANO EXECUTIVO (8 SEMANAS)
 
 ---
