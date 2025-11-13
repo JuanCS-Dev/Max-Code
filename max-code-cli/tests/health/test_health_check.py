@@ -141,7 +141,7 @@ class TestIndividualServiceHealthChecks:
         checker = HealthChecker(timeout=1.0)
 
         with patch('aiohttp.ClientSession', return_value=create_mock_aiohttp_session(raise_error=asyncio.TimeoutError())):
-            result = await checker.check_service("thot", MAXIMUS_SERVICES["thot"])
+            result = await checker.check_service("maba", MAXIMUS_SERVICES["maba"])
 
             assert result.status == ServiceStatus.DOWN
             assert result.error == "Timeout"
@@ -153,7 +153,7 @@ class TestIndividualServiceHealthChecks:
         checker = HealthChecker(timeout=5.0)
 
         with patch('aiohttp.ClientSession', return_value=create_mock_aiohttp_session(raise_error=ValueError("Unexpected error"))):
-            result = await checker.check_service("thoth", MAXIMUS_SERVICES["thoth"])
+            result = await checker.check_service("nis", MAXIMUS_SERVICES["nis"])
 
             assert result.status == ServiceStatus.DOWN
             assert "ValueError" in result.error
@@ -169,13 +169,13 @@ class TestParallelServiceChecks:
 
     @pytest.mark.asyncio
     async def test_check_all_services_parallel(self):
-        """Test checking all 8 services in parallel"""
+        """Test checking all 5 REAL services in parallel"""
         checker = HealthChecker(timeout=5.0)
 
         with patch('aiohttp.ClientSession', return_value=create_mock_aiohttp_session(200)):
             health_map = await checker.check_all_services()
 
-            assert len(health_map) == 8
+            assert len(health_map) == 5
             assert all(service_id in health_map for service_id in MAXIMUS_SERVICES.keys())
             assert all(health.status == ServiceStatus.HEALTHY for health in health_map.values())
 
@@ -325,13 +325,12 @@ class TestCriticalServiceDetection:
 class TestServiceConfiguration:
     """Test MAXIMUS services configuration"""
 
-    def test_all_8_services_configured(self):
-        """Test all 8 MAXIMUS services are configured"""
-        assert len(MAXIMUS_SERVICES) == 8
+    def test_all_real_services_configured(self):
+        """Test all 5 REAL MAXIMUS services are configured"""
+        assert len(MAXIMUS_SERVICES) == 5
 
         expected_services = [
-            "maximus_core", "penelope", "maba", "thot",
-            "thoth", "peniel", "anima", "pneuma"
+            "maximus_core", "penelope", "maba", "nis", "orchestrator"
         ]
 
         for service_id in expected_services:
@@ -343,9 +342,9 @@ class TestServiceConfiguration:
         assert len(ports) == len(set(ports))
 
     def test_service_ports_in_range(self):
-        """Test all service ports are in valid range (8100-8200)"""
+        """Test all service ports are in valid range (8000-8200)"""
         for config in MAXIMUS_SERVICES.values():
-            assert 8100 <= config["port"] <= 8200  # Real services use different port ranges
+            assert 8000 <= config["port"] <= 8200  # Real services use different port ranges
 
     def test_service_has_required_fields(self):
         """Test each service has required configuration fields"""
@@ -377,7 +376,7 @@ class TestConvenienceFunctions:
 
             assert isinstance(health_map, dict)
             assert isinstance(summary, dict)
-            assert len(health_map) == 8
+            assert len(health_map) == 5
 
     def test_sync_health_check(self):
         """Test sync_health_check convenience function"""
@@ -410,7 +409,7 @@ class TestHealthCheckIntegration:
         with patch('aiohttp.ClientSession', return_value=create_mock_aiohttp_session(200, response_data)):
             # Step 1: Check all services
             health_map = await checker.check_all_services()
-            assert len(health_map) == 8
+            assert len(health_map) == 5
 
             # Step 2: Generate summary
             summary = checker.get_summary(health_map)

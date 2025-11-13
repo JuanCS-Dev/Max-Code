@@ -1,15 +1,12 @@
 """
 Health Check System - MAXIMUS Services Monitoring
 
-Verifica saúde e conectividade dos 8 serviços MAXIMUS:
+Verifica saúde e conectividade dos 5 serviços MAXIMUS REAIS:
 1. Maximus Core (8100) - Consciousness & Safety
 2. PENELOPE (8154) - 7 Fruits & Healing
 3. MABA (8152) - Browser Agent
-4. THOT (8153) - Decision Support
-5. THOTH (8155) - Memory System
-6. PENIEL (8156) - Vision & Image Analysis
-7. ANIMA (8157) - Context & Awareness
-8. PNEUMA (8158) - Creative Generation
+4. NIS (8153) - Neural Integration Service
+5. Orchestrator (8027) - Service Orchestration
 
 Features:
 - Individual service health checks
@@ -55,17 +52,17 @@ class ServiceHealth:
     uptime_seconds: Optional[int] = None
 
 
-# MAXIMUS Services Configuration
+# MAXIMUS Services Configuration - REAL SERVICES ONLY
 MAXIMUS_SERVICES = {
     "maximus_core": {
         "name": "Maximus Core",
-        "port": 8100,  # REAL port (not 8150)
+        "port": 8100,
         "description": "Consciousness & Safety",
         "critical": True,
     },
     "penelope": {
         "name": "PENELOPE",
-        "port": 8154,  # REAL port (not 8151)
+        "port": 8154,
         "description": "7 Fruits & Healing",
         "critical": True,
     },
@@ -75,34 +72,16 @@ MAXIMUS_SERVICES = {
         "description": "Browser Agent",
         "critical": False,
     },
-    "thot": {
-        "name": "THOT",
+    "nis": {
+        "name": "NIS",
         "port": 8153,
-        "description": "Decision Support",
+        "description": "Neural Integration Service",
         "critical": False,
     },
-    "thoth": {
-        "name": "THOTH",
-        "port": 8155,  # Moved from 8154 (conflict with Penelope)
-        "description": "Memory System",
-        "critical": False,
-    },
-    "peniel": {
-        "name": "PENIEL",
-        "port": 8156,  # Moved from 8155
-        "description": "Vision & Image Analysis",
-        "critical": False,
-    },
-    "anima": {
-        "name": "ANIMA",
-        "port": 8157,  # Moved from 8156
-        "description": "Context & Awareness",
-        "critical": False,
-    },
-    "pneuma": {
-        "name": "PNEUMA",
-        "port": 8158,  # Moved from 8157
-        "description": "Creative Generation",
+    "orchestrator": {
+        "name": "Orchestrator",
+        "port": 8027,
+        "description": "Service Orchestration",
         "critical": False,
     },
 }

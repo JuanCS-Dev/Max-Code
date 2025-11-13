@@ -584,5 +584,13 @@ def shell():
     start_enhanced_repl()
 
 
+# Import and register Health Check command (FASE 7 - Health Monitoring)
+try:
+    from cli.commands.health import health as health_cmd
+    cli.add_command(health_cmd, name='health')
+except ImportError as e:
+    console.print(f"[yellow]Warning: Health command not available: {e}[/yellow]")
+
+
 if __name__ == '__main__':
     cli()
