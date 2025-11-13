@@ -357,14 +357,18 @@ def analyze(file_path, output, agent):
 @click.option('--test-file', type=click.Path(), help='Generate test file')
 @click.option('--framework', type=click.Choice(['pytest', 'unittest']), default='pytest',
               help='Testing framework (default: pytest)')
-def generate(description, test_file, framework):
+@click.option('--stream/--no-stream', default=True, help='Stream responses (default: true)')
+def generate(description, test_file, framework, stream):
     """
     Generate code or tests from description.
 
     Examples:
       max-code generate "REST API endpoint for users"
       max-code generate --test-file tests/test_api.py "User authentication"
+      max-code generate "Python function to check if number is prime"
     """
+    from core.llm.unified_client import UnifiedLLMClient
+
     desc_text = ' '.join(description)
 
     console.print(f"\n[bold cyan]Code Generation[/bold cyan]")
@@ -373,14 +377,50 @@ def generate(description, test_file, framework):
         console.print(f"Test Framework: [yellow]{framework}[/yellow]")
     console.print()
 
-    # Stub: Will integrate with MAXIMUS tomorrow
-    console.print("[yellow]⚠ Generation integration coming in FASE 6-8 (tomorrow)[/yellow]")
-    console.print("[white]This will provide:[/white]")
-    console.print("  • Production-ready code")
-    console.print("  • Comprehensive tests")
-    console.print("  • Documentation")
-    console.print("  • Type hints")
-    console.print()
+    # Build prompt for code generation
+    if test_file:
+        prompt = f"""Generate {framework} tests for: {desc_text}
+
+Requirements:
+- Use {framework} framework
+- Include comprehensive test cases
+- Add docstrings
+- Follow best practices"""
+    else:
+        prompt = f"""Generate production-ready code for: {desc_text}
+
+Requirements:
+- Clean, readable code
+- Type hints
+- Docstrings
+- Error handling
+- Best practices"""
+
+    try:
+        # Initialize LLM client with fallback
+        client = UnifiedLLMClient()
+
+        console.print("[bold cyan]Generated Code:[/bold cyan]\n")
+
+        if stream:
+            # Stream response
+            for token in client.chat(message=prompt, stream=True):
+                console.print(token, end="")
+            console.print("\n")
+        else:
+            # Non-streaming
+            response = client.chat(message=prompt, stream=False)
+            console.print(response)
+            console.print()
+
+    except RuntimeError as e:
+        console.print(f"[red]Error: {e}[/red]")
+        console.print("[yellow]⚠️  Claude API not available. Set ANTHROPIC_API_KEY in .env[/yellow]")
+        console.print("[yellow]    Or set GEMINI_API_KEY for Gemini fallback[/yellow]")
+    except Exception as e:
+        console.print(f"[red]Unexpected error: {e}[/red]")
+        import traceback
+        console.print(f"[dim]{traceback.format_exc()}[/dim]")
 
 
 @cli.command()

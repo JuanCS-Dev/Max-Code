@@ -28,6 +28,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy application code
 COPY . .
 
+# Create max-code executable entrypoint (BEFORE switching user)
+RUN echo '#!/bin/bash\npython -m cli.main "$@"' > /usr/local/bin/max-code && \
+    chmod +x /usr/local/bin/max-code
+
 # Create non-root user for security
 RUN useradd -m -u 1000 maxcode && \
     chown -R maxcode:maxcode /app
@@ -39,10 +43,6 @@ USER maxcode
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV MAX_CODE_HOME=/app
-
-# Create max-code executable entrypoint
-RUN echo '#!/bin/bash\npython -m cli.main "$@"' > /usr/local/bin/max-code && \
-    chmod +x /usr/local/bin/max-code
 
 # Health check using integrated health command
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
