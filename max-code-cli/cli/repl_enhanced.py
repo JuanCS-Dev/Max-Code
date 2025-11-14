@@ -981,7 +981,16 @@ class EnhancedREPL:
                 'run': ['run', 'execute', 'exec', 'bash'],
                 'git': ['git status', 'git diff', 'git log', 'git branch', 'git commit', 'git push', 'git pull', 'git-'],
                 'web-search': ['search-web', 'web-search', 'search web', 'google', 'duckduckgo'],
-                'web-fetch': ['fetch', 'web-fetch', '/fetch', '/web-fetch', 'get url', 'download page']
+                'web-fetch': ['fetch', 'web-fetch', '/fetch', '/web-fetch', 'get url', 'download page'],
+                # Development commands (Phase 4+ - NLP Integration)
+                'test': ['run tests', 'run the tests', 'test the code', 'run unit tests', 'run test suite', 'execute tests'],
+                'lint': ['lint', 'lint the code', 'check code quality', 'run linters', 'check linting'],
+                'format': ['format', 'format code', 'format the code', 'auto-format', 'beautify code'],
+                'typecheck': ['type check', 'typecheck', 'check types', 'run mypy', 'type safety'],
+                'security': ['security scan', 'check security', 'security check', 'scan for vulnerabilities', 'run security'],
+                'audit': ['run audit', 'audit the code', 'comprehensive audit', 'full audit'],
+                'coverage': ['coverage', 'test coverage', 'code coverage', 'coverage report'],
+                'ci': ['run ci', 'ci checks', 'run ci checks', 'local ci'],
             }
 
             detected_tool = None
@@ -991,8 +1000,14 @@ class EnhancedREPL:
                     break
 
             if detected_tool:
-                # Direct tool execution (como Claude Code)
-                self._execute_tool_command(message, detected_tool)
+                # Check if it's a dev command (Phase 4+ - NLP Integration)
+                dev_commands = ['test', 'lint', 'format', 'typecheck', 'security', 'audit', 'coverage', 'ci']
+                if detected_tool in dev_commands:
+                    # Route to dev command handler
+                    self._handle_dev_command(f'/{detected_tool}', '')
+                else:
+                    # Direct tool execution (como Claude Code)
+                    self._execute_tool_command(message, detected_tool)
 
             elif intent.type in [IntentType.CODE, IntentType.FIX, IntentType.TEST,
                                 IntentType.REVIEW, IntentType.DOCS, IntentType.PLAN]:
