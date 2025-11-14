@@ -291,10 +291,11 @@ Only provide the selectors, no explanation."""
                 # Skip empty lines and comments (but NOT CSS ID selectors like #login-btn)
                 if not stripped:
                     continue
-                # Skip comment lines that are actual comments (word after #)
-                if stripped.startswith("#") and len(stripped) > 1 and stripped[1].isalpha():
-                    continue
-                # Keep CSS selectors including ID selectors
+                # Skip comment lines: "# Comment" has space after #
+                # But keep CSS ID selectors: "#login-btn" has no space after #
+                if stripped.startswith("#") and len(stripped) > 1 and stripped[1] == " ":
+                    continue  # This is a comment line
+                # Keep everything else (CSS selectors, including #id selectors)
                 selectors.append(stripped)
 
             logger.info(
