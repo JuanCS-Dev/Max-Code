@@ -1,0 +1,107 @@
+# Pre-commit hooks configuration
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+#
+# Boris Cherny Standard: Prevention > Detection
+# "If it doesn't pass pre-commit, it doesn't get committed"
+
+repos:
+  # Python code formatting
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        name: black (Python formatter)
+        language_version: python3.11
+
+  # Python import sorting
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: isort (import sorter)
+        args: ["--profile", "black"]
+
+  # Python linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        name: flake8 (linter)
+        args:
+          - "--max-line-length=100"
+          - "--extend-ignore=E203,W503"  # Black compatibility
+          - "--exclude=.git,__pycache__,build,dist,.venv,venv"
+
+  # Type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        name: mypy (type checker)
+        args: ["--ignore-missing-imports", "--show-error-codes"]
+        additional_dependencies: [types-all]
+        files: ^(core|cli|agents)/.*\.py$
+        exclude: ^tests/
+
+  # Security: Detect secrets
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        name: detect-secrets (security)
+        args: ['--baseline', '.secrets.baseline']
+        exclude: package.lock.json
+
+  # Generic file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        name: trim trailing whitespace
+      - id: end-of-file-fixer
+        name: fix end of files
+      - id: check-yaml
+        name: check yaml syntax
+      - id: check-added-large-files
+        name: check for large files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+        name: check for merge conflicts
+      - id: check-json
+        name: check json syntax
+      - id: check-toml
+        name: check toml syntax
+
+  # CRITICAL: Bare Except Prevention (Production Code Only)
+  - repo: local
+    hooks:
+      - id: no-bare-except-production
+        name: No bare excepts in production code
+        entry: python scripts/check_bare_except.py
+        language: system
+        files: ^(core|cli|agents)/.*\.py$
+        pass_filenames: true
+        description: "Boris Cherny Standard: Bare excepts forbidden in production"
+
+  # Python docstring validation
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        name: pydocstyle (docstring checker)
+        args: ["--convention=google"]
+        files: ^(core|cli|agents)/.*\.py$
+        exclude: ^tests/
+
+# Configuration for CI/CD integration
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: [mypy, no-bare-except-production]  # Skip heavy checks in CI
+  submodules: false
