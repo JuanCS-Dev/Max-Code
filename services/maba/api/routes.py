@@ -10,6 +10,7 @@ License: Proprietary
 """
 
 import asyncio
+import base64
 import logging
 import time
 
@@ -22,6 +23,9 @@ from libs.auth import verify_token
 # Day 3: Database and Cognitive Map
 from db import get_db
 from cognitive_map import CognitiveMapService
+
+# Day 5: PENELOPE Integration
+from penelope_integration import PageAnalyzer, PenelopeClient, AutoHealer
 
 from models import (
     BrowserActionResponse,
@@ -384,34 +388,151 @@ async def analyze_page(
     service=Depends(get_maba_service)
 ):
     """
-    Analyze current page with LLM. **Auth required.**
+    Analyze current page with PENELOPE's intelligence. **Auth required.**
 
-    This endpoint uses Claude to analyze the page content and provide
-    insights, recommendations, or structured data extraction.
+    Day 5: Uses Claude Sonnet with vision to analyze page screenshots and HTML,
+    providing intelligent insights, recommendations, and structured data.
 
-    NOTE: LLM-based page analysis is planned for future implementation.
-    This endpoint currently returns HTTP 501 Not Implemented.
+    PENELOPE brings:
+    - Vision-based screenshot analysis
+    - HTML structure understanding
+    - Intelligent recommendations
+    - Context-aware suggestions
 
     Args:
-        request: Page analysis request
+        request: Page analysis request with optional instructions
         session_id: Browser session ID
+        token_data: JWT token (auto-injected)
+        service: MABA service instance
 
     Returns:
-        Analysis results
+        Intelligent analysis with recommendations
 
     Raises:
-        HTTPException: 501 - Feature not yet implemented
+        HTTPException: 500 - If analysis fails
+        HTTPException: 404 - If session not found
     """
-    raise HTTPException(
-        status_code=501,
-        detail={
-            "error": "Not Implemented",
-            "message": "LLM-based page analysis is not yet implemented",
-            "planned_for": "Phase 2 (MVP expansion)",
-            "alternative": "Use /extract endpoint for structured data extraction",
-            "documentation": "/docs#tag/MABA/operation/extract_data_extract_post",
-        },
-    )
+    try:
+        # Get current page from browser session
+        browser_session = service.browser_controller.sessions.get(session_id)
+        if not browser_session:
+            raise HTTPException(status_code=404, detail=f"Session {session_id} not found")
+
+        page = browser_session.get("page")
+        if not page:
+            raise HTTPException(status_code=400, detail="No active page in session")
+
+        # Capture screenshot
+        screenshot_bytes = await page.screenshot()
+        screenshot_b64 = base64.b64encode(screenshot_bytes).decode('utf-8')
+
+        # Get page HTML
+        html_content = await page.content()
+
+        # Get current URL
+        current_url = page.url
+
+        # Initialize PENELOPE PageAnalyzer
+        analyzer = PageAnalyzer()
+
+        # Perform analysis based on type
+        if request.analysis_type == "general":
+            # General page analysis with vision
+            analysis_result = await analyzer.analyze_screenshot(
+                screenshot_b64=screenshot_b64,
+                url=current_url,
+                question=request.instructions,
+            )
+
+            return PageAnalysisResponse(
+                analysis=analysis_result["analysis"],
+                structured_data={
+                    "url": current_url,
+                    "model": analysis_result.get("model"),
+                    "confidence": analysis_result.get("confidence"),
+                },
+                recommendations=[
+                    "Review the analysis above for actionable insights",
+                    "Use /extract endpoint for structured data extraction",
+                    "Use /cognitive-map/query for learned patterns",
+                ],
+            )
+
+        elif request.analysis_type == "form":
+            # Analyze forms and input fields
+            html_analysis = await analyzer.analyze_html_structure(
+                html=html_content,
+                url=current_url,
+                goal="identify all forms and input fields",
+            )
+
+            return PageAnalysisResponse(
+                analysis=html_analysis["analysis"],
+                structured_data={"url": current_url, "html_length": html_analysis.get("html_length")},
+                recommendations=[
+                    "Forms and fields have been identified",
+                    "Use type_text action to fill forms",
+                    "Use click action to submit forms",
+                ],
+            )
+
+        elif request.analysis_type == "navigation":
+            # Analyze navigation options
+            html_analysis = await analyzer.analyze_html_structure(
+                html=html_content,
+                url=current_url,
+                goal="identify all navigation links and buttons",
+            )
+
+            return PageAnalysisResponse(
+                analysis=html_analysis["analysis"],
+                structured_data={"url": current_url},
+                recommendations=[
+                    "Navigation options have been identified",
+                    "Use click action to navigate",
+                    "Use cognitive map to learn navigation patterns",
+                ],
+            )
+
+        elif request.analysis_type == "data":
+            # Structured data extraction
+            if request.instructions:
+                # Parse instructions for schema
+                # Simple format: "title, price, description"
+                fields = [f.strip() for f in request.instructions.split(",")]
+                schema = {field: f"Extract {field}" for field in fields}
+            else:
+                # Default schema
+                schema = {
+                    "title": "Main title or heading",
+                    "content": "Main content or text",
+                }
+
+            extracted = await analyzer.extract_with_llm(
+                html=html_content,
+                schema=schema,
+            )
+
+            return PageAnalysisResponse(
+                analysis=f"Extracted {len(extracted)} fields from page",
+                structured_data=extracted,
+                recommendations=[
+                    "Data has been extracted using Claude LLM",
+                    "Review structured_data field for results",
+                ],
+            )
+
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unknown analysis_type: {request.analysis_type}. Use: general, form, navigation, data",
+            )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Page analysis failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/cognitive-map/important-pages")
@@ -531,3 +652,232 @@ async def get_stats(
     except Exception as e:
         logger.error(f"Failed to get stats: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================================================
+# DAY 5: PENELOPE INTELLIGENCE ENDPOINTS
+# ============================================================================
+
+@router.post("/penelope/suggest-action")
+async def suggest_intelligent_action(
+    goal: str,
+    session_id: str,
+    token_data: dict = Depends(verify_token),
+    service=Depends(get_maba_service),
+):
+    """
+    Ask PENELOPE to suggest next browser action based on goal.
+
+    Day 5: Intelligent action suggestion using Claude reasoning.
+
+    Args:
+        goal: User's goal or task description
+        session_id: Browser session ID
+        token_data: JWT token (auto-injected)
+        service: MABA service instance
+
+    Returns:
+        Suggested action with reasoning and confidence
+
+    Example:
+        POST /penelope/suggest-action?session_id=abc&goal=login
+        
+        Response:
+        {
+            "action": "type",
+            "selector": "input[name='email']",
+            "text": "user@example.com",
+            "reasoning": "Need to fill email field first",
+            "confidence": 0.95,
+            "next_steps": ["Fill password", "Click submit"]
+        }
+    """
+    try:
+        # Get current page
+        browser_session = service.browser_controller.sessions.get(session_id)
+        if not browser_session:
+            raise HTTPException(status_code=404, detail=f"Session {session_id} not found")
+
+        page = browser_session.get("page")
+        if not page:
+            raise HTTPException(status_code=400, detail="No active page in session")
+
+        # Get page data
+        current_url = page.url
+        html_content = await page.content()
+        screenshot_bytes = await page.screenshot()
+        screenshot_b64 = base64.b64encode(screenshot_bytes).decode('utf-8')
+
+        # Try PENELOPE service first
+        penelope_client = PenelopeClient()
+        try:
+            suggestion = await penelope_client.suggest_action(
+                current_url=current_url,
+                goal=goal,
+                page_html=html_content,
+                screenshot=screenshot_b64,
+            )
+            await penelope_client.close()
+            return suggestion
+
+        except Exception as penelope_error:
+            logger.warning(f"⚠️ PENELOPE service unavailable: {penelope_error}")
+            await penelope_client.close()
+
+            # Fallback to local analysis
+            analyzer = PageAnalyzer()
+            analysis = await analyzer.analyze_html_structure(
+                html=html_content,
+                url=current_url,
+                goal=goal,
+            )
+            await analyzer.close()
+
+            return {
+                "analysis": analysis["analysis"],
+                "url": current_url,
+                "goal": goal,
+                "note": "Using local analysis (PENELOPE service unavailable)",
+            }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Action suggestion failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/penelope/auto-heal")
+async def auto_heal_failed_action(
+    failed_action: dict,
+    error_message: str,
+    session_id: str,
+    token_data: dict = Depends(verify_token),
+    service=Depends(get_maba_service),
+):
+    """
+    Request PENELOPE to heal a failed browser action.
+
+    Day 5: Auto-healing system that finds alternatives when actions fail.
+
+    Args:
+        failed_action: The action that failed (dict with action, selector, etc.)
+        error_message: Error message from the failure
+        session_id: Browser session ID
+        token_data: JWT token (auto-injected)
+        service: MABA service instance
+
+    Returns:
+        Healed action to retry, or None if healing not possible
+
+    Example:
+        POST /penelope/auto-heal?session_id=abc
+        Body:
+        {
+            "failed_action": {"action": "click", "selector": "button.missing"},
+            "error_message": "Element not found"
+        }
+
+        Response:
+        {
+            "healed": true,
+            "action": "click",
+            "selector": "button[type='submit']",
+            "healing_strategy": "alternative_selector",
+            "reasoning": "Original selector not found, trying type attribute",
+            "confidence": 0.85
+        }
+    """
+    try:
+        # Get current page
+        browser_session = service.browser_controller.sessions.get(session_id)
+        if not browser_session:
+            raise HTTPException(status_code=404, detail=f"Session {session_id} not found")
+
+        page = browser_session.get("page")
+        if not page:
+            raise HTTPException(status_code=400, detail="No active page in session")
+
+        # Get page data
+        html_content = await page.content()
+        screenshot_bytes = await page.screenshot()
+        screenshot_b64 = base64.b64encode(screenshot_bytes).decode('utf-8')
+
+        # Initialize auto-healer
+        analyzer = PageAnalyzer()
+        penelope_client = PenelopeClient()
+        auto_healer = AutoHealer(analyzer=analyzer, penelope_client=penelope_client)
+
+        # Attempt healing
+        healed_action = await auto_healer.heal_failed_action(
+            failed_action=failed_action,
+            error_message=error_message,
+            page_html=html_content,
+            screenshot=screenshot_b64,
+        )
+
+        # Cleanup
+        await auto_healer.close()
+
+        if healed_action:
+            return {
+                "healed": True,
+                **healed_action,
+            }
+        else:
+            return {
+                "healed": False,
+                "message": "Could not find alternative approach",
+                "error": error_message,
+            }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Auto-healing failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/penelope/health")
+async def penelope_health_check(
+    token_data: dict = Depends(verify_token),
+):
+    """
+    Check PENELOPE service and integration health.
+
+    Day 5: Health check for PENELOPE integration.
+
+    Returns:
+        Health status of PENELOPE service and local analyzer
+    """
+    health = {
+        "penelope_service": "unknown",
+        "local_analyzer": "unknown",
+        "auto_healer": "available",
+    }
+
+    # Check PENELOPE service
+    try:
+        penelope_client = PenelopeClient()
+        service_health = await penelope_client.health_check()
+        await penelope_client.close()
+        health["penelope_service"] = "healthy"
+        health["penelope_details"] = service_health
+    except Exception as e:
+        health["penelope_service"] = "unavailable"
+        health["penelope_error"] = str(e)
+
+    # Check local analyzer
+    try:
+        analyzer = PageAnalyzer()
+        if analyzer.client:
+            health["local_analyzer"] = "healthy"
+            health["analyzer_model"] = "claude-sonnet-4-5"
+        else:
+            health["local_analyzer"] = "no_api_key"
+        await analyzer.close()
+    except Exception as e:
+        health["local_analyzer"] = "error"
+        health["analyzer_error"] = str(e)
+
+    return health
