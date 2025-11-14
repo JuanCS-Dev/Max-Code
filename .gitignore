@@ -1,3 +1,8 @@
+# ============================================
+# MAXIMUS AI - .gitignore
+# Constitution: Vértice v3.0
+# ============================================
+
 # Python
 __pycache__/
 *.py[cod]
@@ -19,12 +24,15 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # Virtual Environment
 venv/
 ENV/
 env/
 .venv
+.python-version
+pipenv/
 
 # IDEs
 .vscode/
@@ -33,30 +41,113 @@ env/
 *.swo
 *~
 .DS_Store
+*.sublime-project
+*.sublime-workspace
 
 # Environment variables
 .env
 .env.local
+.env.*.local
+.envrc
 
 # Credentials (NEVER commit!)
 .credentials.json
 *.pem
 *.key
+*.p12
+*.pfx
+secrets/
+.secrets/
 
-# Max-Code specific
+# Max-Code CLI specific
 .max-code/
+max-code-cli/.max-code/
 
 # Testing
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
 .tox/
 .nox/
+.hypothesis/
+coverage.xml
+*.cover
+.cache
+nosetests.xml
+test-results/
+junit.xml
 
 # Logs
 *.log
 logs/
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Temporary
+# Temporary files
 *.tmp
+*.temp
 .cache/
+.temp/
+temp/
+tmp/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# OS specific
+Thumbs.db
+Desktop.ini
+.Spotlight-V100
+.Trashes
+._*
+
+# Backup files
+*.bak
+*.backup
+*.old
+*~
+
+# Reports and analysis (temporary)
+*_report_*.json
+*_analysis*.json
+*.report.txt
+system_check_*.json
+cli_benchmark*.json
+coverage*.json
+export*.json
+
+# Git commit helpers (temporary)
+.git-commit-*.txt
+
+# Migration backups
+.migration_backups/
+
+# Node modules (for any JS tooling)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Documentation build
+docs/_build/
+site/
+
+# Prometheus & monitoring data
+prometheus_data/
+grafana_data/
+loki_data/

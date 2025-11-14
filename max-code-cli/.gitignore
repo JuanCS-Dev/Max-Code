@@ -1,3 +1,8 @@
+# ============================================
+# MAX-CODE CLI - .gitignore
+# Constitution: Vértice v3.0
+# ============================================
+
 # Python
 __pycache__/
 *.py[cod]
@@ -26,14 +31,18 @@ venv/
 ENV/
 env/
 .venv
+.python-version
+pipenv/
 
-# IDE
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+*.sublime-project
+*.sublime-workspace
 
 # Testing
 .pytest_cache/
@@ -41,10 +50,14 @@ env/
 .coverage.*
 htmlcov/
 .tox/
+.nox/
+.hypothesis/
 coverage.xml
 *.cover
-.hypothesis/
-*.log
+.cache
+nosetests.xml
+test-results/
+junit.xml
 
 # Test artifacts
 tests/fixtures/cassettes/
@@ -56,14 +69,19 @@ tests/**/__pycache__/
 .env
 .env.local
 .env.*.local
+.envrc
 *.pem
 *.key
 *.crt
+*.p12
+*.pfx
 *_secret*
 *_token*
 *_password*
 credentials.json
 secrets.yaml
+secrets/
+.secrets/
 config.local.*
 
 # Temporary files
@@ -71,32 +89,80 @@ config.local.*
 *.temp
 *.bak
 *.backup
+*.old
 *.cache
 .cache/
+.temp/
+temp/
+tmp/
 
 # MAX-CODE specific
+.max-code/
 .max-code-history
-/tmp/
 *.backup.*
 
 # Logs (development artifacts)
+*.log
+logs/
+*.log.*
 docs/logs/*.log
 core.log
 penelope.log
-*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Docker artifacts
 .dockerignore.backup
+.docker/
 
-# Reports
+# Reports and analysis (temporary)
 *.xml
 coverage.xml
+*.json.bak
+*_report_*.json
+*_analysis*.json
+*.report.txt
+system_check_*.json
+cli_benchmark*.json
+coverage*.json
+export*.json
 CLAUDE_CODE_PARITY_REPORT.md
+
+# Git commit helpers (temporary)
+.git-commit-*.txt
+
+# Backups
+.backup_*/
+backups/*.bak
+
+# Node modules (for any JS tooling)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-shm
+*.db-wal
 
 # Documentation builds
 docs/_build/
 site/
 
-# OS
-.DS_Store
+# OS specific
 Thumbs.db
+Desktop.ini
+.Spotlight-V100
+.Trashes
+._*
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Invalid package files
+=*

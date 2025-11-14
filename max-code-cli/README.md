@@ -553,9 +553,9 @@ We welcome contributions that maintain our standards:
 
 ## License
 
-Proprietary - Vértice Platform
+MIT License - Part of the MAXIMUS AI Platform
 
-For licensing inquiries: [contact information]
+See [../LICENSE](../LICENSE) for details
 
 ---
 
@@ -583,15 +583,23 @@ For licensing inquiries: [contact information]
 
 ---
 
+## Project Structure
+
+MAX-CODE CLI is part of the larger MAXIMUS AI platform. For full documentation, see:
+
+- **[MAXIMUS AI Root](../README.md)** - Main project documentation
+- **[Services Documentation](../docs/services/)** - All microservices
+- **[Constitution Vértice](../docs/governance/CONSTITUTION_VERTICE_v3.0.md)** - Governing framework
+
 ## Contact
 
-- **Issues:** [GitHub Issues](https://github.com/your-org/max-code-cli/issues)
-- **Documentation:** [docs/](docs/)
+- **Main Repository:** [MAXIMUS AI](../)
+- **Documentation:** [docs/](docs/) and [../docs/](../docs/)
 - **Status:** Grade A+ (95/100) - Production Ready
 
 ---
 
-**Last Updated:** 2025-11-13
+**Last Updated:** 2025-11-14
 **Version:** v3.0.0
 **Status:** Production Ready
 

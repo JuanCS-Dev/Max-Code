@@ -225,6 +225,11 @@ pytest
 - **[NIS](docs/services/nis/)** - Narrative intelligence (253 tests passing)
 - **[All Services](docs/services/)** - Complete service documentation
 
+### Legacy Documentation
+
+- **[Legacy Docs](docs/legacy/)** - Historical documentation and investigation reports
+- **[Audit Reports](docs/reports/)** - System audit and validation reports
+
 ⭐ = Essential for Max-Code development
 
 ---
@@ -288,6 +293,10 @@ All services operate under **CONSTITUIÇÃO VÉRTICE v3.0**, implementing the **
 
 Start individual service:
 ```bash
+# Using helper scripts
+./scripts/start/start_penelope.sh
+
+# Or directly
 cd services/penelope
 python main.py
 ```
@@ -366,7 +375,7 @@ docker stats
 
 ## 📄 License
 
-[TODO: Add license information]
+MIT License - See [LICENSE](LICENSE) file for details
 
 ---
 
@@ -382,13 +391,22 @@ This standalone version is extracted from the **Vértice Platform** (cyber-secur
 
 ## 🤝 Contributing
 
-[TODO: Add contribution guidelines]
+Contributions are welcome! Please ensure all code follows the **CONSTITUIÇÃO VÉRTICE v3.0** principles:
+- Code must be complete (no placeholders or TODOs)
+- Test coverage ≥ 90%
+- All tests must pass
+- Follow existing architectural patterns
+
+See [docs/governance/CONSTITUTION_VERTICE_v3.0.md](docs/governance/CONSTITUTION_VERTICE_v3.0.md) for complete guidelines.
 
 ---
 
 ## 📞 Support
 
-[TODO: Add support channels]
+For issues and questions:
+- Open an issue on GitHub
+- Review documentation in [docs/](docs/)
+- Check [Troubleshooting](#-troubleshooting) section above
 
 ---
 
