@@ -13,11 +13,11 @@ DEBT-002: Sprint 1 UI Testing (Part 2/3)
 """
 
 import pytest
+import sys
 import time
 from unittest.mock import Mock, patch, MagicMock
+from pathlib import Path
 
-# Add project root to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from ui.effects import (
     EffectsManager,

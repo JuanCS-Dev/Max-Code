@@ -16,16 +16,13 @@ DEBT-002: Sprint 1 UI Testing (Part 1/3)
 
 import pytest
 import sys
-
-# Add project root to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import os
 from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
 import time
 
-from ui.banner import MaxCodeBanner, show_banner, print_banner
 
+from ui.banner import MaxCodeBanner, show_banner, print_banner
 
 class TestMaxCodeBanner:
     """Test suite for MaxCodeBanner class"""
