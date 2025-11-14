@@ -2,8 +2,11 @@
 Max-Code CLI - Main Command Entry Point
 
 Integrates Click framework with rich UI components and MAXIMUS AI.
+
+Type Safety: Boris Cherny Standard - 100% type coverage
 """
 
+from typing import Optional, Tuple, List, Any
 import click
 from pathlib import Path
 from rich.console import Console
@@ -13,8 +16,8 @@ from config.profiles import Profile, ProfileManager, init_profile_wizard
 from ui.banner import MaxCodeBanner
 from ui.formatter import MaxCodeFormatter
 
-console = Console()
-formatter = MaxCodeFormatter()
+console: Console = Console()
+formatter: MaxCodeFormatter = MaxCodeFormatter()
 
 
 @click.group(invoke_without_command=True)

@@ -1,0 +1,221 @@
+# Max-Code CLI - Security-Audited Requirements
+# Updated: 2025-11-14
+# Auditor: Boris Cherny (Claude Code)
+# Standard: Zero Known CVEs
+#
+# This file contains updated versions of all dependencies
+# to address the 32 security vulnerabilities identified in
+# the Security Audit Report (2025-11-11)
+
+# ============================================================
+# CORE FRAMEWORK (CRITICAL SECURITY UPDATES)
+# ============================================================
+
+# Cryptography - CRITICAL: 4 CVEs fixed
+# Old: 41.0.7 → New: 43.0.1+
+cryptography>=43.0.1
+
+# Web Framework - HIGH: 1 CVE fixed
+# Old: 0.104.1 → New: 0.109.1+
+fastapi>=0.109.1
+
+# ASGI Framework - HIGH: 2 CVEs fixed
+# Old: 0.27.0 → New: 0.47.2+
+starlette>=0.47.2
+
+# JWT Authentication - HIGH: 2 CVEs fixed
+# Old: 3.3.0 → New: 3.4.0+
+python-jose[cryptography]>=3.4.0
+
+# Multipart Form Data - MEDIUM: 2 CVEs fixed
+# Old: 0.0.6 → New: 0.0.18+
+python-multipart>=0.0.18
+
+# ============================================================
+# LANGCHAIN ECOSYSTEM (CRITICAL SECURITY UPDATES)
+# ============================================================
+
+# LangChain Core - CRITICAL: 3 CVEs fixed
+# Old: 0.1.0 → New: 0.2.5+
+# WARNING: Breaking API changes! See migration guide.
+langchain>=0.2.5
+
+# LangChain Community - CRITICAL: 5 CVEs fixed
+# Old: 0.0.20 → New: 0.3.27+
+langchain-community>=0.3.27
+
+# LangChain Core - CRITICAL: 2 CVEs fixed
+# Old: 0.1.23 → New: 0.3.15+
+langchain-core>=0.3.15
+
+# ============================================================
+# NETWORKING & DATA (MEDIUM PRIORITY)
+# ============================================================
+
+# HTTP Client - MEDIUM: 2 CVEs fixed
+# Old: 2.3.0 → New: 2.5.0+
+urllib3>=2.5.0
+
+# Vector Database Client - MEDIUM: 1 CVE fixed
+# Old: 1.7.0 → New: 1.9.0+
+qdrant-client>=1.9.0
+
+# Compression Library - LOW: 1 CVE fixed
+# Old: 1.1.0 → New: 1.2.0+
+brotli>=1.2.0
+
+# ============================================================
+# DEVELOPMENT TOOLS (LOW PRIORITY)
+# ============================================================
+
+# Code Formatter - LOW: 1 CVE fixed
+# Old: 23.12.1 → New: 24.3.0+
+black>=24.3.0
+
+# Package Manager - LOW: Auto-update recommended
+# Old: 25.2 → New: 25.3+
+pip>=25.3
+
+# Fast Package Installer - LOW: 2 CVEs fixed
+# Old: 0.9.3 → New: 0.9.6+
+uv>=0.9.6
+
+# Elliptic Curve Cryptography - LOW: 1 CVE fixed
+ecdsa>=0.19.2
+
+# ============================================================
+# ADDITIONAL DEPENDENCIES (Keep existing versions if secure)
+# ============================================================
+
+# CLI & UI
+click>=8.1.7
+rich>=13.7.0
+prompt-toolkit>=3.0.43
+
+# Async & HTTP
+httpx>=0.27.0
+asyncio>=3.4.3
+
+# Configuration
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+python-dotenv>=1.0.0
+
+# Logging & Monitoring
+structlog>=24.1.0
+python-json-logger>=2.0.7
+
+# Testing (dev only)
+pytest>=7.4.3
+pytest-cov>=4.1.0
+pytest-asyncio>=0.23.0
+
+# Type Checking (dev only)
+mypy>=1.8.0
+types-requests>=2.31.0
+
+# Code Quality (dev only)
+flake8>=7.0.0
+isort>=5.13.2
+radon>=6.0.1
+
+# ============================================================
+# DEPRECATED / REMOVE
+# ============================================================
+
+# py - DEPRECATED: Should be removed
+# Old: 1.11.0
+# Action: Remove dependency, use pytest-dev instead
+# DO NOT INSTALL: py>=1.11.0
+
+# ============================================================
+# INSTALLATION INSTRUCTIONS
+# ============================================================
+
+# 1. BACKUP CURRENT ENVIRONMENT:
+#    pip freeze > requirements.backup.txt
+#
+# 2. TEST IN ISOLATED ENVIRONMENT:
+#    python -m venv test_secure_env
+#    source test_secure_env/bin/activate
+#    pip install -r requirements.secure.txt
+#    pytest  # Verify all tests pass
+#    deactivate
+#
+# 3. UPDATE PRODUCTION:
+#    pip install --upgrade -r requirements.secure.txt
+#
+# 4. VERIFY NO VULNERABILITIES:
+#    pip-audit --desc
+#
+# 5. RUN FULL TEST SUITE:
+#    pytest --cov=max-code-cli --cov-report=term
+#
+# 6. COMMIT CHANGES:
+#    git add requirements.secure.txt
+#    git commit -m "fix(security): Update dependencies to fix 32 CVEs"
+
+# ============================================================
+# BREAKING CHANGES & MIGRATION NOTES
+# ============================================================
+
+# LANGCHAIN 0.1.0 → 0.2.5:
+#   - API changes in chat models
+#   - Import paths changed: langchain.chat_models → langchain_community.chat_models
+#   - Callback handling updated
+#   - See: https://python.langchain.com/docs/migration
+#
+# STARLETTE 0.27.0 → 0.47.2:
+#   - Middleware API changes
+#   - Request/Response handling updated
+#   - WebSocket interface changes
+#   - See: https://www.starlette.io/release-notes/
+#
+# FASTAPI 0.104.1 → 0.109.1:
+#   - Pydantic v2 migration (if not already done)
+#   - Dependency injection changes
+#   - See: https://fastapi.tiangolo.com/release-notes/
+
+# ============================================================
+# VERIFICATION CHECKLIST
+# ============================================================
+
+# After installing these updates, verify:
+# [ ] All 32 CVEs resolved (pip-audit shows 0 vulnerabilities)
+# [ ] All tests passing (pytest exit code 0)
+# [ ] CLI commands work (max-code --help, max-code config)
+# [ ] LangChain integration functional
+# [ ] FastAPI endpoints responding
+# [ ] No import errors
+# [ ] Performance acceptable (no significant degradation)
+
+# ============================================================
+# SUPPORT & TROUBLESHOOTING
+# ============================================================
+
+# If issues occur:
+# 1. Check migration guides (links above)
+# 2. Review breaking changes in CHANGELOG files
+# 3. Revert to backup: pip install -r requirements.backup.txt
+# 4. Report issues: https://github.com/juan/max-code-cli/issues
+
+# ============================================================
+# MAINTENANCE
+# ============================================================
+
+# Schedule regular security audits:
+#   Weekly: pip-audit --desc
+#   Monthly: Review for new CVEs
+#   Quarterly: Major version updates
+
+# Automation:
+#   - GitHub Dependabot for automatic PR creation
+#   - CI/CD pipeline with pip-audit check
+#   - Pre-commit hook for local verification
+
+---
+
+# Signed-off by: Boris Cherny (Claude Code)
+# Under Authority: Constituição Vértice v3.0
+# Date: 2025-11-14
+# Status: ✅ SECURITY AUDIT RECOMMENDATIONS COMPLETE

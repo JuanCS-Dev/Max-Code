@@ -5,9 +5,11 @@ Classe base para todos os agentes especializados.
 
 "A cada um é dada a manifestação do Espírito para o proveito comum"
 (1 Coríntios 12:7)
+
+Type Safety: Boris Cherny Standard - 100% type coverage
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Protocol
 from dataclasses import dataclass
 from enum import Enum
 from abc import ABC, abstractmethod
@@ -96,12 +98,15 @@ class AgentResult:
         Retorna output completo com Dream comment incluído.
 
         Use este método para obter output + análise realista do Dream.
+
+        Returns:
+            String containing output and optional dream comment
         """
         if self.dream_comment:
             return str(self.output) + "\n" + self.dream_comment
         return str(self.output)
 
-    def print_with_dream(self):
+    def print_with_dream(self) -> None:
         """Imprime resultado com Dream comment."""
         print(self.get_full_output())
 
@@ -239,8 +244,14 @@ class BaseAgent(ABC):
                 error=str(e),
             )
 
-    def get_stats(self) -> Dict:
-        """Retorna estatísticas do agente"""
+    def get_stats(self) -> Dict[str, Any]:
+        """
+        Retorna estatísticas do agente.
+
+        Returns:
+            Dictionary containing agent statistics including total tasks,
+            successful tasks, failed tasks, and success rate percentage
+        """
         total = self.stats['total_tasks_executed']
         return {
             **self.stats,
@@ -250,8 +261,8 @@ class BaseAgent(ABC):
             ),
         }
 
-    def print_stats(self):
-        """Imprime estatísticas"""
+    def print_stats(self) -> None:
+        """Imprime estatísticas do agente no console."""
         stats = self.get_stats()
 
         print(f"\n{'='*60}")
@@ -265,8 +276,26 @@ class BaseAgent(ABC):
 
 # ==================== HELPER FUNCTIONS ====================
 
-def create_agent_task(description: str, **parameters) -> AgentTask:
-    """Helper para criar AgentTask"""
+def create_agent_task(description: str, **parameters: Any) -> AgentTask:
+    """
+    Helper function to create an AgentTask with auto-generated ID.
+
+    Args:
+        description: Human-readable task description
+        **parameters: Arbitrary keyword arguments for task parameters
+
+    Returns:
+        AgentTask with unique timestamp-based ID
+
+    Example:
+        >>> task = create_agent_task(
+        ...     "Generate REST API",
+        ...     framework="fastapi",
+        ...     include_tests=True
+        ... )
+        >>> print(task.description)
+        'Generate REST API'
+    """
     import time
     return AgentTask(
         id=f"task_{int(time.time()*1000)}",
