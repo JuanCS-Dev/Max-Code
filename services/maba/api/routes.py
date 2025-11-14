@@ -1,6 +1,7 @@
 """MABA API Routes.
-# Day 2: JWT Authentication
-from libs.auth import verify_token
+
+Day 2: JWT Authentication
+Day 3: Database integration with CognitiveMap learning
 
 FastAPI routes for MABA browser automation operations.
 
@@ -13,6 +14,15 @@ import logging
 import time
 
 from fastapi import Depends, APIRouter, Depends, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
+
+# Day 2: JWT Authentication
+from libs.auth import verify_token
+
+# Day 3: Database and Cognitive Map
+from db import get_db
+from cognitive_map import CognitiveMapService
+
 from models import (
     BrowserActionResponse,
     BrowserSessionRequest,
@@ -296,29 +306,38 @@ async def extract_data(
 async def query_cognitive_map(
     request: CognitiveMapQueryRequest,
     token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
-    service=Depends(get_maba_service)
+    db: AsyncSession = Depends(get_db),  # Day 3: Database session
 ):
     """
     Query the cognitive map for learned information. **Auth required.**
 
+    Day 3: Uses database-backed CognitiveMapService for intelligent recommendations.
+
     Args:
         request: Cognitive map query request
         token_data: JWT token (auto-injected)
+        db: Database session (auto-injected)
 
     Returns:
-        Query results
+        Query results with confidence scores
     """
     try:
-        if request.query_type == "find_element":
-            selector = await service.cognitive_map.find_element(
+        # Create cognitive map service with database session
+        cognitive_map = CognitiveMapService(db)
+
+        if request.query_type == "recommend_selector":
+            # Get selector recommendations for a URL and action type
+            recommendations = await cognitive_map.recommend_selector(
                 url=request.parameters.get("url"),
-                description=request.parameters.get("description"),
-                min_importance=request.parameters.get("min_importance", 0.3),
+                action_type=request.parameters.get("action_type", "click"),
+                limit=request.parameters.get("limit", 5),
             )
 
-            if selector:
+            if recommendations:
                 return CognitiveMapQueryResponse(
-                    found=True, result={"selector": selector}, confidence=0.8
+                    found=True,
+                    result={"recommendations": recommendations},
+                    confidence=min(recommendations[0]["count"] / 100, 1.0) if recommendations else 0.0,
                 )
             else:
                 return CognitiveMapQueryResponse(
@@ -326,14 +345,23 @@ async def query_cognitive_map(
                 )
 
         elif request.query_type == "get_path":
-            path = await service.cognitive_map.get_navigation_path(
+            # Get learned navigation path
+            path = await cognitive_map.get_navigation_path(
                 from_url=request.parameters.get("from_url"),
                 to_url=request.parameters.get("to_url"),
             )
 
             if path:
                 return CognitiveMapQueryResponse(
-                    found=True, result={"path": path}, confidence=0.9
+                    found=True,
+                    result={
+                        "action_sequence": path.action_sequence,
+                        "success_count": path.success_count,
+                        "failure_count": path.failure_count,
+                        "confidence_score": path.confidence_score,
+                        "avg_duration_ms": path.avg_duration_ms,
+                    },
+                    confidence=path.confidence_score,
                 )
             else:
                 return CognitiveMapQueryResponse(
@@ -386,19 +414,90 @@ async def analyze_page(
     )
 
 
+@router.get("/cognitive-map/important-pages")
+async def get_important_pages(
+    min_score: float = 50.0,
+    limit: int = 10,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    db: AsyncSession = Depends(get_db),  # Day 3: Database session
+):
+    """
+    Get most important pages from cognitive map. **Auth required.**
+
+    Day 3: Returns pages ranked by importance score (visit frequency, recency,
+    success rate, learned selectors).
+
+    Args:
+        min_score: Minimum importance score (0-100)
+        limit: Maximum number of pages to return
+        token_data: JWT token (auto-injected)
+        db: Database session (auto-injected)
+
+    Returns:
+        List of important pages with metadata
+    """
+    try:
+        cognitive_map = CognitiveMapService(db)
+        pages = await cognitive_map.get_important_pages(
+            min_score=min_score, limit=limit
+        )
+        return {"pages": [page.to_dict() for page in pages], "count": len(pages)}
+
+    except Exception as e:
+        logger.error(f"Failed to get important pages: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/cognitive-map/recent-pages")
+async def get_recent_pages(
+    hours: int = 24,
+    limit: int = 10,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    db: AsyncSession = Depends(get_db),  # Day 3: Database session
+):
+    """
+    Get recently visited pages. **Auth required.**
+
+    Day 3: Returns pages visited within the specified time window.
+
+    Args:
+        hours: Number of hours to look back
+        limit: Maximum number of pages
+        token_data: JWT token (auto-injected)
+        db: Database session (auto-injected)
+
+    Returns:
+        List of recent pages
+    """
+    try:
+        cognitive_map = CognitiveMapService(db)
+        pages = await cognitive_map.get_recent_pages(hours=hours, limit=limit)
+        return {"pages": [page.to_dict() for page in pages], "count": len(pages)}
+
+    except Exception as e:
+        logger.error(f"Failed to get recent pages: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/stats")
 async def get_stats(
     token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
-    service=Depends(get_maba_service)
+    service=Depends(get_maba_service),
+    db: AsyncSession = Depends(get_db),  # Day 3: Database session
 ):
     """
     Get MABA statistics. **Auth required.**
 
+    Day 3: Returns comprehensive statistics including cognitive map metrics
+    from database.
+
     Args:
         token_data: JWT token (auto-injected)
+        service: MABA service instance (auto-injected)
+        db: Database session (auto-injected)
 
     Returns:
-        Statistics dict
+        Statistics dict with cognitive map and browser info
     """
     try:
         # Check if service has a get_stats method (for testing/mocking)
@@ -409,10 +508,10 @@ async def get_stats(
                 return stats
             return await stats
 
-        # Otherwise collect stats from components
-        cognitive_map_stats = (
-            await service.cognitive_map.get_stats() if service.cognitive_map else {}
-        )
+        # Day 3: Collect stats from components
+        cognitive_map = CognitiveMapService(db)
+        cognitive_map_stats = await cognitive_map.get_statistics()
+
         browser_health = (
             await service.browser_controller.health_check()
             if service.browser_controller
