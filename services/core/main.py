@@ -25,8 +25,9 @@ from consciousness.api import create_consciousness_api
 from consciousness.system import ConsciousnessConfig, ConsciousnessSystem
 from governance_sse import create_governance_api
 
-# ADW (AI-Driven Workflows) router
-from adw_router import router as adw_router
+# TODO: ADW Router removed - non-functional feature (2024-11-14)
+# Reimplementation required if needed in future versions
+# from adw_router import router as adw_router
 
 # HITL imports for Governance SSE
 from hitl import DecisionQueue, HITLConfig, HITLDecisionFramework, OperatorInterface, SLAConfig
@@ -205,9 +206,9 @@ async def startup_event():
     app.include_router(governance_router, prefix="/api/v1")
     print("✅ Governance API routes registered at /api/v1/governance/*")
 
-    # Register ADW (AI-Driven Workflows) API routes
-    app.include_router(adw_router)
-    print("✅ ADW API routes registered at /api/adw/*")
+    # TODO: ADW Router removed - non-functional feature (2024-11-14)
+    # app.include_router(adw_router)
+    # print("✅ ADW API routes registered at /api/adw/*")
 
     # Initialize Consciousness System
     print("🧠 Initializing Consciousness System...")

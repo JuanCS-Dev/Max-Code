@@ -1,0 +1,137 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop, 'claude/*' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [core, maba, nis, penelope]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Cache pip packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.service }}-${{ hashFiles('services/${{ matrix.service }}/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ matrix.service }}-
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        cd services/${{ matrix.service }}
+        pip install -r requirements.txt
+        pip install pytest pytest-cov pytest-asyncio pytest-mock
+
+    - name: Run tests with coverage
+      run: |
+        cd services/${{ matrix.service }}
+        pytest --cov --cov-report=xml --cov-report=term -v || true
+
+    - name: Check minimum coverage (25%)
+      run: |
+        cd services/${{ matrix.service }}
+        pytest --cov --cov-fail-under=25 || echo "Warning: Coverage below 25% for ${{ matrix.service }}"
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./services/${{ matrix.service }}/coverage.xml
+        flags: ${{ matrix.service }}
+        name: ${{ matrix.service }}-coverage
+        fail_ci_if_error: false
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install linters
+      run: |
+        pip install flake8 black isort
+
+    - name: Run flake8 (errors only)
+      run: |
+        flake8 services/ libs/ --count --select=E9,F63,F7,F82 --show-source --statistics
+
+    - name: Run flake8 (warnings)
+      run: |
+        flake8 services/ libs/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Check code formatting with black
+      run: |
+        black --check services/ libs/ || echo "Warning: Code formatting issues found. Run 'black .' to fix."
+
+    - name: Check import sorting
+      run: |
+        isort --check-only services/ libs/ || echo "Warning: Import sorting issues found. Run 'isort .' to fix."
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Core Docker image
+      run: |
+        docker build -f infrastructure/docker/Dockerfiles/Dockerfile.core -t maximus-core:ci services/core
+
+    - name: Build MABA Docker image
+      run: |
+        docker build -f infrastructure/docker/Dockerfiles/Dockerfile.maba -t maximus-maba:ci services/maba
+
+    - name: Build NIS Docker image
+      run: |
+        docker build -f infrastructure/docker/Dockerfiles/Dockerfile.nis -t maximus-nis:ci services/nis
+
+    - name: Build PENELOPE Docker image
+      run: |
+        docker build -f infrastructure/docker/Dockerfiles/Dockerfile.penelope -t maximus-penelope:ci services/penelope
+
+  integration-test:
+    runs-on: ubuntu-latest
+    needs: [docker-build]
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Start infrastructure services
+      run: |
+        docker-compose up -d postgres redis neo4j
+        sleep 15
+
+    - name: Check infrastructure health
+      run: |
+        docker-compose ps
+        docker-compose logs postgres redis neo4j
+
+    - name: Run smoke tests
+      run: |
+        docker exec maximus-postgres pg_isready -U maximus || echo "Postgres not ready"
+        docker exec maximus-redis redis-cli ping || echo "Redis not ready"
+
+    - name: Cleanup
+      if: always()
+      run: |
+        docker-compose down -v

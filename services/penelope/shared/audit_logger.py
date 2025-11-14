@@ -95,15 +95,17 @@ except ImportError:
 # ============================================================================
 
 
+import os
+
 class AuditConfig:
     """Audit logging configuration."""
 
     # PostgreSQL connection (override via environment)
-    DB_HOST = "localhost"
-    DB_PORT = 5432
-    DB_NAME = "vertice_audit"
-    DB_USER = "vertice"
-    DB_PASSWORD = "changeme"
+    DB_HOST = os.getenv("AUDIT_DB_HOST", "localhost")
+    DB_PORT = int(os.getenv("AUDIT_DB_PORT", "5432"))
+    DB_NAME = os.getenv("AUDIT_DB_NAME", "vertice_audit")
+    DB_USER = os.getenv("AUDIT_DB_USER", "vertice")
+    DB_PASSWORD = os.getenv("AUDIT_DB_PASSWORD", "CHANGE_ME_IN_PRODUCTION")
 
     # Table name
     TABLE_NAME = "audit_logs"
