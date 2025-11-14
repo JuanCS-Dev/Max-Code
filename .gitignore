@@ -151,3 +151,21 @@ site/
 prometheus_data/
 grafana_data/
 loki_data/
+
+# ============================================
+# Legacy / Archive Prevention
+# Added: 2025-11-14 (DEBT-006 cleanup)
+# ============================================
+
+# Old/backup files (prevent accidental commits)
+*_old.py
+*_backup.py
+*.old
+*.backup
+
+# Archived directories (git history is enough)
+archived/
+archived_*/
+*_archived/
+archive_old/
+
