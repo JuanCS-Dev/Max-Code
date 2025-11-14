@@ -155,6 +155,43 @@ class EnhancedCompleter(Completer):
                 'icon': '📄',
                 'description': 'Fetch URL (alias) - Example: /web-fetch https://docs.python.org'
             },
+            # Development & Quality Tools (Phase 4)
+            '/test': {
+                'icon': '🧪',
+                'description': 'Run tests with coverage - Example: /test --unit'
+            },
+            '/lint': {
+                'icon': '🔍',
+                'description': 'Run linters (flake8, black, isort) - Example: /lint --fix'
+            },
+            '/format': {
+                'icon': '🎨',
+                'description': 'Format code with black and isort - Example: /format'
+            },
+            '/typecheck': {
+                'icon': '🔬',
+                'description': 'Run mypy type checking - Example: /typecheck'
+            },
+            '/security': {
+                'icon': '🔒',
+                'description': 'Security scan (pip-audit, bandit) - Example: /security --full'
+            },
+            '/audit': {
+                'icon': '📋',
+                'description': 'Comprehensive audit script - Example: /audit'
+            },
+            '/coverage': {
+                'icon': '📊',
+                'description': 'Generate coverage reports - Example: /coverage'
+            },
+            '/ci': {
+                'icon': '🚀',
+                'description': 'Run CI checks locally - Example: /ci'
+            },
+            '/pre-push': {
+                'icon': '✅',
+                'description': 'Validate before pushing - Example: /pre-push'
+            },
         }
 
     def get_completions(self, document, complete_event):
@@ -893,10 +930,15 @@ class EnhancedREPL:
                     tool_command = cmd[1:].capitalize() + ' ' + args
                     self._process_natural(tool_command)
 
+                # Verificar se é comando de dev (Phase 4)
+                elif cmd in ['/test', '/lint', '/format', '/typecheck', '/security', '/audit', '/coverage', '/ci', '/pre-push']:
+                    self._handle_dev_command(cmd, args)
+
                 else:
                     console.print(f"\n[red]❌ Unknown command: {cmd}[/red]")
                     console.print("[yellow]💡 Type /help or press Ctrl+P for commands[/yellow]")
-                    console.print("[yellow]💡 Tools: /read, /write, /edit, /search, /grep, /run[/yellow]\n")
+                    console.print("[yellow]💡 Tools: /read, /write, /edit, /search, /grep, /run[/yellow]")
+                    console.print("[yellow]💡 Dev: /test, /lint, /format, /typecheck, /security, /audit, /ci[/yellow]\n")
 
             # Natural language
             else:
@@ -1358,6 +1400,67 @@ class EnhancedREPL:
                 return content
 
         return content
+
+    def _handle_dev_command(self, cmd: str, args: str):
+        """
+        Handle development commands (Phase 4).
+
+        Commands: /test, /lint, /format, /typecheck, /security, /audit, /coverage, /ci, /pre-push
+        """
+        import subprocess
+
+        console.print(f"\n[cyan]🚀 Running {cmd}...[/cyan]\n")
+
+        # Map commands to subprocess calls
+        cmd_map = {
+            '/test': ['pytest', 'tests/', '--cov=sdk', '--cov=cli', '--cov=config', '--cov-report=term-missing'],
+            '/lint': ['flake8', 'sdk/', 'cli/', 'config/', '--count', '--statistics'],
+            '/format': ['black', 'sdk/', 'cli/', 'config/', 'tests/'],
+            '/typecheck': ['mypy', 'sdk/', 'cli/', 'config/', '--config-file=mypy.ini'],
+            '/security': ['pip-audit', '--desc'],
+            '/audit': ['bash', 'audit-cli.sh'],
+            '/coverage': ['pytest', 'tests/', '--cov=sdk', '--cov=cli', '--cov=config', '--cov-report=html', '--cov-report=xml'],
+            '/ci': ['make', 'ci'],
+            '/pre-push': ['make', 'pre-push'],
+        }
+
+        # Handle --fix flag for lint
+        if cmd == '/lint' and '--fix' in args:
+            console.print("[yellow]→[/yellow] Formatting with black...")
+            subprocess.run(['black', 'sdk/', 'cli/', 'config/', 'tests/'])
+            console.print("\n[yellow]→[/yellow] Sorting imports with isort...")
+            subprocess.run(['isort', 'sdk/', 'cli/', 'config/', 'tests/'])
+            console.print("\n[yellow]→[/yellow] Checking with flake8...")
+            subprocess.run(cmd_map['/lint'])
+            console.print("\n[green]✅ Code formatted and linted![/green]\n")
+            return
+
+        # Handle --full flag for security
+        if cmd == '/security' and '--full' in args:
+            console.print("[yellow]→[/yellow] Running pip-audit...")
+            subprocess.run(['pip-audit', '--desc', '--fix-dry-run'])
+            console.print("\n[yellow]→[/yellow] Running bandit...")
+            subprocess.run(['bandit', '-r', 'sdk/', 'cli/', 'config/'])
+            console.print("\n[green]✅ Security scan complete![/green]\n")
+            return
+
+        # Handle --unit flag for test
+        if cmd == '/test' and '--unit' in args:
+            console.print("[yellow]→[/yellow] Running unit tests...")
+            subprocess.run(['pytest', 'tests/unit/', '-v'])
+            console.print("\n[green]✅ Unit tests complete![/green]\n")
+            return
+
+        # Run default command
+        if cmd in cmd_map:
+            result = subprocess.run(cmd_map[cmd])
+
+            if result.returncode == 0:
+                console.print(f"\n[green]✅ {cmd} completed successfully![/green]\n")
+            else:
+                console.print(f"\n[red]❌ {cmd} failed![/red]\n")
+        else:
+            console.print(f"\n[red]❌ Unknown dev command: {cmd}[/red]\n")
 
     def run(self):
         """Run enhanced REPL with magnificent visuals"""

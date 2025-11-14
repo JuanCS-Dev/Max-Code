@@ -635,5 +635,13 @@ except ImportError as e:
     console.print(f"[yellow]Warning: Health command not available: {e}[/yellow]")
 
 
+# Import and register Development commands (PHASE 4 - CI/CD & Quality Gates)
+try:
+    from cli.dev_commands import dev as dev_cmd
+    cli.add_command(dev_cmd, name='dev')
+except ImportError as e:
+    console.print(f"[yellow]Warning: Dev commands not available: {e}[/yellow]")
+
+
 if __name__ == '__main__':
     cli()
