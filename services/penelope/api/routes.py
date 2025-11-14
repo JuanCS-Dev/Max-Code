@@ -18,7 +18,10 @@ License: Proprietary
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+
+# Day 2: JWT Authentication
+from libs.auth import verify_token
 
 from models import DiagnoseRequest
 
@@ -226,14 +229,18 @@ async def get_healing_history(
     limit: int = Query(50, ge=1, le=500, description="Número máximo de eventos"),
     offset: int = Query(0, ge=0, description="Offset para paginação"),
     severity: str | None = Query(None, description="Filtrar por severidade (P0-P3)"),
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
 ):
     """
-    Retorna histórico de intervenções de healing.
+    Retorna histórico de intervenções de healing. **Auth required.**
+
+    Day 2: Protected by JWT authentication.
 
     Args:
         limit: Número máximo de eventos a retornar
         offset: Offset para paginação
         severity: Filtrar por severidade (P0, P1, P2, P3)
+        token_data: JWT token (auto-injected)
 
     Returns:
         Lista de eventos de healing com paginação
@@ -305,9 +312,14 @@ async def get_healing_history(
 
 
 @router.post("/diagnose", status_code=status.HTTP_201_CREATED)
-async def diagnose_anomaly(request: DiagnoseRequest):
+async def diagnose_anomaly(
+    request: DiagnoseRequest,
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
+):
     """
-    Diagnostica uma anomalia e recomenda intervenção.
+    Diagnostica uma anomalia e recomenda intervenção. **Auth required.**
+
+    Day 2: Protected by JWT authentication.
 
     Integra com:
     - Sophia Engine: Decide se deve intervir
@@ -316,6 +328,7 @@ async def diagnose_anomaly(request: DiagnoseRequest):
 
     Args:
         request: Dados da anomalia
+        token_data: JWT token (auto-injected)
 
     Returns:
         Diagnóstico com recomendação de intervenção
@@ -400,13 +413,17 @@ async def get_patches(
         None, description="Filtrar por status (pending, validated, deployed, failed)"
     ),
     limit: int = Query(20, ge=1, le=100),
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
 ):
     """
-    Retorna lista de patches gerados.
+    Retorna lista de patches gerados. **Auth required.**
+
+    Day 2: Protected by JWT authentication.
 
     Args:
         status_filter: Filtrar por status
         limit: Número máximo de patches a retornar
+        token_data: JWT token (auto-injected)
 
     Returns:
         Lista de patches com metadados
@@ -481,14 +498,18 @@ async def query_wisdom_base(
     similarity_threshold: float = Query(
         0.8, ge=0.0, le=1.0, description="Limiar mínimo de similaridade"
     ),
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
 ):
     """
-    Consulta Wisdom Base por precedentes históricos.
+    Consulta Wisdom Base por precedentes históricos. **Auth required.**
+
+    Day 2: Protected by JWT authentication.
 
     Args:
         anomaly_type: Tipo de anomalia
         service: Serviço específico (opcional)
         similarity_threshold: Limiar de similaridade
+        token_data: JWT token (auto-injected)
 
     Returns:
         Lista de precedentes ordenados por similaridade

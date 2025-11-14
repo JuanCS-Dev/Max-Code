@@ -85,12 +85,17 @@ async def create_browser_session(
 
 
 @router.delete("/sessions/{session_id}")
-async def close_browser_session(session_id: str, service=Depends(get_maba_service)):
+async def close_browser_session(
+    session_id: str,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
+):
     """
-    Close a browser session.
+    Close a browser session. **Auth required.**
 
     Args:
         session_id: Session ID to close
+        token_data: JWT token (auto-injected)
 
     Returns:
         Success message
@@ -111,14 +116,18 @@ async def close_browser_session(session_id: str, service=Depends(get_maba_servic
 
 @router.post("/navigate", response_model=BrowserActionResponse)
 async def navigate(
-    request: NavigationRequest, session_id: str, service=Depends(get_maba_service)
+    request: NavigationRequest,
+    session_id: str,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
 ):
     """
-    Navigate to a URL.
+    Navigate to a URL. **Auth required.**
 
     Args:
         request: Navigation request
         session_id: Browser session ID
+        token_data: JWT token (auto-injected)
 
     Returns:
         Navigation result
@@ -148,14 +157,18 @@ async def navigate(
 
 @router.post("/click", response_model=BrowserActionResponse)
 async def click(
-    request: ClickRequest, session_id: str, service=Depends(get_maba_service)
+    request: ClickRequest,
+    session_id: str,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
 ):
     """
-    Click an element.
+    Click an element. **Auth required.**
 
     Args:
         request: Click request
         session_id: Browser session ID
+        token_data: JWT token (auto-injected)
 
     Returns:
         Click result
@@ -178,14 +191,18 @@ async def click(
 
 @router.post("/type", response_model=BrowserActionResponse)
 async def type_text(
-    request: TypeRequest, session_id: str, service=Depends(get_maba_service)
+    request: TypeRequest,
+    session_id: str,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
 ):
     """
-    Type text into an element.
+    Type text into an element. **Auth required.**
 
     Args:
         request: Type request
         session_id: Browser session ID
+        token_data: JWT token (auto-injected)
 
     Returns:
         Type result
@@ -209,14 +226,18 @@ async def type_text(
 
 @router.post("/screenshot", response_model=BrowserActionResponse)
 async def screenshot(
-    request: ScreenshotRequest, session_id: str, service=Depends(get_maba_service)
+    request: ScreenshotRequest,
+    session_id: str,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
 ):
     """
-    Take a screenshot.
+    Take a screenshot. **Auth required.**
 
     Args:
         request: Screenshot request
         session_id: Browser session ID
+        token_data: JWT token (auto-injected)
 
     Returns:
         Screenshot result with base64 data
@@ -239,14 +260,18 @@ async def screenshot(
 
 @router.post("/extract", response_model=BrowserActionResponse)
 async def extract_data(
-    request: ExtractRequest, session_id: str, service=Depends(get_maba_service)
+    request: ExtractRequest,
+    session_id: str,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
 ):
     """
-    Extract data from current page.
+    Extract data from current page. **Auth required.**
 
     Args:
         request: Extract request
         session_id: Browser session ID
+        token_data: JWT token (auto-injected)
 
     Returns:
         Extracted data
@@ -269,13 +294,16 @@ async def extract_data(
 
 @router.post("/cognitive-map/query", response_model=CognitiveMapQueryResponse)
 async def query_cognitive_map(
-    request: CognitiveMapQueryRequest, service=Depends(get_maba_service)
+    request: CognitiveMapQueryRequest,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
 ):
     """
-    Query the cognitive map for learned information.
+    Query the cognitive map for learned information. **Auth required.**
 
     Args:
         request: Cognitive map query request
+        token_data: JWT token (auto-injected)
 
     Returns:
         Query results
@@ -322,10 +350,13 @@ async def query_cognitive_map(
 
 @router.post("/analyze", response_model=PageAnalysisResponse)
 async def analyze_page(
-    request: PageAnalysisRequest, session_id: str, service=Depends(get_maba_service)
+    request: PageAnalysisRequest,
+    session_id: str,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
 ):
     """
-    Analyze current page with LLM.
+    Analyze current page with LLM. **Auth required.**
 
     This endpoint uses Claude to analyze the page content and provide
     insights, recommendations, or structured data extraction.
@@ -356,9 +387,15 @@ async def analyze_page(
 
 
 @router.get("/stats")
-async def get_stats(service=Depends(get_maba_service)):
+async def get_stats(
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
+):
     """
-    Get MABA statistics.
+    Get MABA statistics. **Auth required.**
+
+    Args:
+        token_data: JWT token (auto-injected)
 
     Returns:
         Statistics dict

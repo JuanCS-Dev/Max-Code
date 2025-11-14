@@ -14,7 +14,7 @@ import os
 from typing import Any
 
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from _demonstration.maximus_integrated import MaximusIntegrated
 from pydantic import BaseModel
@@ -32,13 +32,13 @@ from governance_sse import create_governance_api
 # HITL imports for Governance SSE
 from hitl import DecisionQueue, HITLConfig, HITLDecisionFramework, OperatorInterface, SLAConfig
 
-# Import Service Registry client
-try:
-    from libs.registry.client import auto_register_service, RegistryClient
-    REGISTRY_AVAILABLE = True
-except ImportError:
-    REGISTRY_AVAILABLE = False
-    print("⚠️  Service Registry client not available - running standalone")
+# Day 2: Import security & health libraries
+from libs.auth import verify_token
+from libs.health import HealthChecker
+from libs.validation import HealthResponse
+
+# Service Registry removed (Day 1) - using direct URLs
+REGISTRY_AVAILABLE = False
 
 # Import Constitutional v3.0 modules (optional)
 try:
@@ -99,8 +99,22 @@ class QueryRequest(BaseModel):
 async def startup_event():
     """Initializes the Maximus AI system and starts its autonomic core on application startup."""
 
+    # Day 2: Initialize Health Checker
+    global health_checker
+    service_version = os.getenv("SERVICE_VERSION", "1.0.0")
+
+    health_checker = HealthChecker(
+        service_name="maximus-core",
+        version=service_version,
+        timeout=5
+    )
+    # Add dependency checks
+    health_checker.add_postgres_check()  # For ToM Engine, episodic memory
+    health_checker.add_redis_check()  # For ToM cache
+    logger.info("✅ Day 2: HealthChecker initialized with Postgres + Redis")
+
     # Constitutional v3.0 Initialization (optional)
-    global metrics_exporter, constitutional_tracer, health_checker
+    global metrics_exporter, constitutional_tracer
     service_version = os.getenv("SERVICE_VERSION", "1.0.0")
 
     if CONSTITUTIONAL_AVAILABLE:
@@ -146,7 +160,7 @@ async def startup_event():
     else:
         logger.warning("⚠️ Constitutional v3.0 not available - skipping")
 
-    global maximus_ai, decision_queue, operator_interface, decision_framework, consciousness_system, _heartbeat_task
+    global maximus_ai, decision_queue, operator_interface, decision_framework, consciousness_system
 
     print("🚀 Starting Maximus Core Service...")
 
@@ -236,36 +250,19 @@ async def startup_event():
         print("   Continuing without consciousness monitoring...")
         consciousness_system = None
 
-    # Auto-register with Service Registry
-    if REGISTRY_AVAILABLE:
-        try:
-            _heartbeat_task = await auto_register_service(
-                service_name="maximus_core_service",
-                port=8150,  # Internal container port
-                health_endpoint="/health",
-                metadata={"category": "maximus_core", "version": "1.0.0"}
-            )
-            print("✅ Registered with Vértice Service Registry")
-        except Exception as e:
-            print(f"⚠️  Failed to register with service registry: {e}")
+    # Service Registry removed (Day 1) - using direct URLs via environment variables
 
     print("✅ Maximus Core Service started successfully with full HITL Governance integration")
+    print("✅ Day 2: HealthChecker integrated, /query endpoint protected with JWT")
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Shuts down the Maximus AI system and its autonomic core on application shutdown."""
-    global maximus_ai, decision_queue, consciousness_system, _heartbeat_task
+    global maximus_ai, decision_queue, consciousness_system
     print("👋 Shutting down Maximus Core Service...")
 
-    # Deregister from Service Registry
-    if _heartbeat_task:
-        _heartbeat_task.cancel()
-    if REGISTRY_AVAILABLE:
-        try:
-            await RegistryClient.deregister("maximus_core_service")
-        except:
-            pass
+    # Service Registry removed (Day 1) - no deregistration needed
 
     # Stop Consciousness System
     if consciousness_system:
@@ -285,11 +282,14 @@ async def shutdown_event():
     print("🛑 Maximus Core Service shut down.")
 
 
-@app.get("/health")
+@app.get("/health", response_model=HealthResponse)
 async def health_check() -> dict[str, Any]:
-    """Performs a comprehensive health check of the Maximus Core Service.
+    """Performs a comprehensive health check of the Maximus Core Service. **Public endpoint (no auth).**
+
+    Day 2: Uses HealthChecker for infrastructure dependencies (Postgres, Redis).
 
     Checks:
+    - Infrastructure: PostgreSQL, Redis (via HealthChecker)
     - MAXIMUS AI status
     - Consciousness System health (TIG, ESGT, Arousal, Safety)
     - PrefrontalCortex status (social cognition)
@@ -299,10 +299,16 @@ async def health_check() -> dict[str, Any]:
     Returns:
         Dict[str, Any]: Comprehensive health status with component breakdown
     """
+    # Day 2: Get infrastructure health from HealthChecker
+    base_health = await health_checker.check_all()
+
+    # Extend with Core-specific components
     health_status = {
-        "status": "healthy",
-        "message": "Maximus Core Service is operational.",
-        "timestamp": __import__("time").time(),
+        "status": base_health["status"],
+        "service": base_health["service"],
+        "version": base_health["version"],
+        "timestamp": base_health["timestamp"],
+        "dependencies": base_health.get("dependencies", {}),
         "components": {}
     }
 
@@ -406,11 +412,17 @@ async def health_check() -> dict[str, Any]:
 
 
 @app.post("/query")
-async def process_query_endpoint(request: QueryRequest) -> dict[str, Any]:
-    """Processes a natural language query using the Maximus AI.
+async def process_query_endpoint(
+    request: QueryRequest,
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
+) -> dict[str, Any]:
+    """Processes a natural language query using the Maximus AI. **Auth required.**
+
+    Day 2: Protected by JWT authentication.
 
     Args:
         request (QueryRequest): The request body containing the query and optional context.
+        token_data: JWT token (auto-injected)
 
     Returns:
         Dict[str, Any]: The response from the Maximus AI, including the final answer, confidence score, and other metadata.
