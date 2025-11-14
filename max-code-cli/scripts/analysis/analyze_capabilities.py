@@ -47,8 +47,9 @@ class CapabilityAnalyzer:
         for py_file in py_files:
             try:
                 total_lines += len(py_file.read_text(errors="ignore").splitlines())
-            except:
-                pass
+            except (OSError, UnicodeDecodeError):
+                # Skip files that can't be read (I/O errors, binary files)
+                continue
         
         return {
             "total_python_files": len(py_files),
@@ -228,8 +229,9 @@ class CapabilityAnalyzer:
                 content = py_file.read_text(errors="ignore").lower()
                 for keyword in keywords:
                     planning_indicators["planning_keywords_count"] += content.count(keyword)
-            except:
-                pass
+            except (OSError, UnicodeDecodeError):
+                # Skip files that can't be read
+                continue
         
         return planning_indicators
     
@@ -263,11 +265,12 @@ class CapabilityAnalyzer:
                 
                 if "subprocess.run" in content or "os.system" in content:
                     exec_info["can_run_commands"] = True
-                
+
                 if "docker" in content.lower() or "sandbox" in content.lower():
                     exec_info["has_sandbox"] = True
-            except:
-                pass
+            except (OSError, UnicodeDecodeError):
+                # Skip files that can't be read
+                continue
         
         return exec_info
     
@@ -304,8 +307,9 @@ class CapabilityAnalyzer:
                 limit_match = re.search(r'context.*(?:limit|size|max).*?(\d+)', content)
                 if limit_match:
                     context_info["context_size_limit"] = int(limit_match.group(1))
-            except:
-                pass
+            except (OSError, UnicodeDecodeError):
+                # Skip files that can't be read
+                continue
         
         return context_info
     
@@ -332,10 +336,11 @@ class CapabilityAnalyzer:
                 
                 if "fallback" in content.lower() or "alternative" in content.lower():
                     error_info["has_fallback"] = True
-                
+
                 error_info["error_recovery_count"] += content.lower().count("recover") + content.lower().count("fix error")
-            except:
-                pass
+            except (OSError, UnicodeDecodeError):
+                # Skip files that can't be read
+                continue
         
         return error_info
     
@@ -371,8 +376,9 @@ class CapabilityAnalyzer:
                 
                 for keyword in keywords:
                     multi_step_info["step_keywords_count"] += content.count(keyword)
-            except:
-                pass
+            except (OSError, UnicodeDecodeError):
+                # Skip files that can't be read
+                continue
         
         return multi_step_info
     
@@ -411,8 +417,9 @@ class CapabilityAnalyzer:
                 
                 for keyword in keywords:
                     self_correction_info["correction_keywords_count"] += content.count(keyword)
-            except:
-                pass
+            except (OSError, UnicodeDecodeError):
+                # Skip files that can't be read
+                continue
         
         return self_correction_info
     
