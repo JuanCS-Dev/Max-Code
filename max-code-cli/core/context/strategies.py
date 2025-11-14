@@ -323,6 +323,8 @@ class LLMSummaryStrategy(BaseCompactionStrategy):
         """
         super().__init__(config)
         self.llm_client = llm_client
+        self._summary_cache = {}  # Cache: message_hash -> summary
+        self._cache_max_size = 100  # Limit cache size
 
     def compact(
         self,
@@ -389,7 +391,15 @@ class LLMSummaryStrategy(BaseCompactionStrategy):
         return compacted
 
     def _summarize_with_llm(self, messages: List[Message]) -> str:
-        """Generate real LLM-based summary of conversation history"""
+        """Generate real LLM-based summary of conversation history (with caching)"""
+        # Generate cache key from message contents
+        cache_key = self._generate_cache_key(messages)
+
+        # Check cache first
+        if cache_key in self._summary_cache:
+            logger.debug(f"Using cached summary for {len(messages)} messages")
+            return self._summary_cache[cache_key]
+
         # Build prompt for summarization
         conversation_text = "\n\n".join([
             f"[{msg.role.value}]: {msg.content[:500]}"  # Truncate long messages
@@ -414,12 +424,40 @@ Summary:"""
             )
 
             summary = response.content[0].text if response.content else ""
-            return f"[Context Summary]: {summary}"
+            summary_text = f"[Context Summary]: {summary}"
+
+            # Cache the result
+            self._cache_summary(cache_key, summary_text)
+
+            return summary_text
 
         except Exception as e:
             logger.error(f"LLM summarization error: {e}")
             # Fallback to placeholder if LLM fails
             return self._create_summary_placeholder(messages)
+
+    def _generate_cache_key(self, messages: List[Message]) -> str:
+        """Generate cache key from message contents"""
+        import hashlib
+
+        # Create deterministic key from message contents
+        content_str = "".join([
+            f"{msg.role.value}:{msg.content[:100]}"
+            for msg in messages
+        ])
+        return hashlib.md5(content_str.encode()).hexdigest()
+
+    def _cache_summary(self, key: str, summary: str):
+        """Cache summary with LRU eviction"""
+        # Implement simple LRU: remove oldest if over limit
+        if len(self._summary_cache) >= self._cache_max_size:
+            # Remove first (oldest) key
+            oldest_key = next(iter(self._summary_cache))
+            del self._summary_cache[oldest_key]
+            logger.debug(f"Evicted oldest cache entry (size: {len(self._summary_cache)})")
+
+        self._summary_cache[key] = summary
+        logger.debug(f"Cached summary (cache size: {len(self._summary_cache)})")
 
     def _create_summary_placeholder(self, messages: List[Message]) -> str:
         """Create placeholder summary (fallback when LLM unavailable)"""
