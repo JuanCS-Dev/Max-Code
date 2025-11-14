@@ -447,6 +447,416 @@ PENELOPE guia o usuário para completar tarefas complexas.
 
 ---
 
+## 🎬 Exemplos Práticos de Uso Real
+
+### Exemplo 1: Login Automático com Auto-Healing
+
+```python
+from penelope_integration import PageAnalyzer, AutoHealer
+import base64
+
+async def login_with_intelligence(page, email, password):
+    """Login inteligente que se auto-cura quando seletores mudam."""
+
+    # Initialize PENELOPE components
+    analyzer = PageAnalyzer(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    healer = AutoHealer(analyzer=analyzer, max_heal_attempts=3)
+
+    try:
+        # Try to fill email field
+        await page.fill("input[name='email']", email)
+    except Exception as e:
+        # Selector changed! Use auto-healing
+        healed = await healer.heal_failed_action(
+            failed_action={"action": "type", "selector": "input[name='email']"},
+            error_message=str(e),
+            page_html=await page.content()
+        )
+        if healed:
+            await page.fill(healed["selector"], email)
+        else:
+            raise Exception("Could not find email field")
+
+    try:
+        # Try to fill password field
+        await page.fill("input[name='password']", password)
+    except Exception as e:
+        healed = await healer.heal_failed_action(
+            failed_action={"action": "type", "selector": "input[name='password']"},
+            error_message=str(e),
+            page_html=await page.content()
+        )
+        if healed:
+            await page.fill(healed["selector"], password)
+
+    # Click submit button with auto-healing
+    try:
+        await page.click("button[type='submit']")
+    except Exception as e:
+        healed = await healer.heal_failed_action(
+            failed_action={"action": "click", "selector": "button[type='submit']"},
+            error_message=str(e),
+            page_html=await page.content()
+        )
+        if healed:
+            await page.click(healed["selector"])
+
+    # Check healing statistics
+    stats = healer.get_healing_stats()
+    print(f"✅ Login completed with {stats['success_rate']*100}% healing success rate")
+
+    await healer.close()
+```
+
+### Exemplo 2: Scraping Inteligente com Vision
+
+```python
+async def scrape_product_with_vision(page):
+    """Extrai dados de produto usando vision + LLM."""
+
+    analyzer = PageAnalyzer()
+
+    # Capture screenshot
+    screenshot_bytes = await page.screenshot()
+    screenshot_b64 = base64.b64encode(screenshot_bytes).decode('utf-8')
+
+    # Analyze with vision first
+    vision_analysis = await analyzer.analyze_screenshot(
+        screenshot_b64=screenshot_b64,
+        url=page.url,
+        question="What product information is visible?"
+    )
+
+    print(f"Vision Analysis: {vision_analysis['analysis']}")
+
+    # Extract structured data with LLM
+    html = await page.content()
+    product_data = await analyzer.extract_with_llm(
+        html=html,
+        schema={
+            "title": "Product name or title",
+            "price": "Product price with currency",
+            "availability": "In stock or out of stock",
+            "rating": "Customer rating (e.g., 4.5/5)",
+            "description": "Product description",
+            "features": "Key product features"
+        }
+    )
+
+    print(f"📊 Extracted Data:")
+    for key, value in product_data.items():
+        print(f"  {key}: {value}")
+
+    await analyzer.close()
+    return product_data
+```
+
+### Exemplo 3: Navegação Guiada por Objetivo
+
+```python
+async def navigate_to_goal(page, goal: str):
+    """Navega inteligentemente até completar um objetivo."""
+
+    client = PenelopeClient()
+    max_steps = 10
+    step_count = 0
+
+    while step_count < max_steps:
+        # Get current page state
+        current_url = page.url
+        html = await page.content()
+        screenshot = base64.b64encode(await page.screenshot()).decode('utf-8')
+
+        # Ask PENELOPE what to do next
+        suggestion = await client.suggest_action(
+            current_url=current_url,
+            goal=goal,
+            page_html=html,
+            screenshot=screenshot
+        )
+
+        print(f"Step {step_count + 1}: {suggestion['reasoning']}")
+
+        # Execute suggested action
+        if suggestion['action'] == 'click':
+            await page.click(suggestion['selector'])
+            await page.wait_for_load_state('networkidle')
+        elif suggestion['action'] == 'type':
+            await page.fill(suggestion['selector'], suggestion['text'])
+        elif suggestion['action'] == 'navigate':
+            await page.goto(suggestion['url'])
+        elif suggestion['action'] == 'complete':
+            print(f"✅ Goal achieved: {goal}")
+            break
+
+        step_count += 1
+
+    await client.close()
+```
+
+### Exemplo 4: Testing Resiliente com Auto-Healing
+
+```python
+import pytest
+
+@pytest.mark.asyncio
+async def test_checkout_flow_with_healing(page):
+    """Test de checkout que se auto-cura quando UI muda."""
+
+    healer = AutoHealer(max_heal_attempts=3)
+
+    # Helper function with auto-healing
+    async def resilient_click(selector, description):
+        try:
+            await page.click(selector, timeout=5000)
+        except Exception as e:
+            healed = await healer.heal_failed_action(
+                failed_action={"action": "click", "selector": selector},
+                error_message=str(e),
+                page_html=await page.content()
+            )
+            assert healed, f"Could not heal {description}"
+            await page.click(healed["selector"])
+
+    # Test flow with auto-healing
+    await page.goto("https://shop.example.com")
+    await resilient_click("button.add-to-cart", "add to cart button")
+    await resilient_click("a[href='/cart']", "cart link")
+    await resilient_click("button.checkout", "checkout button")
+    await resilient_click("button.complete-order", "complete order button")
+
+    # Verify order completed
+    assert "order-confirmation" in page.url
+
+    # Print healing statistics
+    stats = healer.get_healing_stats()
+    print(f"Test healing stats: {stats['successful']}/{stats['total_attempts']} successful")
+
+    await healer.close()
+```
+
+---
+
+## 💡 Melhores Práticas
+
+### 1. **Sempre Feche os Recursos**
+
+```python
+# ✅ CORRETO - Com context manager
+async with PenelopeClient() as client:
+    result = await client.suggest_action(...)
+
+# ✅ CORRETO - Explícito
+analyzer = PageAnalyzer()
+try:
+    result = await analyzer.analyze_screenshot(...)
+finally:
+    await analyzer.close()
+
+# ❌ ERRADO - Não fecha
+analyzer = PageAnalyzer()
+result = await analyzer.analyze_screenshot(...)  # Memory leak!
+```
+
+### 2. **Use Max History Size para Prevenir Memory Leaks**
+
+```python
+# ✅ CORRETO - Limite configurado
+healer = AutoHealer(max_history_size=100)  # Keeps last 100 entries
+
+# ❌ ERRADO - Pode crescer indefinidamente em produção
+healer = AutoHealer()  # Default 100 is ok, but be aware
+```
+
+### 3. **Passe API Key Explicitamente em Produção**
+
+```python
+# ✅ CORRETO - API key explícita
+analyzer = PageAnalyzer(api_key=os.getenv("ANTHROPIC_API_KEY"))
+
+# ⚠️ ATENÇÃO - Depende de variável de ambiente
+analyzer = PageAnalyzer()  # Ok para dev, mas configure em prod
+```
+
+### 4. **Use Fallback para PENELOPE Service**
+
+```python
+# ✅ CORRETO - Fallback para local analyzer
+try:
+    suggestion = await penelope_client.suggest_action(...)
+except Exception as e:
+    logger.warning(f"PENELOPE service unavailable: {e}")
+    # Fallback to local analyzer
+    local_analyzer = PageAnalyzer()
+    analysis = await local_analyzer.analyze_html_structure(...)
+```
+
+### 5. **Valide Confidence Scores**
+
+```python
+# ✅ CORRETO - Verifica confiança
+suggestion = await client.suggest_action(...)
+if suggestion['confidence'] < 0.8:
+    logger.warning("Low confidence suggestion, manual review recommended")
+    # Ask for human confirmation or use fallback
+```
+
+---
+
+## 🔧 Troubleshooting
+
+### Problema: "Anthropic API key not configured"
+
+**Causa:** PageAnalyzer criado sem API key.
+
+**Solução:**
+```python
+# Set environment variable
+export ANTHROPIC_API_KEY="sk-ant-..."
+
+# Or pass explicitly
+analyzer = PageAnalyzer(api_key="sk-ant-...")
+```
+
+### Problema: CSS ID selectors (#id) não estão sendo sugeridos
+
+**Causa:** Bug corrigido na versão atual.
+
+**Solução:** Atualize para versão mais recente (após commit e728f5f).
+
+### Problema: Memory leak com healing_history crescendo
+
+**Causa:** Versão antiga sem limite de histórico.
+
+**Solução:**
+```python
+# Use max_history_size
+healer = AutoHealer(max_history_size=100)
+```
+
+### Problema: JSON extraction falhando
+
+**Causa:** Claude retornou JSON em formato inesperado.
+
+**Solução:** Versão atual tem 3 estratégias de extração (direct, markdown block, embedded). Atualize para versão mais recente.
+
+### Problema: PENELOPE service retornando 503
+
+**Causa:** Serviço indisponível ou sobrecarregado.
+
+**Solução:** Use fallback para local analyzer:
+```python
+try:
+    result = await penelope_client.suggest_action(...)
+except httpx.HTTPError:
+    # Fallback
+    result = await local_analyzer.analyze_html_structure(...)
+```
+
+---
+
+## ⚡ Performance Tips
+
+### 1. **Truncamento de HTML Inteligente**
+
+HTML muito grande consome tokens desnecessariamente. PENELOPE já faz truncamento automático:
+
+- `analyze_html_structure`: máx 50,000 chars
+- `suggest_selectors`: máx 30,000 chars
+- `extract_with_llm`: máx 40,000 chars
+
+Truncamento é feito em tag boundaries para não quebrar HTML.
+
+### 2. **Concurrent Operations**
+
+PENELOPE suporta operações concorrentes:
+
+```python
+# ✅ CORRETO - Paralelo quando possível
+tasks = [
+    analyzer.analyze_screenshot(screenshot1, url1),
+    analyzer.analyze_screenshot(screenshot2, url2),
+    analyzer.analyze_screenshot(screenshot3, url3),
+]
+results = await asyncio.gather(*tasks)
+```
+
+### 3. **Reuse Clients**
+
+```python
+# ✅ CORRETO - Reutiliza client
+client = PenelopeClient()
+for page in pages:
+    result = await client.suggest_action(...)
+await client.close()
+
+# ❌ ERRADO - Cria novo client a cada vez
+for page in pages:
+    client = PenelopeClient()  # Overhead!
+    result = await client.suggest_action(...)
+    await client.close()
+```
+
+### 4. **Cache de Análises (Futuro)**
+
+Planejado para roadmap:
+
+```python
+# Futuro: Cache de análises repetidas
+cached_analyzer = CachedPageAnalyzer(cache_ttl=3600)
+result = await cached_analyzer.analyze_screenshot(...)  # Cached for 1 hour
+```
+
+### Performance Targets
+
+- Screenshot analysis: < 50ms (excluindo Claude API)
+- HTML truncation: < 10ms para 1MB HTML
+- Selector suggestion: < 50ms (excluindo Claude API)
+- Healing operation: < 100ms total
+- Concurrent throughput: 20+ operações simultâneas
+- Memory usage: < 1MB para 1000 healing history entries
+
+---
+
+## 📊 Monitoring & Observability
+
+### Healing Statistics
+
+```python
+healer = AutoHealer()
+
+# ... perform healings ...
+
+stats = healer.get_healing_stats()
+print(f"Total attempts: {stats['total_attempts']}")
+print(f"Successful: {stats['successful']}")
+print(f"Failed: {stats['failed']}")
+print(f"Success rate: {stats['success_rate']*100}%")
+print(f"Average attempts: {stats['average_attempts']}")
+```
+
+### Logging
+
+PENELOPE usa Python logging standard:
+
+```python
+import logging
+
+# Enable debug logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('penelope_integration')
+```
+
+Logs importantes:
+- `🧠 PENELOPE PageAnalyzer initialized with Claude`
+- `👁️ Analyzed screenshot of {url}`
+- `🎯 Suggested {n} selectors for '{description}'`
+- `🔧 Healing selector: {old} → {new}`
+- `✅ PENELOPE healed the action`
+- `⚠️ PENELOPE could not heal action`
+
+---
+
 ## 🚀 Roadmap
 
 - [ ] Cache de análises para performance
