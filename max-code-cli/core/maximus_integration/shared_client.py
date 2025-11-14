@@ -159,7 +159,9 @@ class SharedMaximusClient:
                     if 200 <= response.status_code < 300:
                         try:
                             response_data = response.json()
-                        except:
+                        except (ValueError, TypeError, AttributeError) as e:
+                            # JSON decode failed - return raw text
+                            # Common with non-JSON responses
                             response_data = {"text": response.text}
                         
                         logger.debug(

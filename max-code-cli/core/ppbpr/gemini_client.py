@@ -342,7 +342,9 @@ class GeminiClient:
                 if len(parts) >= 3:
                     domain = parts[2]  # http://domain.com/path
                     domains.add(domain)
-            except:
+            except (AttributeError, IndexError, TypeError):
+                # Source might not have uri attribute, or splitting failed
+                # Skip this source and continue
                 pass
 
         if len(domains) >= 3:
