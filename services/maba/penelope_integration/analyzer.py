@@ -18,6 +18,30 @@ from anthropic import Anthropic, AsyncAnthropic
 logger = logging.getLogger(__name__)
 
 
+def _safe_truncate_html(html: str, max_length: int) -> str:
+    """Safely truncate HTML without breaking tags.
+
+    Args:
+        html: HTML content to truncate
+        max_length: Maximum length
+
+    Returns:
+        Truncated HTML that won't break in middle of tags
+    """
+    if len(html) <= max_length:
+        return html
+
+    # Truncate to max_length
+    truncated = html[:max_length]
+
+    # Find last complete tag (avoid breaking mid-tag)
+    last_close = truncated.rfind('>')
+    if last_close > 0 and last_close > max_length * 0.8:  # At least 80% of desired length
+        truncated = truncated[:last_close + 1]
+
+    return truncated
+
+
 class PageAnalyzer:
     """Analyze web pages using Claude's vision and reasoning.
     
@@ -66,6 +90,11 @@ class PageAnalyzer:
         """
         if not self.client:
             raise ValueError("Anthropic API key not configured")
+
+        if not screenshot_b64:
+            raise ValueError("Screenshot is required")
+        if not url:
+            raise ValueError("URL is required")
 
         # Build prompt
         prompt = f"Analyze this screenshot from {url}."
@@ -150,8 +179,11 @@ Be concise but thorough."""
         if not self.client:
             raise ValueError("Anthropic API key not configured")
 
+        if not html:
+            raise ValueError("HTML content is required")
+
         # Truncate HTML if too long (Claude has token limits)
-        html_truncated = html[:50000] if len(html) > 50000 else html
+        html_truncated = _safe_truncate_html(html, 50000)
 
         prompt = f"""Analyze this HTML from {url}.
 
@@ -222,7 +254,12 @@ Provide a structured analysis."""
         if not self.client:
             raise ValueError("Anthropic API key not configured")
 
-        html_truncated = html[:30000] if len(html) > 30000 else html
+        if not html:
+            raise ValueError("HTML content is required")
+        if not element_description:
+            raise ValueError("Element description is required")
+
+        html_truncated = _safe_truncate_html(html, 30000)
 
         prompt = f"""Given this HTML, suggest CSS selectors to find: {element_description}
 
@@ -248,11 +285,17 @@ Only provide the selectors, no explanation."""
 
             # Parse selectors from response
             response_text = message.content[0].text
-            selectors = [
-                line.strip()
-                for line in response_text.split("\n")
-                if line.strip() and not line.strip().startswith("#")
-            ]
+            selectors = []
+            for line in response_text.split("\n"):
+                stripped = line.strip()
+                # Skip empty lines and comments (but NOT CSS ID selectors like #login-btn)
+                if not stripped:
+                    continue
+                # Skip comment lines that are actual comments (word after #)
+                if stripped.startswith("#") and len(stripped) > 1 and stripped[1].isalpha():
+                    continue
+                # Keep CSS selectors including ID selectors
+                selectors.append(stripped)
 
             logger.info(
                 f"🎯 Suggested {len(selectors)} selectors for '{element_description}'"
@@ -285,7 +328,12 @@ Only provide the selectors, no explanation."""
         if not self.client:
             raise ValueError("Anthropic API key not configured")
 
-        html_truncated = html[:40000] if len(html) > 40000 else html
+        if not html:
+            raise ValueError("HTML content is required")
+        if not schema or not isinstance(schema, dict):
+            raise ValueError("Valid schema dictionary is required")
+
+        html_truncated = _safe_truncate_html(html, 40000)
 
         schema_desc = "\n".join([f"- {key}: {desc}" for key, desc in schema.items()])
 
@@ -319,20 +367,44 @@ Only respond with the JSON object, no other text."""
 
             # Parse JSON from response
             import json
+            import re
 
-            response_text = message.content[0].text
-            # Try to extract JSON from response
+            response_text = message.content[0].text.strip()
+
+            # Try multiple extraction strategies
+            extracted_data = None
+
+            # Strategy 1: Direct JSON parse
             try:
                 extracted_data = json.loads(response_text)
             except json.JSONDecodeError:
-                # Try to find JSON in response
-                import re
+                pass
 
-                json_match = re.search(r"\{.*\}", response_text, re.DOTALL)
+            # Strategy 2: Extract JSON from markdown code blocks
+            if not extracted_data:
+                json_block_match = re.search(
+                    r"```(?:json)?\s*(\{.*?\})\s*```",
+                    response_text,
+                    re.DOTALL
+                )
+                if json_block_match:
+                    try:
+                        extracted_data = json.loads(json_block_match.group(1))
+                    except json.JSONDecodeError:
+                        pass
+
+            # Strategy 3: Find first JSON object in text
+            if not extracted_data:
+                json_match = re.search(r"\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}", response_text, re.DOTALL)
                 if json_match:
-                    extracted_data = json.loads(json_match.group())
-                else:
-                    raise ValueError("Could not parse JSON from Claude response")
+                    try:
+                        extracted_data = json.loads(json_match.group())
+                    except json.JSONDecodeError:
+                        pass
+
+            if not extracted_data:
+                logger.error(f"Failed to parse JSON from Claude response: {response_text[:200]}")
+                raise ValueError("Could not parse JSON from Claude response")
 
             logger.info(f"📊 Extracted {len(extracted_data)} fields with Claude")
 

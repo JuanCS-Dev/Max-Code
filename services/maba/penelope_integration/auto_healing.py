@@ -29,6 +29,8 @@ class AutoHealer:
         analyzer: Optional[PageAnalyzer] = None,
         penelope_client: Optional[PenelopeClient] = None,
         max_heal_attempts: int = 3,
+        api_key: Optional[str] = None,
+        max_history_size: int = 100,
     ):
         """Initialize auto-healer.
 
@@ -36,13 +38,16 @@ class AutoHealer:
             analyzer: PageAnalyzer for local healing
             penelope_client: PenelopeClient for service-based healing
             max_heal_attempts: Maximum number of healing attempts per action
+            api_key: Anthropic API key (only used if analyzer not provided)
+            max_history_size: Maximum healing history entries to keep (prevents memory leak)
         """
-        self.analyzer = analyzer or PageAnalyzer()
+        self.analyzer = analyzer or PageAnalyzer(api_key=api_key)
         self.penelope_client = penelope_client
         self.max_heal_attempts = max_heal_attempts
-        
+        self.max_history_size = max_history_size
+
         self.healing_history: List[Dict[str, Any]] = []
-        
+
         logger.info("🔧 AutoHealer initialized")
 
     async def heal_failed_action(
@@ -117,6 +122,12 @@ class AutoHealer:
                 "success": healed is not None,
             }
         )
+
+        # Prevent memory leak: trim history if it exceeds max size
+        if len(self.healing_history) > self.max_history_size:
+            # Keep only the most recent entries
+            self.healing_history = self.healing_history[-self.max_history_size:]
+            logger.debug(f"Trimmed healing history to {self.max_history_size} entries")
 
         return healed
 

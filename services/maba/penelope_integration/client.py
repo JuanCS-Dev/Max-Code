@@ -135,6 +135,11 @@ class PenelopeClient:
                 "confidence": 0.95
             }
         """
+        if not current_url:
+            raise ValueError("current_url is required")
+        if not goal:
+            raise ValueError("goal is required")
+
         payload = {
             "current_url": current_url,
             "goal": goal,
@@ -189,6 +194,11 @@ class PenelopeClient:
                 "confidence": 0.85
             }
         """
+        if not failed_action or not isinstance(failed_action, dict):
+            raise ValueError("failed_action must be a dictionary")
+        if not error_message:
+            raise ValueError("error_message is required")
+
         payload = {
             "failed_action": failed_action,
             "error_message": error_message,
@@ -240,6 +250,13 @@ class PenelopeClient:
                 "availability": "Stock status"
             }
         """
+        if not html:
+            raise ValueError("html is required")
+        if not url:
+            raise ValueError("url is required")
+        if not schema or not isinstance(schema, dict):
+            raise ValueError("schema must be a dictionary")
+
         payload = {
             "html": html,
             "url": url,
