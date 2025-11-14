@@ -11,9 +11,10 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-# Core module imports
-from core.browser_controller import BrowserController
-from core.cognitive_map import CognitiveMapEngine
+# Day 3: Browser and Cognitive Map imports
+from browser import BrowserController
+from cognitive_map import CognitiveMapService
+from db import get_db, init_db
 from pydantic import BaseModel, Field, field_validator
 from libs.common.maximus_integration import MaximusIntegrationMixin, RiskLevel, ToolCategory
 
@@ -202,33 +203,28 @@ class MABAService(SubordinateServiceBase, MaximusIntegrationMixin):
         super().__init__(service_name, service_version, maximus_endpoint)
 
         self.browser_controller: BrowserController | None = None
-        self.cognitive_map: CognitiveMapEngine | None = None
+        # Note: cognitive_map is created per-request with db session from get_db()
 
     async def initialize(self) -> bool:
         """
         Initialize MABA-specific resources.
 
+        Day 3: Initialize database, browser controller, and register tools.
+
         Returns:
             True if initialization succeeded, False otherwise
         """
         try:
+            # Day 3: Initialize database connection
+            logger.info("🔌 Initializing database connection...")
+            await init_db(create_tables=False)  # Use Alembic migrations, not create_all
+            logger.info("✅ Database connection initialized")
+
             # Initialize browser controller
-            self.browser_controller = BrowserController(
-                browser_type=os.getenv("BROWSER_TYPE", "chromium"),
-                headless=os.getenv("BROWSER_HEADLESS", "true").lower() == "true",
-                max_instances=int(os.getenv("MAX_BROWSER_INSTANCES", 5)),
-            )
+            logger.info("🌐 Initializing browser controller...")
+            self.browser_controller = BrowserController()
             await self.browser_controller.initialize()
             logger.info("✅ Browser controller initialized")
-
-            # Initialize cognitive map engine
-            self.cognitive_map = CognitiveMapEngine(
-                neo4j_uri=os.getenv("NEO4J_URI", "bolt://vertice-neo4j:7687"),
-                neo4j_user=os.getenv("NEO4J_USER", "neo4j"),
-                neo4j_password=os.getenv("NEO4J_PASSWORD", "vertice-neo4j-password"),
-            )
-            await self.cognitive_map.initialize()
-            logger.info("✅ Cognitive map engine initialized")
 
             # Register tools with MAXIMUS
             tools = self._get_tool_manifest()
@@ -241,15 +237,19 @@ class MABAService(SubordinateServiceBase, MaximusIntegrationMixin):
             return False
 
     async def shutdown(self) -> None:
-        """Shutdown MABA-specific resources."""
+        """Shutdown MABA-specific resources.
+
+        Day 3: Cleanup browser controller and database connections.
+        """
         try:
             if self.browser_controller:
                 await self.browser_controller.shutdown()
                 logger.info("✅ Browser controller shut down")
 
-            if self.cognitive_map:
-                await self.cognitive_map.shutdown()
-                logger.info("✅ Cognitive map engine shut down")
+            # Day 3: Close database connections
+            from db.database import close_db
+            await close_db()
+            logger.info("✅ Database connections closed")
 
         except Exception as e:
             logger.error(f"Error during MABA shutdown: {e}")
@@ -257,6 +257,8 @@ class MABAService(SubordinateServiceBase, MaximusIntegrationMixin):
     async def health_check(self) -> dict[str, Any]:
         """
         Perform MABA health checks.
+
+        Day 3: Check browser controller and database connectivity.
 
         Returns:
             Dict with health status
@@ -272,12 +274,13 @@ class MABAService(SubordinateServiceBase, MaximusIntegrationMixin):
         else:
             components["browser_controller"] = {"status": "not_initialized"}
 
-        # Check cognitive map
-        if self.cognitive_map:
-            map_health = await self.cognitive_map.health_check()
-            components["cognitive_map"] = map_health
-        else:
-            components["cognitive_map"] = {"status": "not_initialized"}
+        # Day 3: Check database connectivity
+        try:
+            from db.database import check_db_health
+            db_health = await check_db_health()
+            components["database"] = db_health
+        except Exception as e:
+            components["database"] = {"status": "unhealthy", "error": str(e)}
 
         base_health["components"] = components
 

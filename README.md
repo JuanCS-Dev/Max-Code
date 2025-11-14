@@ -1,5 +1,7 @@
 # MAXIMUS AI - Autonomous Intelligence System
 
+⚠️ **STATUS: ALPHA - NOT PRODUCTION READY (Active Development)** ⚠️
+
 **Version:** 1.0.0-standalone
 **Constitution:** Vértice v3.0
 **Framework:** DETER-AGENT (5-Layer Deterministic Execution)
@@ -198,11 +200,12 @@ cd services/penelope
 pytest
 ```
 
-**Test Coverage:**
-- **TRINITY Combined:** 559+ tests, 96.7% coverage
-- **PENELOPE:** 262/262 (100%)
-- **NIS:** 253/253 (100%)
-- **Maximus Core:** 44/44 (100%)
+**Test Status:**
+- **TRINITY Combined:** 559+ tests passing
+- **PENELOPE:** 262/262 passing
+- **NIS:** 253/253 passing
+- **Maximus Core:** 44/44 passing
+- **Coverage:** 25.16% (work in progress - target: 80%+)
 
 ---
 
@@ -339,11 +342,28 @@ All services export constitutional metrics:
 
 ### Grafana Dashboards
 
-Pre-configured dashboards available in Grafana (port 3000):
-- PENELOPE Overview
-- PENELOPE Biblical Compliance
-- TRINITY Performance
-- Constitutional Metrics
+Grafana available at port 3000 (dashboards under development)
+
+---
+
+## ⚠️ Known Issues & Limitations
+
+**Current Limitations:**
+- Test coverage: 25.16% (target: 80%+)
+- Service Registry: Not implemented (services use direct env var URLs)
+- Grafana dashboards: Not yet created
+- CI/CD: Basic GitHub Actions (needs expansion)
+- Production deployment: Requires additional hardening
+
+**Removed/Disabled Features:**
+- ADW Router: Removed (was non-functional)
+- DLQ Monitor: Requires Kafka setup (not included by default)
+
+**Roadmap:**
+- Week 1-2: Increase test coverage to 50%+
+- Week 3-4: Production hardening & security audit
+- Month 2: Advanced monitoring dashboards
+- Month 3: Restore additional services (Eureka, Oráculo)
 
 ---
 

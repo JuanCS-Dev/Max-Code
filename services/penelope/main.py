@@ -33,6 +33,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_client import start_http_server
 
+# Day 2: Import security & health libraries
+from libs.auth import verify_token
+from libs.health import HealthChecker
+from libs.validation import HealthResponse
+
 # Constitutional v3.0 imports (optional)
 try:
     from libs.constitutional.metrics import MetricsExporter, auto_update_sabbath_status
@@ -42,13 +47,8 @@ except ImportError:
     CONSTITUTIONAL_AVAILABLE = False
     print("⚠️  Constitutional v3.0 modules not available - running without")
 
-# Shared library imports (optional)
-try:
-    from libs.registry.client import RegistryClient, auto_register_service
-    REGISTRY_AVAILABLE = True
-except ImportError:
-    REGISTRY_AVAILABLE = False
-    print("⚠️  Service Registry not available - running standalone")
+# Service Registry removed (Day 1) - using direct URLs
+REGISTRY_AVAILABLE = False
 
 # Configure logging
 logging.basicConfig(
@@ -64,7 +64,7 @@ sophia_engine: SophiaEngine | None = None
 praotes_validator: PraotesValidator | None = None
 tapeinophrosyne_monitor: TapeinophrosyneMonitor | None = None
 metrics_exporter: Any = None  # MetricsExporter (optional)
-_heartbeat_task: asyncio.Task | None = None
+health_checker: HealthChecker | None = None  # Day 2: HealthChecker
 
 
 def is_sabbath() -> bool:
@@ -92,7 +92,7 @@ async def lifespan(app: FastAPI):
     - Graceful shutdown with prayer
     """
     global wisdom_base, observability_client, sophia_engine, praotes_validator
-    global tapeinophrosyne_monitor, metrics_exporter, _heartbeat_task
+    global tapeinophrosyne_monitor, metrics_exporter, health_checker
 
     # ORAÇÃO DE INICIALIZAÇÃO
     logger.info("✝" * 50)
@@ -119,9 +119,19 @@ async def lifespan(app: FastAPI):
     logger.info("🚀 Starting PENELOPE Service...")
 
     try:
-        # Initialize Metrics Exporter (Constitution v3.0 compliance) - Optional
+        # Day 2: Initialize Health Checker
         service_version = os.getenv("SERVICE_VERSION", "1.0.0")
 
+        health_checker = HealthChecker(
+            service_name="penelope",
+            version=service_version,
+            timeout=5
+        )
+        # Add dependency checks
+        health_checker.add_redis_check()  # For caching, state management
+        logger.info("✅ Day 2: HealthChecker initialized with Redis")
+
+        # Initialize Metrics Exporter (Constitution v3.0 compliance) - Optional
         if CONSTITUTIONAL_AVAILABLE:
             metrics_exporter = MetricsExporter(
                 service_name="penelope", version=service_version
@@ -171,30 +181,11 @@ async def lifespan(app: FastAPI):
         else:
             logger.info("✅ Regular operation mode (weekday)")
 
-        # Register with Service Registry (optional)
-        if REGISTRY_AVAILABLE:
-            try:
-                _heartbeat_task = await auto_register_service(
-                    service_name="penelope",
-                    port=int(os.getenv("SERVICE_PORT", 8154)),
-                    health_endpoint="/health",
-                    metadata={
-                        "category": "maximus_subordinate",
-                        "type": "autonomous_healing",
-                        "version": os.getenv("SERVICE_VERSION", "1.0.0"),
-                        "governance": "7_biblical_articles",
-                        "sabbath_mode": is_sabbath(),
-                    },
-                )
-                logger.info("✅ Registered with Vértice Service Registry")
-            except Exception as e:
-                logger.warning(f"⚠️ Failed to register with service registry: {e}")
-                logger.warning("   Continuing without registry (standalone mode)")
-        else:
-            logger.warning("⚠️  Service Registry not available - running standalone")
+        # Service Registry removed (Day 1) - using direct URLs via environment variables
 
         logger.info("✅ PENELOPE Service started successfully")
         logger.info("   Governed by: 7 Biblical Articles of Christian Governance")
+        logger.info("✅ Day 2: HealthChecker integrated, API endpoints protected with JWT")
 
         yield
 
@@ -206,20 +197,7 @@ async def lifespan(app: FastAPI):
         # Shutdown sequence
         logger.info("👋 Shutting down PENELOPE Service...")
 
-        # Cancel heartbeat task
-        if _heartbeat_task:
-            _heartbeat_task.cancel()
-            try:
-                await _heartbeat_task
-            except asyncio.CancelledError:
-                pass
-
-        # Deregister from Service Registry
-        try:
-            await RegistryClient.deregister("penelope")
-            logger.info("✅ Deregistered from Service Registry")
-        except Exception as e:
-            logger.warning(f"⚠️ Failed to deregister: {e}")
+        # Service Registry removed (Day 1) - no deregistration needed
 
         logger.info("🙏 Thank you for allowing me to serve.")
         logger.info("🛑 PENELOPE Service shut down successfully")
@@ -266,12 +244,15 @@ if metrics_exporter:
 # This will be done during lifespan startup after tracer initialization
 
 
-@app.get("/health")
+@app.get("/health", response_model=HealthResponse)
 async def health_check() -> dict[str, Any]:
     """
-    Comprehensive health check endpoint.
+    Comprehensive health check endpoint. **Public endpoint (no auth).**
+
+    Day 2: Uses HealthChecker for infrastructure dependencies (Redis).
 
     Checks:
+    - Infrastructure: Redis (via HealthChecker)
     - PENELOPE core engines status
     - Wisdom Base connectivity
     - Observability clients connectivity
@@ -280,6 +261,15 @@ async def health_check() -> dict[str, Any]:
     Returns:
         Dict with health status and component details
     """
+    # Day 2: Get infrastructure health from HealthChecker
+    if health_checker:
+        base_health = await health_checker.check_all()
+        overall_status = base_health["status"]
+        dependencies = base_health.get("dependencies", {})
+    else:
+        overall_status = "degraded"
+        dependencies = {}
+
     components_status = {}
 
     # Check Sophia Engine
@@ -303,12 +293,17 @@ async def health_check() -> dict[str, Any]:
         "ok" if observability_client else "not_initialized"
     )
 
-    # Overall status
+    # Update overall status based on components
     all_ok = all(status == "ok" for status in components_status.values())
-    overall_status = "healthy" if all_ok else "degraded"
+    if not all_ok and overall_status == "healthy":
+        overall_status = "degraded"
 
     return {
         "status": overall_status,
+        "service": "penelope",
+        "version": os.getenv("SERVICE_VERSION", "1.0.0"),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "dependencies": dependencies if dependencies else None,
         "components": components_status,
         "virtues_status": {
             "sophia": components_status["sophia_engine"],
@@ -316,7 +311,6 @@ async def health_check() -> dict[str, Any]:
             "tapeinophrosyne": components_status["tapeinophrosyne_monitor"],
         },
         "sabbath_mode": is_sabbath(),
-        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
 

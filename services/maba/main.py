@@ -35,8 +35,10 @@ from api.routes import router as maba_router
 # Import MABA service components
 from models import MABAService
 
-# Shared library imports (work when in ~/vertice-dev/backend/services/)
-from libs.registry.client import RegistryClient, auto_register_service
+# Day 2 Integration: Security & Health Libraries
+from libs.health import HealthChecker
+from libs.auth import verify_token
+from libs.validation import HealthResponse, BrowserActionRequest, BrowserActionResponse
 
 # Configure logging
 logging.basicConfig(
@@ -47,7 +49,16 @@ logger = logging.getLogger(__name__)
 
 # Global service instance
 maba_service: MABAService | None = None
-_heartbeat_task: asyncio.Task | None = None
+
+# Initialize Health Checker (Day 2)
+health_checker = HealthChecker(
+    service_name="maba",
+    version=os.getenv("SERVICE_VERSION", "1.0.0"),
+    timeout=5
+)
+health_checker.add_postgres_check()
+health_checker.add_redis_check()
+health_checker.add_neo4j_check()
 
 
 @asynccontextmanager
@@ -62,7 +73,7 @@ async def lifespan(app: FastAPI):
     - Service registry registration
     - Graceful shutdown
     """
-    global maba_service, _heartbeat_task
+    global maba_service
 
     logger.info("🚀 Starting MABA (MAXIMUS Browser Agent) Service...")
 
@@ -82,24 +93,7 @@ async def lifespan(app: FastAPI):
         # Set service in routes for dependency injection
         set_maba_service(maba_service)
 
-        # Register with Service Registry
-        try:
-            _heartbeat_task = await auto_register_service(
-                service_name="maba",
-                port=int(os.getenv("SERVICE_PORT", 8152)),
-                health_endpoint="/health",
-                metadata={
-                    "category": "maximus_subordinate",
-                    "type": "browser_agent",
-                    "version": os.getenv("SERVICE_VERSION", "1.0.0"),
-                },
-            )
-            logger.info("✅ Registered with Vértice Service Registry")
-        except Exception as e:
-            logger.warning(f"⚠️ Failed to register with service registry: {e}")
-            logger.warning("   Continuing without registry (standalone mode)")
-
-        logger.info("✅ MABA Service started successfully")
+        logger.info("✅ MABA (MAXIMUS Browser Agent) started successfully")
 
         yield
 
@@ -109,22 +103,7 @@ async def lifespan(app: FastAPI):
 
     finally:
         # Shutdown sequence
-        logger.info("👋 Shutting down MABA Service...")
-
-        # Cancel heartbeat task
-        if _heartbeat_task:
-            _heartbeat_task.cancel()
-            try:
-                await _heartbeat_task
-            except asyncio.CancelledError:
-                pass
-
-        # Deregister from Service Registry
-        try:
-            await RegistryClient.deregister("maba")
-            logger.info("✅ Deregistered from Service Registry")
-        except Exception as e:
-            logger.warning(f"⚠️ Failed to deregister: {e}")
+        logger.info("👋 Shutting down MABA (MAXIMUS Browser Agent)...")
 
         # Stop MABA service
         if maba_service:
@@ -163,36 +142,21 @@ from websocket_routes import router as websocket_router
 app.include_router(websocket_router)
 
 
-@app.get("/health")
+@app.get("/health", response_model=HealthResponse)
 async def health_check() -> dict[str, Any]:
     """
-    Comprehensive health check endpoint.
+    Comprehensive health check endpoint (Day 2).
 
     Checks:
-    - MABA service status
-    - Browser controller health
-    - Cognitive map engine status
-    - Database connectivity
+    - PostgreSQL connectivity
     - Redis connectivity
+    - Neo4j connectivity
+    - Service status
 
-    Returns:
-        Dict with health status and component details
+    Returns HealthResponse with dependency status.
+    Public endpoint (no authentication required for monitoring).
     """
-    try:
-        # Use get_maba_service() for consistency with routes and testing
-        service = get_maba_service()
-
-        if not service:
-            raise HTTPException(status_code=503, detail="MABA service not initialized")
-
-        health_status = await service.health_check()
-        return health_status
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Health check failed: {e}", exc_info=True)
-        raise HTTPException(status_code=503, detail=f"Health check failed: {str(e)}")
+    return await health_checker.check_all()
 
 
 @app.get("/metrics")
