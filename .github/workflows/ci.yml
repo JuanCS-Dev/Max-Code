@@ -1,0 +1,304 @@
+name: Max-Code CLI - CI/CD Pipeline
+
+# Boris Cherny Standard: Comprehensive quality gates
+# "If it doesn't have CI, it's not production ready"
+
+on:
+  push:
+    branches: [ main, develop, 'claude/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  # ============================================================
+  # JOB 1: CODE QUALITY & LINTING
+  # ============================================================
+  code-quality:
+    name: Code Quality & Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          cd max-code-cli
+          pip install --upgrade pip
+          pip install -r requirements-dev.txt
+          pip install black flake8 isort bandit
+      
+      - name: Check code formatting (black)
+        run: |
+          cd max-code-cli
+          black --check --diff sdk/ cli/ config/ tests/
+      
+      - name: Check import sorting (isort)
+        run: |
+          cd max-code-cli
+          isort --check-only --diff sdk/ cli/ config/ tests/
+      
+      - name: Lint with flake8
+        run: |
+          cd max-code-cli
+          flake8 sdk/ cli/ config/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 sdk/ cli/ config/ --count --max-complexity=10 --max-line-length=100 --statistics
+
+  # ============================================================
+  # JOB 2: TYPE SAFETY (mypy)
+  # ============================================================
+  type-checking:
+    name: Type Safety (mypy)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          cd max-code-cli
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install mypy types-requests types-PyYAML
+      
+      - name: Type check with mypy
+        run: |
+          cd max-code-cli
+          mypy sdk/ cli/ config/ --config-file=mypy.ini
+
+  # ============================================================
+  # JOB 3: SECURITY SCANNING
+  # ============================================================
+  security:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          cd max-code-cli
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pip-audit bandit safety
+      
+      - name: Audit dependencies (pip-audit)
+        run: |
+          cd max-code-cli
+          pip-audit --desc --fix-dry-run || true
+      
+      - name: Security scan with bandit
+        run: |
+          cd max-code-cli
+          bandit -r sdk/ cli/ config/ -f json -o bandit-report.json || true
+          bandit -r sdk/ cli/ config/ -ll -i
+      
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-reports
+          path: max-code-cli/bandit-report.json
+          retention-days: 30
+
+  # ============================================================
+  # JOB 4: TESTING & COVERAGE (Multi-version)
+  # ============================================================
+  test:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          cd max-code-cli
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+      
+      - name: Run tests with coverage
+        run: |
+          cd max-code-cli
+          pytest tests/ \
+            --cov=sdk \
+            --cov=cli \
+            --cov=config \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            --cov-report=html \
+            --cov-fail-under=80 \
+            -v
+      
+      - name: Upload coverage reports to Codecov
+        if: matrix.python-version == '3.11'
+        uses: codecov/codecov-action@v4
+        with:
+          file: max-code-cli/coverage.xml
+          flags: unittests
+          name: codecov-max-code-cli
+          fail_ci_if_error: false
+      
+      - name: Upload coverage HTML
+        if: matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-html
+          path: max-code-cli/htmlcov/
+          retention-days: 30
+      
+      - name: Generate coverage badge
+        if: matrix.python-version == '3.11'
+        run: |
+          cd max-code-cli
+          coverage report --format=total > coverage.txt
+          echo "COVERAGE=$(cat coverage.txt)" >> $GITHUB_ENV
+
+  # ============================================================
+  # JOB 5: AUDIT SCRIPT VALIDATION
+  # ============================================================
+  audit-validation:
+    name: Run Audit Script
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install audit dependencies
+        run: |
+          cd max-code-cli
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install pip-audit bandit radon
+      
+      - name: Run audit script
+        run: |
+          cd max-code-cli
+          chmod +x audit-cli.sh
+          ./audit-cli.sh
+      
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audit-report
+          path: max-code-cli/AUDIT_REPORT_*.md
+          retention-days: 30
+
+  # ============================================================
+  # JOB 6: BUILD VALIDATION
+  # ============================================================
+  build:
+    name: Build Validation
+    runs-on: ubuntu-latest
+    needs: [code-quality, type-checking, security, test]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          cd max-code-cli
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install build wheel
+      
+      - name: Validate package structure
+        run: |
+          cd max-code-cli
+          python -c "
+          import sys
+          from pathlib import Path
+          
+          required_dirs = ['sdk', 'cli', 'config', 'tests', 'core']
+          required_files = ['requirements.txt', 'requirements-dev.txt', 'pytest.ini', 'mypy.ini']
+          
+          for d in required_dirs:
+              if not Path(d).exists():
+                  print(f'❌ Missing directory: {d}')
+                  sys.exit(1)
+          
+          for f in required_files:
+              if not Path(f).exists():
+                  print(f'❌ Missing file: {f}')
+                  sys.exit(1)
+          
+          print('✅ Package structure validated')
+          "
+      
+      - name: Test CLI imports
+        run: |
+          cd max-code-cli
+          python -c "
+          import sys
+          sys.path.insert(0, '.')
+          
+          # Test critical imports
+          from sdk.base_agent import BaseAgent, AgentTask, AgentResult
+          from sdk.agent_pool import AgentPool
+          from sdk.agent_orchestrator import AgentOrchestrator
+          from config.logging_config import setup_logging, get_logger
+          
+          print('✅ All critical imports successful')
+          "
+      
+      - name: Summary
+        run: |
+          echo "🎉 Build validation complete!"
+          echo "✅ Code quality passed"
+          echo "✅ Type safety validated"
+          echo "✅ Security scanned"
+          echo "✅ Tests passed (80%+ coverage)"
+          echo "✅ Package structure validated"
+          echo "✅ Critical imports working"

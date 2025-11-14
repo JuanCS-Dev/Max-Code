@@ -1,0 +1,46 @@
+# Coverage.py configuration
+# Boris Cherny Standard: Track what matters, ignore what doesn't
+
+[run]
+source = sdk,cli,config
+omit =
+    */tests/*
+    */test_*
+    */__pycache__/*
+    */venv/*
+    */env/*
+    */.venv/*
+    */examples/*
+    */scripts/*
+    */migrations/*
+    */__init__.py
+branch = True
+parallel = False
+
+[report]
+precision = 2
+show_missing = True
+skip_covered = False
+sort = Cover
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    @abstractmethod
+    @abc.abstractmethod
+    class .*\bProtocol\):
+    @overload
+
+[html]
+directory = htmlcov
+title = Max-Code CLI Coverage Report
+
+[xml]
+output = coverage.xml
+
+[json]
+output = coverage.json
+show_contexts = True

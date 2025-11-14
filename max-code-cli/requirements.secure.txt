@@ -72,9 +72,13 @@ brotli>=1.2.0
 # Old: 23.12.1 → New: 24.3.0+
 black>=24.3.0
 
-# Package Manager - LOW: Auto-update recommended
-# Old: 25.2 → New: 25.3+
+# Package Manager - CRITICAL: 1 CVE fixed (CVE-2025-8869)
+# Old: 24.0 → New: 25.3+
 pip>=25.3
+
+# Build Tools - CRITICAL: 2 CVEs fixed (CVE-2025-47273, CVE-2024-6345)
+# Old: 68.1.2 → New: 78.1.1+
+setuptools>=78.1.1
 
 # Fast Package Installer - LOW: 2 CVEs fixed
 # Old: 0.9.3 → New: 0.9.6+
