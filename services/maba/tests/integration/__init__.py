@@ -1,0 +1,1 @@
+"""MABA integration tests."""
