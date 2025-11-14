@@ -92,8 +92,10 @@ def grep_pattern(pattern: str, directory: str = ".") -> ToolResult:
                             for line_num, line in enumerate(f, 1):
                                 if re.search(pattern, line):
                                     matches.append(f"{filepath}:{line_num}: {line.strip()}")
-                    except:
-                        pass
+                    except (OSError, UnicodeDecodeError, PermissionError):
+                        # Skip files that can't be read (binary files, permission denied, etc.)
+                        # This is expected in directory traversal
+                        continue
         
         return ToolResult.success(f"Found {len(matches)} matches")
     except Exception as e:
