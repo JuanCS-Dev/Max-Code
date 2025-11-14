@@ -9,11 +9,16 @@ uvicorn[standard]==0.27.0
 pydantic==2.5.3
 
 # HTTP Client
+
+# Authentication (Day 2)
+pyjwt==2.8.0
+python-multipart==0.0.6
+
 httpx==0.26.0
 
 # Database & Cache
 asyncpg==0.29.0
-redis==5.0.0
+redis[asyncio]==5.0.0
 
 # Docker Integration (Digital Twin)
 docker==7.0.0
