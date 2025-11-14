@@ -1,0 +1,129 @@
+# Max-Code CLI - Development Dependencies
+# Phase 2: Testing & Error Handling Infrastructure
+# Boris Cherny Standard: "Tests ou não aconteceu"
+
+# ============================================================
+# TESTING FRAMEWORK
+# ============================================================
+
+# Core testing
+pytest>=7.4.3
+pytest-cov>=4.1.0          # Coverage reporting
+pytest-asyncio>=0.23.0     # Async test support
+pytest-mock>=3.12.0        # Mocking utilities
+pytest-xdist>=3.5.0        # Parallel test execution
+
+# Test utilities
+coverage[toml]>=7.4.0      # Coverage measurement
+pytest-timeout>=2.2.0      # Test timeouts
+pytest-benchmark>=4.0.0    # Performance benchmarking
+
+# ============================================================
+# TYPE CHECKING & LINTING
+# ============================================================
+
+# Type checking
+mypy>=1.8.0
+types-requests>=2.31.0
+types-PyYAML>=6.0.12
+
+# Linting & formatting
+black>=24.3.0              # Code formatter (security fix)
+flake8>=7.0.0              # Linter
+isort>=5.13.2              # Import sorting
+pylint>=3.0.3              # Advanced linting
+
+# Code quality
+radon>=6.0.1               # Complexity analysis
+bandit>=1.7.6              # Security linter
+safety>=2.3.5              # Dependency vulnerability scanner
+
+# ============================================================
+# TESTING UTILITIES
+# ============================================================
+
+# Mocking & fixtures
+faker>=22.0.0              # Fake data generation
+factory-boy>=3.3.0         # Test fixtures
+responses>=0.24.1          # HTTP mocking
+freezegun>=1.4.0           # Time mocking
+
+# ============================================================
+# DOCUMENTATION
+# ============================================================
+
+# Docs generation
+sphinx>=7.2.6              # Documentation
+sphinx-rtd-theme>=2.0.0    # Read the Docs theme
+
+# ============================================================
+# DEVELOPMENT TOOLS
+# ============================================================
+
+# Debugging
+ipdb>=0.13.13              # IPython debugger
+ipython>=8.19.0            # Enhanced Python shell
+
+# Performance
+py-spy>=0.3.14             # Sampling profiler
+memory-profiler>=0.61.0    # Memory profiling
+
+# ============================================================
+# CI/CD TOOLS
+# ============================================================
+
+# Pre-commit hooks
+pre-commit>=3.6.0
+
+# Code coverage reporting
+codecov>=2.1.13
+
+# ============================================================
+# INSTALLATION INSTRUCTIONS
+# ============================================================
+
+# 1. INSTALL DEV DEPENDENCIES:
+#    pip install -r requirements-dev.txt
+#
+# 2. SET UP PRE-COMMIT HOOKS:
+#    pre-commit install
+#
+# 3. RUN TESTS:
+#    pytest --cov=max-code-cli --cov-report=term --cov-report=html
+#
+# 4. CHECK TYPES:
+#    mypy max-code-cli/ --config-file mypy.ini
+#
+# 5. FORMAT CODE:
+#    black max-code-cli/
+#    isort max-code-cli/
+#
+# 6. LINT CODE:
+#    flake8 max-code-cli/ --max-line-length=100
+#    pylint max-code-cli/
+
+# ============================================================
+# PYTEST CONFIGURATION
+# ============================================================
+
+# See pytest.ini for configuration
+# See .coveragerc for coverage configuration
+
+# ============================================================
+# BORIS CHERNY STANDARDS
+# ============================================================
+
+# "Tests ou não aconteceu" - Boris Cherny
+#
+# These tools enforce:
+# ✅ Comprehensive testing (pytest + coverage)
+# ✅ Type safety (mypy)
+# ✅ Code quality (black + flake8 + pylint)
+# ✅ Security (bandit + safety)
+# ✅ Performance (profiling tools)
+#
+# Target metrics:
+# - Test coverage: >80% (SDK: >95%)
+# - Type coverage: 100%
+# - Complexity: <10 per function
+# - Security: 0 vulnerabilities
