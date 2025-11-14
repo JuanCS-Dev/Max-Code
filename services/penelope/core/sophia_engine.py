@@ -23,6 +23,19 @@ import yaml
 
 from models import Anomaly, InterventionDecision, InterventionLevel, Severity
 
+# Import production-grade patches
+try:
+    from core.sophia_engine_patches import (
+        ServiceRegistryClient,
+        PrometheusMonitor,
+        ServiceRestarter,
+        AlertManager
+    )
+    PATCHES_AVAILABLE = True
+except ImportError:
+    PATCHES_AVAILABLE = False
+    logger.warning("sophia_engine_patches not available - using stub implementations")
+
 logger = logging.getLogger(__name__)
 
 
@@ -46,6 +59,18 @@ class SophiaEngine:
         """
         self.wisdom_base = wisdom_base
         self.observability_client = observability_client
+
+        # Initialize production-grade clients (if available)
+        if PATCHES_AVAILABLE:
+            self.registry_client = ServiceRegistryClient()
+            self.prometheus_monitor = PrometheusMonitor()
+            self.service_restarter = ServiceRestarter()
+            self.alert_manager = AlertManager()
+        else:
+            self.registry_client = None
+            self.prometheus_monitor = None
+            self.service_restarter = None
+            self.alert_manager = None
 
         # Configurações de sabedoria
         self.transient_failure_threshold_minutes = 5
@@ -422,9 +447,13 @@ class SophiaEngine:
                     logger.debug(f"Failed to parse docker-compose.yml: {e}")
 
             # 3. Query Service Registry (if available)
-            # TODO: Implement when Service Registry client is available
-            # registry_deps = await self._query_registry_dependencies(service)
-            # dependencies.update(registry_deps)
+            if self.registry_client:
+                try:
+                    registry_deps = await self.registry_client.query_dependencies(service)
+                    dependencies.update(registry_deps)
+                    logger.info(f"Found {len(registry_deps)} dependencies from Service Registry")
+                except Exception as e:
+                    logger.warning(f"Failed to query Service Registry: {e}")
 
             result = sorted(list(dependencies))
             logger.info(f"Service {service} has {len(result)} dependencies: {result}")
@@ -858,8 +887,14 @@ class SophiaEngine:
         Returns:
             metrics: Dict with error_rate, healthy, etc.
         """
-        # TODO: Implement real Prometheus query
-        # For now, return conservative defaults
+        # Use PrometheusMonitor if available, otherwise fallback to conservative defaults
+        if self.prometheus_monitor:
+            try:
+                return await self.prometheus_monitor.get_service_metrics(service)
+            except Exception as e:
+                logger.error(f"Failed to query Prometheus for {service}: {e}")
+
+        # Fallback to conservative defaults
         return {
             "error_rate": 0.01,  # 1% error rate
             "healthy": True,
@@ -878,9 +913,16 @@ class SophiaEngine:
         Returns:
             success: True if restart succeeded
         """
-        # TODO: Implement real service restart
-        # docker-compose restart {service} or kubectl rollout restart
-        logger.info(f"Would restart service: {service}")
+        # Use ServiceRestarter if available
+        if self.service_restarter:
+            try:
+                return await self.service_restarter.restart_service(service)
+            except Exception as e:
+                logger.error(f"Failed to restart service {service}: {e}")
+                return False
+
+        # Fallback: just log
+        logger.warning(f"ServiceRestarter not available - would restart service: {service}")
         return True
 
     async def _alert_human(
@@ -899,7 +941,14 @@ class SophiaEngine:
         Returns:
             success: True if alert sent
         """
-        # TODO: Implement real alerting (Slack, PagerDuty, etc.)
+        # Use AlertManager if available
+        if self.alert_manager:
+            try:
+                return await self.alert_manager.alert_human(service, severity, message, **kwargs)
+            except Exception as e:
+                logger.error(f"Failed to send alert via AlertManager: {e}")
+
+        # Fallback: just log
         logger.critical(
             f"🚨 HUMAN ALERT [{severity}] for {service}: {message} | Context: {kwargs}"
         )

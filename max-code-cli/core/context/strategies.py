@@ -323,6 +323,8 @@ class LLMSummaryStrategy(BaseCompactionStrategy):
         """
         super().__init__(config)
         self.llm_client = llm_client
+        self._summary_cache = {}  # Cache: message_hash -> summary
+        self._cache_max_size = 100  # Limit cache size
 
     def compact(
         self,
@@ -355,10 +357,15 @@ class LLMSummaryStrategy(BaseCompactionStrategy):
             fallback = SelectiveStrategy(self.config)
             return fallback.compact(context, target_tokens)
 
-        # TODO: Implement LLM summarization
-        # For now, create placeholder summary message
+        # Summarize middle messages with LLM
         if middle_msgs:
-            summary_text = self._create_summary_placeholder(middle_msgs)
+            try:
+                summary_text = self._summarize_with_llm(middle_msgs)
+                logger.info(f"LLM generated summary of {len(middle_msgs)} messages")
+            except Exception as e:
+                logger.warning(f"LLM summarization failed: {e}, using placeholder")
+                summary_text = self._create_summary_placeholder(middle_msgs)
+
             summary_msg = Message(
                 role=MessageRole.SYSTEM,
                 content=summary_text,
@@ -383,8 +390,77 @@ class LLMSummaryStrategy(BaseCompactionStrategy):
 
         return compacted
 
+    def _summarize_with_llm(self, messages: List[Message]) -> str:
+        """Generate real LLM-based summary of conversation history (with caching)"""
+        # Generate cache key from message contents
+        cache_key = self._generate_cache_key(messages)
+
+        # Check cache first
+        if cache_key in self._summary_cache:
+            logger.debug(f"Using cached summary for {len(messages)} messages")
+            return self._summary_cache[cache_key]
+
+        # Build prompt for summarization
+        conversation_text = "\n\n".join([
+            f"[{msg.role.value}]: {msg.content[:500]}"  # Truncate long messages
+            for msg in messages
+        ])
+
+        summarization_prompt = f"""Please provide a concise summary of the following conversation history.
+Focus on key decisions, important information, and context that would be helpful for continuing the conversation.
+Keep the summary brief but informative (2-4 sentences).
+
+Conversation to summarize:
+{conversation_text}
+
+Summary:"""
+
+        # Call LLM for summarization
+        try:
+            response = self.llm_client.messages.create(
+                model="claude-3-haiku-20240307",  # Use fast model for summarization
+                max_tokens=200,  # Brief summary
+                messages=[{"role": "user", "content": summarization_prompt}]
+            )
+
+            summary = response.content[0].text if response.content else ""
+            summary_text = f"[Context Summary]: {summary}"
+
+            # Cache the result
+            self._cache_summary(cache_key, summary_text)
+
+            return summary_text
+
+        except Exception as e:
+            logger.error(f"LLM summarization error: {e}")
+            # Fallback to placeholder if LLM fails
+            return self._create_summary_placeholder(messages)
+
+    def _generate_cache_key(self, messages: List[Message]) -> str:
+        """Generate cache key from message contents"""
+        import hashlib
+
+        # Create deterministic key from message contents
+        content_str = "".join([
+            f"{msg.role.value}:{msg.content[:100]}"
+            for msg in messages
+        ])
+        return hashlib.md5(content_str.encode()).hexdigest()
+
+    def _cache_summary(self, key: str, summary: str):
+        """Cache summary with LRU eviction"""
+        # Implement simple LRU: remove oldest if over limit
+        if len(self._summary_cache) >= self._cache_max_size:
+            # Remove first (oldest) key
+            oldest_key = next(iter(self._summary_cache))
+            del self._summary_cache[oldest_key]
+            logger.debug(f"Evicted oldest cache entry (size: {len(self._summary_cache)})")
+
+        self._summary_cache[key] = summary
+        logger.debug(f"Cached summary (cache size: {len(self._summary_cache)})")
+
     def _create_summary_placeholder(self, messages: List[Message]) -> str:
-        """Create placeholder summary (TODO: replace with real LLM summary)"""
+        """Create placeholder summary (fallback when LLM unavailable)"""
         user_msgs = sum(1 for msg in messages if msg.role == MessageRole.USER)
         assistant_msgs = sum(
             1 for msg in messages if msg.role == MessageRole.ASSISTANT

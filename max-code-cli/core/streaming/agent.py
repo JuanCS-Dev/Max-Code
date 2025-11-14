@@ -142,16 +142,57 @@ class StreamingAgent:
 
     async def _stream_from_llm(self, prompt: str) -> AsyncIterator[StreamChunk]:
         """
-        Stream from actual LLM client.
+        Stream from actual Anthropic API.
 
-        TODO: Implement real Anthropic API streaming.
+        Uses Anthropic SDK streaming API to get real-time responses.
         """
-        # Placeholder for real LLM streaming
-        # This would use self.llm_client to stream from Anthropic API
+        if not self.llm_client:
+            raise ValueError("LLM client not provided - cannot stream from API")
 
-        raise NotImplementedError(
-            "Real LLM streaming not implemented. Use mock streaming for now."
+        # Message start
+        yield StreamChunk(
+            event_type=StreamEventType.MESSAGE_START,
+            data={
+                "message": {
+                    "role": "assistant",
+                    "model": self.config.model,
+                }
+            },
         )
+
+        # Stream from Anthropic API
+        try:
+            with self.llm_client.messages.stream(
+                model=self.config.model,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=self.config.max_tokens or 4096,
+                temperature=self.config.temperature or 0.7,
+            ) as stream:
+                for text in stream.text_stream:
+                    # Yield content delta chunk
+                    yield StreamChunk(
+                        event_type=StreamEventType.CONTENT_BLOCK_DELTA,
+                        data={
+                            "delta": {
+                                "type": "text_delta",
+                                "text": text,
+                            }
+                        },
+                    )
+
+            # Message complete
+            yield StreamChunk(
+                event_type=StreamEventType.MESSAGE_DELTA,
+                data={"delta": {"stop_reason": "end_turn"}},
+            )
+
+        except Exception as e:
+            logger.error(f"Error streaming from Anthropic API: {e}")
+            # Yield error chunk
+            yield StreamChunk(
+                event_type=StreamEventType.ERROR,
+                data={"error": str(e)},
+            )
 
     async def _mock_stream(self, prompt: str) -> AsyncIterator[StreamChunk]:
         """

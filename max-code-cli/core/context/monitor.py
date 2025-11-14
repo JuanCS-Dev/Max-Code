@@ -208,6 +208,7 @@ class ContextMonitor:
         }
 
     def __repr__(self) -> str:
+        """String representation with usage statistics"""
         return (
             f"<ContextMonitor: {self.get_usage_percent():.1f}% "
             f"({self.get_current_usage()}/{self.context.max_tokens} tokens)>"
@@ -321,10 +322,38 @@ class AutoCompactionMonitor(ContextMonitor):
         Returns:
             True if user confirms
         """
-        # TODO: Implement user prompt
-        # For now, auto-approve
-        logger.info("User confirmation required (auto-approved for now)")
-        return True
+        import sys
+
+        # Check if running in interactive terminal
+        if not sys.stdin.isatty():
+            logger.info("Non-interactive mode - auto-approving compaction")
+            return True
+
+        try:
+            # Get context stats
+            current_tokens = self.context.get_token_count()
+            max_tokens = self.context.max_tokens
+            usage_ratio = self.get_usage_ratio()
+
+            # Real user prompt
+            print(f"\n⚠️  Context approaching limit:")
+            print(f"   Current: {current_tokens}/{max_tokens} tokens ({usage_ratio*100:.1f}%)")
+            print(f"   Strategy: {self.config.strategy.value}")
+            print(f"   Target: Reduce by ~{int((1-self.config.target_ratio)*100)}%")
+
+            response = input("\n   Proceed with context compaction? [Y/n]: ").strip().lower()
+
+            if response in ['', 'y', 'yes']:
+                logger.info("User approved context compaction")
+                return True
+            else:
+                logger.info("User declined context compaction")
+                return False
+
+        except (EOFError, KeyboardInterrupt):
+            # Fallback on input error
+            logger.warning("User prompt interrupted - auto-approving")
+            return True
 
     def enable_auto_compact(self):
         """Enable automatic compaction"""

@@ -117,7 +117,13 @@ class ContextCompactor:
         compacted_message_count = len(compacted_context.messages)
 
         messages_removed = original_message_count - compacted_message_count
-        messages_summarized = 0  # TODO: Track from strategy
+
+        # Track messages summarized (from summary metadata if LLM strategy was used)
+        messages_summarized = 0
+        for msg in compacted_context.messages:
+            if msg.metadata.get("type") == "summary":
+                messages_summarized = msg.metadata.get("message_count", 0)
+                break  # Only one summary per compaction
 
         compaction_time = time.time() - start_time
 
@@ -201,6 +207,7 @@ class ContextCompactor:
         }
 
     def __repr__(self) -> str:
+        """String representation with strategy and stats"""
         return (
             f"<ContextCompactor: {self.config.strategy}, "
             f"{self.total_compactions} compactions>"
@@ -306,6 +313,7 @@ class CompactionManager:
         self.monitor.disable_auto_compact()
 
     def __repr__(self) -> str:
+        """String representation with usage and compaction stats"""
         return (
             f"<CompactionManager: {self.monitor.get_usage_percent():.1f}% usage, "
             f"{self.compactor.total_compactions} compactions>"
