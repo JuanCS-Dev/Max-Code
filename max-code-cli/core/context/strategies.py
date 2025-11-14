@@ -355,10 +355,15 @@ class LLMSummaryStrategy(BaseCompactionStrategy):
             fallback = SelectiveStrategy(self.config)
             return fallback.compact(context, target_tokens)
 
-        # TODO: Implement LLM summarization
-        # For now, create placeholder summary message
+        # Summarize middle messages with LLM
         if middle_msgs:
-            summary_text = self._create_summary_placeholder(middle_msgs)
+            try:
+                summary_text = self._summarize_with_llm(middle_msgs)
+                logger.info(f"LLM generated summary of {len(middle_msgs)} messages")
+            except Exception as e:
+                logger.warning(f"LLM summarization failed: {e}, using placeholder")
+                summary_text = self._create_summary_placeholder(middle_msgs)
+
             summary_msg = Message(
                 role=MessageRole.SYSTEM,
                 content=summary_text,
@@ -383,8 +388,41 @@ class LLMSummaryStrategy(BaseCompactionStrategy):
 
         return compacted
 
+    def _summarize_with_llm(self, messages: List[Message]) -> str:
+        """Generate real LLM-based summary of conversation history"""
+        # Build prompt for summarization
+        conversation_text = "\n\n".join([
+            f"[{msg.role.value}]: {msg.content[:500]}"  # Truncate long messages
+            for msg in messages
+        ])
+
+        summarization_prompt = f"""Please provide a concise summary of the following conversation history.
+Focus on key decisions, important information, and context that would be helpful for continuing the conversation.
+Keep the summary brief but informative (2-4 sentences).
+
+Conversation to summarize:
+{conversation_text}
+
+Summary:"""
+
+        # Call LLM for summarization
+        try:
+            response = self.llm_client.messages.create(
+                model="claude-3-haiku-20240307",  # Use fast model for summarization
+                max_tokens=200,  # Brief summary
+                messages=[{"role": "user", "content": summarization_prompt}]
+            )
+
+            summary = response.content[0].text if response.content else ""
+            return f"[Context Summary]: {summary}"
+
+        except Exception as e:
+            logger.error(f"LLM summarization error: {e}")
+            # Fallback to placeholder if LLM fails
+            return self._create_summary_placeholder(messages)
+
     def _create_summary_placeholder(self, messages: List[Message]) -> str:
-        """Create placeholder summary (TODO: replace with real LLM summary)"""
+        """Create placeholder summary (fallback when LLM unavailable)"""
         user_msgs = sum(1 for msg in messages if msg.role == MessageRole.USER)
         assistant_msgs = sum(
             1 for msg in messages if msg.role == MessageRole.ASSISTANT
