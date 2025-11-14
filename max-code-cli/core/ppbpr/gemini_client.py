@@ -337,13 +337,16 @@ class GeminiClient:
         domains = set()
         for source in sources:
             try:
-                # Extract domain from URI
-                parts = source.uri.split('/')
-                if len(parts) >= 3:
-                    domain = parts[2]  # http://domain.com/path
-                    domains.add(domain)
-            except:
-                pass
+                # Extract domain from URI (e.g., http://domain.com/path)
+                if source.uri and isinstance(source.uri, str):
+                    parts = source.uri.split('/')
+                    if len(parts) >= 3:
+                        domain = parts[2]
+                        domains.add(domain)
+            except (AttributeError, IndexError, TypeError):
+                # source.uri is None, not a string, or split failed
+                # This is expected - skip this source
+                continue
 
         if len(domains) >= 3:
             score += 0.2

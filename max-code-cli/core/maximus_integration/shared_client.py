@@ -159,7 +159,12 @@ class SharedMaximusClient:
                     if 200 <= response.status_code < 300:
                         try:
                             response_data = response.json()
-                        except:
+                        except (ValueError, TypeError) as e:
+                            # Response is not valid JSON - fall back to text
+                            # This is expected for some endpoints that return plain text
+                            logger.debug(
+                                f"Non-JSON response from {service.value} {endpoint}: {type(e).__name__}"
+                            )
                             response_data = {"text": response.text}
                         
                         logger.debug(

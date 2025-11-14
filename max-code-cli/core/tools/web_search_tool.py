@@ -283,12 +283,13 @@ class WebSearchTool:
             )
 
     def _extract_domain(self, url: str) -> str:
-        """Extract domain from URL"""
+        """Extract domain from URL, returns 'unknown' for malformed URLs"""
         try:
             from urllib.parse import urlparse
             parsed = urlparse(url)
-            return parsed.netloc
-        except:
+            return parsed.netloc or "unknown"
+        except (ValueError, AttributeError):
+            # URL is malformed or parsing failed - this is expected for some search results
             return "unknown"
 
     def _format_results(
