@@ -1,4 +1,6 @@
 """MABA API Routes.
+# Day 2: JWT Authentication
+from libs.auth import verify_token
 
 FastAPI routes for MABA browser automation operations.
 
@@ -10,7 +12,7 @@ import asyncio
 import logging
 import time
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Depends, APIRouter, Depends, HTTPException
 from models import (
     BrowserActionResponse,
     BrowserSessionRequest,
@@ -50,13 +52,16 @@ def get_maba_service():
 
 @router.post("/sessions")
 async def create_browser_session(
-    request: BrowserSessionRequest, service=Depends(get_maba_service)
+    request: BrowserSessionRequest,
+    token_data: dict = Depends(verify_token),  # Day 2: JWT Auth
+    service=Depends(get_maba_service)
 ):
     """
-    Create a new browser session.
+    Create a new browser session. **Auth required.**
 
     Args:
         request: Browser session configuration
+        token_data: JWT token (auto-injected)
 
     Returns:
         Session details including ID and status

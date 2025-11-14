@@ -10,8 +10,11 @@ License: Proprietary
 import logging
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from pydantic import BaseModel, Field
+
+# Day 2: JWT Authentication
+from libs.auth import verify_token
 
 # Import models
 from models import (
@@ -76,15 +79,21 @@ class MetricsQueryRequest(BaseModel):
 
 
 @router.post("/narratives")
-async def generate_narrative(request: dict[str, Any]) -> dict[str, Any]:
+async def generate_narrative(
+    request: dict[str, Any],
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
+) -> dict[str, Any]:
     """
     Generate a narrative from consciousness snapshot.
 
     This endpoint generates narratives based on consciousness snapshots,
     compatible with test expectations.
 
+    **Authentication:** Requires valid JWT token.
+
     Args:
         request: Narrative generation request
+        token_data: JWT token data (injected by auth dependency)
 
     Returns:
         Dict with narrative data
@@ -118,8 +127,11 @@ async def generate_narrative(request: dict[str, Any]) -> dict[str, Any]:
 
 
 @router.get("/narratives/{narrative_id}")
-async def get_narrative(narrative_id: str) -> dict[str, Any]:
-    """Get a narrative by ID."""
+async def get_narrative(
+    narrative_id: str,
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
+) -> dict[str, Any]:
+    """Get a narrative by ID. **Authentication:** Requires valid JWT token."""
     try:
         service = get_mvp_service()
 
@@ -142,8 +154,12 @@ async def get_narrative(narrative_id: str) -> dict[str, Any]:
 
 
 @router.get("/narratives")
-async def list_narratives(limit: int = 50, offset: int = 0) -> dict[str, Any]:
-    """List narratives with pagination."""
+async def list_narratives(
+    limit: int = 50,
+    offset: int = 0,
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
+) -> dict[str, Any]:
+    """List narratives with pagination. **Authentication:** Requires valid JWT token."""
     try:
         service = get_mvp_service()
 
@@ -169,8 +185,11 @@ async def list_narratives(limit: int = 50, offset: int = 0) -> dict[str, Any]:
 
 
 @router.delete("/narratives/{narrative_id}")
-async def delete_narrative(narrative_id: str) -> dict[str, Any]:
-    """Delete a narrative by ID."""
+async def delete_narrative(
+    narrative_id: str,
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
+) -> dict[str, Any]:
+    """Delete a narrative by ID. **Authentication:** Requires valid JWT token."""
     try:
         service = get_mvp_service()
 
@@ -193,8 +212,11 @@ async def delete_narrative(narrative_id: str) -> dict[str, Any]:
 
 
 @router.post("/audio/synthesize")
-async def synthesize_audio(request: dict[str, Any]) -> dict[str, Any]:
-    """Synthesize audio from text."""
+async def synthesize_audio(
+    request: dict[str, Any],
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
+) -> dict[str, Any]:
+    """Synthesize audio from text. **Authentication:** Requires valid JWT token."""
     try:
         service = get_mvp_service()
 
@@ -218,14 +240,20 @@ async def synthesize_audio(request: dict[str, Any]) -> dict[str, Any]:
 
 
 @router.post("/metrics", status_code=status.HTTP_200_OK)
-async def query_metrics(request: MetricsQueryRequest) -> dict[str, Any]:
+async def query_metrics(
+    request: MetricsQueryRequest,
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
+) -> dict[str, Any]:
     """
     Query system metrics without narrative generation.
 
     Returns raw metrics data from Prometheus and InfluxDB.
 
+    **Authentication:** Requires valid JWT token.
+
     Args:
         request: Metrics query request
+        token_data: JWT token data (injected by auth dependency)
 
     Returns:
         Dict containing metrics data
@@ -257,14 +285,20 @@ async def query_metrics(request: MetricsQueryRequest) -> dict[str, Any]:
 
 
 @router.get("/anomalies", status_code=status.HTTP_200_OK)
-async def detect_anomalies(time_range_minutes: int = 60) -> dict[str, Any]:
+async def detect_anomalies(
+    time_range_minutes: int = 60,
+    token_data: dict = Depends(verify_token)  # Day 2: JWT Auth
+) -> dict[str, Any]:
     """
     Detect anomalies in system metrics.
 
     Returns detected anomalies without full narrative generation.
 
+    **Authentication:** Requires valid JWT token.
+
     Args:
         time_range_minutes: Time range for anomaly detection
+        token_data: JWT token data (injected by auth dependency)
 
     Returns:
         Dict containing detected anomalies

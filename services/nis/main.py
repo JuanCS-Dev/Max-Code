@@ -35,8 +35,10 @@ from api.routes import router as mvp_router
 # Import MVP service components
 from models import MVPService
 
-# Shared library imports (work when in ~/vertice-dev/backend/services/)
-from libs.registry.client import RegistryClient, auto_register_service
+# Day 2 Integration: Security & Health Libraries
+from libs.health import HealthChecker
+from libs.auth import verify_token, get_optional_token
+from libs.validation import HealthResponse, NarrativeRequest, NarrativeResponse
 
 # Configure logging
 logging.basicConfig(
@@ -47,7 +49,16 @@ logger = logging.getLogger(__name__)
 
 # Global service instance
 mvp_service: MVPService | None = None
-_heartbeat_task: asyncio.Task | None = None
+
+# Initialize Health Checker (Day 2)
+health_checker = HealthChecker(
+    service_name="nis",
+    version=os.getenv("SERVICE_VERSION", "1.0.0"),
+    timeout=5
+)
+# Register dependency checks
+health_checker.add_redis_check()
+health_checker.add_http_check("prometheus", os.getenv("PROMETHEUS_URL", "http://prometheus:9090"))
 
 
 @asynccontextmanager
@@ -77,24 +88,7 @@ async def lifespan(app: FastAPI):
         # Set service in routes for dependency injection
         set_mvp_service(mvp_service)
 
-        # Register with Service Registry
-        try:
-            _heartbeat_task = await auto_register_service(
-                service_name="mvp",
-                port=int(os.getenv("SERVICE_PORT", 8153)),
-                health_endpoint="/health",
-                metadata={
-                    "category": "maximus_subordinate",
-                    "type": "vision_protocol",
-                    "version": os.getenv("SERVICE_VERSION", "1.0.0"),
-                },
-            )
-            logger.info("✅ Registered with Vértice Service Registry")
-        except Exception as e:
-            logger.warning(f"⚠️ Failed to register with service registry: {e}")
-            logger.warning("   Continuing without registry (standalone mode)")
-
-        logger.info("✅ MVP Service started successfully")
+        logger.info("✅ NIS (Narrative Intelligence Service) started successfully")
 
         yield
 
@@ -104,28 +98,13 @@ async def lifespan(app: FastAPI):
 
     finally:
         # Shutdown sequence
-        logger.info("👋 Shutting down MVP Service...")
-
-        # Cancel heartbeat task
-        if _heartbeat_task:
-            _heartbeat_task.cancel()
-            try:
-                await _heartbeat_task
-            except asyncio.CancelledError:
-                pass
-
-        # Deregister from Service Registry
-        try:
-            await RegistryClient.deregister("mvp")
-            logger.info("✅ Deregistered from Service Registry")
-        except Exception as e:
-            logger.warning(f"⚠️ Failed to deregister: {e}")
+        logger.info("👋 Shutting down NIS (Narrative Intelligence Service)...")
 
         # Stop MVP service
         if mvp_service:
             await mvp_service.stop()
 
-        logger.info("🛑 MVP Service shut down successfully")
+        logger.info("🛑 NIS Service shut down successfully")
 
 
 # Create FastAPI application
@@ -158,24 +137,20 @@ from websocket_routes import router as websocket_router
 app.include_router(websocket_router)
 
 
-@app.get("/health")
+@app.get("/health", response_model=HealthResponse)
 async def health_check() -> dict[str, Any]:
-    """Comprehensive health check endpoint."""
-    try:
-        # Use get_mvp_service() for consistency with routes and testing
-        service = get_mvp_service()
+    """
+    Comprehensive health check endpoint (Day 2).
 
-        if not service:
-            raise HTTPException(status_code=503, detail="MVP service not initialized")
+    Checks:
+    - Redis connectivity
+    - Prometheus availability
+    - Service status
 
-        health_status = await service.health_check()
-        return health_status
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Health check failed: {e}", exc_info=True)
-        raise HTTPException(status_code=503, detail=f"Health check failed: {str(e)}")
+    Returns HealthResponse with dependency status.
+    Public endpoint (no authentication required for monitoring).
+    """
+    return await health_checker.check_all()
 
 
 @app.get("/metrics")

@@ -11,9 +11,14 @@ pydantic==2.5.3
 # HTTP Client
 httpx==0.26.0
 
+# Authentication (Day 2)
+pyjwt==2.8.0
+python-multipart==0.0.6
+
 # Database & Cache
 asyncpg==0.29.0
-redis==5.0.0
+redis[asyncio]==5.0.0
+neo4j==5.14.0
 
 # Environment & Configuration
 python-dotenv==1.0.0
